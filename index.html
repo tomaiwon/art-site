@@ -1,67 +1,85 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hans">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Yi Huang</title>
-  <meta name="description" content="Yi Huang — artist." />
   <style>
-    :root { --fg:#111; --bg:#fafafa; --muted:#666; }
-    html, body { height: 100%; }
+    :root{
+      --fg: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --seal: #b51a1a;
+      --bg: #0b0b0b;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
-      margin:0;
-      background:var(--bg);
-      color:var(--fg);
-      font-family: ui-serif, "Times New Roman", Times, serif;
-      letter-spacing: 0.2px;
+      margin:0; background:var(--bg); color:var(--fg);
+      font-family: ui-serif, "Songti SC","STSong","Noto Serif SC","Times New Roman",serif;
+      letter-spacing:.2px;
     }
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:72px 20px;
+    .hero{ min-height:100vh; position:relative; overflow:hidden; }
+    .hero::before{
+      content:""; position:absolute; inset:0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.20) 45%, rgba(0,0,0,.45)),
+        url("assets/cover.jpg") center/cover no-repeat;
     }
-    .panel{
-      width:min(720px, 100%);
+    header{
+      position:relative; z-index:2;
+      display:flex; justify-content:space-between; align-items:flex-start;
+      padding:28px 28px;
     }
-    h1{
-      font-size:28px;
-      font-weight:400;
-      margin:0 0 22px 0;
+    .brand{
+      color:var(--fg); text-decoration:none;
+      font-size:18px; font-weight:400; line-height:1.2;
     }
     nav a{
-      display:block;
-      font-size:18px;
-      line-height:1.9;
-      color:var(--fg);
-      text-decoration:none;
-      width:fit-content;
+      color:var(--fg); text-decoration:none;
+      font-size:12px; letter-spacing:1.2px; margin-left:18px;
     }
-    nav a:hover{
-      text-decoration:underline;
-      text-underline-offset: 4px;
+    nav a:hover{ text-decoration:underline; text-underline-offset:4px; }
+
+    /* 朱印：右下角一个小方章 */
+    .seal{
+      position:absolute; right:26px; bottom:26px; z-index:2;
+      width:56px; height:56px;
+      border:1px solid rgba(255,255,255,.55);
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(181,26,26,.85);
+      backdrop-filter: blur(2px);
+      transform: rotate(0.5deg);
     }
-    .meta{
-      margin-top:28px;
+    .seal span{
       font-size:14px;
-      color:var(--muted);
+      letter-spacing:2px;
+      color:#fff;
+      line-height:1;
+    }
+
+    @media (max-width:640px){
+      header{ padding:20px 18px; }
+      nav a{ margin-left:12px; }
+      .seal{ right:18px; bottom:18px; width:52px; height:52px; }
     }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="panel">
-      <h1>Yi Huang</h1>
-
+  <div class="hero">
+    <header>
+      <a class="brand" href="index.html">Yi Huang</a>
       <nav>
-        <a href="work.html">work</a>
-        <a href="info.html">info</a>
-        <a href="contact.html">contact</a>
-        <a href="news.html">news</a>
+        <a href="work.html">WORK</a>
+        <a href="info.html">INFO</a>
+        <a href="contact.html">CONTACT</a>
+        <a href="news.html">NEWS</a>
       </nav>
+    </header>
 
-      <div class="meta">yihuang.art</div>
+    <!-- 这里把章内容改成你想要的两个字/两字母，比如：黄 / YH / 乙 / 一 -->
+    <div class="seal" aria-label="seal">
+      <span>黄</span>
     </div>
   </div>
 </body>
