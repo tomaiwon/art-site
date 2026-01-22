@@ -283,33 +283,14 @@
         </li>
          <li class="item">
           <span class="year">2024.07</span>
-          <span class="name"><a href="#" id="dlWord" style="color:#000000; text-decoration:none;">
+          <span class="name"><a
+  href="/files/思辨设计表达方式中当代影像艺术的运用及影响——以作品《春光之響》为例.pdf"
+  download
+  style="color:#000; text-decoration:none;"
+>
   思辨设计表达方式中当代影像艺术的运用及影响——以作品《春光之響》为例
 </a>
 
-<script>
-  document.getElementById("dlWord").addEventListener("click", async (e) => {
-    e.preventDefault();
-
-    const url = "/files/";     // 你的 docx 路径
-    const filename = "思辨设计表达方式中当代影像艺术的运用及影响——以作品《春光之響》为例.pdf";       // 下载时的文件名
-
-    const res = await fetch(url);
-    if (!res.ok) {
-      alert("下载失败：找不到文件或服务器拒绝访问");
-      return;
-    }
-
-    const blob = await res.blob();
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(a.href);
-  });
-</script>
 </a></span>
         </li>
         <li class="item">
@@ -501,6 +482,7 @@
   </main>
 </body>
 </html>
+
 
 
 
