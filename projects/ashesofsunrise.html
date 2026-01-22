@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blow Up</title>
+
+<style>
+  @font-face{ font-family:"EFont"; src:url("../fonts/E.ttf") format("truetype"); }
+  @font-face{ font-family:"ZFont"; src:url("../fonts/Z.ttf") format("truetype"); }
+  @font-face{ font-family:"NFont"; src:url("../fonts/N.ttf") format("truetype"); }
+
+  html,body,*{ font-synthesis:none; }
+
+  html, body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    color:#fff;
+  }
+
+  /* 顶部导航 */
+  .nav-left,.nav-right{
+    position:fixed;
+    top:22px;
+    z-index:1000;
+    font-family:"ZFont","EFont",sans-serif;
+    font-size:28px;
+    letter-spacing:2.5px;
+    opacity:0.6;
+    transition:opacity .2s;
+  }
+  .nav-left{ left:30px; }
+  .nav-right{ right:30px; }
+  .nav-left:hover,.nav-right:hover{ opacity:1; }
+
+  .nav-left a,.nav-right a{
+    color:#fff;
+    background:none;
+    border:none;
+    text-decoration:none;
+    cursor:pointer;
+    font:inherit;
+  }
+  .nav-left a:hover,.nav-right a:hover{
+    text-decoration:underline;
+    text-underline-offset:5px;
+  }
+
+  /* 图文页面容器（直接显示） */
+  #page{
+    min-height:100vh;
+    overflow-y:auto;
+    box-sizing:border-box;
+    padding:80px 22px;
+  }
+
+  .info-box{
+    max-width:760px;
+    margin:0 auto;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  .info-box h1{
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size:28px;
+    font-weight:500;
+    letter-spacing:0.3px;
+    margin:0 0 26px 0;
+    color:#ddd;
+  }
+
+  .info-box p{
+    font-size:12px;
+    line-height:1.5;
+    margin:0 0 22px 0;
+  }
+
+  .en{
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:500;
+    color:#ddd;
+  }
+  .zh{
+    font-family:"SimSun","宋体",serif;
+    font-weight:700;
+    color:#eee;
+  }
+
+  .work-image{
+    width:100%;
+    margin:34px 0;
+    display:block;
+    height:auto;
+  }
+  .work-image.tight{
+    margin-bottom:14px;
+  }
+
+  .caption{
+    font-size:12px;
+    color:#666;
+    line-height:1.55;
+    margin-top:-6px;
+    margin-bottom:26px;
+  }
+
+  .lang-divider{
+    border:0;
+    border-top:1px solid #333;
+    margin:42px 0 36px;
+  }
+
+  .zh-gallery{
+    padding-bottom:60px;
+  }
+
+  .footer-divider{
+    border:0;
+    border-top:1px solid #333;
+    margin:54px 0 28px;
+  }
+
+  .self-reflection{
+    display:flex;
+    gap:40px;
+    padding-bottom:30px;
+  }
+  .self-reflection p{
+    width:50%;
+    margin:0;
+  }
+  @media(max-width:860px){
+    .self-reflection{
+      flex-direction:column;
+      gap:20px;
+    }
+    .self-reflection p{ width:100%; }
+  }
+
+  /* Vimeo 在最后：做成“影院屏幕”比例 */
+  .film-wrap{
+    margin-top:26px;
+    padding-bottom:40px;
+  }
+
+  .film-title{
+    font-size:12px;
+    color:#666;
+    margin:0 0 12px 0;
+  }
+
+  .film-embed{
+    position:relative;
+    width:100%;
+    aspect-ratio: 16 / 9;
+    background:#000;
+    border:1px solid #222;
+  }
+  .film-embed iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- 顶部导航 -->
+<div class="nav-left">
+  <a href="/work.html">BACK</a>
+</div>
+
+<!-- 右上：直接跳到底部 Vimeo -->
+<div class="nav-right">
+  <a href="#film">FILM</a>
+</div>
+
+<!-- 图文正文（默认显示） -->
+<div id="page">
+  <div class="info-box">
+
+    <h1>ABOUT</h1>
+
+     <p class="en">
+      Art History Series<br>
+      Reality、Truth and Perspectivism<br>
+      Impressionist
+    </p>
+
+    <p class="en">Producer: Yi Huang</p>
+
+    <p class="en">
+      Content: This is a website work on art history and abstract virtualisation, accompanied by thesis images, exploring the relationship between humans and light, starting from the impact of photography on painting to the artworks of modernism that began to throw up questions.<br><br> the project brings together reflections on how to deal with the question of what is real, from the inspiration of pointillism on digital photography to the open-ended end of perspectivism.</p>
+
+    <img class="work-image tight" src="../images/as6.png" alt="still 01">
+
+    <p class="en caption">
+      Format: Website Art<br>
+      Tech: HTML、Javascript
+    </p>
+
+    <hr class="lang-divider">
+
+    <p class="zh">
+      艺术史系列<br>
+      真实、真相和视角主义<br>
+      印象派
+    </p>
+
+    <p class="zh">制作人：黄熠</p>
+
+
+    <p class="zh">
+      内容：这是一个关于艺术史与抽象虚拟化的网站项目，通过论文配图探索人类与光的关系。从摄影对绘画的影响出发，到现代主义艺术作品开始提出质疑，该项目汇集了对“何为真实”这一命题的思考——从点彩派对数码摄影的启发，到透视主义开放式的终结。</p>
+
+    <div class="zh-gallery">
+      <img class="work-image tight" src="../images/ash7.png" alt="still 02">
+
+      <p class="zh caption">
+        形式：网络艺术<br>
+        技术：HTML、Javascript
+      </p>
+ <img class="work-image" src="../images/as8.png" alt="still 03">
+      <img class="work-image" src="../images/ash0.png" alt="still 04">
+      <img class="work-image" src="../images/ash1.png" alt="still 05">
+      <img class="work-image" src="../images/ash2.png" alt="still 03">
+      <img class="work-image" src="../images/ash3.png" alt="still 04">
+      <img class="work-image" src="../images/ash4.png" alt="still 05">
+      <img class="work-image" src="../images/ash5.png" alt="still 06">
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="self-reflection">
+      <p class="zh">
+        自检：
+      <p class="en">Self Reflection: 
+</p>
+    </div>
+
+    <p style="color:#666;">© 2024 All Rights Reserved.</p>
+
+    <!-- Vimeo 放到最后 -->
+    <div class="film-wrap" id="film">
+      <p class="film-title">《Ashes Of Sunrise》</p>
+      <div class="film-embed">
+        <iframe
+          src="https://player.vimeo.com/video/1156695878?title=0&byline=0&portrait=0&badge=0&autopause=0"
+          allow="fullscreen; picture-in-picture"
+          allowfullscreen
+          title="ashesofsunrise">
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
