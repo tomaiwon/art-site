@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Daily Digest · 2026 · 02 · 22</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #faf9f6;
+      --bg2:     #f2f0eb;
+      --border:  #ddd8ce;
+      --text:    #1c1810;
+      --dim:     #9a8f7a;
+      --link:    #1a1410;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Georgia', 'Noto Serif SC', serif;
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 52px 0 36px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .header-date {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: normal;
+      letter-spacing: 0.04em;
+      color: #1c1810;
+      margin-bottom: 6px;
+    }
+    .header-sub {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 1.5px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    nav a {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-transform: uppercase;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    nav a:hover { opacity: 1; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 60px; }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 22px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      padding: 2px 7px;
+      border: 1px solid;
+      opacity: 0.85;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: normal;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Cards ── */
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .card {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .card:last-child { border-bottom: none; }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    .source {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .date {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: var(--dim);
+    }
+
+    .title {
+      display: block;
+      color: var(--link);
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 5px;
+      transition: color 0.15s;
+    }
+    .title:hover { color: #fff8e8; }
+
+    .summary {
+      font-size: 13px;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    .empty {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 1px;
+      padding: 16px 0;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: var(--dim);
+      letter-spacing: 1.5px;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--dim); opacity: 0.3; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-date">Sunday, 22 February 2026 · 00:31 London</div>
+  <h1>Daily Digest</h1>
+  <div class="header-sub">黃熠 · 艺术 · 电影 · AI · 半导体</div>
+</header>
+
+<nav><a href="#art" style="color:#7a5c28">艺术事件</a><a href="#film" style="color:#3a4878">电影世界</a><a href="#ai" style="color:#2a6848">AI · 科技</a><a href="#semi" style="color:#782828">半导体产业</a></nav>
+
+
+  <section class="section" id="art">
+    <div class="section-head">
+      <span class="section-label" style="color:#7a5c28;border-color:#b8965a">ART</span>
+      <span class="section-title" style="color:#7a5c28">艺术事件</span>
+    </div>
+    <div class="cards">
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#7a5c28">Artforum</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://www.artforum.com/columns/field-notes-paris-thomas-patier-2026-1234743777/" target="_blank">Paris Extra Muros: Visiting the French capital region’s centres d’art</a>
+          <p class="summary">Winter exhibitions from CAC Brétigny to Le Crédac</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#7a5c28">Artforum</span>
+            <span class="date">Feb 19</span>
+          </div>
+          <a class="title" href="https://www.artforum.com/news/south-african-court-rejects-gabrielle-goliaths-venice-bid-1234744039/" target="_blank">South African Court Rejects Gabrielle Goliath’s Bid to Reinstate Canceled Venice Biennale Pavilion (updated)</a>
+          <p class="summary">A South African court ruled against artist Gabrielle Goliath in her effort to reinstate her pavilion at the 2026 Venice Biennale after it was abruptly canceled by South African Minister of Sport, Arts and Culture Gayton …</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#7a5c28">Artforum</span>
+            <span class="date">Feb 19</span>
+          </div>
+          <a class="title" href="https://www.artforum.com/news/art-basel-announces-exhibitors-for-2026-flagship-fair-1234744003/" target="_blank">Art Basel Announces Exhibitors for 2026 Swiss Fair</a>
+          <p class="summary">The organizers of&#160;Art Basel&#160;today named the 290 galleries slated to participate in the Swiss fair’s flagship edition, to take place June 18–21 with preview days June 16 and 17. The exhibitors represent forty-th…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#7a5c28">Hyperallergic</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://hyperallergic.com/the-de-sades-among-us/" target="_blank">The de Sades Among Us</a>
+          <p class="summary">The seeds of evil that brought us Epstein, blatant censorship at the University of North Texas, the problem with wall labels, and a Black Medieval angel of love.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#7a5c28">Hyperallergic</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://hyperallergic.com/south-africa-pulls-out-of-venice-biennale/" target="_blank">South Africa Pulls Out of Venice Biennale</a>
+          <p class="summary">Turns out Gaza broke the country's art world, too.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#7a5c28">Hyperallergic</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://hyperallergic.com/the-us-department-of-hate/" target="_blank">The US Department of Hate</a>
+          <p class="summary">The Siren is back for a fourth edition. Read, ponder, and rise up before it’s too late.</p>
+        </div>
+    </div>
+  </section>
+  <section class="section" id="film">
+    <div class="section-head">
+      <span class="section-label" style="color:#3a4878;border-color:#7a88b8">FILM</span>
+      <span class="section-title" style="color:#3a4878">电影世界</span>
+    </div>
+    <div class="cards">
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">Variety</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://variety.com/2026/music/news/bruce-springsteen-ticket-prices-variations-1236669375/" target="_blank">How Much Are Bruce Springsteen Tickets? The Promised Range for ‘The Promised Land’ Is $87-$3,007, With Nearly Row-by-Row Variations In-Between</a>
+          <p class="summary">Another Bruce Springsteen tour on-sale; another bout of elation among those who procured tickets. Along with, of course, another round of debate over how easy it was or wasn&#8217;t to get those tickets&#8230; and anothe…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">Variety</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://variety.com/2026/tv/news/michael-imperioli-the-sopranos-characters-trump-supporters-1236669372/" target="_blank">Michael Imperioli Says ‘A Lot’ of ‘The Sopranos’ Characters Would ‘Probably’ Be Trump Supporters: ‘The Show Is About the American Dream’</a>
+          <p class="summary">“The Sopranos” star Michael Imperioli told The Independent that the characters in the HBO crime drama would “probably” be supporters of Donald Trump if the show were made today. “The show is about the American dream, esp…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">Variety</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://variety.com/2026/film/news/american-psycho-remake-patrick-bateman-luca-guadagnino-1236669341/" target="_blank">‘American Psycho’ Author Bret Easton Ellis Says ‘High Profile Actors’ Have Turned Down Patrick Bateman Role: ‘They Don’t Want To Be in the Shoes of Christian Bale’</a>
+          <p class="summary">“American Psycho” is one of the most iconic titles to have come out in the year 2000 — which might be why several actors have been hesitant to step into the role of the homicidal banker Patrick Bateman. “A couple of high…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">IndieWire</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.indiewire.com/news/festivals/berlinale-tried-to-avoid-politics-winners-made-impossible-1235180866/" target="_blank">Berlinale Tried to Avoid Politics. Its Winners Made That Impossible.</a>
+          <p class="summary">Acceptance speeches condemning Israel and supporting Palestine dominated the ceremony, forcing the festival to confront the controversy it spent days trying to contain.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">IndieWire</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.indiewire.com/awards/results/berlin-film-festival-2026-winners-list-1235180312/" target="_blank">İlker Catak’s ‘Yellow Letters’ Wins Golden Bear at Berlin Film Festival: Full List of Awards</a>
+          <p class="summary">Berlin: The 76th Berlinale concludes with an awards ceremony that reveals all the winners from president Wim Wenders' competition jury.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">IndieWire</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.indiewire.com/features/best-of/men-with-brooms-canadian-curling-cult-comedy-1235180807/" target="_blank">Obsessed with the 2026 Olympic Curling Scandal? Try the Canadian Cult Classic ‘Men with Brooms’</a>
+          <p class="summary">Paul Gross directs himself, Leslie Nielsen, Molly Parker, and more in this wacky 2002 sports comedy.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">Deadline</span>
+            <span class="date">Feb 22</span>
+          </div>
+          <a class="title" href="https://deadline.com/2026/02/michael-imperioli-the-sopranos-characters-trump-supporters-1236731955/" target="_blank">Michael Imperioli Posits ‘The Sopranos’ Mobsters Would Be Trump Supporters If The Show Was Set In 2026</a>
+          <p class="summary">More than a quarter century removed from its premiere, the seminal multi-Emmy-winning mobster drama The Sopranos remains a rewatch staple, with its quintessential commentary on class and the American dream. Spanning six …</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">Deadline</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://deadline.com/2026/02/trump-netflix-susan-rice-warner-bros-1236731945/" target="_blank">Donald Trump Calls On Netflix To Fire Board Member Susan Rice Or “Pay The Consequences”</a>
+          <p class="summary">Donald Trump called on Netflix to fire one of its board members, Susan Rice, the former U.S. ambassador to the United Nations and national security adviser, following comments she made about accountability when Democrats…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">Deadline</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://deadline.com/2026/02/scrubs-revival-returing-cast-carla-cox-epiosode-number-kids-1236731607/" target="_blank">‘Scrubs’ Revival Cheatsheet: Who Is Back; How Many Episodes Judy Reyes & John C. McGinley Are In; How Many Kids J.D. & Elliot, Turk & Carla Have</a>
+          <p class="summary">Scrubs returns Feb. 25 on ABC with original stars Zach Braff, Sarah Chalke and Donald Faison back as series regulars reprising their roles as J.D., Elliot and Turk, respectively. Two other key OG cast members, Judy Reyes…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#3a4878">The Playlist</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://theplaylist.net/psycho-killer-review-andrew-kevin-walkers-long-delayed-slasher-is-a-dull-muted-misfire-20260221/" target="_blank">‘Psycho Killer’ Review: Andrew Kevin Walker’s Long-Delayed Slasher Is A Dull, Muted Misfire</a>
+          <p class="summary">Even if he had never accomplished anything else (and he has!), Andrew Kevin Walker will always be remembered as the screenwriter behind David Fincher ’s “ Se7en ,” the most iconic serial killer procedural of the ’90s tha…</p>
+        </div>
+    </div>
+  </section>
+  <section class="section" id="ai">
+    <div class="section-head">
+      <span class="section-label" style="color:#2a6848;border-color:#6aaa88">AI</span>
+      <span class="section-title" style="color:#2a6848">AI · 科技</span>
+    </div>
+    <div class="cards">
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">MIT Tech Review</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://www.technologyreview.com/2026/02/20/1133368/exclusive-ebook-the-great-al-hype-correction-of-2025/" target="_blank">Exclusive eBook: The great Al hype correction of 2025</a>
+          <p class="summary">2025 was a year of reckoning, including how the heads of the top AI companies made promises they couldn’t keep. In this exclusive subscriber-only eBook, you&#8217;ll learn more about why we may need to readjust our expec…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">MIT Tech Review</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://www.technologyreview.com/2026/02/20/1133396/the-download-microsofts-online-reality-check-and-the-worrying-rise-in-measles-cases/" target="_blank">The Download: Microsoft’s online reality check, and the worrying rise in measles cases</a>
+          <p class="summary">This is today&#8217;s edition of The Download, our weekday newsletter that provides a daily dose of what&#8217;s going on in the world of technology. Microsoft has a new plan to prove what’s real and what’s AI online AI-…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">MIT Tech Review</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://www.technologyreview.com/2026/02/20/1132629/job-titles-future-breast-biomechanic/" target="_blank">Job titles of the future: Breast biomechanic</a>
+          <p class="summary">Twenty years ago, Joanna Wakefield-Scurr was having persistent pain in her breasts. Her doctor couldn’t diagnose the cause but said a good, supportive bra could help. A professor of biomechanics, Wakefield-Scurr thought …</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">Ars Technica</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://arstechnica.com/science/2026/02/dinosaur-eggshells-can-reveal-the-age-of-other-fossils/" target="_blank">Dinosaur eggshells can reveal the age of other fossils</a>
+          <p class="summary">Like rocks, egg shells can trap isotopes, allowing us to use them to date samples.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">Ars Technica</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://arstechnica.com/science/2026/02/have-we-leapt-into-commercial-genetic-testing-without-understanding-it/" target="_blank">Have we leapt into commercial genetic testing without understanding it?</a>
+          <p class="summary">A new book argues that tests might reshape human diversity even if they don't work.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">Ars Technica</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://arstechnica.com/science/2026/02/major-government-research-lab-appears-to-be-squeezing-out-foreign-scientists/" target="_blank">Major government research lab appears to be squeezing out foreign scientists</a>
+          <p class="summary">"Noncitizens" lost after-hours access to a NIST lab last month.</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">The Verge</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.theverge.com/tech/882852/arturia-fx-collection-6" target="_blank">Arturia’s FX Collection 6 adds two new effects and a $99 intro version</a>
+          <p class="summary">Arturia launched a new version of its flagship effects suite, FX Collection, which includes two new plugins, EFX Ambient and Pitch Shifter-910. FX Collection 6 also marks the introduction of an Intro version with a selec…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">The Verge</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.theverge.com/tech/882838/georgia-elon-musk-america-pac-voter-fraud" target="_blank">Georgia says Elon Musk’s America PAC violated election law</a>
+          <p class="summary">For all his bluster about voter fraud, Elon Musk has been one of the most flagrant flaunters of US election law. Now his America PAC has been slapped with a reprimand by the Georgia State Election Board for sending out p…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">The Verge</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.theverge.com/ai-artificial-intelligence/882814/tumbler-ridge-school-shooting-chatgpt" target="_blank">Suspect in Tumbler Ridge school shooting described violent scenarios to ChatGPT</a>
+          <p class="summary">The suspect in the mass shooting at Tumbler Ridge, British Columbia, Jesse Van Rootselaar, was raising alarms among employees at OpenAI months before the shooting took place. This past June, Jesse had conversations with …</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#2a6848">Wired</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.wired.com/story/sony-wh-ch720n-deal-february-2026/" target="_blank">Sony’s WH-CH720N headphones offer excellent value at full price, but right now they're a steal.</a>
+          <p class="summary">Sony’s WH-CH720N headphones offer excellent value at full price, but right now they're a steal.</p>
+        </div>
+    </div>
+  </section>
+  <section class="section" id="semi">
+    <div class="section-head">
+      <span class="section-label" style="color:#782828;border-color:#b87878">SEMI</span>
+      <span class="section-title" style="color:#782828">半导体产业</span>
+    </div>
+    <div class="cards">
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">EE Times</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://www.eetimes.com/supreme-court-strikes-down-trumps-tariff-regime/" target="_blank">Supreme Court Strikes Down Trump’s Tariff Regime</a>
+          <p class="summary">Supreme Court blocks executive overreach on tariffs, forcing supply chain reset and sparking budgetary crisis over billions in refunds. The post Supreme Court Strikes Down Trump’s Tariff Regime appeared first on EE Times…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">EE Times</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://www.eetimes.com/discipline-will-keep-memory-market-tight/" target="_blank">Discipline Will Keep Memory Market Tight</a>
+          <p class="summary">Memory makers are wary of a post-AI bust, which will restrain their supply of DRAM. The post Discipline Will Keep Memory Market Tight appeared first on EE Times .</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">EE Times</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://www.eetimes.com/india-deep-tech-alliance-pledges-2-5b-in-investment/" target="_blank">India Deep Tech Alliance Pledges $2.5B in Investment</a>
+          <p class="summary">India’s deep-tech funding accelerates, but questions linger over defensible, globally scalable product innovation. The post India Deep Tech Alliance Pledges $2.5B in Investment appeared first on EE Times .</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">SemiEngineering</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://semiengineering.com/nanoscale-mos%e2%82%82-based-memristors-integrated-into-cmos-microchips/" target="_blank">Nanoscale MoS₂-based Memristors Integrated into CMOS Microchips</a>
+          <p class="summary">A new technical paper, &#8220;Integration of Low-Voltage Nanoscale MoS2 Memristors on CMOS Microchips&#8221; was published by RWTH Aachen and Forschungszentrum Jülich GmbH. Abstract &#8220;2D materials (2DMs) are gaining…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">SemiEngineering</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://semiengineering.com/chip-industry-week-in-review-126/" target="_blank">Chip Industry Week in Review</a>
+          <p class="summary">ISSCC research blitz; $50M for agentic AI; 3D interconnects tool; Ultra Ethernet security; Watt's Law and power supply ceiling; Intel-Google security stress test; heat techniques; chip architectures at the edge; ChipPath…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">SemiEngineering</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://semiengineering.com/the-on-device-llm-revolution/" target="_blank">The On-Device LLM Revolution</a>
+          <p class="summary">Why 3B to 30B models are moving to the edge — and what that means for silicon. The post The On-Device LLM Revolution appeared first on Semiconductor Engineering .</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">IEEE Spectrum</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://spectrum.ieee.org/ai-data-centers-hts-superconductors" target="_blank">AI Data Centers Turn to High-Temperature Superconductors</a>
+          <p class="summary">Data centers for AI are turning the world of power generation on its head. There isn’t enough power capacity on the grid to even come close to how much energy is needed for the number being built. And traditional transmi…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">IEEE Spectrum</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://spectrum.ieee.org/ieee-climate-mitigation-talks-2025" target="_blank">IEEE Plays a Pivotal Role In Climate Mitigation Talks</a>
+          <p class="summary">IEEE has enhanced its standing as a trusted, neutral authority on the role of technology in climate change mitigation and adaption. Last year it became the first technical association to be invited to a U.N. Conference o…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">IEEE Spectrum</span>
+            <span class="date">Feb 20</span>
+          </div>
+          <a class="title" href="https://spectrum.ieee.org/robot-martial-arts" target="_blank">Video Friday: Humanoid Robots Celebrate Spring</a>
+          <p class="summary">Video Friday is your weekly selection of awesome robotics videos, collected by your friends at IEEE Spectrum robotics. We also post a weekly calendar of upcoming robotics events for the next few months. Please send us yo…</p>
+        </div>
+        <div class="card">
+          <div class="meta">
+            <span class="source" style="color:#782828">Tom's Hardware</span>
+            <span class="date">Feb 21</span>
+          </div>
+          <a class="title" href="https://www.tomshardware.com/monitors/gaming-monitors/27-inch-1440p-curved-gaming-beast-is-now-40-percent-off-samsung-odyssey-g55c-falls-usd9-short-of-historic-low" target="_blank">27-inch 1440p curved gaming beast is now 40% off — Samsung Odyssey G55C falls $9 short of historic low</a>
+          <p class="summary">Samsung’s Odyssey G55C features a 165 Hz refresh rate, 1000R curvature, and FreeSync support, making it a solid budget-friendly option for 1440p gamers at its current Amazon discount.</p>
+        </div>
+    </div>
+  </section>
+
+<footer>
+  Generated at 00:31 · RSS aggregator · 2026 · 02 · 22
+</footer>
+
+</body>
+</html>
