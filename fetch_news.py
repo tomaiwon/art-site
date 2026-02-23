@@ -90,8 +90,8 @@ FEEDS = {
     },
 }
 
-MAX_PER_SOURCE   = 4
-MAX_PER_CATEGORY = 15
+MAX_PER_SOURCE   = 3
+MAX_PER_CATEGORY = 12
 
 # CI 环境输出到仓库根目录 news.html；本地输出到桌面
 if IS_CI:
@@ -462,6 +462,7 @@ def main():
         if ai_client and items:
             print('  翻译中...', end='', flush=True)
             items = translate_category(items, meta['title'])
+            import time; time.sleep(1)
         print()
         all_items_by_category[key] = items
         sections_html.append(build_section(key, meta, items))
