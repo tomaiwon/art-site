@@ -33,6 +33,10 @@ FEEDS = {
             ('e-flux',            'https://www.e-flux.com/announcements/feed/'),
             ('The Art Newspaper', 'https://www.theartnewspaper.com/rss'),
             ('Rhizome',           'https://rhizome.org/feed/'),
+            ('Artnet News',       'https://news.artnet.com/feed'),
+            ('Dezeen',            'https://www.dezeen.com/feed/'),
+            ('Colossal',          'https://www.thisiscolossal.com/feed/'),
+            ('Creative Review',   'https://www.creativereview.co.uk/feed/'),
         ],
     },
     'film': {
@@ -41,11 +45,15 @@ FEEDS = {
         'accent': '#3a4878',
         'dim':    '#7a88b8',
         'sources': [
-            ('Variety',       'https://variety.com/feed/'),
-            ('IndieWire',     'https://www.indiewire.com/feed/'),
-            ('Deadline',      'https://deadline.com/feed/'),
-            ('The Playlist',  'https://theplaylist.net/feed/'),
-            ('Screen Daily',  'https://www.screendaily.com/rss'),
+            ('Variety',              'https://variety.com/feed/'),
+            ('IndieWire',            'https://www.indiewire.com/feed/'),
+            ('Deadline',             'https://deadline.com/feed/'),
+            ('The Playlist',         'https://theplaylist.net/feed/'),
+            ('Screen Daily',         'https://www.screendaily.com/rss'),
+            ('Hollywood Reporter',   'https://www.hollywoodreporter.com/c/news/feed/'),
+            ('Little White Lies',    'https://lwlies.com/feed/'),
+            ('Roger Ebert',          'https://www.rogerebert.com/feed'),
+            ('Filmmaker Magazine',   'https://filmmakermagazine.com/feed/'),
         ],
     },
     'ai': {
@@ -54,11 +62,15 @@ FEEDS = {
         'accent': '#2a6848',
         'dim':    '#6aaa88',
         'sources': [
-            ('MIT Tech Review', 'https://www.technologyreview.com/feed/'),
-            ('VentureBeat AI',  'https://venturebeat.com/category/ai/feed/'),
-            ('Ars Technica',    'https://feeds.arstechnica.com/arstechnica/index'),
-            ('The Verge',       'https://www.theverge.com/rss/index.xml'),
-            ('Wired',           'https://www.wired.com/feed/rss'),
+            ('MIT Tech Review',  'https://www.technologyreview.com/feed/'),
+            ('VentureBeat AI',   'https://venturebeat.com/category/ai/feed/'),
+            ('Ars Technica',     'https://feeds.arstechnica.com/arstechnica/index'),
+            ('The Verge',        'https://www.theverge.com/rss/index.xml'),
+            ('Wired',            'https://www.wired.com/feed/rss'),
+            ('TechCrunch AI',    'https://techcrunch.com/category/artificial-intelligence/feed/'),
+            ('404 Media',        'https://www.404media.co/feed'),
+            ('AI News',          'https://artificialintelligence-news.com/feed/'),
+            ('Rest of World',    'https://restofworld.org/feed/'),
         ],
     },
     'semi': {
@@ -72,12 +84,14 @@ FEEDS = {
             ('IEEE Spectrum',   'https://spectrum.ieee.org/feeds/feed.rss'),
             ("Tom's Hardware",  'https://www.tomshardware.com/feeds/all'),
             ('AnandTech',       'https://www.anandtech.com/rss/'),
+            ('EDN',             'https://www.edn.com/feed/'),
+            ('The Register',    'https://www.theregister.com/headlines.rss'),
         ],
     },
 }
 
-MAX_PER_SOURCE   = 3
-MAX_PER_CATEGORY = 10
+MAX_PER_SOURCE   = 4
+MAX_PER_CATEGORY = 15
 
 # CI 环境输出到仓库根目录 news.html；本地输出到桌面
 if IS_CI:
