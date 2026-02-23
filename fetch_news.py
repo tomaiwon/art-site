@@ -192,7 +192,7 @@ def translate_category(items, category_title):
     try:
         response = ai_client.chat.completions.create(
             model=AI_MODEL,
-            max_tokens=2048,
+            max_tokens=4096,
             response_format={'type': 'json_object'},
             messages=[
                 {'role': 'system', 'content': SYSTEM_PROMPT},
