@@ -5,6 +5,9 @@ on:
     - cron: '0 9 * * *'   # 09:00 UTC = 10:00 BST (夏令时) / 09:00 GMT (冬令时)
   workflow_dispatch:       # 允许手动触发
 
+permissions:
+  contents: write
+
 jobs:
   update-news:
     runs-on: ubuntu-latest
