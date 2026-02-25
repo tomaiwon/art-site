@@ -8,7 +8,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
 <link rel="preload" as="font" href="fonts/E.ttf" type="font/ttf" crossorigin>
-<link rel="preload" as="font" href="fonts/Z-work.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="fonts/Z-support.woff2" type="font/woff2" crossorigin>
 
 <style>
   @font-face{
@@ -27,14 +27,14 @@
   }
   @font-face{
     font-family:"ZFont";
-    src:url("fonts/Z-work.woff2") format("woff2");
+    src:url("fonts/Z-support.woff2") format("woff2");
     font-weight:400;
     font-style:normal;
     font-display:block;
   }
   @font-face{
     font-family:"ZFont";
-    src:url("fonts/Z-work.woff2") format("woff2");
+    src:url("fonts/Z-support.woff2") format("woff2");
     font-weight:700;
     font-style:normal;
     font-display:block;
@@ -98,33 +98,28 @@
     margin-bottom:20px;
   }
 
-  /* 商品卡片 */
   .product{
     display:flex;
-    gap:32px;
+    gap:36px;
     align-items:flex-start;
-    margin-bottom:48px;
     max-width:860px;
   }
 
-  .product-images{
-    display:flex;
-    gap:10px;
+  .product-image{
     flex-shrink:0;
+    border:2px solid #111;
   }
-
-  .product-images img{
-    width:180px;
+  .product-image img{
+    width:220px;
     height:auto;
     display:block;
-    object-fit:cover;
   }
 
   .product-info{
     display:flex;
     flex-direction:column;
-    justify-content:flex-end;
-    padding-bottom:4px;
+    gap:10px;
+    padding-top:4px;
   }
 
   .product-name{
@@ -132,7 +127,17 @@
     font-size:20px;
     font-weight:700;
     color:#111;
-    margin:0 0 6px 0;
+    margin:0;
+  }
+
+  .product-desc{
+    font-family:"ZFont","EFont",sans-serif;
+    font-size:15px;
+    font-weight:400;
+    color:#444;
+    margin:0;
+    line-height:1.6;
+    max-width:360px;
   }
 
   .product-price{
@@ -140,7 +145,7 @@
     font-size:18px;
     font-weight:400;
     color:#555;
-    margin:0 0 16px 0;
+    margin:0;
   }
 
   .buy-btn{
@@ -155,19 +160,16 @@
     text-decoration:none;
     white-space:nowrap;
     align-self:flex-start;
+    margin-top:4px;
   }
   .buy-btn:hover{background:#444;}
-
-  .section{
-    margin-bottom:48px;
-  }
 
   @media(max-width:680px){
     .page{padding:70px 22px;}
     .top-nav{font-size:22px; letter-spacing:2px; right:18px; top:18px; gap:8px;}
     .page-title{font-size:24px;}
-    .product{flex-direction:column; gap:16px;}
-    .product-images img{width:140px;}
+    .product{flex-direction:column; gap:20px;}
+    .product-image img{width:180px;}
     .section-label{font-size:18px;}
   }
 </style>
@@ -185,24 +187,22 @@
 <main class="page">
   <h1 class="page-title">SUPPORT</h1>
 
-  <!-- 影像CD -->
-  <section class="section">
+  <section>
     <span class="section-label">影像CD</span>
     <span class="section-label-en">Video CD</span>
 
     <div class="product">
-      <div class="product-images">
-        <img src="images/cd-front.webp" alt="封面">
-        <img src="images/cd-back.webp" alt="封底">
+      <div class="product-image">
+        <img src="images/cd-front.webp" alt="The Experience 关中往事 封面">
       </div>
       <div class="product-info">
         <p class="product-name">The Experience 关中往事</p>
+        <p class="product-desc">《关中往事》光盘纪念版<br>THE EXPERIENCE: Commemorative Edition DVD</p>
         <p class="product-price">£20</p>
         <a class="buy-btn" href="https://buy.stripe.com/test_7sY7sN67XgMaclUfOX9k400" target="_blank">BUY</a>
       </div>
     </div>
   </section>
-
 
 </main>
 </body>
