@@ -101,13 +101,14 @@
   .product{
     display:flex;
     gap:36px;
-    align-items:flex-start;
+    align-items:stretch;
     max-width:860px;
   }
 
   .product-image{
     flex-shrink:0;
     border:2px solid #111;
+    align-self:flex-start;
   }
   .product-image img{
     width:220px;
@@ -118,13 +119,15 @@
   .product-info{
     display:flex;
     flex-direction:column;
-    gap:10px;
+    justify-content:space-between;
     padding-top:4px;
+    padding-bottom:2px;
+    height:calc(220px * 0.96);
   }
 
   .product-name{
-    font-family:"EFont","ZFont",sans-serif;
-    font-size:20px;
+    font-family:"ZFont","EFont",sans-serif;
+    font-size:18px;
     font-weight:700;
     color:#111;
     margin:0;
@@ -132,7 +135,7 @@
 
   .product-desc{
     font-family:"ZFont","EFont",sans-serif;
-    font-size:15px;
+    font-size:13px;
     font-weight:400;
     color:#444;
     margin:0;
@@ -197,7 +200,7 @@
       </div>
       <div class="product-info">
         <p class="product-name">The Experience 关中往事</p>
-        <p class="product-desc">《关中往事》光盘纪念版<br>THE EXPERIENCE: Commemorative Edition DVD<br><br>内容：一名学生导演通过穿梭在不同时空，寻找一种独属于东方的，结构性完满的结局，就在这掺杂着真实虚幻的过程中，他被拽进了数字媒介的历史长河……<br><br>Content: A student director traverses different timelines in search of a structurally complete ending uniquely belonging to the East. In this quest to discern the boundary between reality and illusion, he finds himself drawn into the historical currents of digital media...</p>
+        <p class="product-desc">《关中往事》光盘纪念版<br>THE EXPERIENCE: Commemorative Edition DVD<br><br>内容: 一名学生导演通过穿梭在不同时空，寻找一种独属于东方的，结构性完满的结局，就在这掺杂着真实虚幻的过程中，他被拽进了数字媒介的历史长河……<br><br>Content: A student director traverses different timelines in search of a structurally complete ending uniquely belonging to the East. In this quest to discern the boundary between reality and illusion, he finds himself drawn into the historical currents of digital media...</p>
         <p class="product-price">£20</p>
         <a class="buy-btn" href="https://buy.stripe.com/00wcN53aw6WsaRn7vy6g800" target="_blank">BUY</a>
       </div>
