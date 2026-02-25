@@ -77,21 +77,11 @@
     font-size:28px;
     letter-spacing:2.5px;
     font-weight:700;
-    margin:0 0 18px 0;
+    margin:0 0 36px 0;
     font-family:"EFont","ZFont",sans-serif;
   }
 
-  .group{
-    margin:18px 0 36px 0;
-    max-width:860px;
-  }
-
-  .group-head{
-    margin:0 0 14px 0;
-    line-height:1.2;
-  }
-
-  .category{
+  .section-label{
     display:block;
     font-family:"ZFont","EFont",sans-serif;
     font-size:23px;
@@ -99,44 +89,58 @@
     color:#111;
     margin-bottom:2px;
   }
-
-  .category-en{
+  .section-label-en{
     display:block;
     font-family:"EFont","ZFont",sans-serif;
     font-size:17px;
     font-weight:700;
     color:#2a2a2a;
-    margin-bottom:14px;
+    margin-bottom:20px;
   }
 
-  /* 商品列表 */
-  .list{
-    list-style:none;
-    padding:0;
-    margin:0;
-  }
-
-  .item{
+  /* 商品卡片 */
+  .product{
     display:flex;
-    gap:16px;
-    align-items:baseline;
-    margin:10px 0;
+    gap:32px;
+    align-items:flex-start;
+    margin-bottom:48px;
+    max-width:860px;
   }
 
-  .item-name{
+  .product-images{
+    display:flex;
+    gap:10px;
+    flex-shrink:0;
+  }
+
+  .product-images img{
+    width:180px;
+    height:auto;
+    display:block;
+    object-fit:cover;
+  }
+
+  .product-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding-bottom:4px;
+  }
+
+  .product-name{
     font-family:"EFont","ZFont",sans-serif;
-    font-weight:700;
     font-size:20px;
+    font-weight:700;
     color:#111;
-    flex:1;
+    margin:0 0 6px 0;
   }
 
-  .item-price{
+  .product-price{
     font-family:"EFont","ZFont",sans-serif;
-    font-weight:400;
     font-size:18px;
+    font-weight:400;
     color:#555;
-    white-space:nowrap;
+    margin:0 0 16px 0;
   }
 
   .buy-btn{
@@ -147,19 +151,24 @@
     letter-spacing:1.5px;
     color:#fff;
     background:#111;
-    padding:6px 16px;
+    padding:8px 20px;
     text-decoration:none;
     white-space:nowrap;
+    align-self:flex-start;
   }
   .buy-btn:hover{background:#444;}
 
-  @media(max-width:860px){
+  .section{
+    margin-bottom:48px;
+  }
+
+  @media(max-width:680px){
     .page{padding:70px 22px;}
     .top-nav{font-size:22px; letter-spacing:2px; right:18px; top:18px; gap:8px;}
     .page-title{font-size:24px;}
-    .category{font-size:18px;}
-    .item-name{font-size:17px;}
-    .item-price{font-size:15px;}
+    .product{flex-direction:column; gap:16px;}
+    .product-images img{width:140px;}
+    .section-label{font-size:18px;}
   }
 </style>
 </head>
@@ -177,33 +186,35 @@
   <h1 class="page-title">SUPPORT</h1>
 
   <!-- 影像CD -->
-  <section class="group">
-    <h2 class="group-head">
-      <span class="category">影像CD</span>
-      <span class="category-en">Video CD</span>
-    </h2>
-    <ul class="list">
-      <li class="item">
-        <span class="item-name">作品名称 / Title</span>
-        <span class="item-price">£__</span>
+  <section class="section">
+    <span class="section-label">影像CD</span>
+    <span class="section-label-en">Video CD</span>
+
+    <div class="product">
+      <div class="product-images">
+        <img src="images/cd-front.webp" alt="封面">
+        <img src="images/cd-back.webp" alt="封底">
+      </div>
+      <div class="product-info">
+        <p class="product-name">作品名称 / Title</p>
+        <p class="product-price">£__</p>
         <a class="buy-btn" href="#" target="_blank">BUY</a>
-      </li>
-    </ul>
+      </div>
+    </div>
   </section>
 
   <!-- 书籍 -->
-  <section class="group">
-    <h2 class="group-head">
-      <span class="category">书籍</span>
-      <span class="category-en">Books</span>
-    </h2>
-    <ul class="list">
-      <li class="item">
-        <span class="item-name">书名 / Title</span>
-        <span class="item-price">£__</span>
+  <section class="section">
+    <span class="section-label">书籍</span>
+    <span class="section-label-en">Books</span>
+
+    <div class="product">
+      <div class="product-info">
+        <p class="product-name">书名 / Title</p>
+        <p class="product-price">£__</p>
         <a class="buy-btn" href="#" target="_blank">BUY</a>
-      </li>
-    </ul>
+      </div>
+    </div>
   </section>
 
 </main>
