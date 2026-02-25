@@ -260,17 +260,19 @@ def generate_html(sections_html):
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Yi Huang 黄熠 — NEWS</title>
+<title>Yi Huang 黄熠 — AUTOMATIC</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+<link rel="preload" as="font" href="fonts/E.ttf" type="font/ttf" crossorigin>
+<link rel="preload" as="font" href="fonts/Z-news.woff2" type="font/woff2" crossorigin>
 <style>
-  @font-face{{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}}
-  @font-face{{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}}
-  @font-face{{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2"),url("fonts/Z.woff") format("woff");font-weight:400;font-style:normal;font-display:swap;}}
-  @font-face{{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2"),url("fonts/Z.woff") format("woff");font-weight:700;font-style:normal;font-display:swap;}}
-  @font-face{{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}}
-  @font-face{{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}}
+  @font-face{{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;}}
+  @font-face{{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:700;font-style:normal;font-display:block;}}
+  @font-face{{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}}
+  @font-face{{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}}
+  @font-face{{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;}}
+  @font-face{{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:700;font-style:normal;font-display:block;}}
 
   html,body{{height:100%;}}
   body{{
