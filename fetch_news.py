@@ -395,10 +395,11 @@ def generate_html(sections_html):
   <a href="index.html">ABOUT</a>
   <a href="work.html">WORK</a>
   <a href="contact.html">CONTACT</a>
+  <a href="support.html">SUPPORT</a>
 </nav>
 
 <main class="page">
-  <h1 class="page-title">NEWS</h1>
+  <h1 class="page-title">AUTOMATIC</h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
   <script>(function(){{
     function secs(){{
