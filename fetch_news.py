@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Daily News Digest — 艺术 · 电影 · AI · 半导体
+Daily News Digest — 艺术 · 电影 · AI · 半导体 · 国际时事
 每天伦敦时间 10:00 自动运行（GitHub Actions），生成 news.html 并提交
 """
 
@@ -86,6 +86,22 @@ FEEDS = {
             ('AnandTech',       'https://www.anandtech.com/rss/'),
             ('EDN',             'https://www.edn.com/feed/'),
             ('The Register',    'https://www.theregister.com/headlines.rss'),
+        ],
+    },
+    'intl': {
+        'title':  '国际时事',
+        'label':  'INTL',
+        'accent': '#3a3a5a',
+        'dim':    '#7a7a9a',
+        'sources': [
+            ('Reuters World',       'https://feeds.reuters.com/reuters/worldNews'),
+            ('BBC World',           'http://feeds.bbci.co.uk/news/world/rss.xml'),
+            ('South China Morning Post', 'https://www.scmp.com/rss/91/feed'),
+            ('The Diplomat',        'https://thediplomat.com/feed/'),
+            ('Foreign Policy',      'https://foreignpolicy.com/feed/'),
+            ('Nikkei Asia',         'https://asia.nikkei.com/rss/feed/nar'),
+            ('Taiwan News',         'https://www.taiwannews.com.tw/en/rss'),
+            ('VOA News',            'https://www.voanews.com/api/z$pqmvekg-qv'),
         ],
     },
 }
