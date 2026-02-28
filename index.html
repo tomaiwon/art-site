@@ -189,7 +189,10 @@
     font-family:"EFont","ZFont",sans-serif;
   }
 
+  .mob-br{ display:none; }
+
   @media (max-width: 860px){
+    .mob-br{ display:block; }
     .top-nav{
       font-size:16px;
       letter-spacing:1.5px;
@@ -244,7 +247,7 @@
     <div class="section-title">ABOUT</div>
 
     <div class="about-zh">
-      黄熠，二零零二年生。<br>
+      黄熠，二零零二年生。<span class="mob-br"></span>
       栖居长沙、往来伦敦。<br>
       为研究型文艺工作者。<br>
       其作多由数字之世、艺史之脉与地缘之局而生。以影像、装置、文本为媒。
@@ -259,11 +262,11 @@
     <div class="edu" aria-label="Education">
       <div class="edu-row">
         <div class="edu-year">2O2O–2O24</div>
-        <div class="edu-text">Xi’an Academy of Fine Arts<br>BA Digital Media Art</div>
+        <div class="edu-text">Xi’an Academy of Fine Arts<span class="mob-br"></span>BA Digital Media Art</div>
       </div>
       <div class="edu-row">
         <div class="edu-year">2O25–2O26</div>
-        <div class="edu-text">Royal College of Art<br>MA Contemporary Art Practice</div>
+        <div class="edu-text">Royal College of Art<span class="mob-br"></span>MA Contemporary Art Practice</div>
       </div>
     </div>
 
