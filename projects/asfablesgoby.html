@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>As Fables Go By</title>
 
 <style>
@@ -18,10 +18,11 @@
     width:100%;
     height:100%;
     background:#000;
+    overflow:hidden;
     color:#fff;
   }
 
-  /* 顶部导航 */
+  /* ===== 顶部导航 ===== */
   .nav-left,.nav-right{
     position:fixed;
     top:22px;
@@ -36,7 +37,7 @@
   .nav-right{ right:30px; }
   .nav-left:hover,.nav-right:hover{ opacity:1; }
 
-  .nav-left a,.nav-right a{
+  .nav-left a,.nav-right button{
     color:#fff;
     background:none;
     border:none;
@@ -44,17 +45,30 @@
     cursor:pointer;
     font:inherit;
   }
-  .nav-left a:hover,.nav-right a:hover{
+  .nav-left a:hover,.nav-right button:hover{
     text-decoration:underline;
     text-underline-offset:5px;
   }
 
-  /* 图文页面容器（直接显示） */
-  #page{
-    min-height:100vh;
+  /* ===== 视频 ===== */
+  #video-section{
+    position:absolute;
+    inset:0;
+  }
+  #video-section iframe{
+    width:100%;
+    height:100%;
+    border:0;
+  }
+
+  /* ===== INFO ===== */
+  #info-section{
+    position:absolute;
+    inset:0;
+    display:none;
     overflow-y:auto;
-    box-sizing:border-box;
     padding:80px 22px;
+    background:#000;
   }
 
   .info-box{
@@ -68,14 +82,14 @@
     font-size:28px;
     font-weight:500;
     letter-spacing:0.3px;
-    margin:0 0 26px 0;
+    margin-bottom:26px;
     color:#ddd;
   }
 
   .info-box p{
     font-size:12px;
     line-height:1.5;
-    margin:0 0 22px 0;
+    margin-bottom:22px;
   }
 
   .en{
@@ -114,7 +128,7 @@
   }
 
   .zh-gallery{
-    padding-bottom:60px;
+    padding-bottom:80px;
   }
 
   .footer-divider{
@@ -126,12 +140,13 @@
   .self-reflection{
     display:flex;
     gap:40px;
-    padding-bottom:30px;
+    padding-bottom:40px;
   }
   .self-reflection p{
     width:50%;
     margin:0;
   }
+
   @media(max-width:860px){
     .self-reflection{
       flex-direction:column;
@@ -139,52 +154,32 @@
     }
     .self-reflection p{ width:100%; }
   }
-
-  /* Vimeo 在最后：做成“影院屏幕”比例 */
-  .film-wrap{
-    margin-top:26px;
-    padding-bottom:40px;
-  }
-
-  .film-title{
-    font-size:12px;
-    color:#666;
-    margin:0 0 12px 0;
-  }
-
-  .film-embed{
-    position:relative;
-    width:100%;
-    aspect-ratio: 16 / 9;
-    background:#000;
-    border:1px solid #222;
-  }
-  .film-embed iframe{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    border:0;
-  }
 </style>
 </head>
 
 <body>
 
-<!-- 顶部导航 -->
 <div class="nav-left">
   <a href="/work.html">BACK</a>
 </div>
 
-<!-- 右上：直接跳到底部 Vimeo -->
 <div class="nav-right">
-  <a href="#film">FILM</a>
+  <button id="toggleBtn" onclick="toggleView()">INFO</button>
 </div>
 
-<!-- 图文正文（默认显示） -->
-<div id="page">
-  <div class="info-box">
+<div id="video-section">
+  <iframe src="https://player.vimeo.com/video/1170432048?badge=0&autopause=0&player_id=0&app_id=58479"
+    frameborder="0"
+    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+    title="Yi Huang_As Fables Go By (excerpt)_2026_1min14s">
+  </iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
 
+<div id="info-section">
+  <div class="info-box">
     <h1>ABOUT</h1>
 
     <p class="en">
@@ -197,15 +192,15 @@
 
     <p class="en">
       Content: In 1876, the first cohort of students from the Westernization Movement traveled to Britain to study wired telegraphy; in 2025, self-funded students from the Republic journeyed there to study contemporary art practice. Time suffers a dislocation at Loch Ken in South Scotland; the eras weave together into invisible fields roaming the air. The spark plug, forgotten at Parton Kirk, continues to flicker—yet this time, it is not a proof of existence, but a phantom interlude of long and short waves. The unpublicized reality shatters the imagination of a personal pilgrimage; that frequency, hidden at the opening of a poem, receives carrier waves transmitted to the Great Northern Telegraph Company in Denmark, and the only one capable of demodulating it comes from J.J. Thomson Avenue...
-      <br><br>Before Maidenhead Bridge, are the scattered dots of pointillism a tribute to Seurat’s exploration, or do they hold another intent? Piled masses of red, green, and blue besiege the gaze; the train on the railway bridge has grown hazy, and the viaduct looming faintly in the distance seems to stand amidst the real and the illusory. Suddenly, the train glides slowly past the modern platform; accompanied by the roar of the steam engine and the flashing red warning on the locomotive, the torrent of thick smoke drifting skyward implies not only mechanical energy but also the imagination of wisdom and reason. If Turner were alive today, he surely could never have imagined that his casual, intuitive attempt that night—“Rain, Steam and Speed”—would inspire humanity’s greatest exploration of light.
-       <br><br>Under the Bernton Viaduct, two bedraggled figures are at work: one adjusting a large-format camera, the other projecting three beams of light simultaneously onto the bridge structure. In the town of Ayr, soon to be shrouded by the cries of the night, a taut string awaits a specific force. Three negatives of the same color overlap on the plane to reflect a new luminosity; the blending primary colors restore reality. Above the rain and below the rain—reality, history, and existence—all have found their carrier.
-        <br><br>Heading south along the A713 through a stretch of hills, the edge of Loch Ken finally comes into view; it is still a six-mile drive to Parton Kirk...
-     <br><br>The rusted iron gate helplessly throws the cemetery open; the lingering aftereffect of Andy Goldsworthy’s performance brings the air to a standstill. The ancient telegraph machine awaits the inertia of voltage under the flickering of the spark plug; the radio loudspeaker seems to have something to say but has been muffled. They do not know what they have received; it seems to be a void. Nothingness. Illusory schools of fish gradually fill the retina; the Siren drags her enchanting body to lie before the deck. In this dazzling virtual space, the song flows slowly through the Strait of Messina; as it enters, it gradually suppresses the noisy Sicilian accent. The silhouette of the Harpy reappears at times—did her form cause countless heroes to bow in defeat?
-        <br><br>Drifting south by boat along Loch Ken, accusations and mockery crushed my psychological defenses. The accordion pulled the tragic mood to its zenith, and the plummeting vibrations traveled along bird feathers straight to Threave Castle. What offers release? Only the wine.
-       <br><br>When the grim outcome was already cast in stone, the old acquaintance from J.J. Thomson Avenue made everything worse. After the arduous struggle of demodulation, those wave fields—mutually generating and extinguishing like sine and cosine—made matters increasingly bewildering. Are we still heading in the direction of the truth?
-        <br><br>On the second floor of Tate Britain, that unfinished canvas stands in silence, pointing all of this toward that shipping route in Southern Italy, between Naples and Sicily.
-        <br><br>"Are you certain that what you seek is indeed what you are searching for? Siren?"
-         <br><br>Is the fiction formed by intuition merely the unpublicized reality? I ask?
+      <br><br>Before Maidenhead Bridge, are the scattered dots of pointillism a tribute to Seurat's exploration, or do they hold another intent? Piled masses of red, green, and blue besiege the gaze; the train on the railway bridge has grown hazy, and the viaduct looming faintly in the distance seems to stand amidst the real and the illusory. Suddenly, the train glides slowly past the modern platform; accompanied by the roar of the steam engine and the flashing red warning on the locomotive, the torrent of thick smoke drifting skyward implies not only mechanical energy but also the imagination of wisdom and reason. If Turner were alive today, he surely could never have imagined that his casual, intuitive attempt that night—"Rain, Steam and Speed"—would inspire humanity's greatest exploration of light.
+      <br><br>Under the Bernton Viaduct, two bedraggled figures are at work: one adjusting a large-format camera, the other projecting three beams of light simultaneously onto the bridge structure. In the town of Ayr, soon to be shrouded by the cries of the night, a taut string awaits a specific force. Three negatives of the same color overlap on the plane to reflect a new luminosity; the blending primary colors restore reality. Above the rain and below the rain—reality, history, and existence—all have found their carrier.
+      <br><br>Heading south along the A713 through a stretch of hills, the edge of Loch Ken finally comes into view; it is still a six-mile drive to Parton Kirk...
+      <br><br>The rusted iron gate helplessly throws the cemetery open; the lingering aftereffect of Andy Goldsworthy's performance brings the air to a standstill. The ancient telegraph machine awaits the inertia of voltage under the flickering of the spark plug; the radio loudspeaker seems to have something to say but has been muffled. They do not know what they have received; it seems to be a void. Nothingness. Illusory schools of fish gradually fill the retina; the Siren drags her enchanting body to lie before the deck. In this dazzling virtual space, the song flows slowly through the Strait of Messina; as it enters, it gradually suppresses the noisy Sicilian accent. The silhouette of the Harpy reappears at times—did her form cause countless heroes to bow in defeat?
+      <br><br>Drifting south by boat along Loch Ken, accusations and mockery crushed my psychological defenses. The accordion pulled the tragic mood to its zenith, and the plummeting vibrations traveled along bird feathers straight to Threave Castle. What offers release? Only the wine.
+      <br><br>When the grim outcome was already cast in stone, the old acquaintance from J.J. Thomson Avenue made everything worse. After the arduous struggle of demodulation, those wave fields—mutually generating and extinguishing like sine and cosine—made matters increasingly bewildering. Are we still heading in the direction of the truth?
+      <br><br>On the second floor of Tate Britain, that unfinished canvas stands in silence, pointing all of this toward that shipping route in Southern Italy, between Naples and Sicily.
+      <br><br>"Are you certain that what you seek is indeed what you are searching for? Siren?"
+      <br><br>Is the fiction formed by intuition merely the unpublicized reality? I ask?
     </p>
 
     <img class="work-image tight" src="../images/as0.png" alt="still 01">
@@ -228,7 +223,7 @@
     <p class="zh">
       内容：一八七六，首批洋务学子赴英学习有线电报技术，二零二五，共和国自费留学生赴英学习当代艺术实践。时间在南苏格兰的肯湖错位，它们交织成无形的场域自空气中遨游，被遗忘在帕顿教堂的火花塞仍在不停闪烁，但此次它不是表现存在的证明，而是似有似无的长短波间奏。未公开的现实把个人朝圣的想象击碎，那段藏在诗句开头的频段接收着发射至丹麦大北无线电装置里的载波，能够解调它的人只来自于JJ托马斯大道……<br><br>
 
-梅登黑德桥前，散落的点彩画是在致敬修拉的探索还是另有用意？堆砌的红绿蓝将视线包围，铁路桥上的火车已朦胧不清，远方隐隐约约显露的高架桥似乎拥立在真实与虚幻之间。倏尔，火车缓缓驶过现代化的月台，伴随蒸汽机的轰鸣与车首警告红标的闪烁，那如洪流般的浓烟飘向空中不仅暗示了它带来的机械能，还有智慧与理性的想象，如若透纳在世，他定无法想象那晚随意的直觉尝试“雨，蒸汽与速度”，竟启发了人类对于光最大的探索。<br><br>
+梅登黑德桥前，散落的点彩画是在致敬修拉的探索还是另有用意？堆砌的红绿蓝将视线包围，铁路桥上的火车已朦胧不清，远方隐隐约约显露的高架桥似乎拥立在真实与虚幻之间。倏尔，火车缓缓驶过现代化的月台，伴随蒸汽机的轰鸣与车首警告红标的闪烁，那如洪流般的浓烟飘向空中不仅暗示了它带来的机械能，还有智慧与理性的想象，如若透纳在世，他定无法想象那晚随意的直觉尝试"雨，蒸汽与速度"，竟启发了人类对于光最大的探索。<br><br>
 
 伯恩顿高架桥下，狼狈的二人，一人正在调试大画幅相机，一人将三束来自投影仪的光线一齐照向桥体，在即将被夜鸣笼罩的艾尔小镇，那根绷直的弦在等待那个力。三张同色底片在平面的交叠下重新映照出新的明度，混合着的三原色将现实还原，雨上雨下，现实，历史，存在，皆有了载体。<br><br>
 
@@ -242,9 +237,10 @@
 
 泰特不列颠的二楼，静静矗立着的，那副未完成的画作，将这一切指向了意大利南部那条那不勒斯与西西里岛的航线。<br><br>
 
-“你确定你要找的，就是你要找的吗？塞壬？”<br><br>
+"你确定你要找的，就是你要找的吗？塞壬？"<br><br>
 
-直觉所形成的虚构是否就是未公开的现实？我问？<br><br></p>
+直觉所形成的虚构是否就是未公开的现实？我问？
+    </p>
 
     <div class="zh-gallery">
       <img class="work-image tight" src="../images/as1.png" alt="still 02">
@@ -263,28 +259,33 @@
     <hr class="footer-divider">
 
     <div class="self-reflection">
-      <p class="zh">
-        自检：........
+      <p class="zh">自检：........</p>
       <p class="en">Self Reflection: .......</p>
     </div>
 
     <p style="color:#666;">© 2026 All Rights Reserved.</p>
 
-    <!-- Vimeo 放到最后 -->
-    <div class="film-wrap" id="film">
-      <p class="film-title">Early Research Documentary--《Not Bad》</p>
-      <div class="film-embed">
-        <iframe
-          src="https://player.vimeo.com/video/1156540279?title=0&byline=0&portrait=0&badge=0&autopause=0"
-          allow="fullscreen; picture-in-picture"
-          allowfullscreen
-          title="not bad">
-        </iframe>
-      </div>
-    </div>
-
   </div>
 </div>
+
+<script>
+function toggleView(){
+  const v=document.getElementById("video-section");
+  const i=document.getElementById("info-section");
+  const b=document.getElementById("toggleBtn");
+
+  if(i.style.display==="block"){
+    i.style.display="none";
+    v.style.display="block";
+    b.innerText="INFO";
+  }else{
+    v.style.display="none";
+    i.style.display="block";
+    b.innerText="FILM";
+    i.scrollTop=0;
+  }
+}
+</script>
 
 </body>
 </html>
