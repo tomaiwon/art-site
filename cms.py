@@ -129,6 +129,11 @@ SHARED_STYLE = '''
   @media(max-width:860px){ .self-reflection{ flex-direction:column; gap:20px; } .self-reflection p{ width:100%; } }
 '''
 
+def nl2br(text):
+    """把 textarea 里的换行转成 HTML <br>"""
+    return text.replace('\n', '<br>\n')
+
+
 def _info_body(d):
     """生成 info-box 里通用的图文内容 HTML"""
     imgs_en = ''
@@ -151,14 +156,14 @@ def _info_body(d):
     if d['content_zh']:
         content_zh_block = f'''
     <p class="zh">
-      {d["content_zh"]}
+      {nl2br(d["content_zh"])}
     </p>'''
 
     series_zh_block = ''
     if d['series_zh']:
         series_zh_block = f'''
     <p class="zh">
-      {d["series_zh"]}
+      {nl2br(d["series_zh"])}
     </p>
 
     <p class="zh">制作人：{d["producer_zh"] or d["producer"]}</p>
@@ -168,8 +173,8 @@ def _info_body(d):
     if d['reflection_zh'] or d['reflection_en']:
         refl_block = f'''    <hr class="footer-divider">
     <div class="self-reflection">
-      <p class="zh">自检：{d["reflection_zh"]}</p>
-      <p class="en">Self Reflection: {d["reflection_en"]}</p>
+      <p class="zh">自检：{nl2br(d["reflection_zh"])}</p>
+      <p class="en">Self Reflection: {nl2br(d["reflection_en"])}</p>
     </div>
 '''
 
@@ -181,14 +186,14 @@ def _info_body(d):
     <h1>ABOUT</h1>
 
     <p class="en">
-      {d["series_en"]}<br>
+      {nl2br(d["series_en"])}<br>
       {d["category_en"]}
     </p>
 
     <p class="en">Producer: {d["producer"]}</p>
 
     <p class="en">
-      Content: {d["content_en"]}
+      Content: {nl2br(d["content_en"])}
     </p>
 
 {imgs_en}
