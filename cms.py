@@ -491,7 +491,7 @@ NEW_TMPL = '''<!doctype html>
 
     <h2>英文内容</h2>
     <label>系列信息（EN）</label>
-    <input type="text" name="series_en" placeholder="Film / Digital Medium Ontology Series — Chapter">
+    <textarea name="series_en" style="min-height:52px" placeholder="Film / Digital Medium Ontology Series — Chapter"></textarea>
 
     <label>制作人（EN）</label>
     <input type="text" name="producer" placeholder="Yi Huang">
@@ -512,7 +512,7 @@ NEW_TMPL = '''<!doctype html>
 
     <h2>中文内容（可选）</h2>
     <label>系列信息（ZH）</label>
-    <input type="text" name="series_zh" placeholder="独立影像 / 数字媒介本体系列分章">
+    <textarea name="series_zh" style="min-height:52px" placeholder="独立影像 / 数字媒介本体系列分章"></textarea>
 
     <label>制作人（ZH）</label>
     <input type="text" name="producer_zh" placeholder="黄熠">
@@ -546,7 +546,13 @@ NEW_TMPL = '''<!doctype html>
     &nbsp;
     <button type="submit" name="action" value="deploy" class="btn">生成 + 推送 GitHub</button>
   </form>
-</div></body></html>'''
+</div>
+<script>
+document.querySelector('form').addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+});
+</script>
+</body></html>'''
 
 PREVIEW_TMPL = '''<!doctype html>
 <html lang="zh"><head><meta charset="utf-8">
@@ -655,7 +661,7 @@ EDIT_TMPL = '''<!doctype html>
 
     <h2>英文内容</h2>
     <label>系列信息（EN）</label>
-    <input type="text" name="series_en" value="{{ d.series_en }}">
+    <textarea name="series_en" style="min-height:52px">{{ d.series_en }}</textarea>
 
     <label>制作人（EN）</label>
     <input type="text" name="producer" value="{{ d.producer }}">
@@ -676,7 +682,7 @@ EDIT_TMPL = '''<!doctype html>
 
     <h2>中文内容（可选）</h2>
     <label>系列信息（ZH）</label>
-    <input type="text" name="series_zh" value="{{ d.series_zh }}">
+    <textarea name="series_zh" style="min-height:52px">{{ d.series_zh }}</textarea>
 
     <label>制作人（ZH）</label>
     <input type="text" name="producer_zh" value="{{ d.producer_zh }}">
@@ -719,7 +725,13 @@ EDIT_TMPL = '''<!doctype html>
     &nbsp;
     <button type="submit" name="action" value="deploy" class="btn">保存 + 推送 GitHub</button>
   </form>
-</div></body></html>'''
+</div>
+<script>
+document.querySelector('form').addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+});
+</script>
+</body></html>'''
 
 
 def parse_project_html(slug):
