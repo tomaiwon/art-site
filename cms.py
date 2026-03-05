@@ -35,6 +35,11 @@ ALLOWED = {'png','jpg','jpeg','webp','gif'}
 
 # ── 工具函数 ──────────────────────────────────────────────────────────────────
 
+def extract_vimeo_id(raw):
+    """从 Vimeo 嵌入代码或链接中提取视频 ID"""
+    m = re.search(r'vimeo\.com/(?:video/)?(\d+)', raw)
+    return m.group(1) if m else raw.strip()
+
 def slugify(title):
     s = title.lower().strip()
     s = re.sub(r'[^\w\s-]', '', s)
@@ -466,9 +471,9 @@ NEW_TMPL = '''<!doctype html>
       {% endfor %}
     </select>
 
-    <label>Vimeo 视频 ID（视频模板必填）</label>
-    <input type="text" name="vimeo_id" placeholder="1170432048">
-    <p class="hint">Vimeo 链接中的数字部分</p>
+    <label>Vimeo 嵌入代码或链接（视频模板必填）</label>
+    <textarea name="vimeo_id" style="min-height:60px" placeholder="粘贴 Vimeo 给的嵌入代码，或直接填视频 ID"></textarea>
+    <p class="hint">自动提取视频 ID，无需手动处理</p>
 
     <h2>英文内容</h2>
     <label>系列信息（EN）</label>
@@ -604,7 +609,7 @@ def new_work():
         cat_en    = next((en for zh, en in CATEGORIES if zh == cat_zh), '')
         tmpl_type = f.get('template_type', 'video')
         slug      = f.get('slug', '').strip() or slugify(title_en)
-        vimeo_id  = f.get('vimeo_id', '').strip()
+        vimeo_id  = extract_vimeo_id(f.get('vimeo_id', ''))
         commit_msg = f.get('commit_msg', '').strip() or f'feat: add {title_en}'
 
         # 处理上传图片
