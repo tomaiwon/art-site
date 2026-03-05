@@ -57,7 +57,10 @@ def git_push(msg):
     for cmd in cmds:
         r = subprocess.run(cmd, capture_output=True, text=True)
         log.append(r.stdout + r.stderr)
-    return '\n'.join(log)
+        # commit 返回非零但含 "nothing to commit" 属正常，其余非零均视为失败
+        if r.returncode != 0 and 'nothing to commit' not in (r.stdout + r.stderr):
+            return False, '\n'.join(log)
+    return True, '\n'.join(log)
 
 def insert_work_entry(cat_zh, date, title_en, title_zh, slug):
     """在 work.html 对应分类的列表最顶部插入新条目"""
@@ -1031,7 +1034,9 @@ def _do_deploy(slug, cat_zh, date, title_en, title_zh, page_html, commit_msg):
         return False, msg
 
     # Git push
-    log = git_push(commit_msg)
+    ok, log = git_push(commit_msg)
+    if not ok:
+        return False, f'文件已保存，但推送 GitHub 失败：\n{log}'
     return True, f'部署成功 → projects/{slug}.html'
 
 
@@ -1100,7 +1105,9 @@ def edit_work(slug):
             update_work_entry(slug, new_date, title_en, title_zh)
 
         if action == 'deploy':
-            git_push(commit_msg)
+            push_ok, push_log = git_push(commit_msg)
+            if not push_ok:
+                return redirect(f'/?err=文件已保存，但推送失败，请先在终端 git pull 后重试')
 
         return redirect(f'/?ok=已保存 projects/{new_slug}.html')
 
