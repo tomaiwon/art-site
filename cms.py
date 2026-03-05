@@ -411,10 +411,19 @@ DASH_TMPL = '''<!doctype html>
   {% for cat_zh, works in categories %}
   <h2>{{ cat_zh }}</h2>
   <ul class="work-list">
-    {% for date, title, href in works %}
+    {% for date, title, href, slug, shared in works %}
     <li>
       <span class="year">{{ date }}</span>
-      <span class="title"><a href="{{ href }}" target="_blank">{{ title }}</a></span>
+      <span class="title">
+        <a href="{{ href }}" target="_blank">{{ title }}</a>
+        {% if shared %}<span style="color:#444;font-size:10px;margin-left:6px;">占位</span>{% endif %}
+      </span>
+      {% if shared %}
+      <a href="/edit/{{ slug }}?date={{ date|urlencode }}&title={{ title|urlencode }}"
+         class="btn btn-sm btn-ghost" style="margin-left:auto;margin-top:0;">编辑</a>
+      {% else %}
+      <a href="/edit/{{ slug }}" class="btn btn-sm btn-ghost" style="margin-left:auto;margin-top:0;">编辑</a>
+      {% endif %}
     </li>
     {% endfor %}
     {% if not works %}<li><span class="section-label">（空）</span></li>{% endif %}
@@ -558,6 +567,287 @@ PREVIEW_TMPL = '''<!doctype html>
 </div></body></html>'''
 
 
+def detect_template(html):
+    if 'UNDER CONSTRUCTION' in html:
+        return 'construction'
+    if 'toggleView' in html:
+        return 'video'
+    if 'film-embed' in html:
+        return 'text_video'
+    return 'text'
+
+
+EDIT_TMPL = '''<!doctype html>
+<html lang="zh"><head><meta charset="utf-8">
+<title>编辑 — CMS</title>
+<style>{{ css }}
+.img-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.img-chip{ display:flex; align-items:center; gap:6px; background:#1a1a1a;
+           border:1px solid #2a2a2a; padding:5px 10px; font-size:11px; color:#aaa; }
+.img-chip input{ margin:0; }
+</style></head><body>
+<div class="wrap">
+  <h1><a href="/">← 返回</a>&nbsp;&nbsp;{% if fork_mode %}创建独立页面{% else %}编辑{% endif %}：{{ d.title_en }}</h1>
+  {% if fork_mode %}
+  <p style="color:#555;font-size:12px;margin-bottom:20px;">
+    当前占位文件：<code style="color:#666">projects/{{ slug }}.html</code><br>
+    保存后将创建独立文件，work.html 链接自动更新。
+  </p>
+  {% endif %}
+  {% for msg, cls in messages %}<div class="flash {{ cls }}">{{ msg }}</div>{% endfor %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {% if fork_mode %}
+    <input type="hidden" name="fork_mode" value="1">
+    <input type="hidden" name="original_slug" value="{{ slug }}">
+    <input type="hidden" name="entry_date" value="{{ d.date }}">
+    <input type="hidden" name="entry_title_orig" value="{{ d.title_en }}">
+    {% endif %}
+
+    <h2>基本信息</h2>
+    {% if fork_mode %}
+    <label>新文件名（自动生成，可修改）</label>
+    <input type="text" name="new_slug" value="{{ suggested_slug }}" required>
+    <p class="hint">将创建 projects/[文件名].html</p>
+    {% endif %}
+    <div class="row">
+      <div>
+        <label>日期 (YYYY.MM)</label>
+        <input type="text" name="date" value="{{ d.date }}" required>
+      </div>
+      <div>
+        <label>分类</label>
+        <select name="category">
+          {% for zh, en in categories %}
+          <option value="{{ zh }}" {% if zh == d.cat_zh %}selected{% endif %}>{{ zh }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>英文标题</label>
+        <input type="text" name="title_en" value="{{ d.title_en }}" required>
+      </div>
+      <div>
+        <label>中文标题（可选）</label>
+        <input type="text" name="title_zh" value="{{ d.title_zh }}">
+      </div>
+    </div>
+
+    <h2>页面模板</h2>
+    <label>模板类型</label>
+    <select name="template_type">
+      {% for val, label in templates %}
+      <option value="{{ val }}" {% if val == d.template_type %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Vimeo 嵌入代码或链接</label>
+    <textarea name="vimeo_id" style="min-height:60px">{{ d.vimeo_id }}</textarea>
+    <p class="hint">留空或填 ID / 完整嵌入代码均可</p>
+
+    <h2>英文内容</h2>
+    <label>系列信息（EN）</label>
+    <input type="text" name="series_en" value="{{ d.series_en }}">
+
+    <label>制作人（EN）</label>
+    <input type="text" name="producer" value="{{ d.producer }}">
+
+    <label>内容描述（EN）</label>
+    <textarea name="content_en">{{ d.content_en }}</textarea>
+
+    <div class="row">
+      <div>
+        <label>格式</label>
+        <input type="text" name="format" value="{{ d.format }}">
+      </div>
+      <div>
+        <label>技术</label>
+        <input type="text" name="tech" value="{{ d.tech }}">
+      </div>
+    </div>
+
+    <h2>中文内容（可选）</h2>
+    <label>系列信息（ZH）</label>
+    <input type="text" name="series_zh" value="{{ d.series_zh }}">
+
+    <label>制作人（ZH）</label>
+    <input type="text" name="producer_zh" value="{{ d.producer_zh }}">
+
+    <label>内容描述（ZH）</label>
+    <textarea name="content_zh">{{ d.content_zh }}</textarea>
+
+    <h2>自检</h2>
+    <div class="row">
+      <div>
+        <label>Self Reflection (EN)</label>
+        <textarea name="reflection_en">{{ d.reflection_en }}</textarea>
+      </div>
+      <div>
+        <label>自检（ZH）</label>
+        <textarea name="reflection_zh">{{ d.reflection_zh }}</textarea>
+      </div>
+    </div>
+
+    <h2>图片</h2>
+    <p class="hint" style="margin-bottom:8px;">取消勾选 = 从生成页面移除（原文件保留在 images/）</p>
+    <div class="img-row">
+      {% for img in d.images %}
+      <label class="img-chip">
+        <input type="checkbox" name="existing_images" value="{{ img }}" checked>
+        {{ img }}
+      </label>
+      {% endfor %}
+      {% if not d.images %}<span style="color:#555;font-size:12px;">（无图片）</span>{% endif %}
+    </div>
+    <label style="margin-top:16px;">新增图片（可多选）</label>
+    <input type="file" name="images" multiple accept="image/*">
+
+    <h2>部署</h2>
+    <label>Commit 信息</label>
+    <input type="text" name="commit_msg" value="edit: update {{ slug }}">
+
+    <br><br>
+    <button type="submit" name="action" value="save_local" class="btn btn-ghost">仅保存本地</button>
+    &nbsp;
+    <button type="submit" name="action" value="deploy" class="btn">保存 + 推送 GitHub</button>
+  </form>
+</div></body></html>'''
+
+
+def parse_project_html(slug):
+    """读取已有项目 HTML，尽力反解出各字段"""
+    path = os.path.join(PROJECTS, f'{slug}.html')
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding='utf-8') as f:
+        html = f.read()
+
+    d = {'slug': slug}
+
+    m = re.search(r'<title>(.*?)</title>', html)
+    d['title_en'] = m.group(1).strip() if m else slug
+    d['title_zh'] = ''
+
+    d['template_type'] = detect_template(html)
+
+    m = re.search(r'player\.vimeo\.com/video/(\d+)', html)
+    d['vimeo_id'] = m.group(1) if m else ''
+
+    d['images'] = re.findall(r'src="\.\./images/([^"]+)"', html)
+
+    # 解析 .en 段落
+    en_paras = re.findall(r'<p class="en"[^>]*>\s*(.*?)\s*</p>', html, re.DOTALL)
+    d['series_en'] = d['producer'] = d['content_en'] = d['format'] = d['tech'] = d['reflection_en'] = ''
+    for i, p in enumerate(en_paras):
+        clean = re.sub(r'<[^>]+>', ' ', p).strip()
+        clean = re.sub(r'\s+', ' ', clean)
+        if 'Producer:' in clean:
+            d['producer'] = clean.split('Producer:', 1)[1].strip()
+        elif clean.startswith('Content:'):
+            text = re.sub(r'<br\s*/?>', '\n', p)
+            d['content_en'] = re.sub(r'<[^>]+>', '', text).replace('Content:', '').strip()
+        elif 'Format:' in clean:
+            m2 = re.search(r'Format:\s*([^\n<]+)', clean)
+            d['format'] = m2.group(1).strip() if m2 else ''
+            m2 = re.search(r'Tech:\s*([^\n<]+)', clean)
+            d['tech'] = m2.group(1).strip() if m2 else ''
+        elif 'Self Reflection:' in clean:
+            d['reflection_en'] = clean.split('Self Reflection:', 1)[1].strip()
+        elif i == 0:
+            text = re.sub(r'<br\s*/?>', '\n', p)
+            d['series_en'] = re.sub(r'<[^>]+>', '', text).strip()
+
+    # 解析 .zh 段落
+    zh_paras = re.findall(r'<p class="zh"[^>]*>\s*(.*?)\s*</p>', html, re.DOTALL)
+    d['series_zh'] = d['producer_zh'] = d['content_zh'] = d['reflection_zh'] = ''
+    zh_content_parts = []
+    for p in zh_paras:
+        clean = re.sub(r'<[^>]+>', ' ', p).strip()
+        clean = re.sub(r'\s+', ' ', clean)
+        text = re.sub(r'<br\s*/?>', '\n', p)
+        text = re.sub(r'<[^>]+>', '', text).strip()
+        if '制作人：' in clean:
+            d['producer_zh'] = clean.split('制作人：', 1)[1].strip()
+        elif '自检：' in clean:
+            d['reflection_zh'] = clean.split('自检：', 1)[1].strip()
+        elif '形式：' in clean or '技术：' in clean:
+            pass
+        elif not d['series_zh'] and len(clean) < 100:
+            d['series_zh'] = text
+        else:
+            zh_content_parts.append(text)
+    d['content_zh'] = '\n\n'.join(zh_content_parts)
+
+    return d
+
+
+def get_slug_info(slug):
+    """从 work.html 获取 slug 对应的 date 和 cat_zh"""
+    with open(WORK_HTML, encoding='utf-8') as f:
+        html = f.read()
+    for cat_zh, _ in CATEGORIES:
+        pat = re.compile(
+            r'class="name group-title-zh"[^>]*>' + re.escape(cat_zh) +
+            r'.*?<ul class="list">(.*?)</ul>', re.DOTALL)
+        m = pat.search(html)
+        if m:
+            for date, item_slug in re.findall(
+                r'<span class="year">(.*?)</span>.*?href="projects/([^"]+)\.html"',
+                m.group(1), re.DOTALL
+            ):
+                if item_slug.strip() == slug:
+                    return date.strip(), cat_zh
+    return '', CATEGORIES[0][0]
+
+
+def update_work_entry(slug, new_date, new_title_en, new_title_zh):
+    """更新 work.html 中已有条目的日期和标题"""
+    with open(WORK_HTML, encoding='utf-8') as f:
+        html = f.read()
+    display = f"{new_title_en} {new_title_zh}".strip() if new_title_zh else new_title_en
+    new_li = (f'<li class="item">\n'
+              f'          <span class="year">{new_date}</span>\n'
+              f'          <span class="name">'
+              f'<a href="projects/{slug}.html">{display}</a></span>\n'
+              f'        </li>')
+    pat = re.compile(
+        r'<li class="item">.*?href="projects/' + re.escape(slug) + r'\.html".*?</li>',
+        re.DOTALL)
+    new_html, n = pat.subn(new_li, html)
+    if n == 0:
+        return False, f'work.html 中找不到 {slug}'
+    with open(WORK_HTML, 'w', encoding='utf-8') as f:
+        f.write(new_html)
+    return True, 'work.html 更新成功'
+
+
+def update_specific_entry_href(old_slug, entry_date, entry_title, new_slug, new_date, new_display):
+    """精确更新 work.html 中某一条 <li>（通过 old_slug+date+title 定位）的 href 和标题"""
+    with open(WORK_HTML, encoding='utf-8') as f:
+        html = f.read()
+    # 宽松匹配：year + href + title，允许空白变化
+    pat = re.compile(
+        r'<li class="item">\s*<span class="year">' + re.escape(entry_date) +
+        r'</span>\s*<span class="name"><a href="projects/' + re.escape(old_slug) +
+        r'\.html">' + re.escape(entry_title) + r'</a></span>\s*</li>',
+        re.DOTALL
+    )
+    new_li = (f'<li class="item">\n'
+              f'          <span class="year">{new_date}</span>\n'
+              f'          <span class="name">'
+              f'<a href="projects/{new_slug}.html">{new_display}</a></span>\n'
+              f'        </li>')
+    new_html, n = pat.subn(new_li, html)
+    if n == 0:
+        return False, f'找不到条目（{entry_date} / {entry_title}）'
+    with open(WORK_HTML, 'w', encoding='utf-8') as f:
+        f.write(new_html)
+    return True, 'work.html 更新成功'
+
+
 def parse_works():
     """从 work.html 解析各分类的作品列表"""
     with open(WORK_HTML, encoding='utf-8') as f:
@@ -579,9 +869,19 @@ def parse_works():
                 m.group(1), re.DOTALL
             )
             for date, href, title in items:
-                works.append((date.strip(), title.strip(), href.strip()))
+                slug = re.sub(r'^projects/|\.html$', '', href.strip())
+                works.append((date.strip(), title.strip(), href.strip(), slug))
         result.append((cat_zh, works))
-    return result
+
+    # 标记哪些 slug 被多条条目共用
+    from collections import Counter
+    all_slugs = [slug for _, works in result for _, _, _, slug in works]
+    shared = {s for s, c in Counter(all_slugs).items() if c > 1}
+    result2 = []
+    for cat_zh, works in result:
+        works2 = [(d, t, h, sl, sl in shared) for d, t, h, sl in works]
+        result2.append((cat_zh, works2))
+    return result2
 
 
 @app.route('/')
@@ -713,6 +1013,109 @@ def _do_deploy(slug, cat_zh, date, title_en, title_zh, page_html, commit_msg):
     # Git push
     log = git_push(commit_msg)
     return True, f'部署成功 → projects/{slug}.html'
+
+
+@app.route('/edit/<slug>', methods=['GET', 'POST'])
+def edit_work(slug):
+    messages = []
+
+    if request.method == 'POST':
+        f = request.form
+        action       = f.get('action', 'deploy')
+        fork_mode    = bool(f.get('fork_mode'))
+        orig_slug    = f.get('original_slug', slug)
+        entry_date   = f.get('entry_date', '')
+        entry_title_orig = f.get('entry_title_orig', '')
+        new_slug     = f.get('new_slug', '').strip() if fork_mode else slug
+
+        title_en   = f.get('title_en', '').strip()
+        title_zh   = f.get('title_zh', '').strip()
+        new_date   = f.get('date', '').strip()
+        cat_zh     = f.get('category', '')
+        cat_en     = next((en for zh, en in CATEGORIES if zh == cat_zh), '')
+        tmpl_type  = f.get('template_type', 'video')
+        vimeo_id   = extract_vimeo_id(f.get('vimeo_id', ''))
+        commit_msg = f.get('commit_msg', '').strip() or f'edit: update {new_slug}'
+
+        existing_images = f.getlist('existing_images')
+        new_images = []
+        for img_file in request.files.getlist('images'):
+            if img_file and img_file.filename:
+                fn = secure_filename(img_file.filename)
+                img_file.save(os.path.join(IMAGES, fn))
+                new_images.append(fn)
+
+        data = {
+            'title_en':      title_en,
+            'title_zh':      title_zh,
+            'date':          new_date,
+            'category_en':   cat_en,
+            'series_en':     f.get('series_en', '').strip(),
+            'series_zh':     f.get('series_zh', '').strip(),
+            'producer':      f.get('producer', '').strip(),
+            'producer_zh':   f.get('producer_zh', '').strip(),
+            'content_en':    f.get('content_en', '').strip(),
+            'content_zh':    f.get('content_zh', '').strip(),
+            'format':        f.get('format', '').strip(),
+            'tech':          f.get('tech', '').strip(),
+            'reflection_en': f.get('reflection_en', '').strip(),
+            'reflection_zh': f.get('reflection_zh', '').strip(),
+            'vimeo_id':      vimeo_id,
+            'images':        existing_images + new_images,
+        }
+
+        gen = GENERATORS.get(tmpl_type, gen_construction)
+        page_html = gen(data)
+
+        out = os.path.join(PROJECTS, f'{new_slug}.html')
+        with open(out, 'w', encoding='utf-8') as fp:
+            fp.write(page_html)
+
+        display = f"{title_en} {title_zh}".strip() if title_zh else title_en
+        if fork_mode:
+            # 更新 work.html 里那一条的 href 指向新文件
+            update_specific_entry_href(orig_slug, entry_date, entry_title_orig,
+                                       new_slug, new_date, display)
+        else:
+            update_work_entry(slug, new_date, title_en, title_zh)
+
+        if action == 'deploy':
+            git_push(commit_msg)
+
+        return redirect(f'/?ok=已保存 projects/{new_slug}.html')
+
+    # GET — 读取现有文件
+    fork_mode = bool(request.args.get('date') and request.args.get('title'))
+    entry_date  = request.args.get('date', '')
+    entry_title = request.args.get('title', '')
+
+    data = parse_project_html(slug)
+    if not data:
+        return redirect(f'/?err=找不到 projects/{slug}.html')
+
+    if fork_mode:
+        # 用 URL 里的 title/date 覆盖，作为新页面的初始值
+        data['title_en'] = entry_title
+        data['title_zh'] = ''
+        data['date']     = entry_date
+        data['cat_zh']   = '过往实践'
+        suggested_slug   = slugify(entry_title) or slugify(entry_date)
+    else:
+        date, cat_zh = get_slug_info(slug)
+        data['date']   = date
+        data['cat_zh'] = cat_zh
+        suggested_slug = slug
+
+    return render_template_string(
+        EDIT_TMPL.replace('{{ css }}', ADMIN_CSS),
+        slug=slug,
+        d=data,
+        fork_mode=fork_mode,
+        suggested_slug=suggested_slug,
+        categories=CATEGORIES,
+        templates=TEMPLATE_TYPES,
+        messages=messages,
+    )
 
 
 if __name__ == '__main__':
