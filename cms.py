@@ -780,7 +780,10 @@ def parse_project_html(slug):
         elif i == 0:
             text = re.sub(r'<br\s*/?>', '\n', p)
             text = re.sub(r'<[^>]+>', '', text).strip()
-            d['series_en'] = re.sub(r'\n{3,}', '\n\n', text)
+            text = re.sub(r'\n{3,}', '\n\n', text)
+            cat_en_values = {en for _, en in CATEGORIES}
+            lines = [l for l in text.splitlines() if l.strip() not in cat_en_values]
+            d['series_en'] = '\n'.join(lines).strip()
 
     # 解析 .zh 段落
     zh_paras = re.findall(r'<p class="zh"[^>]*>\s*(.*?)\s*</p>', html, re.DOTALL)
@@ -799,7 +802,9 @@ def parse_project_html(slug):
         elif '形式：' in clean or '技术：' in clean:
             pass
         elif not d['series_zh'] and len(clean) < 100:
-            d['series_zh'] = text
+            cat_zh_values = {zh for zh, _ in CATEGORIES}
+            lines = [l for l in text.splitlines() if l.strip() not in cat_zh_values]
+            d['series_zh'] = '\n'.join(lines).strip()
         else:
             zh_content_parts.append(text)
     d['content_zh'] = '\n\n'.join(zh_content_parts)
