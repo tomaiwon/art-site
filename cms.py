@@ -836,8 +836,9 @@ def update_work_entry(slug, new_date, new_title_en, new_title_zh):
               f'<a href="projects/{slug}.html">{display}</a></span>\n'
               f'        </li>')
     pat = re.compile(
-        r'<li class="item">.*?href="projects/' + re.escape(slug) + r'\.html".*?</li>',
-        re.DOTALL)
+        r'<li class="item">\s*<span class="year">[^<]*</span>\s*<span class="name">'
+        r'<a href="projects/' + re.escape(slug) + r'\.html">[^<]*</a></span>\s*</li>'
+    )
     new_html, n = pat.subn(new_li, html)
     if n == 0:
         return False, f'work.html 中找不到 {slug}'
