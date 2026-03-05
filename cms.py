@@ -96,37 +96,37 @@ def insert_work_entry(cat_zh, date, title_en, title_zh, slug):
 # ── HTML 模板生成 ────────────────────────────────────────────────────────────
 
 SHARED_STYLE = '''
-  @font-face{{ font-family:"EFont"; src:url("../fonts/E.ttf") format("truetype"); }}
-  @font-face{{ font-family:"ZFont"; src:url("../fonts/Z.ttf") format("truetype"); }}
-  html,body,*{{ font-synthesis:none; }}
-  html,body{{ margin:0; padding:0; width:100%; height:100%; background:#000; color:#fff; }}
-  .nav-left,.nav-right{{
+  @font-face{ font-family:"EFont"; src:url("../fonts/E.ttf") format("truetype"); }
+  @font-face{ font-family:"ZFont"; src:url("../fonts/Z.ttf") format("truetype"); }
+  html,body,*{ font-synthesis:none; }
+  html,body{ margin:0; padding:0; width:100%; height:100%; background:#000; color:#fff; }
+  .nav-left,.nav-right{
     position:fixed; top:22px; z-index:1000;
     font-family:"ZFont","EFont",sans-serif;
     font-size:28px; letter-spacing:2.5px; opacity:0.6; transition:opacity .2s;
-  }}
-  .nav-left{{ left:30px; }} .nav-right{{ right:30px; }}
-  .nav-left:hover,.nav-right:hover{{ opacity:1; }}
-  .nav-left a,.nav-right button,.nav-right a{{
+  }
+  .nav-left{ left:30px; } .nav-right{ right:30px; }
+  .nav-left:hover,.nav-right:hover{ opacity:1; }
+  .nav-left a,.nav-right button,.nav-right a{
     color:#fff; background:none; border:none;
     text-decoration:none; cursor:pointer; font:inherit;
-  }}
-  .nav-left a:hover,.nav-right button:hover,.nav-right a:hover{{
+  }
+  .nav-left a:hover,.nav-right button:hover,.nav-right a:hover{
     text-decoration:underline; text-underline-offset:5px;
-  }}
-  .info-box{{ max-width:760px; margin:0 auto; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }}
-  .info-box h1{{ font-size:28px; font-weight:500; letter-spacing:0.3px; margin-bottom:26px; color:#ddd; }}
-  .info-box p{{ font-size:12px; line-height:1.5; margin-bottom:22px; }}
-  .en{{ font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-weight:500; color:#ddd; }}
-  .zh{{ font-family:"SimSun","宋体",serif; font-weight:700; color:#eee; }}
-  .work-image{{ width:100%; margin:34px 0; display:block; height:auto; }}
-  .work-image.tight{{ margin-bottom:14px; }}
-  .caption{{ font-size:12px; color:#666; line-height:1.55; margin-top:-6px; margin-bottom:26px; }}
-  .lang-divider{{ border:0; border-top:1px solid #333; margin:42px 0 36px; }}
-  .footer-divider{{ border:0; border-top:1px solid #333; margin:54px 0 28px; }}
-  .self-reflection{{ display:flex; gap:40px; padding-bottom:40px; }}
-  .self-reflection p{{ width:50%; margin:0; }}
-  @media(max-width:860px){{ .self-reflection{{ flex-direction:column; gap:20px; }} .self-reflection p{{ width:100%; }} }}
+  }
+  .info-box{ max-width:760px; margin:0 auto; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
+  .info-box h1{ font-size:28px; font-weight:500; letter-spacing:0.3px; margin-bottom:26px; color:#ddd; }
+  .info-box p{ font-size:12px; line-height:1.5; margin-bottom:22px; }
+  .en{ font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-weight:500; color:#ddd; }
+  .zh{ font-family:"SimSun","宋体",serif; font-weight:700; color:#eee; }
+  .work-image{ width:100%; margin:34px 0; display:block; height:auto; }
+  .work-image.tight{ margin-bottom:14px; }
+  .caption{ font-size:12px; color:#666; line-height:1.55; margin-top:-6px; margin-bottom:26px; }
+  .lang-divider{ border:0; border-top:1px solid #333; margin:42px 0 36px; }
+  .footer-divider{ border:0; border-top:1px solid #333; margin:54px 0 28px; }
+  .self-reflection{ display:flex; gap:40px; padding-bottom:40px; }
+  .self-reflection p{ width:50%; margin:0; }
+  @media(max-width:860px){ .self-reflection{ flex-direction:column; gap:20px; } .self-reflection p{ width:100%; } }
 '''
 
 def _info_body(d):
