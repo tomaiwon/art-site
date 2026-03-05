@@ -765,7 +765,8 @@ def parse_project_html(slug):
             d['producer'] = clean.split('Producer:', 1)[1].strip()
         elif clean.startswith('Content:'):
             text = re.sub(r'<br\s*/?>', '\n', p)
-            d['content_en'] = re.sub(r'<[^>]+>', '', text).replace('Content:', '').strip()
+            text = re.sub(r'<[^>]+>', '', text).replace('Content:', '').strip()
+            d['content_en'] = re.sub(r'\n{3,}', '\n\n', text)
         elif 'Format:' in clean:
             m2 = re.search(r'Format:\s*([^\n<]+)', clean)
             d['format'] = m2.group(1).strip() if m2 else ''
@@ -775,7 +776,8 @@ def parse_project_html(slug):
             d['reflection_en'] = clean.split('Self Reflection:', 1)[1].strip()
         elif i == 0:
             text = re.sub(r'<br\s*/?>', '\n', p)
-            d['series_en'] = re.sub(r'<[^>]+>', '', text).strip()
+            text = re.sub(r'<[^>]+>', '', text).strip()
+            d['series_en'] = re.sub(r'\n{3,}', '\n\n', text)
 
     # 解析 .zh 段落
     zh_paras = re.findall(r'<p class="zh"[^>]*>\s*(.*?)\s*</p>', html, re.DOTALL)
@@ -786,6 +788,7 @@ def parse_project_html(slug):
         clean = re.sub(r'\s+', ' ', clean)
         text = re.sub(r'<br\s*/?>', '\n', p)
         text = re.sub(r'<[^>]+>', '', text).strip()
+        text = re.sub(r'\n{3,}', '\n\n', text)
         if '制作人：' in clean:
             d['producer_zh'] = clean.split('制作人：', 1)[1].strip()
         elif '自检：' in clean:
