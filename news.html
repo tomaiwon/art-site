@@ -130,6 +130,21 @@
     font-size:18px;
     font-variant-numeric:tabular-nums;
   }
+
+  .thoughts-btn{
+    display:inline-block;
+    margin-bottom:36px;
+    font-family:"EFont","ZFont",sans-serif;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:2px;
+    color:#111;
+    text-decoration:none;
+    border:1px solid #111;
+    padding:7px 16px;
+    transition:background 0.15s,color 0.15s;
+  }
+  .thoughts-btn:hover{background:#111;color:#fff;}
 </style>
 </head>
 <body>
@@ -144,6 +159,7 @@
 <main class="page">
   <h1 class="page-title">AUTOMATIC</h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
+  <a href="thoughts.html" class="thoughts-btn">每日思考 DAILY THOUGHTS →</a>
   <script>(function(){
     function secs(){
       var f=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
