@@ -399,11 +399,11 @@ def generate_html(sections_html):
     letter-spacing:1.5px;
     color:#111;
     text-decoration:none;
-    border:1px solid #ccc;
+    border:1px solid #111;
     padding:5px 14px;
-    margin:0 0 28px 0;
+    margin:0 0 18px 0;
   }}
-  .thoughts-btn:hover{{border-color:#111;}}
+  .thoughts-btn:hover{{text-decoration:underline;text-underline-offset:4px;}}
   .next-update{{
     font-family:"EFont","ZFont",sans-serif;
     font-size:13px;
