@@ -403,7 +403,7 @@ def generate_html(sections_html):
     padding:5px 14px;
     margin:0 0 18px 0;
   }}
-  .thoughts-btn:hover{{text-decoration:underline;text-underline-offset:4px;}}
+  .thoughts-btn:hover{{background:#111;color:#fff;}}
   .next-update{{
     font-family:"EFont","ZFont",sans-serif;
     font-size:13px;
