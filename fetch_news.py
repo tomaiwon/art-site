@@ -394,16 +394,16 @@ def generate_html(sections_html):
   .thoughts-btn{{
     display:inline-block;
     font-family:"ZFont","EFont",sans-serif;
-    font-size:16px;
+    font-size:22px;
     font-weight:700;
     letter-spacing:1.5px;
     color:#111;
     text-decoration:none;
-    border:1px solid #111;
-    padding:6px 16px;
+    border:1px solid #ccc;
+    padding:5px 14px;
     margin:0 0 28px 0;
   }}
-  .thoughts-btn:hover{{text-decoration:underline;text-underline-offset:4px;}}
+  .thoughts-btn:hover{{border-color:#111;}}
   .next-update{{
     font-family:"EFont","ZFont",sans-serif;
     font-size:13px;
