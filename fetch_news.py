@@ -430,7 +430,7 @@ def generate_html(sections_html):
 <main class="page">
   <h1 class="page-title">AUTOMATIC</h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
-  <a href="thoughts.html" class="thoughts-btn">沉思录 →</a>
+  <a href="thoughts.html" class="thoughts-btn">沉思录</a>
   <script>(function(){{
     function secs(){{
       var f=new Intl.DateTimeFormat('en-GB',{{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}});
