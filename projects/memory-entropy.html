@@ -61,123 +61,7 @@ Attributes Research
     <p class="en">Producer: Yi Huang</p>
 
     <p class="en">
-      Content: Based on the characteristics of digital memory, I explored the attribute characteristics of digital image storage itself, in the process of digital entropy, digital images as data have to lose themselves in the transmission process, even if they are repaired, they are no longer the original flavor, which is extremely similar to the current human perception of memory.<br>
-<br>
-Technical Logic：I. Starting Point: Digital images are never ‘true’ copies<br>
-<br>
-Digital images begin to lose fidelity the moment they are stored.<br>
-<br>
-This work uses a camera to take a photograph of you every 30 seconds, but by the moment the<br>
-<br>
-image is captured, it has already undergone a triple ‘forgetfulness’:<br>
-<br>
-Lossy compression: doCamCapture exports JPEG files (quality 0.88), not raw data. The first loss of<br>
-<br>
-information occurs at the very moment of capture.<br>
-<br>
-Downsampling: The original camera resolution is 640×360, but the point cloud uses only 128×72—<br>
-<br>
-9,216 sample points. A vast amount of spatial detail is discarded during quantisation.<br>
-<br>
-Compression of the colour dimension: When constructing the point cloud, the three RGB channels<br>
-<br>
-are collapsed into a single luminance value, used to drive the Z-axis (depth). The richness of the<br>
-<br>
-colours themselves is exchanged for a single dimension in space—information conservation is not<br>
-<br>
-achieved, and the information is distorted.<br>
-<br>
-This corresponds to the ‘encoding loss’ in human memory—the moment an event enters memory, it<br>
-<br>
-is no longer the event itself, but rather the part that the brain has chosen to retain.<br>
-<br>
-II. Entropy Gain During Transmission: Existence Itself Leads to Corrosion<br>
-<br>
-The core contradiction of the work lies here:<br>
-<br>
-When you stand in front of the camera, your motion heatmap corrodes your own image.<br>
-<br>
-The technical process is as follows:<br>
-<br>
-The sensor (64×36) calculates frame-to-frame differences every 5 frames, generating a motion<br>
-<br>
-heatmap.<br>
-<br>
-In areas where your body moves, the corresponding points on the point cloud begin to accumulate a<br>
-<br>
-corrosion value, ptC.<br>
-<br>
-Once the corrosion value exceeds the threshold, that point transforms from a coloured square into a<br>
-<br>
-white noise block, overlaid with randomly flickering base-12 characters (0–9AB).<br>
-<br>
-When you stop moving, the erosion value decays slowly (× 0.965), and the point cloud gradually<br>
-<br>
-‘recover’s’<br>
-<br>
-This corresponds to the fact that memory, in the process of being ‘used’ (recalling, recounting,<br>
-<br>
-repeatedly revisiting), actually accelerates its distortion. Every retrieval is a re-encoding,<br>
-<br>
-introducing new errors. ‘You think you are remembering it, but you are actually rewriting it.’<br>
-<br>
-III. After Repair, It Is No Longer the Original<br>
-<br>
-Following corrosion and degradation, the dots return to their coloured state—appearing to have<br>
-<br>
-been restored.<br>
-<br>
-However, there is one crucial detail: the base-12 characters that fluctuated randomly during the<br>
-<br>
-corrosion process are, technically speaking, randomly regenerated (ptI[i] =<br>
-<br>
-Math.floor(Math.random() * 12)), rather than recovered from the original image data. The ‘original<br>
-<br>
-information’ that once resided in that character slot is now irretrievable.<br>
-<br>
-This is precisely where digital entropy is at its most cruel—repair and restoration are two distinct<br>
-<br>
-matters. Repair involves filling gaps with new data, rather than retrieving what has been lost. It is<br>
-<br>
-akin to how humans ‘fill in the blanks’ of damaged memories; often, the brain reconstructs the<br>
-<br>
-content using logic and emotional biases, rather than recalling what actually happened.<br>
-<br>
-IV. The 30-second overwrite cycle: the layering and overwriting of memory<br>
-<br>
-Every 30 seconds, the camera captures a new image and the entire point cloud is reconstructed—the<br>
-<br>
-data of the previous ‘you’ is overwritten.<br>
-<br>
-This overwriting is not a gradual process, but a replacement. The new point cloud does not sit on<br>
-<br>
-top of the old one, but directly replaces it. The previous state vanishes without a trace.<br>
-<br>
-This is analogous to the ‘interference effect’ in human memory—new experiences overwrite old<br>
-<br>
-ones, particularly similar ones. That afternoon you thought you remembered so clearly may well<br>
-<br>
-have been quietly overwritten long ago by countless similar afternoons that followed.<br>
-<br>
-V. The Choice of Base-12 Characters<br>
-<br>
-The corrupted state displays not random gibberish, but the base-12 (duodecimal) character set: 0 1 2<br>
-<br>
-3 4 5 6 7 8 9 A B.<br>
-<br>
-This choice is significant: it is neither text that humans can read directly, nor completely<br>
-<br>
-meaningless noise—it is a machine language, yet one that humans can barely make out. It occupies<br>
-<br>
-a liminal space between ‘readable’ and ‘unreadable’, much like fragments of memory: you know<br>
-<br>
-what they are, yet cannot fully reconstruct their meaning.<br>
-<br>
-The central proposition of the entire work is this: digital images and human memory share the same<br>
-<br>
-fate—neither is a faithful record of reality, but rather a stream of data constantly drifting through<br>
-<br>
-transmission, compression, corruption, overwriting and error correction.
+      Content: Based on the characteristics of digital memory, I explored the attribute characteristics of digital image storage itself, in the process of digital entropy, digital images as data have to lose themselves in the transmission process, even if they are repaired, they are no longer the original flavor, which is extremely similar to the current human perception of memory.
     </p>
 
 <img class="work-image tight" src="../images/ScreenShot_2026-03-05_180722_622.png" alt="still 01">
