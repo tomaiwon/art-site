@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cloth Test</title>
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#fff; }
+  canvas { display:block; }
+  #info {
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    font-family:sans-serif; font-size:12px; color:#aaa; pointer-events:none;
+    letter-spacing:1px;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="info">MOVE MOUSE · CLOTH SIMULATION TEST</div>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161/build/three.module.js';
+
+// ── Renderer ──────────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setClearColor(0xffffff, 1);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+let W = window.innerWidth, H = window.innerHeight;
+renderer.setSize(W, H);
+
+// Orthographic camera: 1 world unit = 1 CSS pixel
+const camera = new THREE.OrthographicCamera(-W/2, W/2, H/2, -H/2, 1, 2000);
+camera.position.z = 800;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xffffff);
+
+// ── Cloth config ──────────────────────────────────────────────────
+const COLS = 38, ROWS = 30, N = COLS * ROWS;
+const GRAVITY  = 0.30;
+const DAMPING  = 0.988;
+const ITERS    = 16;
+const M_RADIUS = 140;
+const M_FORCE  = 12;
+
+// Typed arrays for Verlet integration
+const curX = new Float32Array(N), curY = new Float32Array(N), curZ = new Float32Array(N);
+const preX = new Float32Array(N), preY = new Float32Array(N), preZ = new Float32Array(N);
+const pin  = new Uint8Array(N);
+
+let conA, conB, conL, conCount = 0;
+let restH, restV;
+
+function initCloth() {
+  restH = W / (COLS - 1);
+  restV = H / (ROWS - 1);
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const i = r * COLS + c;
+      const x = -W/2 + c * restH;
+      const y =  H/2 - r * restV;
+      curX[i] = preX[i] = x;
+      curY[i] = preY[i] = y;
+      curZ[i] = preZ[i] = 0;
+      pin[i] = (r === 0) ? 1 : 0;
+    }
+  }
+}
+
+function buildConstraints() {
+  let total = 0;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    if (c < COLS-1) total++;
+    if (r < ROWS-1) total++;
+    if (c < COLS-1 && r < ROWS-1) total += 2;
+    if (c < COLS-2) total++;
+    if (r < ROWS-2) total++;
+  }
+  conA = new Int32Array(total);
+  conB = new Int32Array(total);
+  conL = new Float32Array(total);
+  conCount = 0;
+  const add = (a, b, l) => { conA[conCount]=a; conB[conCount]=b; conL[conCount]=l; conCount++; };
+  const dShear = Math.sqrt(restH*restH + restV*restV);
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const i = r*COLS+c;
+    if (c < COLS-1)                 add(i, i+1,       restH);
+    if (r < ROWS-1)                 add(i, i+COLS,    restV);
+    if (c < COLS-1 && r < ROWS-1){ add(i, i+COLS+1,  dShear); add(i+1, i+COLS, dShear); }
+    if (c < COLS-2)                 add(i, i+2,       restH*2);
+    if (r < ROWS-2)                 add(i, i+COLS*2,  restV*2);
+  }
+}
+
+// ── Geometry (shared position buffer) ────────────────────────────
+const posArr  = new Float32Array(N * 3);
+const posAttr = new THREE.BufferAttribute(posArr, 3);
+
+// White cloth surface (gives 3-D occlusion/depth)
+const meshGeo = new THREE.BufferGeometry();
+meshGeo.setAttribute('position', posAttr);
+const faceIdx = [];
+for (let r = 0; r < ROWS-1; r++) for (let c = 0; c < COLS-1; c++) {
+  const a=r*COLS+c, b=a+1, d=a+COLS, e=d+1;
+  faceIdx.push(a,d,b, b,d,e);
+}
+meshGeo.setIndex(faceIdx);
+scene.add(new THREE.Mesh(meshGeo,
+  new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })));
+
+// Grid lines on top
+const lineIdx = [];
+for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+  const i = r*COLS+c;
+  if (c < COLS-1) lineIdx.push(i, i+1);
+  if (r < ROWS-1) lineIdx.push(i, i+COLS);
+}
+const lineGeo = new THREE.BufferGeometry();
+lineGeo.setAttribute('position', posAttr);
+lineGeo.setIndex(lineIdx);
+scene.add(new THREE.LineSegments(lineGeo,
+  new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.11 })));
+
+// ── Mouse / Touch ─────────────────────────────────────────────────
+const mouse = { x:0, y:0, active:false };
+window.addEventListener('mousemove', e => {
+  mouse.x = e.clientX - W/2;
+  mouse.y = H/2 - e.clientY;
+  mouse.active = true;
+});
+window.addEventListener('mouseleave', () => mouse.active = false);
+window.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  mouse.x = t.clientX - W/2;
+  mouse.y = H/2 - t.clientY;
+  mouse.active = true;
+}, { passive: true });
+window.addEventListener('touchend', () => mouse.active = false);
+
+// ── Physics ───────────────────────────────────────────────────────
+let simTime = 0;
+
+function step() {
+  simTime += 0.009;
+
+  for (let i = 0; i < N; i++) {
+    if (pin[i]) continue;
+    const c = i % COLS, r = Math.floor(i / COLS);
+
+    // Gentle wind
+    const wind = Math.sin(simTime*0.9 + c*0.20 + r*0.06) * 0.055
+               + Math.sin(simTime*1.4 + c*0.11)           * 0.025;
+
+    let vx = (curX[i]-preX[i]) * DAMPING;
+    let vy = (curY[i]-preY[i]) * DAMPING;
+    let vz = (curZ[i]-preZ[i]) * DAMPING;
+
+    preX[i]=curX[i]; preY[i]=curY[i]; preZ[i]=curZ[i];
+    curX[i] += vx + wind;
+    curY[i] += vy - GRAVITY;
+    curZ[i] += vz + Math.sin(simTime*0.6 + c*0.13 + r*0.07) * 0.02;
+
+    // Mouse push (mostly toward viewer in Z)
+    if (mouse.active) {
+      const dx = curX[i]-mouse.x, dy = curY[i]-mouse.y;
+      const d2 = dx*dx + dy*dy;
+      if (d2 < M_RADIUS*M_RADIUS && d2 > 0.01) {
+        const d = Math.sqrt(d2);
+        const f = (1 - d/M_RADIUS) * M_FORCE;
+        curX[i] += (dx/d) * f * 0.18;
+        curY[i] += (dy/d) * f * 0.18;
+        curZ[i] += f * 0.9;
+      }
+    }
+  }
+
+  // Constraint relaxation (Gauss-Seidel)
+  for (let iter = 0; iter < ITERS; iter++) {
+    for (let j = 0; j < conCount; j++) {
+      const a=conA[j], b=conB[j], len=conL[j];
+      const dx=curX[b]-curX[a], dy=curY[b]-curY[a], dz=curZ[b]-curZ[a];
+      const d = Math.sqrt(dx*dx+dy*dy+dz*dz) + 1e-8;
+      const diff = (d - len) / d * 0.5;
+      const ox=dx*diff, oy=dy*diff, oz=dz*diff;
+      if (!pin[a]){ curX[a]+=ox; curY[a]+=oy; curZ[a]+=oz; }
+      if (!pin[b]){ curX[b]-=ox; curY[b]-=oy; curZ[b]-=oz; }
+    }
+  }
+
+  // Upload positions to GPU
+  for (let i = 0; i < N; i++) {
+    posArr[i*3]=curX[i]; posArr[i*3+1]=curY[i]; posArr[i*3+2]=curZ[i];
+  }
+  posAttr.needsUpdate = true;
+  meshGeo.computeVertexNormals();
+}
+
+// ── Resize ────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  W = window.innerWidth; H = window.innerHeight;
+  renderer.setSize(W, H);
+  camera.left=-W/2; camera.right=W/2; camera.top=H/2; camera.bottom=-H/2;
+  camera.updateProjectionMatrix();
+  initCloth(); buildConstraints();
+});
+
+// ── Loop ──────────────────────────────────────────────────────────
+function animate() {
+  step();
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+initCloth();
+buildConstraints();
+animate();
+</script>
+</body>
+</html>
