@@ -231,13 +231,6 @@
     .hero img{ max-height:32vh; }
     .footer{ margin-top:14px; }
   }
-
-  body { perspective: 1400px; perspective-origin: 50% 40%; }
-  .screen, .wrap { transform-style: preserve-3d; }
-  .section-title,.about-zh,.about-en,.edu,.footer {
-    will-change: transform;
-    transition: transform 0.05s linear;
-  }
 </style>
 </head>
 
@@ -294,8 +287,6 @@
 
 const canvas = document.getElementById('field');
 const ctx = canvas.getContext('2d', { alpha: true });
-const trailCanvas = document.createElement('canvas');
-const trailCtx    = trailCanvas.getContext('2d', { alpha: true });
 
 let W = 0, H = 0, DPR = 1;
 function resize(){
@@ -307,9 +298,6 @@ function resize(){
   canvas.style.width = W + 'px';
   canvas.style.height = H + 'px';
   ctx.setTransform(DPR,0,0,DPR,0,0);
-  trailCanvas.width  = canvas.width;
-  trailCanvas.height = canvas.height;
-  trailCtx.setTransform(DPR,0,0,DPR,0,0);
 }
 window.addEventListener('resize', resize);
 resize();
@@ -522,185 +510,57 @@ function respawn(p, biasCenter=false){
   p.life = Math.random() * 300 + 80;
 }
 
-// ── CLOTH HEIGHT FIELD (全屏，Z轴置换 + 斜投影) ───────────────────
-const CG_COLS = 44, CG_ROWS = 32, CG_K = 0.34;
-const CG_N = CG_COLS * CG_ROWS;
-const cgZ  = new Float32Array(CG_N);
-const cgVZ = new Float32Array(CG_N);
-let cgGX = new Float32Array(CG_COLS);
-let cgGY = new Float32Array(CG_ROWS);
-let cgCW, cgCH, cgTime = 0;
-
-function initCG() {
-  cgCW = W / (CG_COLS - 1);
-  cgCH = H / (CG_ROWS - 1);
-  for (let c = 0; c < CG_COLS; c++) cgGX[c] = c * cgCW;
-  for (let r = 0; r < CG_ROWS; r++) cgGY[r] = r * cgCH;
-  cgZ.fill(0); cgVZ.fill(0);
-}
-
-/* 双线性插值：取屏幕坐标 (x,y) 处的 Z 值 */
-function cgInterp(x, y) {
-  const fc = x / cgCW, fr = y / cgCH;
-  const c0 = Math.max(0, Math.min(CG_COLS-2, fc|0));
-  const r0 = Math.max(0, Math.min(CG_ROWS-2, fr|0));
-  const tx = fc - c0, ty = fr - r0;
-  const i00 = r0*CG_COLS+c0;
-  return cgZ[i00]*(1-tx)*(1-ty) + cgZ[i00+1]*tx*(1-ty)
-       + cgZ[i00+CG_COLS]*(1-tx)*ty + cgZ[i00+CG_COLS+1]*tx*ty;
-}
-
-function stepCG() {
-  cgTime += 0.011;
-  for (let r = 0; r < CG_ROWS; r++) for (let c = 0; c < CG_COLS; c++) {
-    const i = r*CG_COLS+c;
-    /* 风力：4个谐波，不规则随机感 */
-    const wind = Math.sin(cgTime*0.65 + c*0.22 + r*0.14)*2.2
-               + Math.sin(cgTime*1.05 + c*0.13 + r*0.09)*1.0
-               + Math.sin(cgTime*0.38 - c*0.18 + r*0.21)*1.4
-               + Math.cos(cgTime*0.82 + c*0.31 - r*0.17)*0.7;
-    cgVZ[i] += wind * 0.012;
-    /* 弹簧拉回平坦 */
-    cgVZ[i] -= cgZ[i] * 0.005;
-    /* 邻域拉普拉斯平滑（让波形连续传播）*/
-    let lap = 0, cnt = 0;
-    if (r > 0)        { lap += cgZ[i-CG_COLS]; cnt++; }
-    if (r < CG_ROWS-1){ lap += cgZ[i+CG_COLS]; cnt++; }
-    if (c > 0)        { lap += cgZ[i-1];        cnt++; }
-    if (c < CG_COLS-1){ lap += cgZ[i+1];        cnt++; }
-    if (cnt) cgVZ[i] += (lap/cnt - cgZ[i]) * 0.038;
-    /* 鼠标向屏幕外推（创造凹陷波纹）*/
-    if (mouse.active) {
-      const dx = cgGX[c]-mouse.x, dy = cgGY[r]-mouse.y;
-      const d2 = dx*dx + dy*dy;
-      if (d2 < 14400 && d2 > 0.1)
-        cgVZ[i] -= (1 - Math.sqrt(d2)/120) * 20;
-    }
-    cgVZ[i] *= 0.952;
-    cgZ[i]  += cgVZ[i];
-  }
-}
-
-function drawCG() {
-  /* 不透明布料面片：法线 z 分量决定明暗，给布面体积感 */
-  for (let r = 0; r < CG_ROWS-1; r++) for (let c = 0; c < CG_COLS-1; c++) {
-    const a=r*CG_COLS+c, b=a+1, d=a+CG_COLS, e=d+1;
-    const dzx = (cgZ[b]-cgZ[a]) / cgCW;
-    const dzy = (cgZ[d]-cgZ[a]) / cgCH;
-    const nz  = 1 / Math.sqrt(dzx*dzx*0.048 + dzy*dzy*0.048 + 1);
-    const val = (208 + 47*nz)|0;            // 208-255，明暗对比更强
-    ctx.fillStyle = `rgb(${val},${val},${val})`;
-    ctx.beginPath();
-    ctx.moveTo(cgGX[c]  +cgZ[a]*CG_K, cgGY[r]  -cgZ[a]*CG_K);
-    ctx.lineTo(cgGX[c+1]+cgZ[b]*CG_K, cgGY[r]  -cgZ[b]*CG_K);
-    ctx.lineTo(cgGX[c+1]+cgZ[e]*CG_K, cgGY[r+1]-cgZ[e]*CG_K);
-    ctx.lineTo(cgGX[c]  +cgZ[d]*CG_K, cgGY[r+1]-cgZ[d]*CG_K);
-    ctx.closePath(); ctx.fill();
-  }
-  /* 投影网格线 */
-  ctx.strokeStyle = 'rgba(0,0,0,0.07)'; ctx.lineWidth = 1;
-  for (let r = 0; r < CG_ROWS; r++) {
-    ctx.beginPath();
-    for (let c = 0; c < CG_COLS; c++) {
-      const i=r*CG_COLS+c;
-      const px=cgGX[c]+cgZ[i]*CG_K, py=cgGY[r]-cgZ[i]*CG_K;
-      c===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
-    }
-    ctx.stroke();
-  }
-  for (let c = 0; c < CG_COLS; c++) {
-    ctx.beginPath();
-    for (let r = 0; r < CG_ROWS; r++) {
-      const i=r*CG_COLS+c;
-      const px=cgGX[c]+cgZ[i]*CG_K, py=cgGY[r]-cgZ[i]*CG_K;
-      r===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
-    }
-    ctx.stroke();
-  }
-}
-
-/* 文字嵌入布料：CSS 3D transform 跟随布面倾斜 */
-let textEls = [];
-function cacheTextEls() {
-  textEls = Array.from(document.querySelectorAll('.section-title,.about-zh,.about-en,.edu,.footer'));
-}
-function updateTextTransforms() {
-  for (const el of textEls) {
-    const r = el.getBoundingClientRect();
-    const cx = r.left + r.width  * 0.5;
-    const cy = r.top  + r.height * 0.5;
-    const cz = cgInterp(cx, cy);
-    const dzx = (cgInterp(cx+24, cy) - cgInterp(cx-24, cy)) / 48;
-    const dzy = (cgInterp(cx, cy+24) - cgInterp(cx, cy-24)) / 48;
-    const ry = -dzx * CG_K * 26;
-    const rx =  dzy * CG_K * 26;
-    const tz =  cz  * CG_K * 1.1;
-    el.style.transform = `perspective(900px) rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg) translateZ(${tz.toFixed(1)}px)`;
-  }
-}
-
 function tick(now){
   const t = now * 0.001;
 
-  stepCG();
-  updateTextTransforms();
-
-  // 1. 绘制不透明布料背景
-  ctx.fillStyle = '#fff';
+  ctx.fillStyle = `rgba(255,255,255,${FADE})`;
   ctx.fillRect(0,0,W,H);
-  drawCG();
 
-  // 2. trailCanvas：destination-out 淡出旧轨迹（→透明，而非变白）
-  trailCtx.globalCompositeOperation = 'destination-out';
-  trailCtx.fillStyle = 'rgba(0,0,0,0.07)';
-  trailCtx.fillRect(0,0,W,H);
-  trailCtx.globalCompositeOperation = 'source-over';
-
-  // 3. 太极权重
+  // 计算当前太极权重，用于“读形增强”和“重生偏置”
   const cx = W * 0.5, cy = H * 0.5;
   const dist = Math.hypot(mouse.x - cx, mouse.y - cy);
   const inner = Math.min(W, H) * 0.16;
   const outer = Math.min(W, H) * 0.44;
   const wTaiji = 1.0 - smoothstep(inner, outer, dist);
   const w = clamp01(wTaiji);
+
+  // 太极越强，线条越稍微更黑（很克制）
   const alpha = 0.18 + 0.10 * w;
-  trailCtx.lineWidth = 1;
-  trailCtx.strokeStyle = `rgba(0,0,0,${alpha.toFixed(3)})`;
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = `rgba(0,0,0,${alpha.toFixed(3)})`;
+
   const bias = w > 0.35;
 
-  // 4. 粒子绘制到 trailCanvas（带布面斜投影）
   for(let i=0;i<COUNT;i++){
     const p = pts[i];
     let x = p.x, y = p.y;
-    let cz = cgInterp(x, y);
-    trailCtx.beginPath();
-    trailCtx.moveTo(x + cz*CG_K, y - cz*CG_K);
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+
     for(let s=0;s<STEP;s++){
       const v = field(x, y, t);
       x += v.x * SEG * 18;
       y += v.y * SEG * 18;
-      cz = cgInterp(x, y);
-      trailCtx.lineTo(x + cz*CG_K, y - cz*CG_K);
+      ctx.lineTo(x, y);
     }
-    trailCtx.stroke();
+
+    ctx.stroke();
+
     p.x = x; p.y = y;
     p.life -= 1;
+
     if(x < -20 || x > W+20 || y < -20 || y > H+20 || p.life <= 0){
       respawn(p, bias);
     }
   }
 
-  // 5. 将轨迹叠合到主 canvas
-  ctx.drawImage(trailCanvas, 0, 0, W, H);
   requestAnimationFrame(tick);
 }
 
 // 初始化
 ctx.fillStyle = '#fff';
 ctx.fillRect(0,0,W,H);
-window.addEventListener('resize', initCG);
-initCG();
-cacheTextEls();
 requestAnimationFrame(tick);
 </script>
 </body>
