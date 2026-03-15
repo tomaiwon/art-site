@@ -4,458 +4,567 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Yi Huang 黄熠</title>
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
 <link rel="preload" as="font" href="fonts/E.ttf" type="font/ttf" crossorigin>
 <link rel="preload" as="font" href="fonts/Z-index.woff2" type="font/woff2" crossorigin>
 
 <style>
-  @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
-  @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
-  @font-face{font-family:"ZFont";src:url("fonts/Z-index.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
-  @font-face{font-family:"ZFont";src:url("fonts/Z-index.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
-  @font-face{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
+  /* 字体：英 E / 中 Z / 数字 N */
+  @font-face{
+    font-family:"EFont";
+    src:url("fonts/E.ttf") format("truetype");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:"EFont";
+    src:url("fonts/E.ttf") format("truetype");
+    font-weight:700;
+    font-style:normal;
+    font-display:swap;
+  }
 
-  html,body{height:100%;overflow:hidden;margin:0;background:#ede9e3;}
+  @font-face{
+    font-family:"ZFont";
+    src:url("fonts/Z-index.woff2") format("woff2");
+    font-weight:400;
+    font-style:normal;
+    font-display:block;
+  }
+  @font-face{
+    font-family:"ZFont";
+    src:url("fonts/Z-index.woff2") format("woff2");
+    font-weight:700;
+    font-style:normal;
+    font-display:block;
+  }
 
-  #three-canvas{
-    position:fixed;inset:0;z-index:0;display:block;
+  @font-face{
+    font-family:"NFont";
+    src:url("fonts/N.ttf") format("truetype");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:"NFont";
+    src:url("fonts/N.ttf") format("truetype");
+    font-weight:700;
+    font-style:normal;
+    font-display:swap;
+  }
+
+  html,body{height:100%; overflow:hidden;}
+  body{
+    margin:0;
+    background:#ffffff;
+    color:#111;
+    font-family:"ZFont","EFont","PingFang SC","Noto Sans SC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  #field{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
   }
 
   .top-nav{
-    position:fixed;top:22px;right:30px;z-index:10;
-    display:flex;flex-direction:column;align-items:flex-end;gap:10px;
-    font-size:28px;font-weight:700;letter-spacing:2.5px;
-    font-family:"EFont","ZFont",sans-serif;
-    mix-blend-mode:multiply;
-  }
-  .top-nav a{color:#111;text-decoration:none;line-height:1;}
-  .top-nav a:hover{text-decoration:underline;text-underline-offset:5px;}
+    position:fixed;
+    top:22px;
+    right:30px;
+    z-index:2;
 
-  @media(max-width:860px){
-    .top-nav{font-size:16px;letter-spacing:1.5px;right:18px;top:18px;gap:8px;}
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:2.5px;
+    font-family:"EFont","ZFont",sans-serif;
+  }
+  .top-nav a{color:#111; text-decoration:none; line-height:1;}
+  .top-nav a:hover{ text-decoration:underline; text-underline-offset:5px; }
+
+  .screen{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    box-sizing:border-box;
+    position:relative;
+    z-index:1;
+  }
+  .wrap{
+    width:min(920px, 100%);
+    text-align:center;
+  }
+
+  .section-title{
+    font-size:28px;
+    letter-spacing:2.5px;
+    font-weight:700;
+    margin:0 0 18px 0;
+    font-family:"EFont","ZFont",sans-serif;
+  }
+
+  .about-zh{
+    font-size:20px;
+    line-height:1.6;
+    font-weight:700;
+    max-width:780px;
+    margin:0 auto;
+    letter-spacing:0.2px;
+  }
+
+  .about-en{
+    margin-top:14px;
+    font-size:17px;
+    line-height:1.55;
+    font-weight:600;
+    max-width:780px;
+    margin-left:auto;
+    margin-right:auto;
+    color:#2a2a2a;
+    font-family:"EFont","ZFont",sans-serif;
+    letter-spacing:0.2px;
+  }
+
+  .edu{
+    margin-top:18px;
+    max-width:780px;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:left;
+  }
+  .edu-row{
+    display:grid;
+    grid-template-columns:140px 1fr;
+    column-gap:14px;
+    align-items:baseline;
+    margin:10px 0;
+  }
+  .edu-year{
+    font-family:"EFont","NFont",sans-serif;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:0.6px;
+    color:#5a5a5a;
+    white-space:nowrap;
+  }
+  .edu-text{
+    font-family:"EFont","ZFont",sans-serif;
+    font-weight:600;
+    font-size:17px;
+    line-height:1.5;
+    letter-spacing:0.2px;
+    color:#5a5a5a;
+  }
+
+  .hero{
+    margin:26px 0 18px;
+  }
+  .hero img{
+    width:100%;
+    height:auto;
+    max-height:38vh;
+    object-fit:contain;
+    display:block;
+  }
+
+  .footer{
+    margin-top:22px;
+    font-size:13px;
+    color:#666;
+    font-weight:600;
+    letter-spacing:0.5px;
+    font-family:"EFont","ZFont",sans-serif;
+  }
+
+  .mob-br{ display:none; }
+  .desk-sep{ display:inline; font-family:"EFont","ZFont",sans-serif; }
+
+  @media (max-width: 860px){
+    .mob-br{ display:block; }
+    .desk-sep{ display:none; }
+    .top-nav{
+      font-size:16px;
+      letter-spacing:1.5px;
+      right:18px;
+      top:18px;
+      gap:8px;
+    }
+    .section-title{ font-size:24px; }
+    .about-zh{ font-size:18px; }
+    .about-en{ font-size:15px; }
+    .edu-row{ display:block; margin:14px 0; }
+    .edu-year{ font-size:16px; }
+    .edu-text{ font-size:15px; margin-top:2px; }
+
+    html,body{ overflow:auto; height:auto; }
+    .screen{
+      height:auto;
+      min-height:100vh;
+      align-items:flex-start;
+      justify-content:flex-start;
+      padding:110px 24px 48px 24px;
+    }
+    .wrap{ text-align:left; width:100%; }
+    .about-zh{ margin:0; }
+    .about-en{ margin-left:0; margin-right:0; }
+    .edu{ margin-left:0; margin-right:0; }
+  }
+
+  @media (max-height: 720px){
+    .section-title{ font-size:24px; }
+    .about-zh{ font-size:18px; line-height:1.55; }
+    .about-en{ font-size:15px; line-height:1.5; }
+    .hero{ margin:18px 0 12px; }
+    .hero img{ max-height:32vh; }
+    .footer{ margin-top:14px; }
   }
 </style>
 </head>
-<body>
 
-<canvas id="three-canvas"></canvas>
+<body>
+<canvas id="field"></canvas>
 
 <nav class="top-nav" aria-label="Primary">
   <a href="work.html">WORK</a>
   <a href="contact.html">CONTACT</a>
-  <a href="news.html">AUTOMATIC</a>
+    <a href="news.html">AUTOMATIC</a>
   <a href="support.html">SUPPORT</a>
 </nav>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<div class="screen">
+  <div class="wrap">
+    <div class="section-title">ABOUT</div>
+
+    <div class="about-zh">
+      黄熠，二零零二年生。<span class="mob-br"></span>
+      栖居长沙、往来伦敦。<br>
+      为研究型文艺工作者。<br>
+      其作多由数字之世、艺史之脉与地缘之局而生。以影像、装置、文本为媒。
+    </div>
+
+    <div class="about-en">
+      Yi Huang (b. 2OO2) is a research-based artistic worker, based between Changsha and London.
+      His practice examines the digital age, art history, and geopolitics through moving image,
+      installation, and text.
+    </div>
+
+    <div class="edu" aria-label="Education">
+      <div class="edu-row">
+        <div class="edu-year">2O2O–2O24</div>
+        <div class="edu-text">Xi’an Academy of Fine Arts<span class="desk-sep"> — </span><span class="mob-br"></span>BA Digital Media Art</div>
+      </div>
+      <div class="edu-row">
+        <div class="edu-year">2O25–2O26</div>
+        <div class="edu-text">Royal College of Art<span class="desk-sep"> — </span><span class="mob-br"></span>MA Contemporary Art Practice</div>
+      </div>
+    </div>
+
+
+    <div class="footer">yihuang.art</div>
+  </div>
+</div>
+
 <script>
-// ─── Scene ─────────────────────────────────────────────────────────────────────
-const threeCanvas = document.getElementById('three-canvas');
-let W = window.innerWidth, H = window.innerHeight;
+/**
+ * 轻量“中心太极收敛”（优化版）：
+ * - 更强的 S 形分界导向
+ * - 太极状态粒子更偏向圆周重生，形更稳定
+ * - 太极权重越高，线条对比度轻微增强（更可读）
+ */
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xede9e3);
+const canvas = document.getElementById('field');
+const ctx = canvas.getContext('2d', { alpha: true });
 
-const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 200);
-camera.position.set(0, 0.5, 20);
-camera.lookAt(0, 0, 0);
-
-const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, antialias: true });
-renderer.setPixelRatio(Math.min(2, devicePixelRatio));
-renderer.setSize(W, H);
-
-// Lights — give the cloth folded-fabric shading
-const ambLight = new THREE.AmbientLight(0xfff8f0, 0.65);
-scene.add(ambLight);
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-dirLight.position.set(4, 6, 12);
-scene.add(dirLight);
-const fillLight = new THREE.DirectionalLight(0xffe8d0, 0.35);
-fillLight.position.set(-6, -2, -8);
-scene.add(fillLight);
-
-// ─── Cloth Texture (canvas) ────────────────────────────────────────────────────
-const TEX_W = 1024, TEX_H = 768;
-const texCanvas = document.createElement('canvas');
-texCanvas.width = TEX_W; texCanvas.height = TEX_H;
-const tc = texCanvas.getContext('2d');
-
-function drawTexture() {
-  // Fabric base
-  tc.fillStyle = '#f7f3ee';
-  tc.fillRect(0, 0, TEX_W, TEX_H);
-
-  // Subtle weave grain — very faint crosshatch
-  tc.save();
-  tc.globalAlpha = 0.028;
-  tc.strokeStyle = '#222';
-  tc.lineWidth = 0.6;
-  for (let x = 0; x < TEX_W; x += 7) {
-    tc.beginPath(); tc.moveTo(x, 0); tc.lineTo(x, TEX_H); tc.stroke();
-  }
-  for (let y = 0; y < TEX_H; y += 7) {
-    tc.beginPath(); tc.moveTo(0, y); tc.lineTo(TEX_W, y); tc.stroke();
-  }
-  tc.restore();
-
-  // ── ABOUT ──
-  tc.fillStyle = '#111';
-  tc.textAlign = 'center';
-  tc.font = 'bold 38px EFont, sans-serif';
-  tc.fillText('ABOUT', TEX_W / 2, 148);
-
-  // ── Chinese bio ──
-  tc.font = 'bold 24px ZFont, sans-serif';
-  tc.fillStyle = '#111';
-  const zhLines = [
-    '黄熠，二零零二年生。',
-    '栖居长沙、往来伦敦。',
-    '为研究型文艺工作者。',
-    '其作多由数字之世、艺史之脉',
-    '与地缘之局而生。以影像、装置、文本为媒。'
-  ];
-  zhLines.forEach((l, i) => tc.fillText(l, TEX_W / 2, 218 + i * 40));
-
-  // ── English bio ──
-  tc.font = '600 19px EFont, sans-serif';
-  tc.fillStyle = '#2a2a2a';
-  const enLines = [
-    'Yi Huang (b. 2OO2) is a research-based artistic worker,',
-    'based between Changsha and London. His practice',
-    'examines the digital age, art history, and geopolitics',
-    'through moving image, installation, and text.'
-  ];
-  enLines.forEach((l, i) => tc.fillText(l, TEX_W / 2, 446 + i * 30));
-
-  // ── Education ──
-  tc.font = '600 17px EFont, sans-serif';
-  tc.fillStyle = '#555';
-  tc.textAlign = 'left';
-  const eX = 142;
-  tc.fillText('2O2O\u20132O24', eX, 574);
-  tc.fillText("Xi'an Academy of Fine Arts  \u2014  BA Digital Media Art", eX + 148, 574);
-  tc.fillText('2O25\u20132O26', eX, 605);
-  tc.fillText('Royal College of Art  \u2014  MA Contemporary Art Practice', eX + 148, 605);
-
-  // ── Footer ──
-  tc.textAlign = 'center';
-  tc.font = '600 13px EFont, sans-serif';
-  tc.fillStyle = '#999';
-  tc.fillText('yihuang.art', TEX_W / 2, 690);
+let W = 0, H = 0, DPR = 1;
+function resize(){
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = Math.floor(window.innerWidth);
+  H = Math.floor(window.innerHeight);
+  canvas.width = Math.floor(W * DPR);
+  canvas.height = Math.floor(H * DPR);
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
 }
+window.addEventListener('resize', resize);
+resize();
 
-drawTexture();
-const clothTexture = new THREE.CanvasTexture(texCanvas);
-
-// Redraw with custom fonts once loaded
-document.fonts.ready.then(() => {
-  drawTexture();
-  clothTexture.needsUpdate = true;
+/* 鼠标 */
+const mouse = { x: W * 0.5, y: H * 0.5, vx: 0, vy: 0, active: false };
+window.addEventListener('mousemove', (e) => {
+  const nx = e.clientX, ny = e.clientY;
+  mouse.vx = nx - mouse.x;
+  mouse.vy = ny - mouse.y;
+  mouse.x = nx; mouse.y = ny;
+  mouse.active = true;
 });
+window.addEventListener('mouseleave', () => mouse.active = false);
 
-// ─── Cloth Physics (Verlet + PBD constraints) ──────────────────────────────────
-const SEGS_X = 26, SEGS_Y = 18;
-const NX = SEGS_X + 1, NY = SEGS_Y + 1;
-const N = NX * NY;
-
-// Cloth world size — larger than viewport so it fills screen
-const CW = 22, CH = 14;
-
-const px = new Float32Array(N);
-const py = new Float32Array(N);
-const pz = new Float32Array(N);
-const ox = new Float32Array(N); // previous positions
-const oy = new Float32Array(N);
-const oz = new Float32Array(N);
-const pinned = new Uint8Array(N);
-
-// Initial positions: flat with slight Z sag
-for (let j = 0; j < NY; j++) {
-  for (let i = 0; i < NX; i++) {
-    const k = j * NX + i;
-    const nj = j / SEGS_Y;
-    px[k] = -CW / 2 + i * (CW / SEGS_X);
-    py[k] = CH / 2 - j * (CH / SEGS_Y);
-    pz[k] = nj * (1 - nj) * 0.5 + (Math.random() - 0.5) * 0.04;
-    ox[k] = px[k]; oy[k] = py[k]; oz[k] = pz[k];
-    if (j === 0) pinned[k] = 1;
-  }
+/* 噪声 */
+function hash(n){ return (Math.sin(n) * 43758.5453123) % 1; }
+function noise(x, y){
+  const xi = Math.floor(x), yi = Math.floor(y);
+  const xf = x - xi, yf = y - yi;
+  const n00 = hash(xi + yi * 57.0);
+  const n10 = hash(xi + 1 + yi * 57.0);
+  const n01 = hash(xi + (yi+1) * 57.0);
+  const n11 = hash(xi + 1 + (yi+1) * 57.0);
+  const u = xf*xf*(3-2*xf);
+  const v = yf*yf*(3-2*yf);
+  const x1 = n00*(1-u) + n10*u;
+  const x2 = n01*(1-u) + n11*u;
+  return x1*(1-v) + x2*v;
 }
 
-// Build constraints
-const constraints = [];
-const restLen = [];
-
-function addC(a, b) {
-  const dx = px[a] - px[b], dy = py[a] - py[b], dz = pz[a] - pz[b];
-  restLen.push(Math.sqrt(dx * dx + dy * dy + dz * dz));
-  constraints.push(a, b);
+function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+function smoothstep(a, b, x){
+  const t = clamp01((x - a) / (b - a));
+  return t*t*(3 - 2*t);
 }
 
-for (let j = 0; j < NY; j++) {
-  for (let i = 0; i < NX; i++) {
-    const k = j * NX + i;
-    if (i < SEGS_X) addC(k, k + 1);
-    if (j < SEGS_Y) addC(k, k + NX);
-    if (i < SEGS_X && j < SEGS_Y) { addC(k, k + NX + 1); addC(k + 1, k + NX); }
-    if (i < SEGS_X - 1) addC(k, k + 2);
-    if (j < SEGS_Y - 1) addC(k, k + NX * 2);
-  }
+/* 环境场（保持你原风格） */
+function ambientField(x, y, t){
+  const nx = (x / W) * 2 - 1;
+  const ny = (y / H) * 2 - 1;
+
+  let fx = 0.35;
+  let fy = 0.05 * Math.sin(t * 0.6 + nx * 2.0);
+
+  const mx = ((mouse.x / W) * 2 - 1);
+  const my = ((mouse.y / H) * 2 - 1);
+  const dx = nx - mx;
+  const dy = ny - my;
+  const r2 = dx*dx + dy*dy + 0.002;
+
+  const inv = 1 / (r2 * r2);
+
+  const radial = 0.55 * inv;
+  fx += dx * radial;
+  fy += dy * radial;
+
+  const swirl = 0.30 * inv;
+  fx += -dy * swirl;
+  fy +=  dx * swirl;
+
+  const speed = Math.min(40, Math.hypot(mouse.vx, mouse.vy));
+  const k = mouse.active ? (speed / 40) : 0.0;
+  fx += (k * 0.25) * (-dy) * inv;
+  fy += (k * 0.25) * ( dx) * inv;
+
+  const n = noise(nx*6 + t*0.4, ny*6 + t*0.4) - 0.5;
+  fx += n * 0.08;
+  fy += n * 0.08;
+
+  const len = Math.hypot(fx, fy) + 1e-6;
+  return { x: fx/len, y: fy/len };
 }
 
-const GRAVITY = -9.0;
-const DAMPING = 0.992;
-const ITER = 10;
-const DT = 1 / 60;
+/**
+ * 太极流场（优化版）：
+ * - 双涡旋 + 边界约束 + “S形分界导向”
+ * - 加两个“眼”位置的小涡旋（非常轻）帮助读形
+ */
+function taijiField(nx, ny){
+  const eps = 1e-4;
 
-let simTime = 0;
+  // 太极盘半径（在归一化空间）
+  const r0 = 0.78;
+  const r = Math.hypot(nx, ny) + eps;
 
-// Mouse world position (projected onto z=0 plane)
-const mouseNDC = new THREE.Vector2(0, 0);
-let mouseActive = false;
-const raycast = new THREE.Raycaster();
-const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-const mouseWorld = new THREE.Vector3();
+  // (1) 整体旋势（提供圆盘整体转动）
+  let fx = -ny;
+  let fy =  nx;
 
-window.addEventListener('mousemove', e => {
-  mouseNDC.set((e.clientX / W) * 2 - 1, -(e.clientY / H) * 2 + 1);
-  mouseActive = true;
-});
-window.addEventListener('mouseleave', () => { mouseActive = false; });
-window.addEventListener('touchmove', e => {
-  const t = e.touches[0];
-  mouseNDC.set((t.clientX / W) * 2 - 1, -(t.clientY / H) * 2 + 1);
-  mouseActive = true;
-}, { passive: true });
+  // (2) 两个主涡旋（阴阳两半）
+  const d = 0.30;      // 涡旋中心偏移
+  const s = 0.95;      // 强度（提高：更明显）
 
-function updateCloth() {
-  simTime += DT;
-
-  // Animate pinned top row — slow wave to create hanging sway
-  for (let i = 0; i < NX; i++) {
-    const ni = i / SEGS_X;
-    px[i] = -CW / 2 + i * (CW / SEGS_X) + Math.sin(simTime * 0.38 + ni * 3.1) * 0.10;
-    py[i] = CH / 2 + Math.cos(simTime * 0.24 + ni * 2.0) * 0.06;
-    pz[i] = Math.sin(simTime * 0.32 + ni * 2.4) * 0.20;
-    ox[i] = px[i]; oy[i] = py[i]; oz[i] = pz[i];
+  // 上涡：逆时针
+  {
+    const dx = nx;
+    const dy = ny - d;
+    const inv = 1.0 / (dx*dx + dy*dy + 0.025);
+    fx += (-dy) * ( s * inv);
+    fy += ( dx) * ( s * inv);
+  }
+  // 下涡：顺时针
+  {
+    const dx = nx;
+    const dy = ny + d;
+    const inv = 1.0 / (dx*dx + dy*dy + 0.025);
+    fx += (-dy) * (-s * inv);
+    fy += ( dx) * (-s * inv);
   }
 
-  // Mouse world pos
-  if (mouseActive) {
-    raycast.setFromCamera(mouseNDC, camera);
-    raycast.ray.intersectPlane(planeZ, mouseWorld);
+  // (3) “眼”辅助涡旋（非常轻，不是画点，是让局部流线更像太极）
+  const eyeS = 0.22;
+  {
+    const ex = 0.0, ey = 0.42;
+    const dx = nx - ex, dy = ny - ey;
+    const inv = 1.0 / (dx*dx + dy*dy + 0.018);
+    fx += (-dy) * ( eyeS * inv);
+    fy += ( dx) * ( eyeS * inv);
+  }
+  {
+    const ex = 0.0, ey = -0.42;
+    const dx = nx - ex, dy = ny - ey;
+    const inv = 1.0 / (dx*dx + dy*dy + 0.018);
+    fx += (-dy) * (-eyeS * inv);
+    fy += ( dx) * (-eyeS * inv);
   }
 
-  // Verlet integrate
-  for (let k = 0; k < N; k++) {
-    if (pinned[k]) continue;
-    const vx = (px[k] - ox[k]) * DAMPING;
-    const vy = (py[k] - oy[k]) * DAMPING;
-    const vz = (pz[k] - oz[k]) * DAMPING;
+  // (4) S 形分界导向（关键：让阴阳边界更像太极）
+  // 设一条 S 曲线： y = a * sin(pi * x / r0)
+  // 对曲线两侧施加相反的“侧向推力”，把流线组织成阴阳两域
+  const a = 0.36;
+  const yCurve = a * Math.sin(Math.PI * (nx / (r0 + eps)));
+  const dS = ny - yCurve;                 // 曲线的符号距离（近似）
+  const kS = 1.05;                        // 推力强度（提高：更明显）
+  const fall = Math.exp(- (dS*dS) / 0.10); // 只在曲线附近起作用
+  // 推力方向取“曲线法向”的近似：沿 y 方向主导，并带一点 x 偏转
+  fx += ( -0.40 * dS ) * (kS * fall);
+  fy += (  1.00 * dS ) * (kS * fall);
 
-    ox[k] = px[k]; oy[k] = py[k]; oz[k] = pz[k];
+  // (5) 边界约束：把流线关在圆里（更像太极盘）
+  const kBound = 2.20;  // 提高：形更稳更圆
+  const push = (r - r0);
+  fx += (-nx / r) * (kBound * push);
+  fy += (-ny / r) * (kBound * push);
 
-    // Gravity + gentle turbulence
-    let ax = 0;
-    let ay = GRAVITY * DT * DT;
-    let az = 0;
-    ax += Math.sin(simTime * 0.28 + py[k] * 0.6) * 0.004;
-    az += Math.cos(simTime * 0.22 + px[k] * 0.5) * 0.006;
+  // (6) 盘内轻微向内收（让流线更贴盘，不“散”）
+  const kIn = 0.15;
+  fx += (-nx / r) * kIn;
+  fy += (-ny / r) * kIn;
 
-    // Mouse push (repulsion)
-    if (mouseActive) {
-      const dx = px[k] - mouseWorld.x;
-      const dy = py[k] - mouseWorld.y;
-      const dz = pz[k] - mouseWorld.z;
-      const d2 = dx * dx + dy * dy + dz * dz;
-      const R = 2.8;
-      if (d2 < R * R) {
-        const d = Math.sqrt(d2) + 1e-6;
-        const f = (1 - d / R) * 0.22;
-        ax += (dx / d) * f;
-        ay += (dy / d) * f;
-        az += (dz / d) * f + f * 0.6;
-      }
-    }
-
-    px[k] += vx + ax;
-    py[k] += vy + ay;
-    pz[k] += vz + az;
-  }
-
-  // Constraint projection (PBD)
-  for (let iter = 0; iter < ITER; iter++) {
-    for (let c = 0, ci = 0; c < constraints.length; c += 2, ci++) {
-      const a = constraints[c], b = constraints[c + 1];
-      const dx = px[b] - px[a];
-      const dy = py[b] - py[a];
-      const dz = pz[b] - pz[a];
-      const d = Math.sqrt(dx * dx + dy * dy + dz * dz) + 1e-9;
-      const corr = (d - restLen[ci]) / d * 0.5;
-      const cx = dx * corr, cy = dy * corr, cz = dz * corr;
-      if (!pinned[a]) { px[a] += cx; py[a] += cy; pz[a] += cz; }
-      if (!pinned[b]) { px[b] -= cx; py[b] -= cy; pz[b] -= cz; }
-    }
-  }
+  // 归一化
+  const len = Math.hypot(fx, fy) + eps;
+  return { x: fx/len, y: fy/len };
 }
 
-// ─── Cloth Mesh ────────────────────────────────────────────────────────────────
-const geo = new THREE.PlaneGeometry(CW, CH, SEGS_X, SEGS_Y);
-geo.attributes.position.setUsage(THREE.DynamicDrawUsage);
+/* 混合场：鼠标越靠近中心 -> 太极权重越高 */
+function field(x, y, t){
+  const cx = W * 0.5, cy = H * 0.5;
+  const dist = Math.hypot(mouse.x - cx, mouse.y - cy);
 
-const mat = new THREE.MeshStandardMaterial({
-  map: clothTexture,
-  side: THREE.DoubleSide,
-  roughness: 0.88,
-  metalness: 0.0,
-});
+  // 让“进入太极”的范围稍扩大一些（更容易触发且更明显）
+  const inner = Math.min(W, H) * 0.16;
+  const outer = Math.min(W, H) * 0.44;
 
-const clothMesh = new THREE.Mesh(geo, mat);
-scene.add(clothMesh);
+  const wTaiji = 1.0 - smoothstep(inner, outer, dist);
+  const w = clamp01(wTaiji);
 
-function syncGeometry() {
-  const pos = geo.attributes.position;
-  for (let k = 0; k < N; k++) pos.setXYZ(k, px[k], py[k], pz[k]);
-  pos.needsUpdate = true;
-  geo.computeVertexNormals();
+  const a = ambientField(x, y, t);
+
+  // 长宽比修正：用 min(W,H) 归一化，让太极盘接近圆
+  const nx = ((x - cx) / Math.min(W, H)) * 2.0;
+  const ny = ((y - cy) / Math.min(W, H)) * 2.0;
+  const tj = taijiField(nx, ny);
+
+  let fx = a.x * (1 - w) + tj.x * w;
+  let fy = a.y * (1 - w) + tj.y * w;
+
+  const len = Math.hypot(fx, fy) + 1e-6;
+  return { x: fx/len, y: fy/len, w };
 }
 
-// ─── Particle System (Three.js Points, hover near text) ───────────────────────
-const MAX_P = 900;
-const pGeo = new THREE.BufferGeometry();
-const pPos = new Float32Array(MAX_P * 3);
-const pAlpha = new Float32Array(MAX_P);
+/* 粒子：略增一点密度但仍轻量（比 1400 低很多） */
+const COUNT = 1000;
+const STEP  = 10;
+const SEG   = 0.9;
+const FADE  = 0.07;
 
-pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3).setUsage(THREE.DynamicDrawUsage));
-pGeo.setAttribute('alpha', new THREE.BufferAttribute(pAlpha, 1).setUsage(THREE.DynamicDrawUsage));
-
-const pMat = new THREE.ShaderMaterial({
-  vertexShader: `
-    attribute float alpha;
-    varying float vAlpha;
-    void main(){
-      vAlpha = alpha;
-      vec4 mv = modelViewMatrix * vec4(position, 1.0);
-      gl_PointSize = clamp(160.0 / -mv.z, 2.0, 5.0);
-      gl_Position = projectionMatrix * mv;
-    }
-  `,
-  fragmentShader: `
-    varying float vAlpha;
-    void main(){
-      float d = length(gl_PointCoord - vec2(0.5));
-      if(d > 0.5) discard;
-      float a = vAlpha * smoothstep(0.5, 0.1, d);
-      gl_FragColor = vec4(0.08, 0.06, 0.04, a);
-    }
-  `,
-  transparent: true,
-  depthWrite: false,
-});
-
-const pSystem = new THREE.Points(pGeo, pMat);
-scene.add(pSystem);
-
-const parts = Array.from({ length: MAX_P }, () => ({
-  x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, life: 0, maxLife: 1, active: false
+const pts = new Array(COUNT).fill(0).map(() => ({
+  x: Math.random() * W,
+  y: Math.random() * H,
+  life: Math.random() * 280 + 60
 }));
 
-function spawnParticle(wx, wy, wz) {
-  for (let i = 0; i < MAX_P; i++) {
-    if (!parts[i].active) {
-      const p = parts[i];
-      p.active = true;
-      p.x = wx + (Math.random() - 0.5) * 0.15;
-      p.y = wy + (Math.random() - 0.5) * 0.15;
-      p.z = wz + Math.random() * 0.1;
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 0.015 + Math.random() * 0.04;
-      p.vx = Math.cos(angle) * speed;
-      p.vy = Math.sin(angle) * speed + 0.008;
-      p.vz = (Math.random() - 0.2) * speed * 1.5;
-      p.maxLife = 50 + Math.random() * 70;
-      p.life = p.maxLife;
-      return;
+function respawn(p, biasCenter=false){
+  if(biasCenter){
+    // 太极状态：更偏向“圆周”进入，让盘更快成形
+    const cx = W * 0.5, cy = H * 0.5;
+    const R = Math.min(W, H) * 0.38;
+    const ang = Math.random() * Math.PI * 2;
+    p.x = cx + Math.cos(ang) * R;
+    p.y = cy + Math.sin(ang) * R;
+  }else{
+    const side = Math.floor(Math.random() * 4);
+    if(side === 0){ p.x = 0; p.y = Math.random()*H; }
+    if(side === 1){ p.x = W; p.y = Math.random()*H; }
+    if(side === 2){ p.x = Math.random()*W; p.y = 0; }
+    if(side === 3){ p.x = Math.random()*W; p.y = H; }
+  }
+  p.life = Math.random() * 300 + 80;
+}
+
+function tick(now){
+  const t = now * 0.001;
+
+  ctx.fillStyle = `rgba(255,255,255,${FADE})`;
+  ctx.fillRect(0,0,W,H);
+
+  // 计算当前太极权重，用于“读形增强”和“重生偏置”
+  const cx = W * 0.5, cy = H * 0.5;
+  const dist = Math.hypot(mouse.x - cx, mouse.y - cy);
+  const inner = Math.min(W, H) * 0.16;
+  const outer = Math.min(W, H) * 0.44;
+  const wTaiji = 1.0 - smoothstep(inner, outer, dist);
+  const w = clamp01(wTaiji);
+
+  // 太极越强，线条越稍微更黑（很克制）
+  const alpha = 0.18 + 0.10 * w;
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = `rgba(0,0,0,${alpha.toFixed(3)})`;
+
+  const bias = w > 0.35;
+
+  for(let i=0;i<COUNT;i++){
+    const p = pts[i];
+    let x = p.x, y = p.y;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+
+    for(let s=0;s<STEP;s++){
+      const v = field(x, y, t);
+      x += v.x * SEG * 18;
+      y += v.y * SEG * 18;
+      ctx.lineTo(x, y);
+    }
+
+    ctx.stroke();
+
+    p.x = x; p.y = y;
+    p.life -= 1;
+
+    if(x < -20 || x > W+20 || y < -20 || y > H+20 || p.life <= 0){
+      respawn(p, bias);
     }
   }
+
+  requestAnimationFrame(tick);
 }
 
-// Text bounding regions in canvas-space UV (u: 0–1, v: 0–1 top-bottom)
-const textRegions = [
-  { u: 0.5, v: 0.193, uw: 0.22, vh: 0.05 },
-  { u: 0.5, v: 0.390, uw: 0.80, vh: 0.26 },
-  { u: 0.5, v: 0.635, uw: 0.78, vh: 0.17 },
-  { u: 0.5, v: 0.775, uw: 0.82, vh: 0.08 },
-];
-
-function inTextRegion(cu, cv) {
-  for (const r of textRegions)
-    if (Math.abs(cu - r.u) < r.uw * 0.5 && Math.abs(cv - r.v) < r.vh * 0.5) return true;
-  return false;
-}
-
-const hitRay = new THREE.Raycaster();
-let spawnCooldown = 0;
-
-function updateParticles() {
-  // Raycast mouse → cloth, check if over text
-  if (mouseActive && spawnCooldown <= 0) {
-    hitRay.setFromCamera(mouseNDC, camera);
-    const hits = hitRay.intersectObject(clothMesh);
-    if (hits.length > 0 && hits[0].uv) {
-      const cu = hits[0].uv.x;
-      const cv = 1 - hits[0].uv.y;
-      if (inTextRegion(cu, cv)) {
-        const wp = hits[0].point;
-        for (let s = 0; s < 5; s++) spawnParticle(wp.x, wp.y, wp.z);
-        spawnCooldown = 3;
-      }
-    }
-  }
-  if (spawnCooldown > 0) spawnCooldown--;
-
-  const posAttr = pGeo.attributes.position;
-  const alphaAttr = pGeo.attributes.alpha;
-
-  for (let i = 0; i < MAX_P; i++) {
-    const p = parts[i];
-    if (p.active) {
-      p.x += p.vx; p.y += p.vy; p.z += p.vz;
-      p.vx *= 0.97; p.vy *= 0.97; p.vz *= 0.97;
-      p.vy -= 0.0003;
-      p.life--;
-      if (p.life <= 0) p.active = false;
-      const t = p.life / p.maxLife;
-      posAttr.setXYZ(i, p.x, p.y, p.z);
-      alphaAttr.setX(i, t * t * 0.85);
-    } else {
-      posAttr.setXYZ(i, 0, -9999, 0);
-      alphaAttr.setX(i, 0);
-    }
-  }
-  posAttr.needsUpdate = true;
-  alphaAttr.needsUpdate = true;
-}
-
-// ─── Resize ────────────────────────────────────────────────────────────────────
-window.addEventListener('resize', () => {
-  W = window.innerWidth; H = window.innerHeight;
-  camera.aspect = W / H;
-  camera.updateProjectionMatrix();
-  renderer.setSize(W, H);
-});
-
-// ─── Loop ──────────────────────────────────────────────────────────────────────
-function animate() {
-  requestAnimationFrame(animate);
-  updateCloth();
-  syncGeometry();
-  updateParticles();
-  renderer.render(scene, camera);
-}
-
-animate();
+// 初始化
+ctx.fillStyle = '#fff';
+ctx.fillRect(0,0,W,H);
+requestAnimationFrame(tick);
 </script>
 </body>
 </html>
+
+
+

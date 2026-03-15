@@ -4,24 +4,154 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Yi Huang 黄熠 — 沉思录</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
 <style>
   @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
   @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2"),url("fonts/Z.woff") format("woff");font-weight:400;font-style:normal;font-display:swap;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2"),url("fonts/Z.woff") format("woff");font-weight:700;font-style:normal;font-display:swap;}
-  html,body{height:100%;overflow:hidden;margin:0;background:#e8e3dc;}
-  #three-canvas{position:fixed;inset:0;z-index:0;display:block;cursor:default;}
-  /* Entry data — hidden from normal view, read by JS, updated by bot */
-  #entry-data{display:none;}
+  @font-face{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
+
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:#ffffff;
+    color:#111;
+    font-family:"ZFont","EFont","PingFang SC","Noto Sans SC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .top-nav{
+    position:fixed;
+    top:22px;
+    right:30px;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:2.5px;
+    font-family:"EFont","ZFont",sans-serif;
+  }
+  .top-nav a{color:#111;text-decoration:none;line-height:1;}
+  .top-nav a:hover{text-decoration:underline;text-underline-offset:5px;}
+
+  .page{
+    min-height:100vh;
+    box-sizing:border-box;
+    padding:72px 70px;
+    max-width:860px;
+  }
+
+  .page-title{
+    font-size:28px;
+    letter-spacing:2.5px;
+    font-weight:700;
+    margin:0 0 48px 0;
+    font-family:"EFont","ZFont",sans-serif;
+  }
+  .page-subtitle{
+    font-size:14px;
+    letter-spacing:1.2px;
+    color:#888;
+    margin:0 0 48px 0;
+    font-family:"EFont","ZFont",sans-serif;
+  }
+
+  /* ── 每条日志 ── */
+  .entry{
+    margin:0 0 56px 0;
+    padding-bottom:40px;
+    border-bottom:1px solid #e8e8e8;
+  }
+  .entry:last-child{
+    border-bottom:none;
+  }
+
+  .entry-header{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:14px;
+  }
+
+  .entry-date{
+    font-family:"ZFont","EFont",sans-serif;
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:1.8px;
+    color:#888;
+    white-space:nowrap;
+  }
+
+  .entry-title{
+    font-family:"ZFont","EFont",sans-serif;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:0.2px;
+    color:#111;
+    line-height:1.3;
+  }
+
+  .entry-body{
+    font-family:"ZFont","EFont",sans-serif;
+    font-size:17px;
+    font-weight:400;
+    line-height:1.9;
+    color:#222;
+    letter-spacing:0.1px;
+  }
+
+  .entry-body p{
+    margin:0 0 1em 0;
+  }
+
+  .entry-body p:last-child{
+    margin-bottom:0;
+  }
+
+  .entry-tags{
+    margin-top:16px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .tag{
+    font-family:"EFont","ZFont",sans-serif;
+    font-size:11px;
+    letter-spacing:1.2px;
+    color:#888;
+    border:1px solid #ccc;
+    padding:2px 8px;
+  }
+
+  @media(max-width:860px){
+    .page{padding:56px 20px;}
+    .top-nav{font-size:16px;letter-spacing:1.5px;right:18px;top:18px;gap:8px;}
+    .page-title{font-size:22px;}
+    .entry-header{flex-direction:column;gap:4px;}
+    .entry-title{font-size:18px;}
+    .entry-body{font-size:15px;}
+  }
 </style>
 </head>
 <body>
-<canvas id="three-canvas"></canvas>
 
-<!-- =====================================================================
-     ENTRY DATA — Bot inserts <article> blocks here (same format as before)
-     ===================================================================== -->
-<div id="entry-data">
+<nav class="top-nav" aria-label="Primary">
+  <a href="index.html">ABOUT</a>
+  <a href="work.html">WORK</a>
+  <a href="news.html">AUTOMATIC</a>
+  <a href="contact.html">CONTACT</a>
+</nav>
+
+<main class="page">
+  <h1 class="page-title">沉思录</h1>
+  
 
   <!-- ==================== ENTRIES ==================== -->
 
@@ -102,7 +232,7 @@
       <span class="entry-title">霍尔木兹封锁下中国石油格局重构</span>
     </div>
     <div class="entry-body">
-      <p>美伊冲突引发霍尔木兹海峡封锁预期，导致国际油价波动并引发中国石油产业新一轮格局调整。和顺石油的股价爆发折射了石油产业"上游垄断、下游多元"格局及地缘政治下的韧性。文中分析了产业链各环节的影响及未来趋势，指出内陆民营企业在地缘冲突下的标杆作用。</p>
+      <p>美伊冲突引发霍尔木兹海峡封锁预期，导致国际油价波动并引发中国石油产业新一轮格局调整。和顺石油的股价爆发折射了石油产业“上游垄断、下游多元”格局及地缘政治下的韧性。文中分析了产业链各环节的影响及未来趋势，指出内陆民营企业在地缘冲突下的标杆作用。</p>
       <p><a href="https://yihuang.art/files/thoughts/2026-03-11-021932.docx" download style="color:#888;font-size:13px;letter-spacing:1px;">↓ DOWNLOAD FULL TEXT</a></p>
     </div>
     <div class="entry-tags">
@@ -170,6 +300,12 @@
   </article>
 
 
+  
+
+
+  
+
+
   <article class="entry" id="2026-03-09">
     <div class="entry-header">
       <span class="entry-date">2026.03.09</span>
@@ -213,7 +349,7 @@
       <span class="entry-title">民主与共和的本质区别</span>
     </div>
     <div class="entry-body">
-      <p>民主强调权力的来源，核心是"谁做主"；共和强调国家的治理，核心是"国家属于谁"。在现代国家中，存在既共和又民主的国家，如美国、法国、中国，也有只民主不共和，如英国、日本，但几乎没有国家会承认自己不民主不共和，只是外部的评价和历史的事实可以揭示现实的真相。</p>
+      <p>民主强调权力的来源，核心是“谁做主”；共和强调国家的治理，核心是“国家属于谁”。在现代国家中，存在既共和又民主的国家，如美国、法国、中国，也有只民主不共和，如英国、日本，但几乎没有国家会承认自己不民主不共和，只是外部的评价和历史的事实可以揭示现实的真相。</p>
       <p><a href="https://yihuang.art/files/thoughts/2026-03-08-234323.docx" download style="color:#888;font-size:13px;letter-spacing:1px;">↓ DOWNLOAD FULL TEXT</a></p>
     </div>
     <div class="entry-tags">
@@ -263,449 +399,8 @@
       <span class="tag">民主共和</span>
     </div>
   </article>
-
   <!-- ==================== END ENTRIES ==================== -->
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script>
-// ─── Parse entries from DOM (bot updates the HTML above) ─────────────────────
-function parseEntries() {
-  return Array.from(document.querySelectorAll('#entry-data article.entry')).map(article => {
-    const date  = article.querySelector('.entry-date')?.textContent.trim()  || '';
-    const title = article.querySelector('.entry-title')?.textContent.trim() || '';
-    const body = [], downloads = [];
-    article.querySelectorAll('.entry-body p').forEach(p => {
-      const a = p.querySelector('a[download]');
-      if (a) {
-        downloads.push({ text: a.textContent.trim(), href: a.href });
-      } else {
-        const t = p.textContent.trim();
-        if (t) body.push(t);
-      }
-    });
-    const tags = Array.from(article.querySelectorAll('.tag')).map(t => t.textContent.trim());
-    return { date, title, body, tags, downloads };
-  });
-}
-
-// ─── Scene ────────────────────────────────────────────────────────────────────
-const threeCanvas = document.getElementById('three-canvas');
-let W = window.innerWidth, H = window.innerHeight;
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xe8e3dc);
-
-const camera = new THREE.PerspectiveCamera(38, W/H, 0.1, 200);
-camera.position.set(0, 0.5, 20);
-camera.lookAt(0, 0, 0);
-
-const renderer = new THREE.WebGLRenderer({canvas:threeCanvas, antialias:true});
-renderer.setPixelRatio(Math.min(2, devicePixelRatio));
-renderer.setSize(W, H);
-
-scene.add(new THREE.AmbientLight(0xfff8f0, 0.65));
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-dirLight.position.set(4, 6, 12); scene.add(dirLight);
-const fillLight = new THREE.DirectionalLight(0xffe8d0, 0.35);
-fillLight.position.set(-6, -2, -8); scene.add(fillLight);
-
-// ─── Texture ─────────────────────────────────────────────────────────────────
-const TEX_W = 1024, TEX_H = 5000;
-const VH_FRAC = 1/3;
-const MAX_SCROLL = TEX_H * (1 - VH_FRAC);
-let scrollY = 0, hoveredNav = -1, hoveredDl = -1;
-
-const staticCanvas = document.createElement('canvas');
-staticCanvas.width = TEX_W; staticCanvas.height = TEX_H;
-const sc = staticCanvas.getContext('2d');
-
-const texCanvas = document.createElement('canvas');
-texCanvas.width = TEX_W; texCanvas.height = TEX_H;
-const tc = texCanvas.getContext('2d');
-
-const navItems = [
-  {text:'ABOUT',     href:'index.html'},
-  {text:'WORK',      href:'work.html'},
-  {text:'AUTOMATIC', href:'news.html'},
-  {text:'CONTACT',   href:'contact.html'},
-];
-const downloadItems = []; // populated in paintStatic
-
-// ── char-level text wrap ──────────────────────────────────────────────────────
-function wrapText(ctx, text, x, y, maxW, lh) {
-  let line = '';
-  for (const ch of text) {
-    const test = line + ch;
-    if (ctx.measureText(test).width > maxW && line) {
-      ctx.fillText(line, x, y); y += lh; line = ch;
-    } else line = test;
-  }
-  if (line) { ctx.fillText(line, x, y); y += lh; }
-  return y;
-}
-
-// ── Static layer ──────────────────────────────────────────────────────────────
-function paintStatic() {
-  downloadItems.length = 0;
-
-  // Lighter cream background for better legibility
-  sc.fillStyle = '#faf7f2';
-  sc.fillRect(0, 0, TEX_W, TEX_H);
-
-  // Linen weave — reduced opacity so text reads clearly
-  sc.save(); sc.globalAlpha = 0.016; sc.strokeStyle = '#3a2a1a'; sc.lineWidth = 0.6;
-  for (let x = 0; x < TEX_W; x += 6) { sc.beginPath(); sc.moveTo(x,0); sc.lineTo(x,TEX_H); sc.stroke(); }
-  for (let yg = 0; yg < TEX_H; yg += 6) { sc.beginPath(); sc.moveTo(0,yg); sc.lineTo(TEX_W,yg); sc.stroke(); }
-  sc.globalAlpha = 0.008; sc.strokeStyle = '#2a1a0a';
-  for (let x = -TEX_H; x < TEX_W; x += 10) { sc.beginPath(); sc.moveTo(x,0); sc.lineTo(x+TEX_H,TEX_H); sc.stroke(); }
-  sc.restore();
-
-  const LX = 64, MW = 840;
-
-  // Page title
-  sc.fillStyle = '#111';
-  sc.font = 'bold 28px "EFont", "ZFont", "PingFang SC", sans-serif';
-  sc.textAlign = 'left';
-  sc.fillText('沉思录', LX, 88);
-
-  sc.save(); sc.globalAlpha = 0.18; sc.strokeStyle = '#111'; sc.lineWidth = 0.8;
-  sc.beginPath(); sc.moveTo(LX, 104); sc.lineTo(TEX_W-64, 104); sc.stroke();
-  sc.restore();
-
-  let y = 140;
-  const entries = parseEntries();
-
-  entries.forEach((entry, ei) => {
-    // Date — #888, 20px bold (original: entry-date)
-    sc.fillStyle = '#888';
-    sc.font = '700 20px "ZFont", "EFont", "PingFang SC", sans-serif';
-    sc.textAlign = 'left';
-    sc.fillText(entry.date, LX, y);
-    y += 30;
-
-    // Title — #111, 22px bold (original: entry-title)
-    sc.fillStyle = '#111';
-    sc.font = '700 22px "ZFont", "EFont", "PingFang SC", sans-serif';
-    y = wrapText(sc, entry.title, LX, y, MW, 30);
-    y += 10;
-
-    // Body — #222, 17px regular, lh=32 (original: entry-body, line-height:1.9)
-    sc.fillStyle = '#222';
-    sc.font = '400 17px "ZFont", "EFont", "PingFang SC", sans-serif';
-    entry.body.forEach(para => {
-      y = wrapText(sc, para, LX, y, MW, 32);
-      y += 10;
-    });
-
-    // Download links — store hit box for click detection
-    entry.downloads.forEach(dl => {
-      sc.fillStyle = '#888';
-      sc.font = '400 13px "EFont", "ZFont", sans-serif';
-      const tw = sc.measureText(dl.text).width;
-      sc.fillText(dl.text, LX, y);
-      // Underline
-      sc.save(); sc.strokeStyle = '#ccc'; sc.lineWidth = 0.8;
-      sc.beginPath(); sc.moveTo(LX, y+2); sc.lineTo(LX+tw, y+2); sc.stroke();
-      sc.restore();
-      downloadItems.push({ href: dl.href, _x1:LX-2, _x2:LX+tw+2, _y1:y-14, _y2:y+4 });
-      y += 24;
-    });
-
-    // Tags — #888, border #ccc (original: .tag)
-    y += 12;
-    let tagX = LX;
-    sc.font = '400 11px "EFont", "ZFont", sans-serif';
-    entry.tags.forEach(tag => {
-      const tw = sc.measureText(tag).width + 16;
-      sc.strokeStyle = '#ccc'; sc.lineWidth = 1;
-      sc.strokeRect(tagX, y-14, tw, 20);
-      sc.fillStyle = '#888';
-      sc.fillText(tag, tagX+8, y);
-      tagX += tw + 8;
-    });
-    y += 20;
-
-    // Separator
-    if (ei < entries.length - 1) {
-      y += 24;
-      sc.save(); sc.globalAlpha = 0.15; sc.strokeStyle = '#111'; sc.lineWidth = 0.8;
-      sc.beginPath(); sc.moveTo(LX, y); sc.lineTo(TEX_W-64, y); sc.stroke();
-      sc.restore();
-      y += 26;
-    }
-  });
-}
-
-// ── Dynamic layer (nav + hover states, redrawn on scroll/hover) ───────────────
-function drawTexture() {
-  tc.drawImage(staticCanvas, 0, 0);
-
-  const navRX = 960, navBaseY = scrollY + 62, navStep = 52;
-  tc.font = 'bold 28px "EFont", "ZFont", sans-serif';
-  tc.textAlign = 'right';
-  navItems.forEach((item, i) => {
-    const baseY = navBaseY + i*navStep;
-    const isHov = hoveredNav === i;
-    tc.fillStyle = isHov ? '#444' : '#0a0a0a';
-    tc.fillText(item.text, navRX, baseY);
-    if (isHov) {
-      const w = tc.measureText(item.text).width;
-      tc.strokeStyle = '#444'; tc.lineWidth = 1.5;
-      tc.beginPath(); tc.moveTo(navRX-w, baseY+5); tc.lineTo(navRX, baseY+5); tc.stroke();
-    }
-    const w = tc.measureText(item.text).width;
-    item._x1=navRX-w-5; item._x2=navRX+5; item._y1=baseY-32; item._y2=baseY+8;
-  });
-
-  // Highlight hovered download link
-  if (hoveredDl >= 0 && hoveredDl < downloadItems.length) {
-    const dl = downloadItems[hoveredDl];
-    tc.save(); tc.globalAlpha = 0.08; tc.fillStyle = '#000';
-    tc.fillRect(dl._x1-2, dl._y1-2, dl._x2-dl._x1+4, dl._y2-dl._y1+4);
-    tc.restore();
-  }
-}
-
-// Init
-paintStatic();
-drawTexture();
-
-const clothTexture = new THREE.CanvasTexture(texCanvas);
-clothTexture.wrapT = THREE.ClampToEdgeWrapping;
-clothTexture.repeat.set(1, VH_FRAC);
-clothTexture.offset.y = 1 - VH_FRAC;
-
-document.fonts.ready.then(() => { paintStatic(); drawTexture(); clothTexture.needsUpdate = true; });
-
-// ─── Scroll ───────────────────────────────────────────────────────────────────
-window.addEventListener('wheel', e => {
-  e.preventDefault();
-  scrollY = Math.max(0, Math.min(MAX_SCROLL, scrollY + e.deltaY * 0.55));
-  clothTexture.offset.y = 1 - scrollY/TEX_H - VH_FRAC;
-  drawTexture(); clothTexture.needsUpdate = true;
-}, {passive:false});
-
-// ─── Cloth Physics ────────────────────────────────────────────────────────────
-const SEGS_X=26, SEGS_Y=18, NX=SEGS_X+1, NY=SEGS_Y+1, N=NX*NY;
-const CW=22, CH=14;
-const px=new Float32Array(N), py=new Float32Array(N), pz=new Float32Array(N);
-const ox=new Float32Array(N), oy=new Float32Array(N), oz=new Float32Array(N);
-const pinned=new Uint8Array(N);
-
-for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
-  const k=j*NX+i, nj=j/SEGS_Y;
-  px[k]=-CW/2+i*(CW/SEGS_X); py[k]=CH/2-j*(CH/SEGS_Y);
-  pz[k]=nj*(1-nj)*0.5+(Math.random()-0.5)*0.04;
-  ox[k]=px[k]; oy[k]=py[k]; oz[k]=pz[k];
-  if(j===0) pinned[k]=1;
-}
-
-const constraints=[], restLen=[];
-function addC(a,b){
-  const dx=px[a]-px[b],dy=py[a]-py[b],dz=pz[a]-pz[b];
-  restLen.push(Math.sqrt(dx*dx+dy*dy+dz*dz)); constraints.push(a,b);
-}
-for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
-  const k=j*NX+i;
-  if(i<SEGS_X) addC(k,k+1);
-  if(j<SEGS_Y) addC(k,k+NX);
-  if(i<SEGS_X&&j<SEGS_Y){addC(k,k+NX+1);addC(k+1,k+NX);}
-  if(i<SEGS_X-1) addC(k,k+2);
-  if(j<SEGS_Y-1) addC(k,k+NX*2);
-}
-
-const GRAVITY=-9.0, DAMPING=0.992, ITER=10, DT=1/60;
-let simTime=0;
-const mouseNDC=new THREE.Vector2(0,0);
-let mouseActive=false;
-const raycast=new THREE.Raycaster();
-const planeZ=new THREE.Plane(new THREE.Vector3(0,0,1),0);
-const mouseWorld=new THREE.Vector3();
-
-window.addEventListener('mousemove',e=>{mouseNDC.set((e.clientX/W)*2-1,-(e.clientY/H)*2+1);mouseActive=true;});
-window.addEventListener('mouseleave',()=>{mouseActive=false;});
-window.addEventListener('touchmove',e=>{
-  const t=e.touches[0];mouseNDC.set((t.clientX/W)*2-1,-(t.clientY/H)*2+1);mouseActive=true;
-},{passive:true});
-
-function updateCloth(){
-  simTime+=DT;
-  for(let i=0;i<NX;i++){
-    const ni=i/SEGS_X;
-    px[i]=-CW/2+i*(CW/SEGS_X)+Math.sin(simTime*0.38+ni*3.1)*0.10;
-    py[i]=CH/2+Math.cos(simTime*0.24+ni*2.0)*0.06;
-    pz[i]=Math.sin(simTime*0.32+ni*2.4)*0.20;
-    ox[i]=px[i];oy[i]=py[i];oz[i]=pz[i];
-  }
-  if(mouseActive){raycast.setFromCamera(mouseNDC,camera);raycast.ray.intersectPlane(planeZ,mouseWorld);}
-  for(let k=0;k<N;k++){
-    if(pinned[k])continue;
-    const vx=(px[k]-ox[k])*DAMPING,vy=(py[k]-oy[k])*DAMPING,vz=(pz[k]-oz[k])*DAMPING;
-    ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];
-    let ax=0,ay=GRAVITY*DT*DT,az=0;
-    ax+=Math.sin(simTime*0.28+py[k]*0.6)*0.004;
-    az+=Math.cos(simTime*0.22+px[k]*0.5)*0.006;
-    if(mouseActive){
-      const dx=px[k]-mouseWorld.x,dy=py[k]-mouseWorld.y,dz=pz[k]-mouseWorld.z;
-      const d2=dx*dx+dy*dy+dz*dz,R=2.8;
-      if(d2<R*R){const d=Math.sqrt(d2)+1e-6,f=(1-d/R)*0.22;ax+=(dx/d)*f;ay+=(dy/d)*f;az+=(dz/d)*f+f*0.6;}
-    }
-    px[k]+=vx+ax;py[k]+=vy+ay;pz[k]+=vz+az;
-  }
-  for(let iter=0;iter<ITER;iter++) for(let c=0,ci=0;c<constraints.length;c+=2,ci++){
-    const a=constraints[c],b=constraints[c+1];
-    const dx=px[b]-px[a],dy=py[b]-py[a],dz=pz[b]-pz[a];
-    const d=Math.sqrt(dx*dx+dy*dy+dz*dz)+1e-9,corr=(d-restLen[ci])/d*0.5;
-    const cx_=dx*corr,cy_=dy*corr,cz_=dz*corr;
-    if(!pinned[a]){px[a]+=cx_;py[a]+=cy_;pz[a]+=cz_;}
-    if(!pinned[b]){px[b]-=cx_;py[b]-=cy_;pz[b]-=cz_;}
-  }
-}
-
-// ─── Cloth Mesh ───────────────────────────────────────────────────────────────
-const geo=new THREE.PlaneGeometry(CW,CH,SEGS_X,SEGS_Y);
-geo.attributes.position.setUsage(THREE.DynamicDrawUsage);
-const mat=new THREE.MeshStandardMaterial({map:clothTexture,side:THREE.DoubleSide,roughness:0.88,metalness:0.0});
-const clothMesh=new THREE.Mesh(geo,mat);
-scene.add(clothMesh);
-
-function syncGeometry(){
-  const pos=geo.attributes.position;
-  for(let k=0;k<N;k++) pos.setXYZ(k,px[k],py[k],pz[k]);
-  pos.needsUpdate=true; geo.computeVertexNormals();
-}
-
-// ─── Particles ────────────────────────────────────────────────────────────────
-const MAX_P=900;
-const pGeo=new THREE.BufferGeometry();
-const pPos=new Float32Array(MAX_P*3),pAlpha=new Float32Array(MAX_P);
-pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3).setUsage(THREE.DynamicDrawUsage));
-pGeo.setAttribute('alpha',new THREE.BufferAttribute(pAlpha,1).setUsage(THREE.DynamicDrawUsage));
-const pMat=new THREE.ShaderMaterial({
-  vertexShader:`attribute float alpha;varying float vAlpha;
-    void main(){vAlpha=alpha;vec4 mv=modelViewMatrix*vec4(position,1.0);
-    gl_PointSize=clamp(160.0/-mv.z,2.0,5.0);gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`varying float vAlpha;
-    void main(){float d=length(gl_PointCoord-vec2(0.5));if(d>0.5)discard;
-    float a=vAlpha*smoothstep(0.5,0.1,d);gl_FragColor=vec4(0.08,0.06,0.04,a);}`,
-  transparent:true,depthWrite:false,
-});
-scene.add(new THREE.Points(pGeo,pMat));
-const parts=Array.from({length:MAX_P},()=>({x:0,y:0,z:0,vx:0,vy:0,vz:0,life:0,maxLife:1,active:false}));
-
-function spawnParticle(wx,wy,wz){
-  for(let i=0;i<MAX_P;i++) if(!parts[i].active){
-    const p=parts[i]; p.active=true;
-    p.x=wx+(Math.random()-0.5)*0.15; p.y=wy+(Math.random()-0.5)*0.15; p.z=wz+Math.random()*0.1;
-    const angle=Math.random()*Math.PI*2, speed=0.015+Math.random()*0.04;
-    p.vx=Math.cos(angle)*speed; p.vy=Math.sin(angle)*speed+0.008;
-    p.vz=(Math.random()-0.2)*speed*1.5;
-    p.maxLife=50+Math.random()*70; p.life=p.maxLife; return;
-  }
-}
-
-const hitRay=new THREE.Raycaster();
-let spawnCooldown=0;
-
-function updateParticles(){
-  if(mouseActive&&spawnCooldown<=0){
-    hitRay.setFromCamera(mouseNDC,camera);
-    const hits=hitRay.intersectObject(clothMesh);
-    if(hits.length>0&&hits[0].uv){
-      const cu=hits[0].uv.x, meshUVy=hits[0].uv.y;
-      const actualUVy=clothTexture.offset.y+meshUVy*VH_FRAC;
-      const cv=1-actualUVy; // canvas fraction (0=top)
-      if(cu<0.88&&cv>0.04){
-        const wp=hits[0].point;
-        for(let s=0;s<4;s++) spawnParticle(wp.x,wp.y,wp.z);
-        spawnCooldown=3;
-      }
-    }
-  }
-  if(spawnCooldown>0) spawnCooldown--;
-  const posAttr=pGeo.attributes.position, alphaAttr=pGeo.attributes.alpha;
-  for(let i=0;i<MAX_P;i++){
-    const p=parts[i];
-    if(p.active){
-      p.x+=p.vx;p.y+=p.vy;p.z+=p.vz;
-      p.vx*=0.97;p.vy*=0.97;p.vz*=0.97;
-      p.vy-=0.0003;p.life--;
-      if(p.life<=0)p.active=false;
-      const t=p.life/p.maxLife;
-      posAttr.setXYZ(i,p.x,p.y,p.z);alphaAttr.setX(i,t*t*0.85);
-    }else{posAttr.setXYZ(i,0,-9999,0);alphaAttr.setX(i,0);}
-  }
-  posAttr.needsUpdate=true;alphaAttr.needsUpdate=true;
-}
-
-// ─── UV hit-test (nav + download) ────────────────────────────────────────────
-const navRay=new THREE.Raycaster();
-
-function uvToCanvas(ndcX, ndcY) {
-  navRay.setFromCamera(new THREE.Vector2(ndcX,ndcY),camera);
-  const hits=navRay.intersectObject(clothMesh);
-  if(!hits.length||!hits[0].uv) return null;
-  const cu=hits[0].uv.x, meshUVy=hits[0].uv.y;
-  const actualUVy=clothTexture.offset.y+meshUVy*VH_FRAC;
-  return { cx:cu*TEX_W, cy:(1-actualUVy)*TEX_H };
-}
-
-function navHitIndex(ndcX,ndcY){
-  const uv=uvToCanvas(ndcX,ndcY); if(!uv) return -1;
-  for(let i=0;i<navItems.length;i++){
-    const it=navItems[i];
-    if(it._x1!==undefined&&uv.cx>=it._x1&&uv.cx<=it._x2&&uv.cy>=it._y1&&uv.cy<=it._y2) return i;
-  }
-  return -1;
-}
-
-function dlHitIndex(ndcX,ndcY){
-  const uv=uvToCanvas(ndcX,ndcY); if(!uv) return -1;
-  for(let i=0;i<downloadItems.length;i++){
-    const dl=downloadItems[i];
-    if(uv.cx>=dl._x1&&uv.cx<=dl._x2&&uv.cy>=dl._y1&&uv.cy<=dl._y2) return i;
-  }
-  return -1;
-}
-
-// Hover: update nav + download highlights + cursor
-window.addEventListener('mousemove',()=>{
-  const navIdx=navHitIndex(mouseNDC.x,mouseNDC.y);
-  const dlIdx=dlHitIndex(mouseNDC.x,mouseNDC.y);
-  const changed=navIdx!==hoveredNav||dlIdx!==hoveredDl;
-  hoveredNav=navIdx; hoveredDl=dlIdx;
-  if(changed){
-    threeCanvas.style.cursor=(navIdx!==-1||dlIdx!==-1)?'pointer':'default';
-    drawTexture(); clothTexture.needsUpdate=true;
-  }
-});
-
-// Click: nav navigate or download file
-threeCanvas.addEventListener('click',e=>{
-  const ndcX=(e.clientX/W)*2-1, ndcY=-(e.clientY/H)*2+1;
-  const navIdx=navHitIndex(ndcX,ndcY);
-  if(navIdx!==-1){window.location.href=navItems[navIdx].href;return;}
-  const dlIdx=dlHitIndex(ndcX,ndcY);
-  if(dlIdx!==-1){
-    const a=document.createElement('a');
-    a.href=downloadItems[dlIdx].href; a.download=''; a.click();
-  }
-});
-
-// ─── Resize ───────────────────────────────────────────────────────────────────
-window.addEventListener('resize',()=>{
-  W=window.innerWidth;H=window.innerHeight;
-  camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);
-});
-
-// ─── Loop ─────────────────────────────────────────────────────────────────────
-function animate(){
-  requestAnimationFrame(animate);
-  updateCloth();syncGeometry();updateParticles();
-  renderer.render(scene,camera);
-}
-animate();
-</script>
+</main>
 </body>
 </html>
