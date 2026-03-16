@@ -266,6 +266,272 @@ def build_section(key, meta, items):
         f'</section>'
     )
 
+# ── Cloth interaction (injected into every generated news.html) ───────────
+_CLOTH_CSS = """
+  #cloth-canvas{position:fixed;inset:0;z-index:50;display:none;opacity:0;pointer-events:none;transition:opacity 1.1s ease-in-out;}
+  #white-veil{position:fixed;inset:0;z-index:51;background:#ffffff;opacity:0;pointer-events:none;transition:opacity 0.9s ease-in-out;}"""
+
+_CLOTH_SCRIPT = """
+<canvas id="cloth-canvas"></canvas>
+<div id="white-veil"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script>
+(function(){
+// 0=normal HTML  1=cloth  2=fading to thoughts
+let clothState = 0;
+const clothCanvas = document.getElementById('cloth-canvas');
+const veil = document.getElementById('white-veil');
+
+let renderer=null,scene=null,camera=null;
+let geo=null,mat=null,clothMesh=null,clothTexture=null;
+let px,py,pz,ox,oy,oz,pinned,constraints,restLen,simTime=0;
+let W=window.innerWidth,H=window.innerHeight;
+
+const SCREENS=5;
+let TEX_W,TEX_H,VH_FRAC,VIS_H,MAX_SCROLL_CV;
+const SCROLL_STEP=80;
+let clothScrollY=0,staticCanvas,texCanvas,tc;
+
+function parseContent(){
+  const groups=[];
+  document.querySelectorAll('.group').forEach(el=>{
+    const zhHead=el.querySelector('.group-zh')?.textContent.trim()||'';
+    const enHead=el.querySelector('.group-en')?.textContent.trim()||'';
+    const items=[];
+    el.querySelectorAll('.item').forEach(item=>{
+      const year=item.querySelector('.year')?.textContent.trim()||'';
+      const nameZh=item.querySelector('.name-zh')?.textContent.trim()||'';
+      items.push({year,nameZh});
+    });
+    groups.push({zhHead,enHead,items});
+  });
+  return groups;
+}
+
+function wrapText(ctx,text,maxW){
+  if(!text) return [];
+  const lines=[];let line='';
+  for(const ch of text){
+    const test=line+ch;
+    if(ctx.measureText(test).width>maxW&&line){
+      const sp=line.lastIndexOf(' ');
+      if(sp>0&&ch!==' '&&!/[\u4e00-\u9fff]/.test(ch)){lines.push(line.slice(0,sp));line=line.slice(sp+1)+ch;}
+      else{lines.push(line.trimEnd());line=ch===' '?'':ch;}
+    }else{line=test;}
+  }
+  if(line.trim()) lines.push(line.trimEnd());
+  return lines;
+}
+
+function paintStatic(){
+  const sc=staticCanvas.getContext('2d');
+  sc.clearRect(0,0,TEX_W,TEX_H);
+  sc.fillStyle='#ffffff';sc.fillRect(0,0,TEX_W,TEX_H);
+  const LM=70,CONTENT_W=Math.min(TEX_W-LM-220,760);
+  let y=72;
+  sc.font='bold 28px EFont,ZFont,sans-serif';sc.fillStyle='#111';sc.textAlign='left';
+  sc.fillText('AUTOMATIC',LM,y+26);y+=26+18;
+  sc.font='400 13px EFont,ZFont,sans-serif';sc.fillStyle='#888';
+  sc.fillText('NEXT UPDATE',LM,y+13);y+=13+36;
+  const groups=parseContent();
+  for(const g of groups){
+    sc.font='bold 22px ZFont,EFont,sans-serif';sc.fillStyle='#111';
+    sc.fillText(g.zhHead,LM,y+20);y+=28;
+    sc.font='bold 17px EFont,ZFont,sans-serif';sc.fillStyle='#2a2a2a';
+    sc.fillText(g.enHead,LM,y+16);y+=16+14;
+    for(const item of g.items){
+      sc.font='bold 20px ZFont,EFont,sans-serif';sc.fillStyle='#888';
+      sc.fillText(item.year,LM,y+18);
+      const yearW=sc.measureText(item.year).width+12;
+      sc.fillStyle='#111';
+      const nameLines=wrapText(sc,item.nameZh,CONTENT_W-yearW);
+      nameLines.forEach((l,i)=>sc.fillText(l,LM+yearW,y+18+i*26));
+      y+=nameLines.length*26+6;
+    }
+    y+=30;
+  }
+}
+
+const navItems=[
+  {text:'ABOUT',  href:'index.html'},
+  {text:'WORK',   href:'work.html'},
+  {text:'CONTACT',href:'contact.html'},
+  {text:'SUPPORT',href:'support.html'},
+];
+let hoveredNav=-1;
+
+function drawTexture(){
+  tc.drawImage(staticCanvas,0,0);
+  const navRX=TEX_W-30,navStartY=clothScrollY+22;
+  tc.textAlign='right';tc.font='bold 28px EFont,ZFont,sans-serif';
+  navItems.forEach((item,i)=>{
+    const by=navStartY+i*50+26,hov=hoveredNav===i;
+    tc.fillStyle=hov?'#555':'#111';tc.fillText(item.text,navRX,by);
+    if(hov){const w=tc.measureText(item.text).width;tc.strokeStyle='#555';tc.lineWidth=1.5;tc.beginPath();tc.moveTo(navRX-w,by+5);tc.lineTo(navRX,by+5);tc.stroke();}
+    const w=tc.measureText(item.text).width;
+    item._x1=navRX-w-6;item._x2=navRX+6;item._y1=by-32;item._y2=by+10;
+  });
+  clothTexture.needsUpdate=true;
+}
+
+const SEGS_X=26,SEGS_Y=18,NX=SEGS_X+1,NY=SEGS_Y+1,N=NX*NY;
+const GRAVITY=-1.2,DAMPING=0.9988,ITER=8,DT=1/60;
+let CW3,CH3,mouseNDC,mouseActive=false,raycast,planeZ,mouseWorld,hitRay;
+
+function initCloth(){
+  TEX_W=W;TEX_H=H*SCREENS;VH_FRAC=1/SCREENS;VIS_H=H;MAX_SCROLL_CV=TEX_H-VIS_H;
+  staticCanvas=document.createElement('canvas');staticCanvas.width=TEX_W;staticCanvas.height=TEX_H;
+  texCanvas=document.createElement('canvas');texCanvas.width=TEX_W;texCanvas.height=TEX_H;
+  tc=texCanvas.getContext('2d');
+  scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);
+  camera=new THREE.PerspectiveCamera(38,W/H,0.1,200);camera.position.set(0,0.5,20);camera.lookAt(0,0,0);
+  renderer=new THREE.WebGLRenderer({canvas:clothCanvas,antialias:true});
+  renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.setSize(W,H);
+  scene.add(new THREE.AmbientLight(0xffffff,0.85));
+  const dl=new THREE.DirectionalLight(0xffffff,0.50);dl.position.set(4,8,12);scene.add(dl);
+  px=new Float32Array(N);py=new Float32Array(N);pz=new Float32Array(N);
+  ox=new Float32Array(N);oy=new Float32Array(N);oz=new Float32Array(N);
+  pinned=new Uint8Array(N);
+  const _vFov=38*Math.PI/180;CH3=2*Math.tan(_vFov/2)*20*1.06;CW3=CH3*(W/H)*1.06;
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+    const k=j*NX+i,nj=j/SEGS_Y;
+    px[k]=-CW3/2+i*(CW3/SEGS_X);py[k]=CH3/2-j*(CH3/SEGS_Y);
+    pz[k]=nj*(1-nj)*0.1+(Math.random()-0.5)*0.02;
+    ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];if(j<=1)pinned[k]=1;
+  }
+  constraints=[];restLen=[];
+  function addC(a,b){const dx=px[a]-px[b],dy=py[a]-py[b],dz=pz[a]-pz[b];restLen.push(Math.sqrt(dx*dx+dy*dy+dz*dz));constraints.push(a,b);}
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+    const k=j*NX+i;
+    if(i<SEGS_X)addC(k,k+1);if(j<SEGS_Y)addC(k,k+NX);
+    if(i<SEGS_X&&j<SEGS_Y){addC(k,k+NX+1);addC(k+1,k+NX);}
+    if(i<SEGS_X-1)addC(k,k+2);if(j<SEGS_Y-1)addC(k,k+NX*2);
+  }
+  clothTexture=new THREE.CanvasTexture(texCanvas);
+  clothTexture.repeat.set(1,VH_FRAC);clothTexture.offset.y=1-VH_FRAC;
+  clothTexture.wrapS=THREE.ClampToEdgeWrapping;clothTexture.wrapT=THREE.ClampToEdgeWrapping;
+  geo=new THREE.PlaneGeometry(CW3,CH3,SEGS_X,SEGS_Y);
+  geo.attributes.position.setUsage(THREE.DynamicDrawUsage);
+  mat=new THREE.MeshStandardMaterial({map:clothTexture,side:THREE.DoubleSide,roughness:0.90});
+  clothMesh=new THREE.Mesh(geo,mat);scene.add(clothMesh);
+  mouseNDC=new THREE.Vector2();raycast=new THREE.Raycaster();
+  planeZ=new THREE.Plane(new THREE.Vector3(0,0,1),0);mouseWorld=new THREE.Vector3();hitRay=new THREE.Raycaster();
+  paintStatic();drawTexture();
+  document.fonts.ready.then(()=>{paintStatic();drawTexture();});
+  animate();
+}
+
+window.addEventListener('mousemove',e=>{
+  if(mouseNDC)mouseNDC.set((e.clientX/W)*2-1,-(e.clientY/H)*2+1);mouseActive=true;
+});
+window.addEventListener('mouseleave',()=>{mouseActive=false;});
+
+function updateCloth(){
+  simTime+=DT;
+  for(let row=0;row<=1;row++){
+    const amp=row===0?0.022:0.006;
+    for(let i=0;i<NX;i++){
+      const k=row*NX+i,ni=i/SEGS_X;
+      px[k]=-CW3/2+i*(CW3/SEGS_X)+Math.sin(simTime*0.28+ni*3.1)*amp;
+      py[k]=CH3/2-row*(CH3/SEGS_Y)+Math.cos(simTime*0.18+ni*2.0)*amp*0.4;
+      pz[k]=Math.sin(simTime*0.22+ni*2.4)*amp*1.5;
+      ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];
+    }
+  }
+  if(mouseActive){raycast.setFromCamera(mouseNDC,camera);raycast.ray.intersectPlane(planeZ,mouseWorld);}
+  for(let k=0;k<N;k++){
+    if(pinned[k])continue;
+    const vx=(px[k]-ox[k])*DAMPING,vy=(py[k]-oy[k])*DAMPING,vz=(pz[k]-oz[k])*DAMPING;
+    ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];
+    let ax=0,ay=GRAVITY*DT*DT,az=0;
+    ax+=Math.sin(simTime*0.20+py[k]*0.5)*0.0008;az+=Math.cos(simTime*0.16+px[k]*0.4)*0.0012;
+    if(mouseActive){
+      const dx=px[k]-mouseWorld.x,dy=py[k]-mouseWorld.y,dz=pz[k]-mouseWorld.z;
+      const d2=dx*dx+dy*dy+dz*dz,R=1.8;
+      if(d2<R*R){const d=Math.sqrt(d2)+1e-6,f=(1-d/R)*0.09;ax+=(dx/d)*f;ay+=(dy/d)*f;az+=(dz/d)*f+f*0.4;}
+    }
+    px[k]+=vx+ax;py[k]+=vy+ay;pz[k]+=vz+az;
+  }
+  for(let iter=0;iter<ITER;iter++){
+    for(let c=0,ci=0;c<constraints.length;c+=2,ci++){
+      const a=constraints[c],b=constraints[c+1];
+      const dx=px[b]-px[a],dy=py[b]-py[a],dz=pz[b]-pz[a];
+      const d=Math.sqrt(dx*dx+dy*dy+dz*dz)+1e-9,corr=(d-restLen[ci])/d*0.5;
+      const cx=dx*corr,cy=dy*corr,cz=dz*corr;
+      if(!pinned[a]){px[a]+=cx;py[a]+=cy;pz[a]+=cz;}
+      if(!pinned[b]){px[b]-=cx;py[b]-=cy;pz[b]-=cz;}
+    }
+  }
+}
+
+function syncGeometry(){
+  const pos=geo.attributes.position;
+  for(let k=0;k<N;k++) pos.setXYZ(k,px[k],py[k],pz[k]);
+  pos.needsUpdate=true;geo.computeVertexNormals();
+}
+
+function uvToCanvas(u,v){return{cx:u*TEX_W,cy:clothScrollY+VIS_H*(1-v)};}
+function navHitIndex(nx,ny){
+  hitRay.setFromCamera(new THREE.Vector2(nx,ny),camera);
+  const hits=hitRay.intersectObject(clothMesh);
+  if(!hits.length||!hits[0].uv)return -1;
+  const{cx,cy}=uvToCanvas(hits[0].uv.x,hits[0].uv.y);
+  for(let i=0;i<navItems.length;i++){
+    const it=navItems[i];
+    if(it._x1!==undefined&&cx>=it._x1&&cx<=it._x2&&cy>=it._y1&&cy<=it._y2)return i;
+  }
+  return -1;
+}
+
+window.addEventListener('wheel',e=>{
+  if(clothState!==1)return;e.preventDefault();
+  clothScrollY=Math.max(0,Math.min(MAX_SCROLL_CV,clothScrollY+Math.sign(e.deltaY)*SCROLL_STEP));
+  clothTexture.offset.y=1-clothScrollY/TEX_H-VH_FRAC;drawTexture();
+},{passive:false});
+
+window.addEventListener('mousemove',()=>{
+  if(clothState!==1||!mouseNDC)return;
+  const idx=navHitIndex(mouseNDC.x,mouseNDC.y);
+  if(idx!==hoveredNav){hoveredNav=idx;clothCanvas.style.cursor=idx!==-1?'pointer':'default';drawTexture();}
+});
+
+clothCanvas.addEventListener('click',e=>{
+  if(clothState!==1)return;
+  const nx=(e.clientX/W)*2-1,ny=-(e.clientY/H)*2+1;
+  const idx=navHitIndex(nx,ny);if(idx!==-1)window.location.href=navItems[idx].href;
+});
+
+window.addEventListener('keydown',e=>{
+  if(e.code!=='Space')return;
+  if(document.activeElement&&document.activeElement!==document.body)return;
+  e.preventDefault();
+  if(clothState===0){
+    clothState=1;initCloth();
+    clothScrollY=Math.max(0,Math.min(MAX_SCROLL_CV,window.scrollY));
+    clothTexture.offset.y=1-clothScrollY/TEX_H-VH_FRAC;drawTexture();
+    document.querySelector('.page').style.transition='opacity 1.1s ease-in-out';
+    document.querySelector('.page').style.opacity='0';
+    document.querySelector('.top-nav').style.transition='opacity 1.1s ease-in-out';
+    document.querySelector('.top-nav').style.opacity='0';
+    clothCanvas.style.display='block';
+    requestAnimationFrame(()=>{clothCanvas.style.opacity='1';clothCanvas.style.pointerEvents='auto';});
+    document.body.style.overflow='hidden';
+  }else if(clothState===1){
+    clothState=2;veil.style.opacity='1';
+    setTimeout(()=>{window.location.href='thoughts.html';},1000);
+  }
+});
+
+window.addEventListener('resize',()=>{
+  W=window.innerWidth;H=window.innerHeight;
+  if(renderer){camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);}
+});
+
+function animate(){requestAnimationFrame(animate);updateCloth();syncGeometry();renderer.render(scene,camera);}
+})();
+</script>"""
+
 def generate_html(sections_html):
     now     = datetime.datetime.now()
     date_en = now.strftime('%d %b %Y').upper()
@@ -416,6 +682,7 @@ def generate_html(sections_html):
     font-size:18px;
     font-variant-numeric:tabular-nums;
   }}
+{_CLOTH_CSS}
 </style>
 </head>
 <body>
@@ -450,6 +717,7 @@ def generate_html(sections_html):
   {''.join(sections_html)}
 </main>
 
+{_CLOTH_SCRIPT}
 </body>
 </html>'''
 
