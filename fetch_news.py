@@ -331,7 +331,7 @@ function paintStatic(){
   const LM=70,CONTENT_W=Math.min(TEX_W-LM-220,760);
   let y=72;
   sc.font='bold 28px EFont,ZFont,sans-serif';sc.fillStyle='#111';sc.textAlign='left';
-  sc.fillText('AUTOMATIC',LM,y+26);y+=26+18;
+  sc.fillText('NEWS',LM,y+26);y+=26+18;
   sc.font='400 13px EFont,ZFont,sans-serif';sc.fillStyle='#888';
   sc.fillText('NEXT UPDATE',LM,y+13);y+=13+36;
   const groups=parseContent();
