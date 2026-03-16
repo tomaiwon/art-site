@@ -682,6 +682,8 @@ def generate_html(sections_html):
     font-size:18px;
     font-variant-numeric:tabular-nums;
   }}
+  .page-title a{{color:#111;text-decoration:none;}}
+  .page-title a:hover{{text-decoration:underline;text-underline-offset:5px;}}
 {_CLOTH_CSS}
 </style>
 </head>
@@ -695,7 +697,7 @@ def generate_html(sections_html):
 </nav>
 
 <main class="page">
-  <h1 class="page-title">AUTOMATIC</h1>
+  <h1 class="page-title"><a href="thoughts.html">NEWS</a></h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
   <a href="thoughts.html" class="thoughts-btn">沉思录</a>
   <script>(function(){{
