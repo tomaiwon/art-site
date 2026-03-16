@@ -657,20 +657,7 @@ def generate_html(sections_html):
     .group-en{{font-size:14px;}}
   }}
 
-  .thoughts-btn{{
-    display:inline-block;
-    font-family:"ZFont","EFont",sans-serif;
-    font-size:22px;
-    font-weight:700;
-    letter-spacing:1.5px;
-    color:#111;
-    text-decoration:none;
-    border:1px solid #111;
-    padding:5px 14px;
-    margin:0 0 18px 0;
-  }}
-  .thoughts-btn:hover{{background:#111;color:#fff;}}
-  .next-update{{
+.next-update{{
     font-family:"EFont","ZFont",sans-serif;
     font-size:13px;
     letter-spacing:1.5px;
@@ -699,8 +686,7 @@ def generate_html(sections_html):
 <main class="page">
   <h1 class="page-title"><a href="thoughts.html">NEWS</a></h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
-  <a href="thoughts.html" class="thoughts-btn">沉思录</a>
-  <script>(function(){{
+<script>(function(){{
     function secs(){{
       var f=new Intl.DateTimeFormat('en-GB',{{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}});
       var p={{}};
