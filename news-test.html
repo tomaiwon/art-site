@@ -400,8 +400,8 @@ function initCloth() {
   ox = new Float32Array(N); oy = new Float32Array(N); oz = new Float32Array(N);
   pinned = new Uint8Array(N);
   const _vFov = 38 * Math.PI / 180;
-  CH3 = 2 * Math.tan(_vFov / 2) * 20 * 1.06;
-  CW3 = CH3 * (W / H) * 1.06;
+  CH3 = 2 * Math.tan(_vFov / 2) * 20 * 0.90;
+  CW3 = CH3 * (W / H);
   for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
     const k = j*NX+i, nj = j/SEGS_Y;
     px[k]=-CW3/2+i*(CW3/SEGS_X); py[k]=CH3/2-j*(CH3/SEGS_Y);
