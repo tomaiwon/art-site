@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Digital Memory - Across RCA</title>
+  <style>
+    html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#000; }
+    canvas { display:block; position:absolute; top:0; left:0; width:100%; height:100%; }
+    video  { display:none; }
+    #start-overlay {
+      position:fixed; inset:0; z-index:100;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:16px;
+      background:rgba(255,255,255,0.96); transition:opacity 1s ease;
+      font-family:"Courier New",Courier,monospace;
+    }
+    #start-overlay.hidden { opacity:0; pointer-events:none; }
+    #start-btn {
+      background:transparent; border:1px solid rgba(0,0,0,0.30);
+      padding:14px 36px; cursor:pointer;
+      font-family:"Courier New",Courier,monospace;
+      font-size:11px; letter-spacing:2.5px; color:#111;
+      transition:background 200ms;
+    }
+    #start-btn:hover { background:rgba(0,0,0,0.05); }
+    #cam-status {
+      position:fixed; right:16px; top:16px; z-index:200;
+      font-family:"Courier New",Courier,monospace; font-size:10px; letter-spacing:1px;
+      color:rgba(255,255,255,0.30); pointer-events:none; user-select:none;
+    }
+    #countdown {
+      position:fixed; right:16px; bottom:16px; z-index:200;
+      font-family:"Courier New",Courier,monospace; font-size:9px; letter-spacing:1.5px;
+      color:rgba(255,255,255,0.18); pointer-events:none; user-select:none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <video id="webcam-video" autoplay playsinline muted></video>
+  <div id="start-overlay">
+    <button id="start-btn">[ ENTER ]</button>
+    <div style="font-size:9px;letter-spacing:1.8px;color:rgba(0,0,0,0.30);">CAMERA REQUIRED</div>
+  </div>
+  <div id="cam-status"></div>
+  <div id="countdown"></div>
+
+<script>
+// ─────────────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────────────
+const CFG = {
+  SAMP_W       : 128,    // fixed sampling width (points per row)
+  SAMP_H       : 72,     // fixed sampling height (points per col)
+
+  // 3D
+  FOCAL        : 1.0,    // perspective focal distance (normalized)
+  PROJ_FACTOR  : 0.92,   // PROJ_SCALE = min(W,H) * this
+  DEPTH_SCALE  : 0.18,   // brightness → z range ±0.09
+  ROT_SPEED    : 0.003,  // radians / frame  (≈ 35 s per full rotation)
+  BOB_AMP      : 0.025,  // normalized units (× min(W,H) → px)
+  BOB_SPEED    : 0.38,
+
+  // render
+  DOT_BASE     : 2.4,    // dot half-size in px at sc = 1
+  BLOCK_BASE   : 15,     // corruption block half-size in px at sc = 1
+  FONT_SIZE    : 12,     // corruption char font (px, fixed)
+  SORT_EVERY   : 2,      // depth-sort every N frames
+
+  // corruption
+  corruptRate  : 0.15,
+  decayRate    : 0.965,
+  charFlipProb : 0.40,
+
+  // capture
+  captureInterval : 30000,
+  crossFadeFrames : 50,
+};
+
+const BASE12   = '0123456789AB';
+const MAX_PTS  = CFG.SAMP_W * CFG.SAMP_H;  // 9 216
+
+// ─────────────────────────────────────────────────────
+// Canvas
+// ─────────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d', { alpha: false });
+const camEl  = document.getElementById('cam-status');
+const cdEl   = document.getElementById('countdown');
+let W = 0, H = 0, paused = false;
+
+function resize() {
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W; canvas.height = H;
+}
+window.addEventListener('resize', resize);
+resize();
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); paused = !paused; }
+});
+
+// ─────────────────────────────────────────────────────
+// Point cloud  (normalized coords, rebuilt per capture)
+// ─────────────────────────────────────────────────────
+//   ptX, ptY, ptZ — 3D position in normalized space
+//   ptB           — brightness 0-1 (for dot alpha)
+//   ptC           — corruption 0-1
+//   ptI           — base-12 char index
+
+const ptX = new Float32Array(MAX_PTS);
+const ptY = new Float32Array(MAX_PTS);
+const ptZ = new Float32Array(MAX_PTS);
+const ptB = new Float32Array(MAX_PTS);
+const ptC = new Float32Array(MAX_PTS);
+const ptI  = new Uint8Array(MAX_PTS);
+const ptR  = new Uint8Array(MAX_PTS);
+const ptGr = new Uint8Array(MAX_PTS);
+const ptBl = new Uint8Array(MAX_PTS);
+const ptColor = new Array(MAX_PTS).fill('#fff');
+
+// Per-frame computed
+const rxA = new Float32Array(MAX_PTS);   // rotated x
+const ryA = new Float32Array(MAX_PTS);   // rotated y (= ptY, unchanged by Y-rot)
+const rzA = new Float32Array(MAX_PTS);   // rotated z
+const sxA = new Float32Array(MAX_PTS);   // screen x
+const syA = new Float32Array(MAX_PTS);   // screen y
+const scA = new Float32Array(MAX_PTS);   // perspective scale
+
+const sortIdx = [];        // filled lazily
+let nPoints = 0;
+
+// Offscreen canvas to sample captured images
+const sampCv  = document.createElement('canvas');
+sampCv.width  = CFG.SAMP_W; sampCv.height = CFG.SAMP_H;
+const sampCtx = sampCv.getContext('2d', { willReadFrequently: true });
+
+function buildCloud(img) {
+  if (!img || !img.complete || !img.naturalWidth) return;
+  // mirror horizontally to match sensor (which is also mirrored)
+  sampCtx.save();
+  sampCtx.translate(CFG.SAMP_W, 0); sampCtx.scale(-1, 1);
+  sampCtx.drawImage(img, 0, 0, CFG.SAMP_W, CFG.SAMP_H);
+  sampCtx.restore();
+
+  const idata = sampCtx.getImageData(0, 0, CFG.SAMP_W, CFG.SAMP_H).data;
+  const AR = CFG.SAMP_H / CFG.SAMP_W;   // e.g. 72/128 ≈ 0.5625
+  nPoints = 0;
+  for (let sy = 0; sy < CFG.SAMP_H; sy++) {
+    for (let sx = 0; sx < CFG.SAMP_W; sx++) {
+      const pi = (sy * CFG.SAMP_W + sx) * 4;
+      const r = idata[pi], g = idata[pi+1], bl = idata[pi+2];
+      const b  = (r*0.299 + g*0.587 + bl*0.114) / 255;
+      const k  = nPoints++;
+      ptX[k] = sx / CFG.SAMP_W - 0.5;                   // -0.5 … +0.5
+      ptY[k] = (sy / CFG.SAMP_H - 0.5) * AR;            // -0.28 … +0.28
+      ptZ[k] = (b - 0.5) * CFG.DEPTH_SCALE;             // -0.09 … +0.09
+      ptB[k] = b;
+      ptR[k] = r; ptGr[k] = g; ptBl[k] = bl;
+      ptColor[k] = `rgb(${r},${g},${bl})`;
+      ptC[k] = 0;
+      ptI[k] = Math.floor(Math.random() * 12);
+    }
+  }
+  // pre-fill sort index
+  sortIdx.length = nPoints;
+  for (let i = 0; i < nPoints; i++) sortIdx[i] = i;
+}
+
+// ─────────────────────────────────────────────────────
+// Sensor  (64×36, frame-diff motion accumulator)
+// ─────────────────────────────────────────────────────
+const SENS_W = 64, SENS_H = 36;
+class Sensor {
+  constructor() {
+    this.video   = document.getElementById('webcam-video');
+    this.sc      = document.createElement('canvas');
+    this.sc.width = SENS_W; this.sc.height = SENS_H;
+    this.sctx    = this.sc.getContext('2d', { willReadFrequently: true });
+    this.data    = new Uint8Array(SENS_W * SENS_H);
+    this.prevRaw = null;
+    this.presenceVal = 0; this.motionVal = 0;
+  }
+  async init() {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { width:{ideal:640}, height:{ideal:360}, facingMode:'user' }
+    });
+    this.video.srcObject = stream; this.video.play();
+    return new Promise(r => { this.video.onloadedmetadata = r; });
+  }
+  update() {
+    if (this.video.readyState < 2) return;
+    this.sctx.save(); this.sctx.scale(-1, 1);
+    this.sctx.drawImage(this.video, -SENS_W, 0, SENS_W, SENS_H);
+    this.sctx.restore();
+    const curr = this.sctx.getImageData(0, 0, SENS_W, SENS_H).data;
+    const N = SENS_W * SENS_H; let ms = 0, ac = 0;
+    if (this.prevRaw) {
+      for (let i = 0; i < N; i++) {
+        const d = Math.abs(curr[i*4+1] - this.prevRaw[i*4+1]);
+        let v = this.data[i] * 0.92; if (d > 15) v += d;
+        this.data[i] = v > 255 ? 255 : v;
+        if (d > 15) ms += d; if (v > 10) ac++;
+      }
+    }
+    this.prevRaw = curr;
+    this.presenceVal = Math.min((ac/N)*4, 1);
+    this.motionVal   = Math.min(ms/20000, 1);
+  }
+  sample(x, y) {
+    const si = Math.max(0, Math.min(SENS_W-1, Math.floor(x/W*SENS_W)));
+    const sj = Math.max(0, Math.min(SENS_H-1, Math.floor(y/H*SENS_H)));
+    return this.data[sj*SENS_W+si] / 255;
+  }
+}
+const sensor = new Sensor();
+let sensorRunning = false;
+let smPresence = 0, smMotion = 0;
+
+// ─────────────────────────────────────────────────────
+// Webcam capture  (30 s → rebuild point cloud)
+// ─────────────────────────────────────────────────────
+let bgCurr = null, nextCapAt = 0;
+
+function doCamCapture() {
+  const vid = sensor.video;
+  if (!vid || vid.readyState < 2) return;
+  const vw = vid.videoWidth, vh = vid.videoHeight;
+  if (!vw || !vh) return;
+  const c = document.createElement('canvas'); c.width = vw; c.height = vh;
+  const cx2 = c.getContext('2d');
+  cx2.translate(vw, 0); cx2.scale(-1, 1); cx2.drawImage(vid, 0, 0, vw, vh);
+  const img = new Image();
+  img.onload = () => { bgCurr = img; buildCloud(img); };
+  img.src = c.toDataURL('image/jpeg', 0.88);
+}
+
+// ─────────────────────────────────────────────────────
+// Start overlay
+// ─────────────────────────────────────────────────────
+const overlay  = document.getElementById('start-overlay');
+const startBtn = document.getElementById('start-btn');
+startBtn.addEventListener('click', async () => {
+  startBtn.textContent = '...'; startBtn.disabled = true;
+  try {
+    camEl.textContent = 'CAM...';
+    await sensor.init();
+    sensorRunning = true; camEl.textContent = '● CAM';
+    nextCapAt = Date.now() + 1200;
+  } catch(e) {
+    camEl.textContent = 'NO CAM'; console.warn('cam:', e);
+  }
+  overlay.classList.add('hidden');
+  setTimeout(() => { overlay.style.display = 'none'; }, 1050);
+});
+
+// ─────────────────────────────────────────────────────
+// Main loop
+// ─────────────────────────────────────────────────────
+const SENSOR_SKIP = 5;
+let frameN = 0, lastTs = 0, angle = 0;
+
+function loop(ts) {
+  requestAnimationFrame(loop);
+  if (paused) return;
+
+  frameN++;
+  const dt = Math.min((ts - lastTs) / 1000, 0.1);
+  lastTs = ts;
+
+  // ── Sensor update ─────────────────────────────────
+  if (sensorRunning && frameN % SENSOR_SKIP === 0) {
+    sensor.update();
+    smPresence += (sensor.presenceVal - smPresence) * 0.08;
+    smMotion   += (sensor.motionVal   - smMotion)   * 0.12;
+    const lvl = Math.min(4, Math.ceil(smMotion * 4));
+    camEl.textContent = smMotion > 0.05 ? '● CAM ' + '▪'.repeat(lvl) : '● CAM';
+  }
+
+  // ── Capture timer ─────────────────────────────────
+  if (sensorRunning && nextCapAt > 0) {
+    const rem = Math.ceil((nextCapAt - Date.now()) / 1000);
+    cdEl.textContent = rem > 0 ? `NEXT CAPTURE ${rem}s` : '';
+    if (Date.now() >= nextCapAt) { doCamCapture(); nextCapAt = Date.now() + CFG.captureInterval; }
+  }
+
+  // ── Black clear ───────────────────────────────────
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  if (nPoints === 0) return;  // no data yet
+
+  // ── 3D transform ──────────────────────────────────
+  angle += CFG.ROT_SPEED;
+  const cosA = Math.cos(angle), sinA = Math.sin(angle);
+  const AR = CFG.SAMP_H / CFG.SAMP_W;              // sample aspect ratio (72/128)
+  const PS = Math.max(W, H / AR);                  // cover: fills entire screen
+  const bob  = Math.sin(angle * CFG.BOB_SPEED) * CFG.BOB_AMP * PS;
+  const f    = CFG.FOCAL;
+
+  for (let i = 0; i < nPoints; i++) {
+    const x = ptX[i], z = ptZ[i];
+    rxA[i] = x * cosA + z * sinA;
+    ryA[i] = ptY[i];                              // Y-axis rotation leaves y unchanged
+    rzA[i] = -x * sinA + z * cosA;
+
+    // perspective: camera at (0,0,f) looking at origin → depth = f − rz
+    const depth = f - rzA[i];
+    if (depth <= 0) { scA[i] = 0; continue; }
+    const sc = f / depth;
+    scA[i] = sc;
+    sxA[i] = rxA[i] * sc * PS + W * 0.5;
+    syA[i] = ryA[i] * sc * PS + H * 0.5 + bob;
+  }
+
+  // ── Corruption update (driven by sensor at projected screen pos) ──
+  for (let i = 0; i < nPoints; i++) {
+    if (scA[i] <= 0) continue;
+    const sense = sensorRunning ? sensor.sample(sxA[i], syA[i]) : 0;
+    if (sense > 0.04) {
+      ptC[i] = Math.min(1, ptC[i] + sense * CFG.corruptRate);
+    } else {
+      ptC[i] *= CFG.decayRate;
+    }
+    if (ptC[i] > 0.05 && Math.random() < ptC[i] * CFG.charFlipProb) {
+      ptI[i] = Math.floor(Math.random() * 12);
+    }
+  }
+
+  // ── Depth sort (back → front = ascending rzA) ────
+  if (frameN % CFG.SORT_EVERY === 0) {
+    sortIdx.sort((a, b) => rzA[a] - rzA[b]);
+  }
+
+  // ── Render pass 1: normal dots (back-to-front, original color) ──
+  for (let ii = 0; ii < nPoints; ii++) {
+    const i = sortIdx[ii];
+    if (scA[i] <= 0 || ptC[i] > 0.05) continue;
+    const sc = scA[i];
+    const ds = Math.max(0.8, CFG.DOT_BASE * sc);
+    ctx.fillStyle   = ptColor[i];
+    ctx.globalAlpha = Math.min(1, sc * 0.55 + 0.45);
+    ctx.fillRect(sxA[i] - ds * 0.5, syA[i] - ds * 0.5, ds, ds);
+  }
+
+  // ── Render pass 2: white corruption blocks ────────
+  ctx.fillStyle = '#ffffff';
+  for (let i = 0; i < nPoints; i++) {
+    const v = ptC[i];
+    if (v < 0.05 || scA[i] <= 0) continue;
+    const bs = Math.max(3, CFG.BLOCK_BASE * scA[i]);
+    ctx.globalAlpha = Math.min(0.97, v * 0.94);
+    ctx.fillRect(sxA[i] - bs * 0.5, syA[i] - bs * 0.5, bs, bs);
+  }
+
+  // ── Render pass 3: black base-12 chars ───────────
+  ctx.font         = `${CFG.FONT_SIZE}px "Courier New"`;
+  ctx.textBaseline = 'middle';
+  ctx.textAlign    = 'center';
+  ctx.fillStyle    = '#000000';
+  for (let i = 0; i < nPoints; i++) {
+    const v = ptC[i];
+    if (v < 0.05 || scA[i] <= 0) continue;
+    ctx.globalAlpha = v;
+    ctx.fillText(BASE12[ptI[i]], sxA[i], syA[i]);
+  }
+
+  ctx.globalAlpha = 1;
+}
+
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
