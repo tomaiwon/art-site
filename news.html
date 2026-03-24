@@ -3,17 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Yi Huang 黄熠 — NEWS</title>
+<title>Yi Huang 黄熠 — AUTOMATIC</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+<link rel="preload" as="font" href="fonts/E.ttf" type="font/ttf" crossorigin>
+<link rel="preload" as="font" href="fonts/Z-news.woff2" type="font/woff2" crossorigin>
 <style>
-  @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
-  @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
-  @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2"),url("fonts/Z.woff") format("woff");font-weight:400;font-style:normal;font-display:swap;}
-  @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2"),url("fonts/Z.woff") format("woff");font-weight:700;font-style:normal;font-display:swap;}
-  @font-face{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
-  @font-face{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
+  @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:"EFont";src:url("fonts/E.ttf") format("truetype");font-weight:700;font-style:normal;font-display:block;}
+  @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+  @font-face{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:"NFont";src:url("fonts/N.ttf") format("truetype");font-weight:700;font-style:normal;font-display:block;}
 
   html,body{height:100%;}
   body{
@@ -109,14 +111,14 @@
 
   @media(max-width:860px){
     .page{padding:70px 22px;}
-    .top-nav{font-size:22px;letter-spacing:2px;right:18px;top:18px;gap:8px;}
+    .top-nav{font-size:16px;letter-spacing:1.5px;right:18px;top:18px;gap:8px;}
     .page-title{font-size:24px;}
     .year,.name-zh{font-size:15px;}
     .group-zh{font-size:15px;}
     .group-en{font-size:14px;}
   }
 
-  .next-update{
+.next-update{
     font-family:"EFont","ZFont",sans-serif;
     font-size:13px;
     letter-spacing:1.5px;
@@ -128,6 +130,11 @@
     font-size:18px;
     font-variant-numeric:tabular-nums;
   }
+  .page-title a{color:#111;text-decoration:none;}
+  .page-title a:hover{text-decoration:underline;text-underline-offset:5px;}
+
+  #cloth-canvas{position:fixed;inset:0;z-index:50;display:none;opacity:0;pointer-events:none;transition:opacity 1.1s ease-in-out;}
+  #white-veil{position:fixed;inset:0;z-index:51;background:#ffffff;opacity:0;pointer-events:none;transition:opacity 0.9s ease-in-out;}
 </style>
 </head>
 <body>
@@ -136,12 +143,13 @@
   <a href="index.html">ABOUT</a>
   <a href="work.html">WORK</a>
   <a href="contact.html">CONTACT</a>
+  <a href="support.html">SUPPORT</a>
 </nav>
 
 <main class="page">
-  <h1 class="page-title">NEWS</h1>
+  <h1 class="page-title"><a href="thoughts.html">NEWS</a></h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
-  <script>(function(){
+<script>(function(){
     function secs(){
       var f=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
       var p={};
@@ -157,52 +165,323 @@
     tick();setInterval(tick,1000);
   })();</script>
 
-  <section class="group" id="art"><h2 class="group-head"><span class="group-zh">艺术事件</span><span class="group-en">ART</span></h2><ul class="list"><li class="item"><span class="year">0322</span> <a href="https://www.artforum.com/news/calvin-tomkins-dead-at-100-1234745865/" target="_blank" class="name-zh">当代艺术界大师级人物卡尔文·汤金斯逝世，享年100岁</a><span class="name-en">Calvin Tomkins, Master Profiler of the Contemporary Art World, Dead at 100</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://www.artforum.com/columns/nyc-field-notes2026-theo-belci-1234745762/" target="_blank" class="name-zh">直面市场：纽约三月展览线上线下展示</a><span class="name-en">Direct to Market: New York’s March Shows, On and Offline</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://www.artforum.com/news/glasgow-international-announces-program-for-11th-edition-1234745825/" target="_blank" class="name-zh">格拉斯哥国际艺术节公布第十一届完整节目</a><span class="name-en">Glasgow International Announces Full Program for Eleventh Edition</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://hyperallergic.com/whitney-biennial-shies-from-the-moment/" target="_blank" class="name-zh">惠特尼双年展避免当前议题</a><span class="name-en">Whitney Biennial Shies From the Moment</span></li>
-        <li class="item"><span class="year">0321</span> <a href="https://hyperallergic.com/iranian-artist-speaks-her-heart/" target="_blank" class="name-zh">伊朗艺术家倾诉心声</a><span class="name-en">Iranian Artist Speaks Her Heart</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://hyperallergic.com/the-whitney-biennial-is-for-the-faint-hearted/" target="_blank" class="name-zh">惠特尼双年展适合胆小者</a><span class="name-en">The Whitney Biennial Is for the Faint-Hearted</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://news.artnet.com/multimedia/art-market-minute-mar-23-2757206" target="_blank" class="name-zh">中国科技资助艺术空间的崛起</a><span class="name-en">The Rise of Tech-Funded Art Spaces in China</span></li>
-        <li class="item"><span class="year">0322</span> <a href="https://news.artnet.com/market/next-gen-collectors-book-2756771" target="_blank" class="name-zh">艺术市场对新一代收藏家的误解</a><span class="name-en">What the Art Market Still Gets Wrong About Next-Gen Collectors</span></li>
-        <li class="item"><span class="year">0321</span> <a href="https://news.artnet.com/market/work-of-the-week-sam-doyle-2756813" target="_blank" class="name-zh">萨姆·多伊尔的画作可能创下自学艺术家的新价位</a><span class="name-en">This Sam Doyle Painting May Mark a New Price Peak for the Self-Taught Artist</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.dezeen.com/2026/03/23/walter-van-beirendonck-space-themed-playscape-belgian-arts-campus/" target="_blank" class="name-zh">瓦尔特·范贝伦东克为比利时艺术校园设计太空主题游乐场</a><span class="name-en">Walter Van Beirendonck designs space-themed playscape for Belgian arts campus</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.dezeen.com/2026/03/23/japanese-winter-tableware-yakush-lighting-seating-dezeen-showroom/" target="_blank" class="name-zh">Yakush推出的日本冬季餐具在Dezeen展出</a><span class="name-en">Japanese Winter tableware by Yakush among new products on Dezeen Showroom</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.dezeen.com/2026/03/23/rong-museum-of-art-ole-scheeren/" target="_blank" class="name-zh">照片揭示奥尔·谢伦的荣博物馆在深圳建设中</a><span class="name-en">Photos reveal Ole Scheeren's Róng Museum of Art under construction in Shenzhen</span></li></ul></section><section class="group" id="film"><h2 class="group-head"><span class="group-zh">影像</span><span class="group-en">FILM</span></h2><ul class="list"><li class="item"><span class="year">0323</span> <a href="https://variety.com/2026/tv/global/africa-tv-screenwriters-series-mania-2026-1236696284/" target="_blank" class="name-zh">非洲编剧在系列狂欢节推出选剧项目（独家）</a><span class="name-en">African Screenwriters Unveil Genre Shows at Series Mania (EXCLUSIVE)</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://variety.com/2026/tv/global/france-tv-distribution-curious-by-nature-walter-presents-1236696473/" target="_blank" class="name-zh">法国电视发行与Walter Presents合作，推出独特的法式程序剧《好奇的本性》（独家）</a><span class="name-en">France TV Distribution Closes U.S., Canada, U.K. With Walter Presents on Singular French Procedural ‘Curious By Nature’ (EXCLUSIVE)</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://variety.com/2026/tv/global/all3media-international-gemma-arterton-secret-service-1236696235/" target="_blank" class="name-zh">All3Media国际公司为杰玛·阿滕顿主演的间谍惊悚片《秘密服务》赢得全球预售（独家）</a><span class="name-en">All3Media International Scores Global Pre-Sales for Gemma Arterton Spy Thriller ‘Secret Service’ (EXCLUSIVE)</span></li>
-        <li class="item"><span class="year">0322</span> <a href="https://www.indiewire.com/news/festivals/political-documentaries-festivals-us-distribution-struggles-1235185643/" target="_blank" class="name-zh">从电影节到网络平台，政治纪录片面临被拒绝的困境</a><span class="name-en">From Festivals to Streamers, Political Documentaries Are Getting Shut Out</span></li>
-        <li class="item"><span class="year">0321</span> <a href="https://www.indiewire.com/features/best-of/maps-to-the-stars-cronenberg-oscars-rewatch-1235185451/" target="_blank" class="name-zh">告别颁奖季，重温大卫·克伦伯格的黑暗讽刺《明星地图》</a><span class="name-en">Say Goodbye to Awards Season with a Rewatch of David Cronenberg’s Deeply Bleak ‘Maps to the Stars’</span></li>
-        <li class="item"><span class="year">0321</span> <a href="https://www.indiewire.com/news/general-news/american-pachuco-filmmakers-respond-cesar-chavez-1235185486/" target="_blank" class="name-zh">新的指控如何影响纪录片上映后反响？</a><span class="name-en">What Happens When New Allegations Change a Documentary After It Premieres?</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://deadline.com/2026/03/global-studios-hires-craig-hunter-md-the-news-agents-1236762788/" target="_blank" class="name-zh">《新闻代理商》制作公司Global聘任新制片主任（独家）</a><span class="name-en">‘The News Agents’ Outfit Global Hires Studio Chief</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://deadline.com/2026/03/taskmaster-greg-davies-bafta-television-awards-1236762780/" target="_blank" class="name-zh">《任务master》主持人格雷格·戴维斯将主持BAFTA电视奖</a><span class="name-en">‘Taskmaster’ Host Greg Davies To Present BAFTA Television Awards</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://deadline.com/2026/03/karine-vanasse-death-of-a-diplomat-series-mania-1236761208/" target="_blank" class="name-zh">卡琳·瓦纳斯出演《外交官之死》；Crave与Siminn合作改编冰岛前第一夫人小说</a><span class="name-en">Karine Vanasse To Star In ‘Death Of A Diplomat’; Crave & Siminn Board TV Adaptation Of Debut Novel From Former First Lady Of Iceland</span></li>
-        <li class="item"><span class="year">0322</span> <a href="https://theplaylist.net/project-hail-mary-completes-a-massive-80-5-million-opening-weekend-touchdown-20260322/" target="_blank" class="name-zh">《项目Hail Mary》创下8050万美元的首周末票房佳绩</a><span class="name-en">‘Project Hail Mary’ Completes A Massive $80.5 Million Opening Weekend Touchdown</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://theplaylist.net/disney-sets-two-untitled-marvel-movies-for-2029-moves-2028-slot-as-pixars-sequel-push-gets-louder-20260320/" target="_blank" class="name-zh">迪士尼为2029年设置两部未定名的漫威电影，并调整2028年档期</a><span class="name-en">Disney Sets Two Untitled Marvel Movies For 2029, Moves 2028 Slot As Pixar’s Sequel Push Gets Louder</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://theplaylist.net/perfect-review-julia-fox-stirs-passions-provokes-rage-in-messy-lesbian-romantic-drama-sxsw-20260320/" target="_blank" class="name-zh">《完美》影评：朱莉亚·福克斯在杂乱的女同性恋浪漫剧中点燃激情与愤怒[SXSW]</a><span class="name-en">‘Perfect’ Review: Julia Fox Stirs Passions & Provokes Rage in Messy Lesbian Romantic Drama [SXSW]</span></li></ul></section><section class="group" id="ai"><h2 class="group-head"><span class="group-zh">人工智能科技</span><span class="group-en">AI</span></h2><ul class="list"><li class="item"><span class="year">0323</span> <a href="https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai/" target="_blank" class="name-zh">湾区动物福利运动希望引入人工智能</a><span class="name-en">The Bay Area’s animal welfare movement wants to recruit AI</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://www.technologyreview.com/2026/03/20/1134448/the-download-openai-building-fully-automated-researcher-psychedelic-drug-trial/" target="_blank" class="name-zh">今日快讯：OpenAI正在构建全自动研究者，并揭示迷幻实验盲点</a><span class="name-en">The Download: OpenAI is building a fully automated researcher, and a psychedelic trial blind spot</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://www.technologyreview.com/2026/03/20/1134438/openai-is-throwing-everything-into-building-a-fully-automated-researcher/" target="_blank" class="name-zh">OpenAI全力投入构建全自动研究者</a><span class="name-en">OpenAI is throwing everything into building a fully automated researcher</span></li>
-        <li class="item"><span class="year">0322</span> <a href="https://arstechnica.com/culture/2026/03/there-can-still-be-only-one-highlander-is-40/" target="_blank" class="name-zh">仍然独一无二：电影《高地人》40周年</a><span class="name-en">There can (still) be only one: Highlander is 40</span></li>
-        <li class="item"><span class="year">0322</span> <a href="https://arstechnica.com/science/2026/03/mining-the-deep-ocean/" target="_blank" class="name-zh">深海采矿的辩论</a><span class="name-en">Mining the deep ocean</span></li>
-        <li class="item"><span class="year">0321</span> <a href="https://arstechnica.com/science/2026/03/we-keep-finding-the-raw-material-of-dna-in-asteroids-whats-it-telling-us/" target="_blank" class="name-zh">小行星上发现DNA原材料——这意味着什么？</a><span class="name-en">We keep finding the raw material of DNA in asteroids—what's it telling us?</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.theverge.com/tech/898815/samsung-quick-share-airdrop-support-galaxy-s26" target="_blank" class="name-zh">三星Galaxy S26系列增添原生AirDrop支持</a><span class="name-en">Samsung adds native AirDrop support to Galaxy S26 devices</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.theverge.com/ai-artificial-intelligence/898781/ai-personality-of-the-year-influencer-contest" target="_blank" class="name-zh">人工智能影响者奖季来临</a><span class="name-en">AI influencer awards season is upon us</span></li>
-        <li class="item"><span class="year">0322</span> <a href="https://www.theverge.com/entertainment/898796/charlotte-adigery-bolis-pupul-topical-dancer-review" target="_blank" class="name-zh">《主题舞者》：推动、玩乐与政治</a><span class="name-en">Topical Dancer is propulsive, playful, and political</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.wired.com/story/the-rise-of-the-ray-ban-meta-creep/" target="_blank" class="name-zh">Ray-Ban Meta Creep的崛起</a><span class="name-en">The Rise of the Ray-Ban Meta Creep</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.wired.com/gallery/best-phones-you-cant-buy-in-the-united-states/" target="_blank" class="name-zh">2026年美国无法购买的7款最佳手机</a><span class="name-en">7 Best Phones You Can’t Buy in the US (2026)</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.wired.com/story/dont-listen-anyone-who-thinks-secession-will-solve-anything/" target="_blank" class="name-zh">不要听信那些认为分裂能解决问题的人</a><span class="name-en">Don’t Listen to Anyone Who Thinks Secession Will Solve Anything</span></li></ul></section><section class="group" id="semi"><h2 class="group-head"><span class="group-zh">半导体产业</span><span class="group-en">SEMI</span></h2><ul class="list"><li class="item"><span class="year">0323</span> <a href="https://www.eetimes.com/how-globalfoundries-takes-ai-from-pilot-to-global-scale/" target="_blank" class="name-zh">GlobalFoundries如何将AI从试点推向全球规模</a><span class="name-en">How GlobalFoundries Takes AI from Pilot to Global Scale</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.eetimes.com/uk-photonics-innovation-investment-and-the-ip-landscape/" target="_blank" class="name-zh">英国光子学：创新、投资与知识产权格局</a><span class="name-en">U.K. Photonics: Innovation, Investment, and the IP Landscape</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://www.eetimes.com/ee-times-europe-magazine-march-2026/" target="_blank" class="name-zh">2026年3月EE Times欧洲杂志</a><span class="name-en">EE Times Europe Magazine – March 2026</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://semiengineering.com/auto-ethernet-10base-t1s-steps-up-with-tbps-on-the-horizon/" target="_blank" class="name-zh">汽车以太网10BASE-T1s的进展： Tbps在望</a><span class="name-en">Auto Ethernet 10BASE-T1s Steps Up, With Tbps On The Horizon</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://semiengineering.com/how-sw-and-hw-vulnerabilities-can-complement-llm-specific-algorithmic-attacks-ut-austin-intel-et-al/" target="_blank" class="name-zh">软件和硬件漏洞如何影响特定算法攻击</a><span class="name-en">How SW and HW Vulnerabilities Can Complement LLM-Specific Algorithmic Attacks (UT Austin, Intel et al.)</span></li>
-        <li class="item"><span class="year">0320</span> <a href="https://semiengineering.com/bias-and-temperature-dependent-noise-measurements-to-investigate-carrier-transport-at-the-tellurium-interface-pohang-university/" target="_blank" class="name-zh">探究铋接触界面载流子传输的噪声特性</a><span class="name-en">Bias- and Temperature-Dependent Noise Measurements to Investigate Carrier Transport at the Tellurium Interface (POSTECH)</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://spectrum.ieee.org/nvidia-rtx-pro-6000-pny" target="_blank" class="name-zh">借助NVIDIA RTX PRO 6000改造数据科学</a><span class="name-en">Transforming Data Science With NVIDIA RTX PRO 6000 Blackwell Workstation Edition</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://content.knowledgehub.wiley.com/heat-beneath-the-surface-thermal-metrology-for-advanced-semiconductor-materials-and-architectures/" target="_blank" class="name-zh">热测量对下一代半导体的演变需求</a><span class="name-en">Why Thermal Metrology Must Evolve for Next-Generation Semiconductors</span></li>
-        <li class="item"><span class="year">0322</span> <a href="https://spectrum.ieee.org/frictionless-ai-psychology" target="_blank" class="name-zh">当AI让生活变得过于轻松时会怎样？</a><span class="name-en">What Happens If AI Makes Things Too Easy for Us?</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.tomshardware.com/pc-components/gpus/imagination-tech-working-on-mainstream-pc-gaming-with-ambitious-graphics-card-and-soc-design-companies-shows-off-progress-with-directx-11-workloads" target="_blank" class="name-zh">Imagination Tech在主流PC游戏中推进‘雄心勃勃的显卡和SoC设计’</a><span class="name-en">Imagination Tech working on mainstream PC gaming with ‘ambitious graphics card and SoC design companies’ — shows off progress with DirectX 11 workloads</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.tomshardware.com/laptops/macbooks/apple-macbook-air-13-inch-m5-review" target="_blank" class="name-zh">苹果MacBook Air（13英寸，M5）评测：稳定如初</a><span class="name-en">Apple MacBook Air (13-inch, M5) review: Steady as it goes</span></li>
-        <li class="item"><span class="year">0323</span> <a href="https://www.tomshardware.com/pc-components/gpus/crimson-desert-devs-apologize-for-confusion-over-intel-gpu-faq-backtracks-over-prior-dismissive-language-regarding-arc-graphics-support" target="_blank" class="name-zh">Crimson Desert开发者就关于Intel GPU的FAQ道歉</a><span class="name-en">Crimson Desert devs apologize for ‘confusion’ over Intel GPU FAQ — backtracks over prior dismissive language regarding Arc graphics support</span></li></ul></section>
+  <section class="group" id="art"><h2 class="group-head"><span class="group-zh">艺术事件</span><span class="group-en">ART</span></h2><ul class="list"><li class="item"><span class="year">0323</span> <a href="https://www.artforum.com/news/paris-internationale-milano-names-galleries-for-first-fair-1234745907/" target="_blank" class="name-zh">巴黎国际艺术博览会米兰首届参与画廊名单公布</a><span class="name-en">Paris Internationale Milano Names Participating Galleries for Inaugural Edition</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.artforum.com/news/chiles-far-right-president-is-slashing-the-culture-budget-1234745914/" target="_blank" class="name-zh">智利新极右翼总统削减文化预算</a><span class="name-en">Chile’s New Far-Right President is Slashing the Culture Budget</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.artforum.com/columns/white-columns-art-by-dealers-diary-1234745915/" target="_blank" class="name-zh">双重交易</a><span class="name-en">Double Dealing</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://hyperallergic.com/columbus-statue-at-the-white-house/" target="_blank" class="name-zh">白宫的哥伦布雕像</a><span class="name-en">Columbus Statue at the White House</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://hyperallergic.com/white-girls-and-the-global-south/" target="_blank" class="name-zh">白人女孩与全球南方</a><span class="name-en">White Girls and the Global South</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://hyperallergic.com/is-there-an-ethical-path-for-ai-art/" target="_blank" class="name-zh">AI艺术有道德之路吗？</a><span class="name-en">Is There an Ethical Path for AI Art?</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://news.artnet.com/art-world/france-export-ban-baldung-drawing-auction-2757459" target="_blank" class="name-zh">法国冻结已重现文艺复兴肖像的拍卖</a><span class="name-en">France Freezes Sale of Rediscovered Renaissance Portrait</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://news.artnet.com/art-world/reality-decay-2757167" target="_blank" class="name-zh">‘现实衰退’是所有坏消息的根源</a><span class="name-en">‘Reality Decay’ Is at the Root of All the Bad News</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://news.artnet.com/art-world/bellini-altarpiece-gallerie-dell-accademia-restoration-2757515" target="_blank" class="name-zh">巨型贝利尼祭坛画公开修复</a><span class="name-en">Monumental Bellini Altarpiece Undergoes Major Restoration in Public View</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.dezeen.com/2026/03/24/burundi-ineza-clinic-francis-kere/" target="_blank" class="name-zh">Kéré建筑事务所设计布隆迪的穿孔砖卫生诊所</a><span class="name-en">Kéré Architecture designs perforated brick health clinic in Burundi</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.dezeen.com/2026/03/24/ai-toy-design-cambridge-university-study/" target="_blank" class="name-zh">研究警告AI玩具可能阻碍儿童情感发展</a><span class="name-en">AI toys could stunt emotional development of young children, study warns</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.dezeen.com/2026/03/23/aia-lawsuit-trump-kennedy-center-dc/" target="_blank" class="name-zh">AIA以史无前例的联盟起诉特朗普对肯尼迪中心的改造</a><span class="name-en">AIA sues Donald Trump over Kennedy Center renovation in unprecedented coalition</span></li></ul></section><section class="group" id="film"><h2 class="group-head"><span class="group-zh">影像</span><span class="group-en">FILM</span></h2><ul class="list"><li class="item"><span class="year">0324</span> <a href="https://variety.com/2026/film/news/project-hail-mary-dhurandhar-the-revenge-uk-ireland-box-office-1236697523/" target="_blank" class="name-zh">《Project Hail Mary》和《Dhurandhar: The Revenge》领跑英爱票房</a><span class="name-en">‘Project Hail Mary,’ ‘Dhurandhar: The Revenge’ Lead U.K., Ireland Box Office</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://variety.com/2026/film/news/dhurandhar-record-2-18-billion-2025-indian-film-ficci-ey-report-1236697510/" target="_blank" class="name-zh">《Dhurandhar》助力印度影视行业创下218亿美元的新纪录</a><span class="name-en">‘Dhurandhar’ Headlines Record $2.18 Billion 2025 for Indian Film as Overall Media and Entertainment Sector Reaches $29.6 Billion</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://variety.com/2026/film/global/adam-cunningham-allied-global-marketing-1236697491/" target="_blank" class="name-zh">亚当·坎宁安被任命为全球首席执行官</a><span class="name-en">Adam Cunningham Named Global CEO of Allied Global Marketing</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.indiewire.com/news/general-news/academy-2025-2026-nicholl-fellowship-recipients-1235185802/" target="_blank" class="name-zh">学院公布2025-2026年尼科尔奖学金获得者</a><span class="name-en">The Academy Announces Its 2025-2026 Nicholl Fellowship Recipients</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.indiewire.com/criticism/movies/brian-review-ben-wang-will-ropp-1235185785/" target="_blank" class="name-zh">《布莱恩》影评：本·王在青少年喜剧中展现迷人魅力</a><span class="name-en">‘Brian’ Review: Ben Wang Is Endearing as a High Schooler with Mood Swings in Charming Teen Comedy</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.indiewire.com/news/box-office/ryan-gosling-project-hail-mary-box-office-analysis-1235185706/" target="_blank" class="name-zh">观众渴望原创和希望，这 explains《Project Hail Mary》的热潮</a><span class="name-en">Audiences Want Originality, Hope, and Ryan Gosling — That’s Why ‘Project Hail Mary’ Soared This Weekend</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://deadline.com/2026/03/the-testaments-casting-chase-infiniti-multiple-season-hopes-1236763951/" target="_blank" class="name-zh">《法外之证》团队期待多季制作</a><span class="name-en">The Testaments’ Team On Casting Chase Infiniti As Agnes & Hopes For Multiple Seasons</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://deadline.com/2026/03/alireza-golafshan-ai-zoma-benesch-wraps-studiocanal-1236763936/" target="_blank" class="name-zh">阿里雷扎·戈拉夫尚的AI惊悚片《Zoma》完工</a><span class="name-en">Alireza Golafshan’s AI-Themed Thriller ‘Zoma’ With Leonie Benesch Wraps; Studiocanal Unveils First Image & Release Date</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://deadline.com/2026/03/studio-n-bloodhounds-2-kitchen-soldier-remarried-empress-1236763926/" target="_blank" class="name-zh">韩国网络漫画改编影视：Studio N推出新剧</a><span class="name-en">Korean Webtoons Come To Film & TV: Studio N On ‘Bloodhounds 2′, ‘The Legend of Kitchen Soldier’ & ‘The Remarried Empress’</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://theplaylist.net/task-mahershala-ali-joins-mark-ruffalo-in-season-2-of-hbos-crime-drama-20260323/" target="_blank" class="name-zh">马赫沙拉·阿里加盟HBO犯罪剧《任务》第2季</a><span class="name-en">‘Task’: Mahershala Ali Joins Mark Ruffalo In Season 2 Of HBO’s Crime Drama</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://theplaylist.net/marvel-renews-wonder-man-for-season-2-at-disney-20260323/" target="_blank" class="name-zh">漫威续订《奇迹人》第二季</a><span class="name-en">Marvel Renews ‘Wonder Man’ For Season 2 At Disney+</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://theplaylist.net/rabbit-rabbit-alison-pill-brian-darcy-james-more-join-adam-driver-in-netflix-hostage-series-from-philip-barantini-20260323/" target="_blank" class="name-zh">《兔子，兔子》：艾莉森·皮尔等人加入亚当·德赖弗新剧</a><span class="name-en">‘Rabbit, Rabbit’: Alison Pill, Brian D’Arcy James & More Join Adam Driver In Netflix Hostage Series From Philip Barantini</span></li></ul></section><section class="group" id="ai"><h2 class="group-head"><span class="group-zh">人工智能科技</span><span class="group-en">AI</span></h2><ul class="list"><li class="item"><span class="year">0323</span> <a href="https://www.technologyreview.com/2026/03/23/1134527/the-hardest-question-to-answer-about-ai-fueled-delusions/" target="_blank" class="name-zh">关于人工智能驱动的妄想，最难回答的问题</a><span class="name-en">The hardest question to answer about AI-fueled delusions</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.technologyreview.com/2026/03/23/1134509/the-download-animal-welfare-agi-pilled-white-house-unveils-ai-policy/" target="_blank" class="name-zh">下载：动物福利运动接纳AGI，白宫发布AI政策</a><span class="name-en">The Download: animal welfare gets AGI-pilled, and the White House unveils its AI policy</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.technologyreview.com/2026/03/23/1134491/the-bay-areas-animal-welfare-movement-wants-to-recruit-ai/" target="_blank" class="name-zh">旧金山的动物福利运动希望招募AI</a><span class="name-en">The Bay Area’s animal welfare movement wants to recruit AI</span></li>
+        <li class="item"><span class="year">0122</span> <a href="https://venturebeat.com/infrastructure/railway-secures-usd100-million-to-challenge-aws-with-ai-native-cloud" target="_blank" class="name-zh">Railway获得1亿美元融资，挑战AWS的AI原生云基础设施</a><span class="name-en">Railway secures $100 million to challenge AWS with AI-native cloud infrastructure</span></li>
+        <li class="item"><span class="year">0119</span> <a href="https://venturebeat.com/infrastructure/claude-code-costs-up-to-usd200-a-month-goose-does-the-same-thing-for-free" target="_blank" class="name-zh">Claude Code每月费用高达200美元，而Goose免费提供类似服务</a><span class="name-en">Claude Code costs up to $200 a month. Goose does the same thing for free.</span></li>
+        <li class="item"><span class="year">0116</span> <a href="https://venturebeat.com/technology/listen-labs-raises-usd69m-after-viral-billboard-hiring-stunt-to-scale-ai" target="_blank" class="name-zh">Listen Labs通过病毒广告筹集6900万美元，扩大AI客户访谈</a><span class="name-en">Listen Labs raises $69M after viral billboard hiring stunt to scale AI customer interviews</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://arstechnica.com/space/2026/03/a-mission-nasa-might-kill-is-still-returning-fascinating-science-from-jupiter/" target="_blank" class="name-zh">一个NASA可能取消的任务仍在向我们传递来自木星的迷人科学</a><span class="name-en">A mission NASA might kill is still returning fascinating science from Jupiter</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://arstechnica.com/health/2026/03/trumps-maha-pick-for-surgeon-general-flounders-amid-gop-doubts/" target="_blank" class="name-zh">特朗普提名的MAHA外科医生选择在共和党内部受疑</a><span class="name-en">Trump's MAHA pick for surgeon general flounders amid GOP doubts</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://arstechnica.com/gaming/2026/03/nvidia-ceo-tries-to-explain-why-dlss-5-isnt-just-ai-slop/" target="_blank" class="name-zh">Nvidia CEO解释为何DLSS 5并非“AI垃圾”</a><span class="name-en">Nvidia CEO tries to explain why DLSS 5 isn’t just “AI slop”</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.theverge.com/news/899172/fcc-foreign-router-ban" target="_blank" class="name-zh">美国政府禁止进口外国制造的消费路由器</a><span class="name-en">The US government just banned consumer routers made outside the US</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.theverge.com/gadgets/899134/fitbit-ace-amazon-big-spring-sale-2026-deal" target="_blank" class="name-zh">适合儿童的Fitbit Ace售价100美元，匹配历史最低价</a><span class="name-en">The kid-friendly Fitbit Ace is $100, which matches its best price</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.theverge.com/tech/899097/kalshi-politicians-athletes-insider-trading-blocked" target="_blank" class="name-zh">Kalshi宣称将禁止政客和运动员在相关市场交易</a><span class="name-en">Kalshi says it will block politicians and athletes from trading in markets they’re tied to</span></li></ul></section><section class="group" id="semi"><h2 class="group-head"><span class="group-zh">半导体产业</span><span class="group-en">SEMI</span></h2><ul class="list"><li class="item"><span class="year">0324</span> <a href="https://www.eetimes.com/xr-brings-humans-and-robots-closer-on-the-factory-floor/" target="_blank" class="name-zh">XR技术让人类与机器人在工厂间更加紧密</a><span class="name-en">XR Brings Humans and Robots Closer on the Factory Floor</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.eetimes.com/taiwans-wbg-momentum-extends-from-devices-to-power-systems/" target="_blank" class="name-zh">台湾宽禁带半导体市场从设备扩展至电力系统</a><span class="name-en">Taiwan’s WBG Momentum Extends from Devices to Power Systems</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.eetimes.com/software-engineering-has-been-commoditized-and-automated-whats-next/" target="_blank" class="name-zh">软件工程的商品化与自动化，未来将如何发展？</a><span class="name-en">Software Engineering Has Been Commoditized and Automated. What’s Next?</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://semiengineering.com/chip-industry-technical-paper-roundup-mar-24/" target="_blank" class="name-zh">芯片行业技术论文汇总：3月24日</a><span class="name-en">Chip Industry Technical Paper Roundup: Mar. 24</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://semiengineering.com/research-bits-mar-24/" target="_blank" class="name-zh">研究动态：3月24日</a><span class="name-en">Research Bits: Mar. 24</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://semiengineering.com/auto-ethernet-10base-t1s-steps-up-with-tbps-on-the-horizon/" target="_blank" class="name-zh">汽车以太网10BASE-T1s提升，万兆位传输在望</a><span class="name-en">Auto Ethernet 10BASE-T1s Steps Up, With Tbps On The Horizon</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://spectrum.ieee.org/in-memoriam-march-2026-remembering" target="_blank" class="name-zh">追忆IEEE电力与能源学会领袖Mel Olken</a><span class="name-en">Remembering IEEE Power & Energy Society Leader Mel Olken</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://spectrum.ieee.org/nvidia-rtx-pro-6000-pny" target="_blank" class="name-zh">通过NVIDIA RTX PRO 6000黑伟工作站版变革数据科学</a><span class="name-en">Transforming Data Science With NVIDIA RTX PRO 6000 Blackwell Workstation Edition</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://content.knowledgehub.wiley.com/heat-beneath-the-surface-thermal-metrology-for-advanced-semiconductor-materials-and-architectures/" target="_blank" class="name-zh">热测量技术需为下一代半导体发展而演变</a><span class="name-en">Why Thermal Metrology Must Evolve for Next-Generation Semiconductors</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.tomshardware.com/tech-industry/semiconductors/trump-administration-targets-4-trillion-pax-silica-investment-fund-for-semiconductors" target="_blank" class="name-zh">特朗普政府瞄准四万亿美元半导体投资基金</a><span class="name-en">Trump administration targets $4 trillion Pax Silica investment fund for semiconductors — the US will start with a $250 million investment for global consortium</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.tomshardware.com/laptops/microsoft-says-for-once-windows-update-isnt-to-blame-for-galaxy-book4-laptops-losing-access-to-c-drive-the-galaxy-connect-app-was-the-culprit-and-its-been-taken-down-from-microsoft-store" target="_blank" class="name-zh">微软称Galaxy Book4笔记本丢失C盘访问并非由Windows更新引起</a><span class="name-en">Microsoft says, for once, Windows update isn't to blame for Galaxy Book4 laptops losing access to C: drive — the Galaxy Connect app was the culprit, and it's been taken down from Microsoft Store</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/price-of-nvidias-vera-rubin-nvl72-racks-skyrockets-to-as-much-as-usd8-8-million-apiece-but-server-makers-margins-will-be-tight-nvidia-is-moving-closer-to-shipping-entire-full-scale-systems" target="_blank" class="name-zh">Nvidia的Vera Rubin NVL72机架价格飙升至880万美元</a><span class="name-en">Price of Nvidia's Vera Rubin NVL72 racks skyrockets to as much as $8.8 million apiece, but server makers' margins will be tight — Nvidia is moving closer to shipping entire full-scale systems</span></li></ul></section><section class="group" id="intl"><h2 class="group-head"><span class="group-zh">国际时事</span><span class="group-en">INTL</span></h2><ul class="list"><li class="item"><span class="year">0324</span> <a href="https://www.bbc.com/news/articles/c895v5pq5p1o?at_medium=RSS&at_campaign=rss" target="_blank" class="name-zh">特朗普盯上伊朗交易：最后通牒、外交及访格拉斯兰德</a><span class="name-en">Ultimatums, diplomacy and a trip to Graceland as Trump eyes a deal with Iran</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://www.bbc.com/news/articles/c78rdze8zvjo?at_medium=RSS&at_campaign=rss" target="_blank" class="name-zh">拉瓜迪亚机场坠毁事故致两名飞行员遇难，现正接受调查</a><span class="name-en">'Like the plane got cut in half': LaGuardia crash that killed two pilots now under investigation</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.bbc.com/news/articles/c1mklzkz41jo?at_medium=RSS&at_campaign=rss" target="_blank" class="name-zh">内部调查：俄罗斯操控安哥拉反政府抗议活动</a><span class="name-en">Inside the alleged Russian operation to trigger anti-government protests in Angola</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.scmp.com/news/hong-kong/society/article/3347730/visiting-galleries-may-keep-artworks-hong-kong-months-due-shipping-chaos?utm_source=rss_feed" target="_blank" class="name-zh">由于运输混乱，香港艺术展作品可能滞留数月</a><span class="name-en">Visiting galleries may keep artworks in Hong Kong for months due to shipping chaos</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.scmp.com/business/china-evs/article/3347728/xiaomi-profit-drops-27-weaker-smartphone-sales-chinese-firms-ev-growth-slows?utm_source=rss_feed" target="_blank" class="name-zh">小米智能手机销售疲软，净利润下滑27%</a><span class="name-en">Xiaomi profit drops 27% on weaker smartphone sales as Chinese firm’s EV growth slows</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.scmp.com/news/china/military/article/3347726/new-type-055-destroyers-pla-east-china-fleet-tested-first-live-fire-drill?utm_source=rss_feed" target="_blank" class="name-zh">新型055驱逐舰在中国东海舰队首次实弹演习</a><span class="name-en">New Type 055 destroyers for PLA East China Fleet tested in first live-fire drill</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://thediplomat.com/2026/03/why-bangladeshi-villagers-are-worried-about-the-iran-us-war/" target="_blank" class="name-zh">孟加拉村民为何担忧伊朗-美国战争</a><span class="name-en">Why Bangladeshi Villagers Are Worried About the Iran-US War</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://thediplomat.com/2026/03/what-do-central-asians-think-about-the-eurasian-economic-union/" target="_blank" class="name-zh">中亚地区人民如何看待欧亚经济联盟？</a><span class="name-en">What Do Central Asians Think About the Eurasian Economic Union?</span></li>
+        <li class="item"><span class="year">0323</span> <a href="https://thediplomat.com/2026/03/in-kashmir-irans-war-is-personal/" target="_blank" class="name-zh">在克什米尔，伊朗战争是个人的事情</a><span class="name-en">In Kashmir, Iran’s War Is Personal</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://foreignpolicy.com/2026/03/24/iran-minorities-bahais-christians-war-regime-trump/" target="_blank" class="name-zh">伊朗的少数民族将为特朗普的战争付出代价</a><span class="name-en">Iran’s Minorities Will Pay the Price for Trump’s War</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://foreignpolicy.com/2026/03/24/iran-israel-us-war-missile-nuclear-weapons-deterrence/" target="_blank" class="name-zh">在战争前夕，伊朗的威慑失效原因</a><span class="name-en">How Iran’s Deterrence Collapsed Ahead of the War</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://foreignpolicy.com/2026/03/24/myanmar-anti-junta-three-brotherhood-alliance-china/" target="_blank" class="name-zh">为什么中国在缅甸反军事联盟中制造分裂</a><span class="name-en">Why China Is Stoking Division in Myanmar’s Anti-Junta Alliance</span></li></ul></section>
 </main>
 
+
+<canvas id="cloth-canvas"></canvas>
+<div id="white-veil"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script>
+(function(){
+// 0=normal HTML  1=cloth  2=fading to thoughts
+let clothState = 0;
+const clothCanvas = document.getElementById('cloth-canvas');
+const veil = document.getElementById('white-veil');
+
+let renderer=null,scene=null,camera=null;
+let geo=null,mat=null,clothMesh=null,clothTexture=null;
+let px,py,pz,ox,oy,oz,pinned,constraints,restLen,simTime=0;
+let W=window.innerWidth,H=window.innerHeight;
+
+const SCREENS=5;
+let TEX_W,TEX_H,VH_FRAC,VIS_H,MAX_SCROLL_CV;
+const SCROLL_STEP=80;
+let clothScrollY=0,staticCanvas,texCanvas,tc;
+
+function parseContent(){
+  const groups=[];
+  document.querySelectorAll('.group').forEach(el=>{
+    const zhHead=el.querySelector('.group-zh')?.textContent.trim()||'';
+    const enHead=el.querySelector('.group-en')?.textContent.trim()||'';
+    const items=[];
+    el.querySelectorAll('.item').forEach(item=>{
+      const year=item.querySelector('.year')?.textContent.trim()||'';
+      const nameZh=item.querySelector('.name-zh')?.textContent.trim()||'';
+      items.push({year,nameZh});
+    });
+    groups.push({zhHead,enHead,items});
+  });
+  return groups;
+}
+
+function wrapText(ctx,text,maxW){
+  if(!text) return [];
+  const lines=[];let line='';
+  for(const ch of text){
+    const test=line+ch;
+    if(ctx.measureText(test).width>maxW&&line){
+      const sp=line.lastIndexOf(' ');
+      if(sp>0&&ch!==' '&&!/[一-鿿]/.test(ch)){lines.push(line.slice(0,sp));line=line.slice(sp+1)+ch;}
+      else{lines.push(line.trimEnd());line=ch===' '?'':ch;}
+    }else{line=test;}
+  }
+  if(line.trim()) lines.push(line.trimEnd());
+  return lines;
+}
+
+function paintStatic(){
+  const sc=staticCanvas.getContext('2d');
+  sc.clearRect(0,0,TEX_W,TEX_H);
+  sc.fillStyle='#ffffff';sc.fillRect(0,0,TEX_W,TEX_H);
+  const LM=70,CONTENT_W=Math.min(TEX_W-LM-220,760);
+  let y=72;
+  sc.font='bold 28px EFont,ZFont,sans-serif';sc.fillStyle='#111';sc.textAlign='left';
+  sc.fillText('NEWS',LM,y+26);y+=26+18;
+  sc.font='400 13px EFont,ZFont,sans-serif';sc.fillStyle='#888';
+  sc.fillText('NEXT UPDATE',LM,y+13);y+=13+36;
+  const groups=parseContent();
+  for(const g of groups){
+    sc.font='bold 22px ZFont,EFont,sans-serif';sc.fillStyle='#111';
+    sc.fillText(g.zhHead,LM,y+20);y+=28;
+    sc.font='bold 17px EFont,ZFont,sans-serif';sc.fillStyle='#2a2a2a';
+    sc.fillText(g.enHead,LM,y+16);y+=16+14;
+    for(const item of g.items){
+      sc.font='bold 20px ZFont,EFont,sans-serif';sc.fillStyle='#888';
+      sc.fillText(item.year,LM,y+18);
+      const yearW=sc.measureText(item.year).width+12;
+      sc.fillStyle='#111';
+      const nameLines=wrapText(sc,item.nameZh,CONTENT_W-yearW);
+      nameLines.forEach((l,i)=>sc.fillText(l,LM+yearW,y+18+i*26));
+      y+=nameLines.length*26+6;
+    }
+    y+=30;
+  }
+}
+
+const navItems=[
+  {text:'ABOUT',  href:'index.html'},
+  {text:'WORK',   href:'work.html'},
+  {text:'CONTACT',href:'contact.html'},
+  {text:'SUPPORT',href:'support.html'},
+];
+let hoveredNav=-1;
+
+function drawTexture(){
+  tc.drawImage(staticCanvas,0,0);
+  const navRX=TEX_W-30,navStartY=clothScrollY+22;
+  tc.textAlign='right';tc.font='bold 28px EFont,ZFont,sans-serif';
+  navItems.forEach((item,i)=>{
+    const by=navStartY+i*50+26,hov=hoveredNav===i;
+    tc.fillStyle=hov?'#555':'#111';tc.fillText(item.text,navRX,by);
+    if(hov){const w=tc.measureText(item.text).width;tc.strokeStyle='#555';tc.lineWidth=1.5;tc.beginPath();tc.moveTo(navRX-w,by+5);tc.lineTo(navRX,by+5);tc.stroke();}
+    const w=tc.measureText(item.text).width;
+    item._x1=navRX-w-6;item._x2=navRX+6;item._y1=by-32;item._y2=by+10;
+  });
+  clothTexture.needsUpdate=true;
+}
+
+const SEGS_X=26,SEGS_Y=18,NX=SEGS_X+1,NY=SEGS_Y+1,N=NX*NY;
+const GRAVITY=-1.2,DAMPING=0.9988,ITER=8,DT=1/60;
+let CW3,CH3,mouseNDC,mouseActive=false,raycast,planeZ,mouseWorld,hitRay;
+
+function initCloth(){
+  TEX_W=W;TEX_H=H*SCREENS;VH_FRAC=1/SCREENS;VIS_H=H;MAX_SCROLL_CV=TEX_H-VIS_H;
+  staticCanvas=document.createElement('canvas');staticCanvas.width=TEX_W;staticCanvas.height=TEX_H;
+  texCanvas=document.createElement('canvas');texCanvas.width=TEX_W;texCanvas.height=TEX_H;
+  tc=texCanvas.getContext('2d');
+  scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);
+  camera=new THREE.PerspectiveCamera(38,W/H,0.1,200);camera.position.set(0,0.5,20);camera.lookAt(0,0,0);
+  renderer=new THREE.WebGLRenderer({canvas:clothCanvas,antialias:true});
+  renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.setSize(W,H);
+  scene.add(new THREE.AmbientLight(0xffffff,0.85));
+  const dl=new THREE.DirectionalLight(0xffffff,0.50);dl.position.set(4,8,12);scene.add(dl);
+  px=new Float32Array(N);py=new Float32Array(N);pz=new Float32Array(N);
+  ox=new Float32Array(N);oy=new Float32Array(N);oz=new Float32Array(N);
+  pinned=new Uint8Array(N);
+  const _vFov=38*Math.PI/180;CH3=2*Math.tan(_vFov/2)*20*0.90;CW3=CH3*(W/H);
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+    const k=j*NX+i,nj=j/SEGS_Y;
+    px[k]=-CW3/2+i*(CW3/SEGS_X);py[k]=CH3/2-j*(CH3/SEGS_Y);
+    pz[k]=nj*(1-nj)*0.1+(Math.random()-0.5)*0.02;
+    ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];if(j<=1)pinned[k]=1;
+  }
+  constraints=[];restLen=[];
+  function addC(a,b){const dx=px[a]-px[b],dy=py[a]-py[b],dz=pz[a]-pz[b];restLen.push(Math.sqrt(dx*dx+dy*dy+dz*dz));constraints.push(a,b);}
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+    const k=j*NX+i;
+    if(i<SEGS_X)addC(k,k+1);if(j<SEGS_Y)addC(k,k+NX);
+    if(i<SEGS_X&&j<SEGS_Y){addC(k,k+NX+1);addC(k+1,k+NX);}
+    if(i<SEGS_X-1)addC(k,k+2);if(j<SEGS_Y-1)addC(k,k+NX*2);
+  }
+  clothTexture=new THREE.CanvasTexture(texCanvas);
+  clothTexture.repeat.set(1,VH_FRAC);clothTexture.offset.y=1-VH_FRAC;
+  clothTexture.wrapS=THREE.ClampToEdgeWrapping;clothTexture.wrapT=THREE.ClampToEdgeWrapping;
+  geo=new THREE.PlaneGeometry(CW3,CH3,SEGS_X,SEGS_Y);
+  geo.attributes.position.setUsage(THREE.DynamicDrawUsage);
+  mat=new THREE.MeshStandardMaterial({map:clothTexture,side:THREE.DoubleSide,roughness:0.90});
+  clothMesh=new THREE.Mesh(geo,mat);scene.add(clothMesh);
+  mouseNDC=new THREE.Vector2();raycast=new THREE.Raycaster();
+  planeZ=new THREE.Plane(new THREE.Vector3(0,0,1),0);mouseWorld=new THREE.Vector3();hitRay=new THREE.Raycaster();
+  paintStatic();drawTexture();
+  document.fonts.ready.then(()=>{paintStatic();drawTexture();});
+  animate();
+}
+
+window.addEventListener('mousemove',e=>{
+  if(mouseNDC)mouseNDC.set((e.clientX/W)*2-1,-(e.clientY/H)*2+1);mouseActive=true;
+});
+window.addEventListener('mouseleave',()=>{mouseActive=false;});
+
+function updateCloth(){
+  simTime+=DT;
+  for(let row=0;row<=1;row++){
+    const amp=row===0?0.022:0.006;
+    for(let i=0;i<NX;i++){
+      const k=row*NX+i,ni=i/SEGS_X;
+      px[k]=-CW3/2+i*(CW3/SEGS_X)+Math.sin(simTime*0.28+ni*3.1)*amp;
+      py[k]=CH3/2-row*(CH3/SEGS_Y)+Math.cos(simTime*0.18+ni*2.0)*amp*0.4;
+      pz[k]=Math.sin(simTime*0.22+ni*2.4)*amp*1.5;
+      ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];
+    }
+  }
+  if(mouseActive){raycast.setFromCamera(mouseNDC,camera);raycast.ray.intersectPlane(planeZ,mouseWorld);}
+  for(let k=0;k<N;k++){
+    if(pinned[k])continue;
+    const vx=(px[k]-ox[k])*DAMPING,vy=(py[k]-oy[k])*DAMPING,vz=(pz[k]-oz[k])*DAMPING;
+    ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];
+    let ax=0,ay=GRAVITY*DT*DT,az=0;
+    ax+=Math.sin(simTime*0.20+py[k]*0.5)*0.0008;az+=Math.cos(simTime*0.16+px[k]*0.4)*0.0012;
+    if(mouseActive){
+      const dx=px[k]-mouseWorld.x,dy=py[k]-mouseWorld.y,dz=pz[k]-mouseWorld.z;
+      const d2=dx*dx+dy*dy+dz*dz,R=1.8;
+      if(d2<R*R){const d=Math.sqrt(d2)+1e-6,f=(1-d/R)*0.09;ax+=(dx/d)*f;ay+=(dy/d)*f;az+=(dz/d)*f+f*0.4;}
+    }
+    px[k]+=vx+ax;py[k]+=vy+ay;pz[k]+=vz+az;
+  }
+  for(let iter=0;iter<ITER;iter++){
+    for(let c=0,ci=0;c<constraints.length;c+=2,ci++){
+      const a=constraints[c],b=constraints[c+1];
+      const dx=px[b]-px[a],dy=py[b]-py[a],dz=pz[b]-pz[a];
+      const d=Math.sqrt(dx*dx+dy*dy+dz*dz)+1e-9,corr=(d-restLen[ci])/d*0.5;
+      const cx=dx*corr,cy=dy*corr,cz=dz*corr;
+      if(!pinned[a]){px[a]+=cx;py[a]+=cy;pz[a]+=cz;}
+      if(!pinned[b]){px[b]-=cx;py[b]-=cy;pz[b]-=cz;}
+    }
+  }
+}
+
+function syncGeometry(){
+  const pos=geo.attributes.position;
+  for(let k=0;k<N;k++) pos.setXYZ(k,px[k],py[k],pz[k]);
+  pos.needsUpdate=true;geo.computeVertexNormals();
+}
+
+function uvToCanvas(u,v){return{cx:u*TEX_W,cy:clothScrollY+VIS_H*(1-v)};}
+function navHitIndex(nx,ny){
+  hitRay.setFromCamera(new THREE.Vector2(nx,ny),camera);
+  const hits=hitRay.intersectObject(clothMesh);
+  if(!hits.length||!hits[0].uv)return -1;
+  const{cx,cy}=uvToCanvas(hits[0].uv.x,hits[0].uv.y);
+  for(let i=0;i<navItems.length;i++){
+    const it=navItems[i];
+    if(it._x1!==undefined&&cx>=it._x1&&cx<=it._x2&&cy>=it._y1&&cy<=it._y2)return i;
+  }
+  return -1;
+}
+
+window.addEventListener('wheel',e=>{
+  if(clothState!==1)return;e.preventDefault();
+  clothScrollY=Math.max(0,Math.min(MAX_SCROLL_CV,clothScrollY+Math.sign(e.deltaY)*SCROLL_STEP));
+  clothTexture.offset.y=1-clothScrollY/TEX_H-VH_FRAC;drawTexture();
+},{passive:false});
+
+window.addEventListener('mousemove',()=>{
+  if(clothState!==1||!mouseNDC)return;
+  const idx=navHitIndex(mouseNDC.x,mouseNDC.y);
+  if(idx!==hoveredNav){hoveredNav=idx;clothCanvas.style.cursor=idx!==-1?'pointer':'default';drawTexture();}
+});
+
+clothCanvas.addEventListener('click',e=>{
+  if(clothState!==1)return;
+  const nx=(e.clientX/W)*2-1,ny=-(e.clientY/H)*2+1;
+  const idx=navHitIndex(nx,ny);if(idx!==-1)window.location.href=navItems[idx].href;
+});
+
+window.addEventListener('keydown',e=>{
+  if(e.code!=='Space')return;
+  if(document.activeElement&&document.activeElement!==document.body)return;
+  e.preventDefault();
+  if(clothState===0){
+    clothState=1;initCloth();
+    clothScrollY=Math.max(0,Math.min(MAX_SCROLL_CV,window.scrollY));
+    clothTexture.offset.y=1-clothScrollY/TEX_H-VH_FRAC;drawTexture();
+    document.querySelector('.page').style.transition='opacity 1.1s ease-in-out';
+    document.querySelector('.page').style.opacity='0';
+    document.querySelector('.top-nav').style.transition='opacity 1.1s ease-in-out';
+    document.querySelector('.top-nav').style.opacity='0';
+    clothCanvas.style.display='block';
+    requestAnimationFrame(()=>{clothCanvas.style.opacity='1';clothCanvas.style.pointerEvents='auto';});
+    document.body.style.overflow='hidden';
+  }else if(clothState===1){
+    clothState=2;veil.style.opacity='1';
+    setTimeout(()=>{window.location.href='thoughts.html';},1000);
+  }
+});
+
+window.addEventListener('resize',()=>{
+  W=window.innerWidth;H=window.innerHeight;
+  if(renderer){camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);}
+});
+
+function animate(){requestAnimationFrame(animate);updateCloth();syncGeometry();renderer.render(scene,camera);}
+})();
+</script>
 </body>
 </html>
