@@ -128,6 +128,10 @@
     font-size:18px;
     font-variant-numeric:tabular-nums;
   }
+  .page-title a{color:#111;text-decoration:none;}
+  .page-title a:hover{text-decoration:underline;text-underline-offset:5px;}
+  #cloth-canvas{position:fixed;inset:0;z-index:50;display:none;opacity:0;pointer-events:none;transition:opacity 1.1s ease-in-out;}
+  #white-veil{position:fixed;inset:0;z-index:51;background:#ffffff;opacity:0;pointer-events:none;transition:opacity 0.9s ease-in-out;}
 </style>
 </head>
 <body>
@@ -139,7 +143,7 @@
 </nav>
 
 <main class="page">
-  <h1 class="page-title">NEWS</h1>
+  <h1 class="page-title"><a href="thoughts.html">NEWS</a></h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
   <script>(function(){
     function secs(){
@@ -157,52 +161,322 @@
     tick();setInterval(tick,1000);
   })();</script>
 
-  <section class="group" id="art"><h2 class="group-head"><span class="group-zh">艺术事件</span><span class="group-en">ART</span></h2><ul class="list"><li class="item"><span class="year">0324</span> <a href="https://www.artforum.com/news/wagner-foundation-names-winners-of-2026-arts-fellowships-1234745999/" target="_blank" class="name-zh">瓦格纳基金会公布75,000美元2026年艺术奖学金获奖者</a><span class="name-en">Wagner Foundation Names Winners of $75,000 2026 Arts Fellowships</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.artforum.com/news/hans-baldung-grien-portrait-national-treasure-in-france-1234745991/" target="_blank" class="name-zh">汉斯·巴尔登·格林的肖像被宣布为国家宝藏，禁止离开法国</a><span class="name-en">Hans Baldung Grien Portrait Declared National Treasure, Barred from Leaving France</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.artforum.com/news/artist-ibrahim-mahama-attacked-by-police-unit-in-ghana-1234745977/" target="_blank" class="name-zh">艺术家易卜拉欣·马哈茂德称加纳警察袭击让他“整个生活停滞”</a><span class="name-en">Artist Ibrahim Mahama Says Police Attack in Ghana Put His ‘Entire Life On Hold’</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://hyperallergic.com/despite-uncertainty-gulf-art-world-projects-normalcy/" target="_blank" class="name-zh">尽管不确定性，海湾艺术界预计复苏</a><span class="name-en">Despite Uncertainty, Gulf Art World Projects Normalcy</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://hyperallergic.com/the-biggest-week-of-the-spring/" target="_blank" class="name-zh">春季最大的艺术周？</a><span class="name-en">The Biggest Week of the Spring?</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://hyperallergic.com/how-to-make-a-no-kings-protest-sign/" target="_blank" class="name-zh">如何制作“无国王”抗议标语</a><span class="name-en">How to Make a No Kings Protest Sign</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://news.artnet.com/market/introducing-the-intelligence-report-the-year-ahead-2026-2756475" target="_blank" class="name-zh">介绍《智能报告：前瞻2026》</a><span class="name-en">Introducing the Intelligence Report: The Year Ahead 2026</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://news.artnet.com/art-world/yayoi-kusama-museum-ludwig-cologne-show-2758026" target="_blank" class="name-zh">300多件草间弥生作品占领德国博物馆</a><span class="name-en">More Than 300 Yayoi Kusama Works Take Over a German Museum</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://news.artnet.com/art-world/brooklyn-museum-african-art-renovation-2757816" target="_blank" class="name-zh">布鲁克林博物馆计划斥资1300万美元改造新非洲艺术画廊</a><span class="name-en">Brooklyn Museum Plans $13 Million Overhaul for New African Art Galleries</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.dezeen.com/2026/03/25/ceintuur-theatre-studio-elen-letort-restaurant-amsterdam/" target="_blank" class="name-zh">Studio Elèn Letort将1920年代阿姆斯特丹影院改造成“轻松宜人”的餐厅</a><span class="name-en">Studio Elèn Letort transforms 1920s Amsterdam cinema into "easygoing and approachable" restaurant</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.dezeen.com/2026/03/25/early-entry-deadline-closes-dezeen-awards/" target="_blank" class="name-zh">Dezeen Awards 2026提前报名截止日期今日到期</a><span class="name-en">Dezeen Awards 2026 early entry deadline closes today</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.dezeen.com/2026/03/25/laurids-gallee-gloopy-resin-lighting-exhibition/" target="_blank" class="name-zh">劳里兹·加莱塑造发光树脂灯具如同发光天线桅杆</a><span class="name-en">Laurids Gallée shapes gloopy resin lighting like glowing antenna masts</span></li></ul></section><section class="group" id="film"><h2 class="group-head"><span class="group-zh">影像</span><span class="group-en">FILM</span></h2><ul class="list"><li class="item"><span class="year">0325</span> <a href="https://variety.com/2026/tv/global/getting-under-your-skin-undercover-drama-second-season-1236698759/" target="_blank" class="name-zh">《入侵内心》获得第二季续订</a><span class="name-en">‘Getting Under Your Skin’ Undercover Drama Greenlit for Second Season (EXCLUSIVE)</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://variety.com/2026/tv/global/streaming-pay-tv-european-audiovisual-observatory-1236698719/" target="_blank" class="name-zh">欧洲视听产业收入达1650亿欧元</a><span class="name-en">Streaming Subscriptions, Pay-TV, Theatrical Box Office and Home Video Drive European Audiovisual Industry Revenue to $165 Billion</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://variety.com/2026/film/news/oscar-winner-guneet-monga-kapoor-women-in-film-india-jio-studios-cannes-market-1236698714/" target="_blank" class="name-zh">女导演冈尼特·蒙嘉与Jio Studios合作支持印度制片人</a><span class="name-en">Oscar Winner Guneet Monga Kapoor-Led Women in Film India Partners With Jio Studios to Back Indian Producers at Cannes (EXCLUSIVE)</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.indiewire.com/news/breaking-news/openai-shut-down-sora-generative-ai-video-app-1235185950/" target="_blank" class="name-zh">OpenAI的Sora项目终止，与迪士尼的合作也结束</a><span class="name-en">Sora Is Dead at OpenAI, and So Is Its Deal with Disney, but the AI Video Battle Is Just Beginning</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.indiewire.com/features/commentary/wall-street-killed-hollywood-warner-bros-1235185461/" target="_blank" class="name-zh">戴维·扎斯拉夫揭示新好莱坞梦想</a><span class="name-en">David Zaslav Cashed Out — and Revealed the New Hollywood Dream</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.indiewire.com/features/craft/project-hail-mary-sound-rocky-language-1235185641/" target="_blank" class="name-zh">《Project Hail Mary》的声音设计创造新语言</a><span class="name-en">The ‘Project Hail Mary’ Sound Design Crafted a New Language for Rocky</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://deadline.com/2026/03/honeymoon-with-harry-costner-gyllenhaal-queensland-1236765213/" target="_blank" class="name-zh">《与哈里度蜜月》将于四月在昆士兰拍摄</a><span class="name-en">‘Honeymoon with Harry’ Starring Kevin Costner, Jake Gyllenhaal & Sarah Pidgeon Sets April Shoot In Queensland</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://deadline.com/2026/03/edinburgh-tv-festival-shortlists-three-cities-2027-1236765212/" target="_blank" class="name-zh">爱丁堡电视节2027年将选择三座城市举办</a><span class="name-en">Edinburgh TV Festival Shortlists Three Cities To Host Event From 2027</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://deadline.com/2026/03/mediawan-group-leonine-studios-ceo-fred-kogel-contract-2028-1236765189/" target="_blank" class="name-zh">Mediawan集团延长Leonine Studios CEO Fred Kogel合同至2028年</a><span class="name-en">Mediawan Group Extends Leonine Studios CEO Fred Kogel’s Contract Until 2028</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://theplaylist.net/oliver-stone-josh-hartnett-team-for-white-lies-as-the-director-mounts-his-first-narrative-feature-since-snowden-20260324/" target="_blank" class="name-zh">奥利弗·斯通与乔什·哈特奈特合作《白色谎言》</a><span class="name-en">Oliver Stone & Josh Hartnett Team For ‘White Lies’ As The Director Mounts His First Narrative Feature Since ‘Snowden’</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://theplaylist.net/13-going-on-30-emily-bader-logan-lerman-topline-netflix-reboot-for-director-brett-haley-20260324/" target="_blank" class="name-zh">《30岁从13岁开始》：Emily Bader与Logan Lerman主演Netflix重启版</a><span class="name-en">’13 Going On 30′: Emily Bader & Logan Lerman Topline Netflix Reboot For Director Brett Haley</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://theplaylist.net/fantasy-life-review-amanda-peet-anchors-matthew-shears-sharply-observed-dramedy-of-privilege-dread-emotional-drift-20260324/" target="_blank" class="name-zh">《幻想生活》评论：阿曼达·皮特饰演的喜剧对特权与焦虑的深刻观察</a><span class="name-en">‘Fantasy Life’ Review: Amanda Peet Anchors Matthew Shear’s Sharply Observed Dramedy Of Privilege, Dread & Emotional Drift</span></li></ul></section><section class="group" id="ai"><h2 class="group-head"><span class="group-zh">人工智能科技</span><span class="group-en">AI</span></h2><ul class="list"><li class="item"><span class="year">0325</span> <a href="https://www.technologyreview.com/2026/03/25/1134571/the-ai-hype-index-ai-goes-to-war/" target="_blank" class="name-zh">人工智能炒作指数：人工智能进入战争</a><span class="name-en">The AI Hype Index: AI goes to war</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.technologyreview.com/2026/03/24/1134531/exclusive-ebook-are-we-ready-to-hand-ai-agents-the-keys/" target="_blank" class="name-zh">独家电子书：我们准备好把钥匙交给AI代理了吗？</a><span class="name-en">Exclusive eBook: Are we ready to hand AI agents the keys?</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.technologyreview.com/2026/03/24/1134562/cryopreservation-brain-cryonics-organ-transplantation/" target="_blank" class="name-zh">这位科学家重新研究了他好友的冷冻大脑</a><span class="name-en">This scientist rewarmed and studied pieces of his friend’s cryopreserved brain</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://arstechnica.com/science/2026/03/how-chemists-turned-bourbon-waste-into-super-capacitors/" target="_blank" class="name-zh">化学家如何将波本酒废料转化为超级电容器</a><span class="name-en">How chemists turned bourbon waste into supercapacitors</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://arstechnica.com/health/2026/03/rfk-jr-anti-vaccine-ally-dramatically-quits-cdc-panel-complaining-of-drama/" target="_blank" class="name-zh">RFK Jr.的反疫苗盟友愤怒辞去CDC顾问职务</a><span class="name-en">"The last straw"—RFK Jr.'s anti-vaccine ally angrily quits CDC panel after spat</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://arstechnica.com/science/2026/03/final-analysis-of-2025-iberian-blackout-policies-left-spain-at-risk/" target="_blank" class="name-zh">2025年伊比利亚停电的最终分析：政策使西班牙处于风险之中</a><span class="name-en">Final analysis of 2025 Iberian blackout: Policies left Spain at risk</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.theverge.com/tech/897876/the-bb-777-is-the-ultimate-in-boombox-nostalgia" target="_blank" class="name-zh">BB-777是复古音响的终极代表</a><span class="name-en">The BB-777 is the ultimate in boombox nostalgia</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.theverge.com/news/899717/meta-instagram-facebook-affiliate-shopping-links-reels" target="_blank" class="name-zh">Instagram和Facebook即将充满附属内容</a><span class="name-en">Instagram and Facebook are about to be filled with affiliate content</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.theverge.com/policy/899910/meta-new-mexico-jury-verdict" target="_blank" class="name-zh">陪审团裁定Meta误导用户其产品安全</a><span class="name-en">Meta misled users about its products’ safety, jury decides</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.wired.com/story/arms-ceo-insists-the-market-needs-his-new-cpu-it-could-piss-everyone-off/" target="_blank" class="name-zh">Arm首席执行官坚称市场需要其新CPU，可能惹恼众人</a><span class="name-en">Arm’s CEO Insists the Market Needs His New CPU. It Could Piss Everyone Off</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.wired.com/camouflage-multicam-military-navy-seals-ice/" target="_blank" class="name-zh">美国伪装如何征服世界</a><span class="name-en">How American Camouflage Conquered the World</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.wired.com/story/iranians-dont-have-a-missile-alert-system-so-volunteers-built-their-own-warning-map/" target="_blank" class="name-zh">伊朗没有导弹警报系统，志愿者建立了自己的警报地图</a><span class="name-en">Iranians Don’t Have a Missile Alert System, So Volunteers Built Their Own Warning Map</span></li></ul></section><section class="group" id="semi"><h2 class="group-head"><span class="group-zh">半导体产业</span><span class="group-en">SEMI</span></h2><ul class="list"><li class="item"><span class="year">0325</span> <a href="https://www.eetimes.com/what-policymakers-must-fix-in-europes-chips-act-2-0/" target="_blank" class="name-zh">欧洲芯片法案2.0：政策制定者需要修复的内容</a><span class="name-en">What Policymakers Must Fix in Europe’s Chips Act 2.0</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.eetimes.com/how-why-not-led-to-a-20-billion-deal-for-groq/" target="_blank" class="name-zh">‘为什么不’带来了20亿美元的Groq交易</a><span class="name-en">How ‘Why Not’ Led to a $20 Billion Deal For Groq</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.eetimes.com/power-module-packaging-evolves-as-materials-and-supply-chains-redefine-power-electronics/" target="_blank" class="name-zh">电力模块封装随着材料和供应链的重新定义而演变</a><span class="name-en">Power Module Packaging Evolves as Materials and Supply Chains Redefine Power Electronics</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://spectrum.ieee.org/data-center-dc" target="_blank" class="name-zh">爱迪生的复仇：数据中心正从交流电转向直流电</a><span class="name-en">In Edison’s Revenge, Data Centers Are Transitioning From AC to DC</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://spectrum.ieee.org/5gw-data-center" target="_blank" class="name-zh">建设世界最大数据中心需要什么？</a><span class="name-en">What Will It Take to Build the World’s Largest Data Center?</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://spectrum.ieee.org/autonomous-drone-warfare" target="_blank" class="name-zh">乌克兰将迎来即将到来的无人机战争转折点</a><span class="name-en">The Coming Drone-War Inflection in Ukraine</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/hps-new-ai-workstation-can-expand-horizontally-to-add-15-percent-more-internal-volume-alternate-side-panel-also-includes-more-active-cooling" target="_blank" class="name-zh">惠普新AI工作站通过水平扩展增加15%内部容量</a><span class="name-en">HP's new AI workstation can expand horizontally to add 15% more internal volume — alternate side panel also includes more active cooling.</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.tomshardware.com/networking/russian-starlink-rival-established-with-16-satellites-launched-aims-for-900-by-2035-commercial-operation-to-begin-next-year-with-250-sputniks" target="_blank" class="name-zh">俄罗斯‘星链对手’启动，目标到2035年发射900颗卫星</a><span class="name-en">Russian ‘Starlink Rival’ established with 16 satellites launched, aims for 900 by 2035 — commercial operation to begin next year with 250 sputniks</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.tomshardware.com/tech-industry/cyber-security/flipper-zero-pen-testing-tool-gets-an-ai-powered-companion-app-natural-language-interface-allows-for-faster-easier-hacking" target="_blank" class="name-zh">Flipper Zero渗透测试工具推出AI辅助应用</a><span class="name-en">Flipper Zero pen-testing tool gets an AI-powered companion app — natural language interface allows for faster, easier hacking</span></li>
-        <li class="item"><span class="year">0325</span> <a href="https://www.edn.com/chiplets-8-best-practices-for-engineering-multi-die-designs/" target="_blank" class="name-zh">Chiplets：多芯片设计的8个最佳实践</a><span class="name-en">Chiplets: 8 best practices for engineering multi-die designs</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.edn.com/is-your-plc-dcs-reading-the-field-contacts-reliably/" target="_blank" class="name-zh">你的PLC/DCS是否可靠读取现场接点？</a><span class="name-en">Is your PLC/DCS reading the field contacts reliably?</span></li>
-        <li class="item"><span class="year">0324</span> <a href="https://www.edn.com/demystifying-3d-ics-a-practical-framework-for-heterogeneous-integration/" target="_blank" class="name-zh">揭开3D ICs神秘面纱：异构集成的实用框架</a><span class="name-en">Demystifying 3D ICs: A practical framework for heterogeneous integration</span></li></ul></section>
+  <section class="group" id="art"><h2 class="group-head"><span class="group-zh">艺术事件</span><span class="group-en">ART</span></h2><ul class="list"><li class="item"><span class="year">0324</span> <a href="https://www.artforum.com/news/wagner-foundation-names-winners-of-2026-arts-fellowships-1234745999/" target="_blank" class="name-zh">瓦格纳基金会公布75,000美元2026艺术奖得主</a><span class="name-en">Wagner Foundation Names Winners of $75,000 2026 Arts Fellowships</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.artforum.com/news/hans-baldung-grien-portrait-national-treasure-in-france-1234745991/" target="_blank" class="name-zh">汉斯·巴尔顿·格林肖像被认定为国家宝藏，禁止离开法国</a><span class="name-en">Hans Baldung Grien Portrait Declared National Treasure, Barred from Leaving France</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.artforum.com/news/artist-ibrahim-mahama-attacked-by-police-unit-in-ghana-1234745977/" target="_blank" class="name-zh">艺术家易卜拉欣·马哈马称加纳警察袭击让他生活停滞</a><span class="name-en">Artist Ibrahim Mahama Says Police Attack in Ghana Put His ‘Entire Life On Hold’</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://hyperallergic.com/take-your-practice-further-in-a-visual-arts-residency-at-banff-centre/" target="_blank" class="name-zh">在班夫中心的视觉艺术驻留计划中进一步发展您的实践</a><span class="name-en">Take Your Practice Further in a Visual Arts Residency at Banff Centre</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://hyperallergic.com/what-makes-a-good-protest-sign/" target="_blank" class="name-zh">什么样的抗议标语才算好？</a><span class="name-en">What Makes a Good Protest Sign?</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://hyperallergic.com/despite-uncertainty-gulf-art-world-projects-normalcy/" target="_blank" class="name-zh">尽管存在不确定性，海湾艺术界仍然展现正常气息</a><span class="name-en">Despite Uncertainty, Gulf Art World Projects Normalcy</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://news.artnet.com/art-world/openai-shutters-sora-2758298" target="_blank" class="name-zh">OpenAI取消争议AI视频应用Sora</a><span class="name-en">OpenAI Scraps Sora, Its Controversial A.I. Video App</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://news.artnet.com/art-world/gabrielle-goliath-venice-biennale-2758181" target="_blank" class="name-zh">加布里埃尔·戈利亚斯将在威尼斯展示被取消的南非展览</a><span class="name-en">Gabrielle Goliath Is Bringing Her Canceled South Africa Pavilion Show to Venice Anyway</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://news.artnet.com/art-world/heinz-mack-beck-and-eggeling-2757753" target="_blank" class="name-zh">95岁的艺术家海因茨·马克坚信艺术的力量</a><span class="name-en">At 95, Artist Heinz Mack Still Believes in the Power of Art: ‘I Affirm My Commitment to Beauty’</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.dezeen.com/2026/03/25/nasa-accelerates-plans-to-build-permanent-moon-base/" target="_blank" class="name-zh">NASA加快建设永久月球基地的计划</a><span class="name-en">NASA accelerates plans to build permanent moon base</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.dezeen.com/2026/03/25/snohetta-theatre-nanterre-amandiers/" target="_blank" class="name-zh">Snøhetta将法国南特-阿曼迪尔剧院改造成"城市灯笼"</a><span class="name-en">Snøhetta transforms Théâtre Nanterre-Amandiers in France into "urban lantern"</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.dezeen.com/2026/03/25/smiljan-radic-pritzker-architecture-prize-winner-interview/" target="_blank" class="name-zh">普利兹克建筑奖得主斯米尔扬·拉迪奇称：我的作品没有信息</a><span class="name-en">"There is no message in what I do" says Pritzker Architecture Prize-winner Smiljan Radić</span></li></ul></section><section class="group" id="film"><h2 class="group-head"><span class="group-zh">影像</span><span class="group-en">FILM</span></h2><ul class="list"><li class="item"><span class="year">0325</span> <a href="https://variety.com/2026/music/news/supreme-court-rules-against-record-labels-music-piracy-case-1236699119/" target="_blank" class="name-zh">最高法院裁定反对唱片公司，Cox通信公司不需承担用户盗版责任</a><span class="name-en">Supreme Court Rules Against Record Labels in $1 Billion Cox Communications Piracy Case</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://variety.com/2026/film/news/anne-hathaway-devil-wears-prada-2-thin-models-1236698860/" target="_blank" class="name-zh">安妮·海瑟薇要求《穿普拉达的女王2》制作方不要选用过瘦模特</a><span class="name-en">Anne Hathaway Told ‘Devil Wears Prada 2’ Producers Not to Put Models Who Are ‘So Skeletal’ and ‘Alarmingly Thin’ in the Movie, Says Meryl Streep</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://variety.com/2026/music/news/ti-drumma-boy-team-for-documentary-the-birth-of-trap-music-1236698669/" target="_blank" class="name-zh">T.I.与Drumma Boy合作推出纪录短片《Trap音乐的诞生》，将在亚特兰大电影节首映</a><span class="name-en">T.I. and Drumma Boy Team for Documentary Short Film ‘The Birth of Trap Music,’ Premiering at Atlanta Film Festival (EXCLUSIVE)</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.indiewire.com/news/festivals/sundance-2026-movies-sold-so-far-1235174095/" target="_blank" class="name-zh">2026年圣丹斯电影节已售电影：玛格诺利为约翰·威尔逊的《混凝土的历史》铺平道路</a><span class="name-en">Sundance 2026 Movies Sold So Far: Magnolia Paves the Way for John Wilson’s ‘The History of Concrete’</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.indiewire.com/criticism/movies/alpha-movie-review-julia-ducournau-neon-1235124653/" target="_blank" class="name-zh">《阿尔法》影评：导演朱莉亚·杜库诺采用更贴近现实的身体恐怖手法</a><span class="name-en">‘Alpha’ Review: ‘Titane’ Director Julia Ducournau Adopts a More Grounded Form of Body Horror for This Dour and Dismal AIDS Allegory</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.indiewire.com/criticism/shows/bait-review-riz-ahmed-james-bond-amazon-series-1235185661/" target="_blank" class="name-zh">《饵》影评：瑞兹·阿迈德重新思考成为詹姆斯·邦德</a><span class="name-en">‘Bait’ Review: Riz Ahmed Rethinks Becoming James Bond in Amazon’s Slick but Formulaic Action-Drama</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://deadline.com/2026/03/nataly-aukar-signs-uta-1236765510/" target="_blank" class="name-zh">UTA签约喜剧演员Nataly Aukar</a><span class="name-en">UTA Signs Comedian Nataly Aukar</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://deadline.com/2026/03/snoop-dogg-god-of-the-rodeo-ridley-scott-1236765040/" target="_blank" class="name-zh">斯努普·道格主演并制作真实犯罪惊悚片《牛仔之神》</a><span class="name-en">Snoop Dogg To Star And Produce ‘God Of The Rodeo’ Pic From Director Rosalind Ross And Producers Giannina And Ridley Scott</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://deadline.com/2026/03/pixomondo-sony-vfx-close-1236765499/" target="_blank" class="name-zh">《龙之家族》特效公司Pixomondo将关闭</a><span class="name-en">‘House Of The Dragon’ VFX Firm Pixomondo Set To Close</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://theplaylist.net/pretty-lethal-review-maddie-ziegler-lana-condor-cant-save-forgettable-straight-to-streaming-action-thriller-20260325/" target="_blank" class="name-zh">《致命美丽》影评：麦迪·齐格勒和拉娜·康多未能拯救这部可忘却的直流视频网站动作惊悚片</a><span class="name-en">‘Pretty Lethal’ Review: Maddie Ziegler & Lana Condor Can’t Save Forgettable Straight-to-Streaming Action Thriller</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://theplaylist.net/new-oscar-rules-earlier-wins-category-fraud-academy-guilt-staying-humble-20260325/" target="_blank" class="name-zh">新奥斯卡规则：提前获胜、类别舞弊、学院内疚和保持谦逊</a><span class="name-en">New Oscar Rules: Earlier Wins, Category Fraud, Academy Guilt & Staying Humble</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://theplaylist.net/apex-trailer-its-charlize-theron-vs-taron-egerton-in-australian-national-park-surivial-thriller-debuting-on-netflix-this-april-20260325/" target="_blank" class="name-zh">《顶点》预告：查理兹·塞隆与塔伦·埃哲顿对决，四月登上Netflix</a><span class="name-en">‘Apex’ Trailer: It’s Charlize Theron vs. Taron Egerton In Australian National Park Surivial Thriller Debuting On Netflix This April</span></li></ul></section><section class="group" id="ai"><h2 class="group-head"><span class="group-zh">人工智能科技</span><span class="group-en">AI</span></h2><ul class="list"><li class="item"><span class="year">0325</span> <a href="https://www.technologyreview.com/2026/03/25/1134657/battery-company-ai-pivot-ses/" target="_blank" class="name-zh">这家电池公司为何转向人工智能</a><span class="name-en">Why this battery company is pivoting to AI</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.technologyreview.com/2026/03/25/1134642/this-startup-wants-to-change-how-mathematicians-do-math/" target="_blank" class="name-zh">这家初创公司想要改变数学家的计算方式</a><span class="name-en">This startup wants to change how mathematicians do math</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.technologyreview.com/2026/03/25/1134636/the-download-reawakening-frozen-brains-and-the-ai-hype-index-returns/" target="_blank" class="name-zh">新闻汇总：重温冷冻大脑与AI炒作指数回归</a><span class="name-en">The Download: reawakening frozen brains, and the AI Hype Index returns</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://arstechnica.com/tech-policy/2026/03/meta-loses-trial-after-arguing-child-exploitation-was-inevitable-on-its-apps/" target="_blank" class="name-zh">Meta在诉讼中败诉，称儿童剥削在其应用上是“不可避免”的</a><span class="name-en">Meta loses trial after arguing child exploitation was “inevitable” on its apps</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://arstechnica.com/tech-policy/2026/03/apple-begins-age-checks-in-the-uk-with-latest-ios-update/" target="_blank" class="name-zh">苹果在英国通过最新iOS更新开始进行年龄检查</a><span class="name-en">Apple begins age checks in the UK with latest iOS update</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://arstechnica.com/ai/2026/03/the-end-of-sora-also-means-the-end-of-disneys-1-billion-openai-investment/" target="_blank" class="name-zh">迪士尼在Sora关闭计划中取消与OpenAI的十亿美元合作</a><span class="name-en">Disney cancels $1 billion OpenAI partnership amid Sora shutdown plans</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.theverge.com/tech/900363/reddit-human-verification-bots-crackdown" target="_blank" class="name-zh">Reddit将要求表现“可疑”的账户证明其为人类</a><span class="name-en">Reddit accounts with ‘fishy’ bot-like behavior will soon need to prove they’re human</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.theverge.com/ai-artificial-intelligence/900425/google-lyria-3-pro-ai-music" target="_blank" class="name-zh">谷歌Lyria 3 Pro能制作更长的AI歌曲</a><span class="name-en">Google Lyria 3 Pro makes longer AI songs</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.theverge.com/games/900389/live-service-games-mess-fortnite-layoffs" target="_blank" class="name-zh">在线服务游戏混乱，连Fortnite也在挣扎</a><span class="name-en">Live-service games are such a mess even Fortnite is struggling</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.wired.com/story/ultrahumans-us-comeback-starts-now-with-the-new-ring-pro/" target="_blank" class="name-zh">Ultrahuman回归：这款Ring Pro能打败Oura吗？</a><span class="name-en">Ultrahuman Is Back: Can the Ring Pro Beat Oura in the US Market?</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.wired.com/story/that-ex-cia-agent-in-all-your-feeds-is-after-a-pardon-from-donald-trump/" target="_blank" class="name-zh">这位前CIA特工因请求特朗普特赦而走红</a><span class="name-en">The Ex-CIA Agent Going Viral Asking for a Trump Pardon</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.wired.com/story/openai-shuts-down-sora-ipo-ai-superapp/" target="_blank" class="name-zh">OpenAI通过终止Sora进入其专注时代</a><span class="name-en">OpenAI Enters Its Focus Era by Killing Sora</span></li></ul></section><section class="group" id="semi"><h2 class="group-head"><span class="group-zh">半导体产业</span><span class="group-en">SEMI</span></h2><ul class="list"><li class="item"><span class="year">0325</span> <a href="https://www.eetimes.com/what-policymakers-must-fix-in-europes-chips-act-2-0/" target="_blank" class="name-zh">欧洲芯片法案2.0亟需政策修正</a><span class="name-en">What Policymakers Must Fix in Europe’s Chips Act 2.0</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.eetimes.com/how-why-not-led-to-a-20-billion-deal-for-groq/" target="_blank" class="name-zh">‘为何不’促成20亿美元的Groq交易</a><span class="name-en">How ‘Why Not’ Led to a $20 Billion Deal For Groq</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://www.eetimes.com/power-module-packaging-evolves-as-materials-and-supply-chains-redefine-power-electronics/" target="_blank" class="name-zh">电源模块封装随材料与供应链演变</a><span class="name-en">Power Module Packaging Evolves as Materials and Supply Chains Redefine Power Electronics</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://semiengineering.com/scale-ai-engineering-the-next-leap-in-lpddr6-low-power-memory/" target="_blank" class="name-zh">Scale AI：LPDDR6低功耗内存的下一步跃进</a><span class="name-en">Scale AI: Engineering the Next Leap in LPDDR6 Low-Power Memory</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://semiengineering.com/beating-the-heat-in-3d-packages/" target="_blank" class="name-zh">如何在3D封装中克服热管理挑战</a><span class="name-en">Beating The Heat In 3D Packages</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://semiengineering.com/extraction-challenges-of-cfet-and-backside-power-delivery/" target="_blank" class="name-zh">CFET和背面供电的提取挑战</a><span class="name-en">Extraction Challenges of CFET and Backside Power Delivery</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://content.knowledgehub.wiley.com/setting-new-performance-standards-with-ieee-802-11bn-an-in-depth-overview-of-wi-fi-8/" target="_blank" class="name-zh">IEEE 802.11bn如何实现Wi-Fi 8的超高可靠性</a><span class="name-en">How IEEE 802.11bn Delivers Ultra-High Reliability for Wi-Fi 8</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://spectrum.ieee.org/ai-community-engagement" target="_blank" class="name-zh">当你举办AI咖啡厅时会发生什么</a><span class="name-en">What Happens When You Host an AI Café</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://spectrum.ieee.org/us-engineering-phd-enrollment-drop" target="_blank" class="name-zh">美国工程博士项目学生流失危机？</a><span class="name-en">Are U.S. Engineering Ph.D. Programs Losing Students?</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.tomshardware.com/pc-components/ssds/samsungs-870-evo-sata-ssd-quietly-gets-8tb-variant-despite-ai-storage-struggle-new-model-spotted-in-europe-for-eur1-300-with-higher-cache-and-endurance" target="_blank" class="name-zh">三星870 EVO SATA SSD推出8TB变体</a><span class="name-en">Samsung’s 870 EVO SATA SSD quietly gets 8TB variant despite storage shortage and skyrocketing pricing — new model spotted in Europe for €1,300 with higher cache and endurance</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.tomshardware.com/pc-components/gpus/intel-arc-pro-b70-and-arc-pro-b65-gpus-bring-32gb-of-ram-to-ai-and-pro-apps-bigger-battlemage-finally-arrives-but-its-not-for-gaming" target="_blank" class="name-zh">英特尔推出Arc Pro B70和B65显卡</a><span class="name-en">Intel Arc Pro B70 and Arc Pro B65 GPUs bring 32GB of RAM to AI and pro apps — bigger Battlemage finally arrives, but it's not for gamers</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.tomshardware.com/pc-components/cpus/pc-makers-face-shortages-of-intel-and-amd-cpus-that-stretch-up-to-six-months-lead-time-for-orders-jumps-from-just-two-weeks-in-the-face-of-ai-demand" target="_blank" class="name-zh">PC制造商面临英特尔和AMD CPU短缺</a><span class="name-en">PC makers face shortages of Intel and AMD CPUs that stretch up to six months — lead time for orders jumps from just two weeks in the face of AI demand</span></li></ul></section><section class="group" id="intl"><h2 class="group-head"><span class="group-zh">国际时事</span><span class="group-en">INTL</span></h2><ul class="list"><li class="item"><span class="year">0325</span> <a href="https://www.bbc.com/news/articles/c747x00m83vo?at_medium=RSS&at_campaign=rss" target="_blank" class="name-zh">巴勒斯坦人警告西岸定居者暴力扩张，称“安全感消失”</a><span class="name-en">'There's no safety anymore': Palestinians warn of expanding West Bank settler violence</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.bbc.com/news/articles/cvg06q36052o?at_medium=RSS&at_campaign=rss" target="_blank" class="name-zh">加纳在联合国投票中要求赔偿奴隶制</a><span class="name-en">Ghana demands compensation for slavery in landmark UN vote</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.bbc.com/news/articles/c9qd7wyln2jo?at_medium=RSS&at_campaign=rss" target="_blank" class="name-zh">民主党赢得佛罗里达州唐纳德·特朗普的马阿拉歌选区</a><span class="name-en">Democrats flip Florida state seat that includes Trump's Mar-a-Lago home</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3347906/hong-kong-holds-art-basel-crown-5-more-years-thanks-new-deal?utm_source=rss_feed" target="_blank" class="name-zh">香港与艺博会续约五年，继续保持其地位</a><span class="name-en">Hong Kong holds onto Art Basel crown for 5 more years thanks to new deal</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.scmp.com/economy/china-economy/article/3347905/airbus-wins-chinese-airlines-101-plane-order-victory-over-boeing-key-market?utm_source=rss_feed" target="_blank" class="name-zh">空客赢得中国航空公司101架飞机订单，击败波音</a><span class="name-en">Airbus wins Chinese airline’s 101-plane order in victory over Boeing in key market</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://www.scmp.com/news/china/military/article/3347889/should-china-be-worried-about-japans-maritime-force-overhaul?utm_source=rss_feed" target="_blank" class="name-zh">中国是否应该担忧日本海军力量改革？</a><span class="name-en">Should China be worried about Japan’s maritime force overhaul?</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://thediplomat.com/2026/03/the-private-firms-powering-chinas-military-ai-push/" target="_blank" class="name-zh">推动中国军事AI的私营企业</a><span class="name-en">The Private Firms Powering China’s Military AI Push</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://thediplomat.com/2026/03/the-economic-consequences-of-the-iran-war-reverberate-in-south-korea/" target="_blank" class="name-zh">伊朗战争的经济后果波及韩国</a><span class="name-en">The Economic Consequences of the Iran War Reverberate in South Korea</span></li>
+        <li class="item"><span class="year">0324</span> <a href="https://thediplomat.com/2026/03/india-china-and-how-not-to-save-the-brahmaputra/" target="_blank" class="name-zh">印度、中国与如何拯救布拉马普特拉河</a><span class="name-en">India, China, and How Not to Save the Brahmaputra</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://foreignpolicy.com/2026/03/25/china-us-russia-sphere-influence-geopolitics-competition/" target="_blank" class="name-zh">不，中国并不想要势力范围</a><span class="name-en">No, China Doesn’t Want Spheres of Influence</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://foreignpolicy.com/2026/03/25/israel-iran-palestine-gaza-west-bank-trump-peace-plan-settler-violence/" target="_blank" class="name-zh">结束巴勒斯坦自决权的斗争</a><span class="name-en">The Battle to End Palestinian Self-Determination</span></li>
+        <li class="item"><span class="year">0325</span> <a href="https://foreignpolicy.com/2026/03/25/ghalibaf-trump-iran-united-states-peace-negotiations/" target="_blank" class="name-zh">伊朗的和平谈判者是他国的特朗普</a><span class="name-en">Iran’s Peace Negotiator Is His Country’s Trump</span></li></ul></section>
 </main>
 
+
+<canvas id="cloth-canvas"></canvas>
+<div id="white-veil"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script>
+(function(){
+// 0=normal HTML  1=cloth  2=fading to thoughts
+let clothState = 0;
+const clothCanvas = document.getElementById('cloth-canvas');
+const veil = document.getElementById('white-veil');
+
+let renderer=null,scene=null,camera=null;
+let geo=null,mat=null,clothMesh=null,clothTexture=null;
+let px,py,pz,ox,oy,oz,pinned,constraints,restLen,simTime=0;
+let W=window.innerWidth,H=window.innerHeight;
+
+const SCREENS=5;
+let TEX_W,TEX_H,VH_FRAC,VIS_H,MAX_SCROLL_CV;
+const SCROLL_STEP=80;
+let clothScrollY=0,staticCanvas,texCanvas,tc;
+
+function parseContent(){
+  const groups=[];
+  document.querySelectorAll('.group').forEach(el=>{
+    const zhHead=el.querySelector('.group-zh')?.textContent.trim()||'';
+    const enHead=el.querySelector('.group-en')?.textContent.trim()||'';
+    const items=[];
+    el.querySelectorAll('.item').forEach(item=>{
+      const year=item.querySelector('.year')?.textContent.trim()||'';
+      const nameZh=item.querySelector('.name-zh')?.textContent.trim()||'';
+      items.push({year,nameZh});
+    });
+    groups.push({zhHead,enHead,items});
+  });
+  return groups;
+}
+
+function wrapText(ctx,text,maxW){
+  if(!text) return [];
+  const lines=[];let line='';
+  for(const ch of text){
+    const test=line+ch;
+    if(ctx.measureText(test).width>maxW&&line){
+      const sp=line.lastIndexOf(' ');
+      if(sp>0&&ch!==' '&&!/[一-鿿]/.test(ch)){lines.push(line.slice(0,sp));line=line.slice(sp+1)+ch;}
+      else{lines.push(line.trimEnd());line=ch===' '?'':ch;}
+    }else{line=test;}
+  }
+  if(line.trim()) lines.push(line.trimEnd());
+  return lines;
+}
+
+function paintStatic(){
+  const sc=staticCanvas.getContext('2d');
+  sc.clearRect(0,0,TEX_W,TEX_H);
+  sc.fillStyle='#ffffff';sc.fillRect(0,0,TEX_W,TEX_H);
+  const LM=70,CONTENT_W=Math.min(TEX_W-LM-220,760);
+  let y=72;
+  sc.font='bold 28px EFont,ZFont,sans-serif';sc.fillStyle='#111';sc.textAlign='left';
+  sc.fillText('NEWS',LM,y+26);y+=26+18;
+  sc.font='400 13px EFont,ZFont,sans-serif';sc.fillStyle='#888';
+  sc.fillText('NEXT UPDATE',LM,y+13);y+=13+36;
+  const groups=parseContent();
+  for(const g of groups){
+    sc.font='bold 22px ZFont,EFont,sans-serif';sc.fillStyle='#111';
+    sc.fillText(g.zhHead,LM,y+20);y+=28;
+    sc.font='bold 17px EFont,ZFont,sans-serif';sc.fillStyle='#2a2a2a';
+    sc.fillText(g.enHead,LM,y+16);y+=16+14;
+    for(const item of g.items){
+      sc.font='bold 20px ZFont,EFont,sans-serif';sc.fillStyle='#888';
+      sc.fillText(item.year,LM,y+18);
+      const yearW=sc.measureText(item.year).width+12;
+      sc.fillStyle='#111';
+      const nameLines=wrapText(sc,item.nameZh,CONTENT_W-yearW);
+      nameLines.forEach((l,i)=>sc.fillText(l,LM+yearW,y+18+i*26));
+      y+=nameLines.length*26+6;
+    }
+    y+=30;
+  }
+}
+
+const navItems=[
+  {text:'ABOUT',  href:'index.html'},
+  {text:'WORK',   href:'work.html'},
+  {text:'CONTACT',href:'contact.html'},
+];
+let hoveredNav=-1;
+
+function drawTexture(){
+  tc.drawImage(staticCanvas,0,0);
+  const navRX=TEX_W-30,navStartY=clothScrollY+22;
+  tc.textAlign='right';tc.font='bold 28px EFont,ZFont,sans-serif';
+  navItems.forEach((item,i)=>{
+    const by=navStartY+i*50+26,hov=hoveredNav===i;
+    tc.fillStyle=hov?'#555':'#111';tc.fillText(item.text,navRX,by);
+    if(hov){const w=tc.measureText(item.text).width;tc.strokeStyle='#555';tc.lineWidth=1.5;tc.beginPath();tc.moveTo(navRX-w,by+5);tc.lineTo(navRX,by+5);tc.stroke();}
+    const w=tc.measureText(item.text).width;
+    item._x1=navRX-w-6;item._x2=navRX+6;item._y1=by-32;item._y2=by+10;
+  });
+  clothTexture.needsUpdate=true;
+}
+
+const SEGS_X=26,SEGS_Y=18,NX=SEGS_X+1,NY=SEGS_Y+1,N=NX*NY;
+const GRAVITY=-1.2,DAMPING=0.9988,ITER=8,DT=1/60;
+let CW3,CH3,mouseNDC,mouseActive=false,raycast,planeZ,mouseWorld,hitRay;
+
+function initCloth(){
+  TEX_W=W;TEX_H=H*SCREENS;VH_FRAC=1/SCREENS;VIS_H=H;MAX_SCROLL_CV=TEX_H-VIS_H;
+  staticCanvas=document.createElement('canvas');staticCanvas.width=TEX_W;staticCanvas.height=TEX_H;
+  texCanvas=document.createElement('canvas');texCanvas.width=TEX_W;texCanvas.height=TEX_H;
+  tc=texCanvas.getContext('2d');
+  scene=new THREE.Scene();scene.background=new THREE.Color(0xffffff);
+  camera=new THREE.PerspectiveCamera(38,W/H,0.1,200);camera.position.set(0,0.5,20);camera.lookAt(0,0,0);
+  renderer=new THREE.WebGLRenderer({canvas:clothCanvas,antialias:true});
+  renderer.setPixelRatio(Math.min(2,devicePixelRatio));renderer.setSize(W,H);
+  scene.add(new THREE.AmbientLight(0xffffff,0.85));
+  const dl=new THREE.DirectionalLight(0xffffff,0.50);dl.position.set(4,8,12);scene.add(dl);
+  px=new Float32Array(N);py=new Float32Array(N);pz=new Float32Array(N);
+  ox=new Float32Array(N);oy=new Float32Array(N);oz=new Float32Array(N);
+  pinned=new Uint8Array(N);
+  const _vFov=38*Math.PI/180;CH3=2*Math.tan(_vFov/2)*20*0.90;CW3=CH3*(W/H);
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+    const k=j*NX+i,nj=j/SEGS_Y;
+    px[k]=-CW3/2+i*(CW3/SEGS_X);py[k]=CH3/2-j*(CH3/SEGS_Y);
+    pz[k]=nj*(1-nj)*0.1+(Math.random()-0.5)*0.02;
+    ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];if(j<=1)pinned[k]=1;
+  }
+  constraints=[];restLen=[];
+  function addC(a,b){const dx=px[a]-px[b],dy=py[a]-py[b],dz=pz[a]-pz[b];restLen.push(Math.sqrt(dx*dx+dy*dy+dz*dz));constraints.push(a,b);}
+  for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+    const k=j*NX+i;
+    if(i<SEGS_X)addC(k,k+1);if(j<SEGS_Y)addC(k,k+NX);
+    if(i<SEGS_X&&j<SEGS_Y){addC(k,k+NX+1);addC(k+1,k+NX);}
+    if(i<SEGS_X-1)addC(k,k+2);if(j<SEGS_Y-1)addC(k,k+NX*2);
+  }
+  clothTexture=new THREE.CanvasTexture(texCanvas);
+  clothTexture.repeat.set(1,VH_FRAC);clothTexture.offset.y=1-VH_FRAC;
+  clothTexture.wrapS=THREE.ClampToEdgeWrapping;clothTexture.wrapT=THREE.ClampToEdgeWrapping;
+  geo=new THREE.PlaneGeometry(CW3,CH3,SEGS_X,SEGS_Y);
+  geo.attributes.position.setUsage(THREE.DynamicDrawUsage);
+  mat=new THREE.MeshStandardMaterial({map:clothTexture,side:THREE.DoubleSide,roughness:0.90});
+  clothMesh=new THREE.Mesh(geo,mat);scene.add(clothMesh);
+  mouseNDC=new THREE.Vector2();raycast=new THREE.Raycaster();
+  planeZ=new THREE.Plane(new THREE.Vector3(0,0,1),0);mouseWorld=new THREE.Vector3();hitRay=new THREE.Raycaster();
+  paintStatic();drawTexture();
+  document.fonts.ready.then(()=>{paintStatic();drawTexture();});
+  animate();
+}
+
+window.addEventListener('mousemove',e=>{
+  if(mouseNDC)mouseNDC.set((e.clientX/W)*2-1,-(e.clientY/H)*2+1);mouseActive=true;
+});
+window.addEventListener('mouseleave',()=>{mouseActive=false;});
+
+function updateCloth(){
+  simTime+=DT;
+  for(let row=0;row<=1;row++){
+    const amp=row===0?0.022:0.006;
+    for(let i=0;i<NX;i++){
+      const k=row*NX+i,ni=i/SEGS_X;
+      px[k]=-CW3/2+i*(CW3/SEGS_X)+Math.sin(simTime*0.28+ni*3.1)*amp;
+      py[k]=CH3/2-row*(CH3/SEGS_Y)+Math.cos(simTime*0.18+ni*2.0)*amp*0.4;
+      pz[k]=Math.sin(simTime*0.22+ni*2.4)*amp*1.5;
+      ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];
+    }
+  }
+  if(mouseActive){raycast.setFromCamera(mouseNDC,camera);raycast.ray.intersectPlane(planeZ,mouseWorld);}
+  for(let k=0;k<N;k++){
+    if(pinned[k])continue;
+    const vx=(px[k]-ox[k])*DAMPING,vy=(py[k]-oy[k])*DAMPING,vz=(pz[k]-oz[k])*DAMPING;
+    ox[k]=px[k];oy[k]=py[k];oz[k]=pz[k];
+    let ax=0,ay=GRAVITY*DT*DT,az=0;
+    ax+=Math.sin(simTime*0.20+py[k]*0.5)*0.0008;az+=Math.cos(simTime*0.16+px[k]*0.4)*0.0012;
+    if(mouseActive){
+      const dx=px[k]-mouseWorld.x,dy=py[k]-mouseWorld.y,dz=pz[k]-mouseWorld.z;
+      const d2=dx*dx+dy*dy+dz*dz,R=1.8;
+      if(d2<R*R){const d=Math.sqrt(d2)+1e-6,f=(1-d/R)*0.09;ax+=(dx/d)*f;ay+=(dy/d)*f;az+=(dz/d)*f+f*0.4;}
+    }
+    px[k]+=vx+ax;py[k]+=vy+ay;pz[k]+=vz+az;
+  }
+  for(let iter=0;iter<ITER;iter++){
+    for(let c=0,ci=0;c<constraints.length;c+=2,ci++){
+      const a=constraints[c],b=constraints[c+1];
+      const dx=px[b]-px[a],dy=py[b]-py[a],dz=pz[b]-pz[a];
+      const d=Math.sqrt(dx*dx+dy*dy+dz*dz)+1e-9,corr=(d-restLen[ci])/d*0.5;
+      const cx=dx*corr,cy=dy*corr,cz=dz*corr;
+      if(!pinned[a]){px[a]+=cx;py[a]+=cy;pz[a]+=cz;}
+      if(!pinned[b]){px[b]-=cx;py[b]-=cy;pz[b]-=cz;}
+    }
+  }
+}
+
+function syncGeometry(){
+  const pos=geo.attributes.position;
+  for(let k=0;k<N;k++) pos.setXYZ(k,px[k],py[k],pz[k]);
+  pos.needsUpdate=true;geo.computeVertexNormals();
+}
+
+function uvToCanvas(u,v){return{cx:u*TEX_W,cy:clothScrollY+VIS_H*(1-v)};}
+function navHitIndex(nx,ny){
+  hitRay.setFromCamera(new THREE.Vector2(nx,ny),camera);
+  const hits=hitRay.intersectObject(clothMesh);
+  if(!hits.length||!hits[0].uv)return -1;
+  const{cx,cy}=uvToCanvas(hits[0].uv.x,hits[0].uv.y);
+  for(let i=0;i<navItems.length;i++){
+    const it=navItems[i];
+    if(it._x1!==undefined&&cx>=it._x1&&cx<=it._x2&&cy>=it._y1&&cy<=it._y2)return i;
+  }
+  return -1;
+}
+
+window.addEventListener('wheel',e=>{
+  if(clothState!==1)return;e.preventDefault();
+  clothScrollY=Math.max(0,Math.min(MAX_SCROLL_CV,clothScrollY+Math.sign(e.deltaY)*SCROLL_STEP));
+  clothTexture.offset.y=1-clothScrollY/TEX_H-VH_FRAC;drawTexture();
+},{passive:false});
+
+window.addEventListener('mousemove',()=>{
+  if(clothState!==1||!mouseNDC)return;
+  const idx=navHitIndex(mouseNDC.x,mouseNDC.y);
+  if(idx!==hoveredNav){hoveredNav=idx;clothCanvas.style.cursor=idx!==-1?'pointer':'default';drawTexture();}
+});
+
+clothCanvas.addEventListener('click',e=>{
+  if(clothState!==1)return;
+  const nx=(e.clientX/W)*2-1,ny=-(e.clientY/H)*2+1;
+  const idx=navHitIndex(nx,ny);if(idx!==-1)window.location.href=navItems[idx].href;
+});
+
+window.addEventListener('keydown',e=>{
+  if(e.code!=='Space')return;
+  if(document.activeElement&&document.activeElement!==document.body)return;
+  e.preventDefault();
+  if(clothState===0){
+    clothState=1;initCloth();
+    clothScrollY=Math.max(0,Math.min(MAX_SCROLL_CV,window.scrollY));
+    clothTexture.offset.y=1-clothScrollY/TEX_H-VH_FRAC;drawTexture();
+    document.querySelector('.page').style.transition='opacity 1.1s ease-in-out';
+    document.querySelector('.page').style.opacity='0';
+    document.querySelector('.top-nav').style.transition='opacity 1.1s ease-in-out';
+    document.querySelector('.top-nav').style.opacity='0';
+    clothCanvas.style.display='block';
+    requestAnimationFrame(()=>{clothCanvas.style.opacity='1';clothCanvas.style.pointerEvents='auto';});
+    document.body.style.overflow='hidden';
+  }else if(clothState===1){
+    clothState=2;veil.style.opacity='1';
+    setTimeout(()=>{window.location.href='thoughts.html';},1000);
+  }
+});
+
+window.addEventListener('resize',()=>{
+  W=window.innerWidth;H=window.innerHeight;
+  if(renderer){camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);}
+});
+
+function animate(){requestAnimationFrame(animate);updateCloth();syncGeometry();renderer.render(scene,camera);}
+})();
+</script>
 </body>
 </html>
