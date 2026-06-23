@@ -180,7 +180,52 @@
     display:block;
   }
 
+  .contact{
+    margin-top:18px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    font-family:"EFont","ZFont",sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:#666;
+    letter-spacing:0.4px;
+  }
+  .contact-row{
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .contact-row svg{
+    flex-shrink:0;
+    opacity:0.7;
+  }
+  .contact-link{
+    color:#666;
+    text-decoration:none;
+  }
+  .contact-link:hover{
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+
   .footer{
+    margin-top:22px;
+    font-size:16px;
+    color:#666;
+    font-weight:600;
+    letter-spacing:0.5px;
+    font-family:"ZFont","EFont",sans-serif;
+  }
+
+  .mob-br{ display:none; }
+  .desk-sep{ display:inline; font-family:"EFont","ZFont",sans-serif; }
+
+  .mob-only{ display:none; }
+  .mob-inline{ display:none; }
+  .desk-inline{ display:inline; }
+
+  .desk-footer{
     margin-top:22px;
     font-size:13px;
     color:#666;
@@ -189,19 +234,20 @@
     font-family:"EFont","ZFont",sans-serif;
   }
 
-  .mob-br{ display:none; }
-  .desk-sep{ display:inline; font-family:"EFont","ZFont",sans-serif; }
+  @media (min-width: 861px){
+    .contact{ display:none; }
+    .footer{ display:none; }
+  }
 
   @media (max-width: 860px){
     .mob-br{ display:block; }
     .desk-sep{ display:none; }
-    .top-nav{
-      font-size:16px;
-      letter-spacing:1.5px;
-      right:18px;
-      top:18px;
-      gap:8px;
-    }
+    .top-nav{ display:none; }
+    .desk-only{ display:none !important; }
+    .desk-inline{ display:none !important; }
+    .mob-only{ display:block; }
+    .mob-inline{ display:inline; }
+    .desk-footer{ display:none; }
     .section-title{ font-size:24px; }
     .about-zh{ font-size:18px; }
     .about-en{ font-size:15px; }
@@ -237,6 +283,28 @@
 <body>
 <canvas id="field"></canvas>
 
+<!-- 移动端导航 -->
+<nav style="
+  display:none;
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  justify-content:space-between;align-items:center;
+  padding:0 22px;height:56px;
+  background:#fff;border-bottom:1px solid #e8e8e8;
+" id="mob-nav">
+  <a href="index.html" style="font-family:'EFont',sans-serif;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#111;text-decoration:none;">about</a>
+  <a href="work.html" style="font-family:'EFont',sans-serif;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;text-decoration:none;">work</a>
+  <a href="support.html" style="font-family:'EFont',sans-serif;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;text-decoration:none;">support</a>
+</nav>
+<script>
+  if(window.innerWidth<=860){
+    document.getElementById('mob-nav').style.display='flex';
+  }
+  window.addEventListener('resize',function(){
+    document.getElementById('mob-nav').style.display=window.innerWidth<=860?'flex':'none';
+  });
+</script>
+
+<!-- 桌面端导航 -->
 <nav class="top-nav" aria-label="Primary">
   <a href="work.html">WORK</a>
   <a href="news.html">NEWS</a>
@@ -246,17 +314,21 @@
 
 <div class="screen">
   <div class="wrap">
-    <div class="section-title">ABOUT</div>
-
+<div class="section-title desk-only">ABOUT</div>
     <div class="about-zh">
       黄熠，二零零二年生。<span class="mob-br"></span>
       栖居长沙、往来伦敦。<br>
-      为研究型文艺工作者。<br>
+      为研究型<span class="desk-inline">艺术</span><span class="mob-inline">文艺</span>工作者。<br>
       其作多由数字之世、艺史之脉与地缘之局而生。以影像、装置、文本为媒。
     </div>
 
-    <div class="about-en">
+    <div class="about-en desk-only">
       Yi Huang (b. 2OO2) is a research-based artistic worker, based between Changsha and London.
+      His practice examines the digital age, art history, and geopolitics through moving image,
+      installation, and text.
+    </div>
+    <div class="about-en mob-only">
+      Yi Huang (b. 2OO2) is a research-based literary and art workers, based between Changsha and London.
       His practice examines the digital age, art history, and geopolitics through moving image,
       installation, and text.
     </div>
@@ -272,14 +344,48 @@
       </div>
     </div>
 
+    <div class="contact">
+      <div class="contact-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <a href="files/cv.pdf" target="_blank" class="contact-link">CV</a>
+      </div>
+      <div class="contact-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        <a href="https://www.instagram.com/yihuang_art" target="_blank" rel="noopener" class="contact-link">@yihuang_art</a>
+      </div>
+      <div class="contact-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/><polyline points="8 2 8 6"/><polyline points="16 2 16 6"/><line x1="4" y1="10" x2="20" y2="10"/></svg>
+        <span>yihuangart09@gmail.com</span>
+      </div>
+      <div class="contact-row" id="wechat-trigger" style="cursor:pointer;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="contact-link">WeChat: ARTOMAI</span>
+      </div>
+      <div id="wechat-qr" style="display:none;margin-top:10px;padding-left:21px;">
+        <img src="images/qrcode-wechat.jpg" alt="WeChat QR" style="width:120px;height:auto;display:block;">
+      </div>
+    </div>
 
-    <div class="footer">yihuang.art</div>
+    <div class="footer">© 2026 TOMATONE PICTURES STUDIO.<br>ALL RIGHTS RESERVED.</div>
+    <div class="desk-footer">yihuang.art</div>
   </div>
 </div>
 
 <script>
+(function(){
+  var trigger = document.getElementById('wechat-trigger');
+  var qr = document.getElementById('wechat-qr');
+  if(trigger && qr){
+    trigger.addEventListener('click', function(){
+      qr.style.display = qr.style.display === 'none' ? 'block' : 'none';
+    });
+  }
+})();
+</script>
+
+<script>
 /**
- * 轻量“中心太极收敛”（优化版）：
+ * 轻量”中心太极收敛”（优化版）：
  * - 更强的 S 形分界导向
  * - 太极状态粒子更偏向圆周重生，形更稳定
  * - 太极权重越高，线条对比度轻微增强（更可读）

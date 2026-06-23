@@ -187,7 +187,7 @@
 
   @media(max-width:680px){
     .page{padding:72px 22px 48px;}
-    .top-nav{font-size:16px; letter-spacing:1.5px; right:18px; top:18px; gap:8px;}
+    .top-nav{ display:none; }
     .page-title{font-size:24px; margin-bottom:24px;}
     .section-label{font-size:18px; margin-bottom:2px;}
     .section-label-en{font-size:14px; margin-bottom:16px;}
@@ -196,7 +196,7 @@
     .product-image img{width:100%; max-width:100%;}
     .product-info{height:auto; padding:16px 0 0; gap:12px;}
     .product-name{display:none;}
-    .product-desc{max-width:100%; font-size:11px;}
+    .product-desc{max-width:100%; font-size:15px;}
     .product-price{font-size:16px;}
     .buy-btn{width:100%; text-align:center; box-sizing:border-box; padding:10px 0; margin-top:8px;}
   }
@@ -204,6 +204,28 @@
 </head>
 
 <body>
+
+<style>
+  .mob-nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:0 22px;height:56px;
+    background:#fff;border-bottom:1px solid #e8e8e8;
+  }
+  .mob-nav a{
+    font-family:"EFont","ZFont",sans-serif;font-size:15px;font-weight:700;
+    letter-spacing:1.5px;text-transform:uppercase;color:#aaa;text-decoration:none;
+  }
+  .mob-nav a.active{ color:#111; }
+  .mob-nav a:hover{ color:#111; }
+  @media(min-width:681px){ .mob-nav{ display:none; } }
+</style>
+
+<nav class="mob-nav">
+  <a href="index.html">about</a>
+  <a href="work.html">work</a>
+  <a href="support.html" class="active">support</a>
+</nav>
 
 <nav class="top-nav" aria-label="Primary">
   <a href="index.html">ABOUT</a>

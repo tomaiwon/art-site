@@ -58,6 +58,22 @@
     unicode-range:U+8BB0,U+71B5;
   }
   @font-face{
+    font-family:"ZFont";
+    src:url("fonts/Z-news.woff2") format("woff2");
+    font-weight:400;
+    font-style:normal;
+    font-display:block;
+    unicode-range:U+53D9;
+  }
+  @font-face{
+    font-family:"ZFont";
+    src:url("fonts/Z-news.woff2") format("woff2");
+    font-weight:700;
+    font-style:normal;
+    font-display:block;
+    unicode-range:U+53D9;
+  }
+  @font-face{
     font-family:"NFont";
     src:url("fonts/N.ttf") format("truetype");
     font-weight:400;
@@ -145,7 +161,57 @@
     margin-top:4px;
   }
 
-  /* 项目清单 */
+  /* ── 图文卡片列表（数字媒介系列） ── */
+  .card-list{
+    list-style:none;
+    padding:0;
+    margin:0 0 8px 0;
+  }
+  .card-item{
+    margin:0 0 28px 0;
+  }
+  .card-link{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    text-decoration:none;
+    color:#111;
+  }
+  .card-link:hover .card-name{
+    text-decoration:underline;
+    text-underline-offset:4px;
+  }
+  .card-thumb{
+    width:180px;
+    height:108px;
+    object-fit:cover;
+    flex-shrink:0;
+    display:block;
+    background:#eee;
+  }
+  .card-info{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .card-year{
+    font-family:"ZFont","EFont",sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.6px;
+    color:#888;
+    white-space:nowrap;
+  }
+  .card-name{
+    font-family:"EFont","ZFont",sans-serif;
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:0.2px;
+    color:#111;
+    line-height:1.3;
+  }
+
+  /* ── 纯文字列表（艺术史 / 文章） ── */
   .list{
     list-style:none;
     padding:0;
@@ -155,10 +221,8 @@
     display:flex;
     gap:12px;
     align-items:baseline;
-    margin:6px 0;        /* 你截图里行距很紧，但不挤 */
+    margin:6px 0;
   }
-
-  /* 年份：NFont */
   .year{
     font-family:"ZFont","EFont",sans-serif;
     font-weight:700;
@@ -168,8 +232,6 @@
     min-width:60px;
     white-space:nowrap;
   }
-
-  /* 标题：EFont（档案/清单感） */
   .name{
     font-family:"EFont","ZFont",sans-serif;
     font-weight:700;
@@ -189,36 +251,148 @@
     text-underline-offset:4px;
   }
 
-  /* 小屏 */
-  @media (max-width: 860px){
-    .page{ padding:70px 22px; }
-    .top-nav{
-      font-size:16px;
-      letter-spacing:1.5px;
-      right:18px;
-      top:18px;
-      gap:8px;
-    }
-    .page-title{ font-size:24px; }
-    .group-zh{ font-size:15px; }
-    .group-en{ font-size:14px; }
-    .year,.name{ font-size:15px; }
-    .group-title-zh{ font-size:17px; }
-    .group-title-en{ font-size:15px; }
-    .year{ min-width:54px; }
+  /* ── 移动端：卡片变全宽竖排 ── */
+  /* ── 移动端分类卡片 ── */
+  .mob-nav{
+    display:none;
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:100;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 20px;
+    height:56px;
+    background:#fff;
+    border-bottom:1px solid #e8e8e8;
   }
+  .mob-nav a{
+    font-family:"EFont","ZFont",sans-serif;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:#aaa;
+    text-decoration:none;
+  }
+  .mob-nav a.active{ color:#111; }
+
+  .cat-list{
+    display:none;
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  .cat-item{ border-bottom:1px solid #e8e8e8; }
+  .cat-item:last-child{ border-bottom:none; }
+  .cat-link{
+    display:block;
+    text-decoration:none;
+    color:#111;
+  }
+  .cat-link img{
+    display:block;
+    width:100%;
+    aspect-ratio:16/9;
+    object-fit:cover;
+  }
+  .cat-info{
+    padding:14px 20px 18px;
+  }
+  .cat-name-zh{
+    font-family:"ZFont","EFont",sans-serif;
+    font-size:18px;
+    font-weight:700;
+    display:block;
+  }
+  .cat-name-en{
+    font-family:"EFont","ZFont",sans-serif;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    color:#888;
+    display:block;
+    margin-top:3px;
+  }
+
+  /* 移动端：隐藏桌面内容，显示分类卡 */
+  @media (max-width: 860px){
+    .top-nav{ display:none !important; }
+    .mob-nav{ display:flex; }
+    .desktop-content{ display:none; }
+    .cat-list{ display:block; }
+    body{ padding-top:56px; }
+  }
+  @media (min-width: 861px){ .mob-nav{ display:none; } }
 </style>
 </head>
 
 <body>
-  <!-- 右上角：回到 ABOUT（也可改成 index.html） -->
+
+<!-- 桌面端导航 -->
 <nav class="top-nav" aria-label="Primary">
   <a href="index.html">ABOUT</a>
+  <a href="work.html">WORK</a>
   <a href="news.html">NEWS</a>
   <a href="contact.html">CONTACT</a>
-  <a href="support.html">SUPPORT</a>
 </nav>
 
+<!-- 移动端导航 -->
+<nav class="mob-nav">
+  <a href="index.html">about</a>
+  <a href="work.html" class="active">work</a>
+  <a href="support.html">support</a>
+</nav>
+
+<!-- 移动端：五个分类卡 -->
+<ul class="cat-list">
+  <li class="cat-item">
+    <a class="cat-link" href="films.html">
+      <img src="images/as0.png" alt="Films">
+      <div class="cat-info">
+        <span class="cat-name-zh">叙事影像</span>
+        <span class="cat-name-en">Narrative Cinema</span>
+      </div>
+    </a>
+  </li>
+  <li class="cat-item">
+    <a class="cat-link" href="work-digital.html">
+      <img src="images/bridge0.png" alt="数字媒介本体系列">
+      <div class="cat-info">
+        <span class="cat-name-zh">数字媒介本体系列</span>
+        <span class="cat-name-en">Digital Media Ontology Series</span>
+      </div>
+    </a>
+  </li>
+  <li class="cat-item">
+    <a class="cat-link" href="work-arthistory.html">
+      <img src="images/xi10.png" alt="艺术史系列">
+      <div class="cat-info">
+        <span class="cat-name-zh">艺术史系列</span>
+        <span class="cat-name-en">Art History Series</span>
+      </div>
+    </a>
+  </li>
+  <li class="cat-item">
+    <a class="cat-link" href="work-practice.html">
+      <img src="images/h4.png" alt="过往实践">
+      <div class="cat-info">
+        <span class="cat-name-zh">过往实践</span>
+        <span class="cat-name-en">Practice Series</span>
+      </div>
+    </a>
+  </li>
+  <li class="cat-item">
+    <a class="cat-link" href="writing.html">
+      <img src="images/20260322010101_186_1635.jpg" alt="Writing">
+      <div class="cat-info">
+        <span class="cat-name-zh">文章</span>
+        <span class="cat-name-en">Writing</span>
+      </div>
+    </a>
+  </li>
+</ul>
+
+<div class="desktop-content">
   <main class="page">
     <h1 class="page-title">WORK</h1>
 
@@ -230,50 +404,17 @@
       </h2>
 
       <ul class="list">
-        <li class="item">
-          <span class="year">2026.05</span>
-          <span class="name"><a href="projects/asfablesgoby.html">As Fables Go By 洋务运动</a></span>
-        </li>
-        <li class="item">
-          <span class="year">2026.03</span>
-          <span class="name"><a href="projects/memory-entropy.html">Memory Entropy 记忆熵</a></span>
-        </li>
-        <li class="item">
-          <span class="year">2026.02</span>
-          <span class="name"><a href="projects/passingby.html">Passing By</a></span>
-        </li>
-         <li class="item">
-          <span class="year">2026.01</span>
-          <span class="name"><a href="projects/barbican.html">Barbican</a></span>
-        </li>
-        <li class="item">
-          <span class="year">2025.12</span>
-          <span class="name"><a href="projects/not-bad.html">Not Bad</a></span>
-        </li>
-         <li class="item">
-          <span class="year">2025.10</span>
-          <span class="name"><a href="projects/bridge.html">Maidenhead Railway Bridge</a></span>
-        </li>
-        <li class="item">
-          <span class="year">2025.09</span>
-          <span class="name"><a href="projects/theexperience.html">The Experience 关中往事</a></span>
-        </li>
-        <li class="item">
-          <span class="year">2025.08</span>
-          <span class="name"><a href="projects/translation.html">Translation</a></span>
-        </li>
-        <li class="item">
-          <span class="year">2024.12</span>
-          <span class="name"><a href="projects/remotefantasy.html">Remote Fantasy 情迷海南岛</a></span>
-        </li>
-         <li class="item">
-          <span class="year">2024.07</span>
-          <span class="name"><a href="projects/blowup.html">Blow Up 春光之響</a></span>
-        </li>
-        <li class="item">
-          <span class="year">2023.05</span>
-          <span class="name"><a href="projects/flowermachine.html">Flower Machine 意念花</a></span>
-        </li>
+        <li class="item"><span class="year">2026.05</span><span class="name"><a href="projects/asfablesgoby.html">As Fables Go By 洋务运动</a></span></li>
+        <li class="item"><span class="year">2026.03</span><span class="name"><a href="projects/memory-entropy.html">Memory Entropy 记忆熵</a></span></li>
+        <li class="item"><span class="year">2026.02</span><span class="name"><a href="projects/passingby.html">Passing By</a></span></li>
+        <li class="item"><span class="year">2026.01</span><span class="name"><a href="projects/barbican.html">Barbican</a></span></li>
+        <li class="item"><span class="year">2025.12</span><span class="name"><a href="projects/not-bad.html">Not Bad</a></span></li>
+        <li class="item"><span class="year">2025.10</span><span class="name"><a href="projects/bridge.html">Maidenhead Railway Bridge</a></span></li>
+        <li class="item"><span class="year">2025.09</span><span class="name"><a href="projects/theexperience.html">The Experience 关中往事</a></span></li>
+        <li class="item"><span class="year">2025.08</span><span class="name"><a href="projects/translation.html">Translation</a></span></li>
+        <li class="item"><span class="year">2024.12</span><span class="name"><a href="projects/remotefantasy.html">Remote Fantasy 情迷海南岛</a></span></li>
+        <li class="item"><span class="year">2024.07</span><span class="name"><a href="projects/blowup.html">Blow Up 春光之響</a></span></li>
+        <li class="item"><span class="year">2023.05</span><span class="name"><a href="projects/flowermachine.html">Flower Machine 意念花</a></span></li>
       </ul>
     </section>
     <!-- 艺术史系列 -->
@@ -535,6 +676,8 @@
       </ul>
     </section>
   </main>
+</div><!-- /.desktop-content -->
+
 </body>
 </html>
 
