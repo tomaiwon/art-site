@@ -18,8 +18,8 @@
   @font-face{font-family:"ZFont";src:url("fonts/Z-support.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-support-punc.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+300A,U+300B;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-support-punc.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+300A,U+300B;}
-  @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9;}
-  @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9;}
+  @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9,U+6D0B,U+52A1,U+8FD0,U+52A8,U+0030-0039;}
+  @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9,U+6D0B,U+52A1,U+8FD0,U+52A8,U+0030-0039;}
 
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{height:100%;}
@@ -126,20 +126,21 @@
   .product-desc{
     font-family:"ZFont","EFont",sans-serif;
     font-size:13px;font-weight:400;color:#444;
-    line-height:1.55;
+    line-height:1.55;flex:1;
   }
   .price-row{
-    display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;
+    display:flex;flex-direction:row;align-items:center;gap:12px;flex-shrink:0;
+    margin-right:10px;
   }
   .product-price{
     font-family:"ZFont","EFont",sans-serif;
-    font-size:15px;font-weight:400;color:#555;
+    font-size:17px;font-weight:400;color:#555;
   }
   .buy-btn{
     display:inline-block;
     font-family:"EFont","ZFont",sans-serif;
-    font-size:13px;font-weight:700;letter-spacing:1.5px;
-    color:#fff;background:#111;padding:7px 20px;
+    font-size:15px;font-weight:700;letter-spacing:1.5px;
+    color:#fff;background:#111;padding:8px 22px;
     text-decoration:none;text-align:center;
   }
   .buy-btn:hover{background:#444;}
@@ -203,6 +204,18 @@
           </div>
         </div>
 
+      </div>
+    </li>
+    <li class="product-item">
+      <div class="product-mob">
+        <img src="images/cd2.png" alt="As Fables Go By 洋务运动 封面">
+        <div class="product-mob-info">
+          <p class="product-desc">《洋务运动》光盘纪念版<br>Commemorative Edition DVD</p>
+          <div class="price-row">
+            <span class="product-price">£25</span>
+            <a class="buy-btn" href="https://buy.stripe.com/3cIbJ1bH294A3oV4jm6g801" target="_blank">BUY</a>
+          </div>
+        </div>
       </div>
     </li>
   </ul>
