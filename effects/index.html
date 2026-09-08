@@ -1,0 +1,3015 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>东亚制造 · Effects Studio</title>
+</head>
+<body>
+<style>
+  /* ——— 视觉语言：参考 BFMAF（艺术节海报 / 粗野编辑）———
+     淡青灰纸底 + 近黑通栏色带 + 荧光黄粗黑体 + 1px 黑细线 + 6px 硬偏移黑影 + 直角。
+     单一明亮主题（海报印刷式），刻意不做深色模式。 */
+  :root {
+    --paper: #e7ede9;          /* BFMAF 页面底色 */
+    --ink: #0d0d0d;
+    --band: #222;              /* BFMAF 通栏色带 */
+    --yellow: #ffff00;         /* BFMAF action-color，唯一强调色 */
+    --panel: #f2f48e;          /* BFMAF 预览信息面板色 */
+    --white: #ffffff;
+    --grey: #888;
+    --grey2: #555;
+    --line: #000;
+    --shadow: 6px 6px 0 #000;  /* BFMAF --boxshadow */
+    --shadow-sm: 3px 3px 0 #000;
+    --sans: Inter, ui-sans-serif, system-ui, "Helvetica Neue", Arial, sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 500 14px/1.45 var(--sans); letter-spacing: .02em; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  .eyebrow { font: 600 11px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+
+  /* ——— 顶部色带 ——— */
+  .lb-head { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 14px 24px; background: var(--band); color: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; min-height: 72px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand .stack { display: flex; flex-direction: column; gap: 4px; }
+  .brand .word { font: 800 26px/1 var(--sans); letter-spacing: -0.02em; color: var(--yellow); }
+  .brand .tag { font: 500 11px/1.3 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.72); }
+
+  .seg { margin-left: auto; display: flex; gap: 0; }
+  .seg-btn { padding: 9px 16px; border: 1px solid rgba(255,255,255,.45); border-right-width: 0; background: transparent; cursor: pointer; color: var(--white); font: 600 12.5px/1 var(--sans); letter-spacing: .04em; transition: background .12s, color .12s; }
+  .seg-btn:last-child { border-right-width: 1px; }
+  .seg-btn:hover { background: rgba(255,255,255,.1); }
+  .seg-btn.active { background: var(--yellow); color: var(--ink); border-color: var(--yellow); }
+  .seg-btn:active { transform: translateY(1px); }
+
+  /* ——— 主区：舞台 + 控制 ——— */
+  .lb-main { display: flex; gap: 0; align-items: stretch; min-height: 0; }
+  .stage { flex: 1 1 auto; min-width: 320px; padding: 24px 24px 28px; background: var(--paper); display: flex; flex-direction: column; gap: 14px; }
+  .drop { border: 1px solid var(--line); background: var(--white); padding: 10px 12px; text-align: center; color: var(--ink); font: 500 12.5px/1.3 var(--sans); cursor: pointer; transition: box-shadow .12s, transform .12s; }
+  .drop:hover { box-shadow: var(--shadow-sm); }
+  .drop:active { transform: translate(1px, 1px); box-shadow: none; }
+  canvas.canvas { max-width: calc(100% - 6px); max-height: 56vh; width: auto; height: auto; border: 1px solid var(--line); box-shadow: var(--shadow); display: block; margin: 0 auto 6px; }
+  #stage-canvas { background: #000; }
+  .cap { color: var(--grey2); font: 500 12px/1.5 var(--sans); }
+
+  .srcbar { display: flex; gap: 0; align-items: center; flex-wrap: wrap; }
+  .srcbar .lead { font: 600 11px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); margin-right: 12px; }
+  .srcbar button { padding: 8px 14px; border: 1px solid var(--line); border-right-width: 0; background: var(--white); color: var(--ink); cursor: pointer; font: 600 12.5px/1 var(--sans); letter-spacing: .03em; }
+  .srcbar button:nth-of-type(3) { border-right-width: 1px; }
+  .srcbar button:hover { background: #f4f6f4; }
+  .srcbar button.active { background: var(--yellow); }
+  .srcbar .status { color: var(--grey2); font: 500 12px/1 var(--sans); margin-left: 14px; }
+
+  .controls { flex: 0 0 300px; display: flex; flex-direction: column; border-left: 1px solid var(--line); background: var(--paper); }
+  .ctrl-head { padding: 14px 18px 12px; border-bottom: 1px solid var(--line); }
+  .ctrl-body { flex: 1 1 auto; padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; max-height: calc(100vh - 116px); }
+  .ctrl { display: flex; flex-direction: column; gap: 6px; }
+  .ctrl .lab { display: flex; justify-content: space-between; align-items: baseline; font: 500 12px/1 var(--sans); color: var(--ink); }
+  .ctrl .lab b { font-weight: 700; }
+  .ctrl .lab span { font-variant-numeric: tabular-nums; color: var(--grey2); }
+  input[type=range] { width: 100%; accent-color: #000; }
+  select, input[type=text] { background: var(--white); border: 1px solid var(--line); color: var(--ink); padding: 7px 8px; font: 500 13px var(--sans); border-radius: 0; }
+  input[type=color] { background: var(--white); border: 1px solid var(--line); padding: 3px; width: 52px; height: 30px; cursor: pointer; border-radius: 0; }
+  .chk { display: flex; align-items: center; gap: 8px; font: 500 12.5px var(--sans); color: var(--ink); cursor: pointer; }
+  .chk input { accent-color: #000; }
+  .hint-note { font: 500 12px/1.5 var(--sans); color: var(--ink); background: var(--panel); border: 1px solid var(--line); padding: 8px 10px; }
+  .actions { display: flex; gap: 10px; margin-top: 6px; }
+  .actions button { flex: 1; padding: 11px 10px; border: 1px solid var(--line); background: var(--white); color: var(--ink); cursor: pointer; font: 700 12px/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; transition: box-shadow .12s, transform .12s; }
+  .actions button:hover { box-shadow: var(--shadow-sm); }
+  .actions button:active { transform: translate(1px, 1px); box-shadow: none; }
+  .actions button.primary { background: var(--yellow); }
+
+  /* ——— 底部 LOOKS 卡片条 ——— */
+  .dock { display: flex; align-items: stretch; gap: 16px; padding: 14px 20px 16px; border-top: 1px solid var(--line); background: var(--paper); }
+  .dock-label { align-self: center; }
+  .cards { display: flex; gap: 10px; overflow-x: auto; padding: 4px 6px 8px 2px; }
+  .card { flex: 0 0 auto; width: 108px; border: 1px solid var(--line); background: var(--white); cursor: pointer; padding: 0; display: flex; flex-direction: column; overflow: hidden; transition: box-shadow .12s, transform .12s; }
+  .card:hover { box-shadow: var(--shadow-sm); }
+  .card:active { transform: translate(1px, 1px); box-shadow: none; }
+  .card.active { box-shadow: var(--shadow-sm); outline: 2px solid var(--line); outline-offset: -2px; }
+  .card .thumb { width: 106px; height: 68px; display: block; background: #000; border-bottom: 1px solid var(--line); }
+  .card .clab { font: 600 9.5px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); padding: 7px 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card.active .clab { background: var(--yellow); }
+
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--line); outline-offset: 2px; }
+  .hidden { display: none !important; }
+  .cards::-webkit-scrollbar, .ctrl-body::-webkit-scrollbar { height: 8px; width: 8px; }
+  .cards::-webkit-scrollbar-thumb, .ctrl-body::-webkit-scrollbar-thumb { background: #000; }
+  .cards::-webkit-scrollbar-track, .ctrl-body::-webkit-scrollbar-track { background: #cfd6d1; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (max-width: 760px) {
+    .lb-head { position: static; padding: 12px 16px; gap: 12px; min-height: 0; }
+    .brand .word { font-size: 22px; }
+    .brand .tag { font-size: 10px; }
+    .seg { margin-left: 0; width: 100%; }
+    .seg-btn { flex: 1; padding: 12px 10px; font-size: 13px; }
+    .lb-main { flex-direction: column; }
+    .stage { padding: 16px 16px 14px; gap: 12px; }
+    canvas.canvas { max-height: 44vh; }
+    .drop { padding: 12px; }
+    .srcbar button { padding: 11px 12px; flex: 1 1 auto; }
+    .srcbar .status { width: 100%; margin: 8px 0 0; }
+    .controls { flex-basis: auto; border-left: 0; border-top: 1px solid var(--line); }
+    .ctrl-head { padding: 12px 16px 10px; }
+    .ctrl-body { max-height: none; padding: 14px 16px 24px; }
+    .actions button { padding: 13px 10px; }
+    /* LOOKS 条固定在屏幕底部，像相机 App 的滤镜条，可横向滑动 */
+    .dock { position: sticky; bottom: 0; z-index: 4; padding: 10px 12px 12px; gap: 10px; }
+    .dock-label { display: none; }
+    .cards { gap: 8px; padding: 3px 4px 2px 2px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+    .card { width: 88px; scroll-snap-align: start; }
+    .card .thumb { width: 86px; height: 54px; }
+    .card .clab { font-size: 8.5px; padding: 6px 3px; }
+  }
+</style>
+
+<div class="lb-head">
+  <div class="brand">
+    <div class="stack">
+      <span class="word">东亚制造</span>
+      <span class="tag">Made in East Asia · Effects</span>
+    </div>
+  </div>
+  <div class="seg" role="tablist">
+    <button class="seg-btn active" id="mode-image">图片</button>
+    <button class="seg-btn" id="mode-video">视频 · 运动</button>
+  </div>
+</div>
+
+<div class="lb-main">
+  <section class="stage">
+    <div class="srcbar hidden" id="srcbar">
+      <span class="lead">来源</span>
+      <button id="src-demo" class="active">演示运动</button>
+      <button id="src-cam">摄像头</button>
+      <button id="src-file">上传视频</button>
+      <input id="src-fileInput" type="file" accept="video/*" style="display:none">
+      <span class="status" id="src-status">演示运动源运行中</span>
+    </div>
+    <div class="drop" id="img-drop">拖图片到这里，或点击选择。当前使用示例图</div>
+    <canvas class="canvas" id="stage-canvas"></canvas>
+    <div class="cap" id="stage-cap">56 种效果，选下方卡片切换。真实照片效果最佳。</div>
+  </section>
+
+  <aside class="controls">
+    <div class="ctrl-head eyebrow">Controls</div>
+    <div class="ctrl-body">
+      <div id="controls"></div>
+      <div class="actions">
+        <button id="btn-reset">重置</button>
+        <button class="primary" id="btn-save">下载 PNG</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer class="dock" id="dock">
+  <div class="dock-label eyebrow">Looks</div>
+  <div class="cards" id="cards"></div>
+</footer>
+
+<script>
+/**
+ * effects.js — Analog & glitch 图片效果引擎（框架无关，零依赖）
+ *
+ * 灵感来自 Ladybug 的 "Analog & glitch" 分类，全部为自有重写实现。
+ * 每个效果是一个 { label, defaults, controls, apply } 对象：
+ *   apply(ctx, src, o)  ctx = 输出画布 2D 上下文（已按 src 尺寸设好）
+ *                       src = 源 ImageData（只读）
+ *                       o   = 参数对象
+ * controls 是给编辑器自动生成 UI 的 schema。
+ *
+ * 纯 Canvas 2D / ImageData，图片直接处理。
+ */
+
+// ---------- 通用工具 ----------
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const lum = (r, g, b) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+
+function hexToRgb(hex) {
+  const h = hex.replace('#', '');
+  const v = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(v, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+// 稳定哈希伪随机 0~1
+function hash(x, y, s = 0) {
+  const v = Math.sin(x * 12.9898 + y * 78.233 + s * 37.719) * 43758.5453;
+  return v - Math.floor(v);
+}
+
+// 采样源像素（clamp 边界）
+function px(d, w, h, x, y) {
+  x = x < 0 ? 0 : x >= w ? w - 1 : x | 0;
+  y = y < 0 ? 0 : y >= h ? h - 1 : y | 0;
+  const i = (y * w + x) * 4;
+  return [d[i], d[i + 1], d[i + 2]];
+}
+
+function hslToRgb(h, s, l) {
+  h /= 360;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) => {
+    const k = (n + h * 12) % 12;
+    return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+  };
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+
+// 颜色主题（ribbonScan / glassDispersion 用）
+const THEMES = {
+  acidGreen: ['#b6ff00', '#00d4a0', '#0a2f1a'],
+  neon: ['#ff2d7e', '#00e5ff', '#7b2dff'],
+  mono: ['#ffffff', '#9aa0aa', '#101014'],
+  sunset: ['#ff7a18', '#ff2d7e', '#2b0a3d'],
+};
+
+// ============================================================
+//  1. GLITCH
+// ============================================================
+function glitch(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const out = new ImageData(w, h);
+  const d = out.data;
+  d.set(data);
+
+  // 条带位移
+  const sh = Math.max(1, Math.round(o.stripHeight));
+  for (let y0 = 0; y0 < h; y0 += sh) {
+    if (hash(y0, 0, o.seed) >= o.density) continue;
+    const shift = Math.round((hash(y0, 7, o.seed) * 2 - 1) * o.maxShift);
+    const yEnd = Math.min(h, y0 + sh);
+    for (let y = y0; y < yEnd; y++) {
+      for (let x = 0; x < w; x++) {
+        const sx = ((x - shift) % w + w) % w;
+        const si = (y * w + sx) * 4;
+        const di = (y * w + x) * 4;
+        d[di] = data[si]; d[di + 1] = data[si + 1]; d[di + 2] = data[si + 2];
+      }
+    }
+  }
+
+  // 色差（RGB 错位）
+  const ab = Math.round(o.colorBoost * 2);
+  if (ab > 0) {
+    const base = d.slice();
+    for (let y = 0; y < h; y++) {
+      const row = y * w;
+      for (let x = 0; x < w; x++) {
+        const di = (row + x) * 4;
+        d[di] = base[(row + clamp(x - ab, 0, w - 1)) * 4];
+        d[di + 2] = base[(row + clamp(x + ab, 0, w - 1)) * 4 + 2];
+      }
+    }
+  }
+
+  // 颗粒
+  if (o.grain > 0) {
+    for (let y = 0; y < h; y++)
+      for (let x = 0; x < w; x++) {
+        const n = (hash(x, y, o.seed + 3) - 0.5) * o.grain * 255;
+        const p = (y * w + x) * 4;
+        d[p] = clamp(d[p] + n, 0, 255);
+        d[p + 1] = clamp(d[p + 1] + n, 0, 255);
+        d[p + 2] = clamp(d[p + 2] + n, 0, 255);
+      }
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// ============================================================
+//  2. PIXEL SORT
+// ============================================================
+function pixelSort(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const out = new ImageData(w, h);
+  const d = out.data;
+  d.set(data);
+  const thr = o.threshold;
+  const maxRun = Math.max(2, Math.round(o.streak));
+  const vertical = !!o.vertical;
+
+  const sortLine = (idxAt, len) => {
+    let i = 0;
+    while (i < len) {
+      const p0 = idxAt(i);
+      if (lum(d[p0], d[p0 + 1], d[p0 + 2]) > thr && hash(i, len, o.seed || 1) > o.randomness * 0.5) {
+        let j = i;
+        const seg = [];
+        while (j < len && j - i < maxRun) {
+          const p = idxAt(j);
+          const l = lum(d[p], d[p + 1], d[p + 2]);
+          if (l <= thr) break;
+          seg.push([d[p], d[p + 1], d[p + 2], l]);
+          j++;
+        }
+        seg.sort((a, b) => (o.reverse ? b[3] - a[3] : a[3] - b[3]));
+        for (let k = 0; k < seg.length; k++) {
+          const p = idxAt(i + k);
+          d[p] = seg[k][0]; d[p + 1] = seg[k][1]; d[p + 2] = seg[k][2];
+        }
+        i = j;
+      } else i++;
+    }
+  };
+
+  if (vertical) {
+    for (let x = 0; x < w; x++) sortLine((k) => (k * w + x) * 4, h);
+  } else {
+    for (let y = 0; y < h; y++) sortLine((k) => (y * w + k) * 4, w);
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// ============================================================
+//  3. FILM PRISM
+// ============================================================
+function filmPrism(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cx = w / 2, cy = h / 2;
+  const out = new ImageData(w, h);
+  const d = out.data;
+  const ab = o.aberration;
+  const contrast = o.filmContrast, fade = o.filmFade;
+
+  const curve = (v) => {
+    let n = v / 255;
+    n = (n - 0.5) * (1 + contrast) + 0.5;
+    n = n * (1 - fade) + fade * 0.5;
+    return clamp(n, 0, 1) * 255;
+  };
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const di = (y * w + x) * 4;
+      const dx = (x - cx) / w, dy = (y - cy) / h;
+      const rx = clamp(Math.round(x + dx * ab * 6), 0, w - 1);
+      const ry = clamp(Math.round(y + dy * ab * 6), 0, h - 1);
+      const bx = clamp(Math.round(x - dx * ab * 6), 0, w - 1);
+      const by = clamp(Math.round(y - dy * ab * 6), 0, h - 1);
+      let R = curve(data[(ry * w + rx) * 4]);
+      let G = curve(data[di + 1]);
+      let B = curve(data[(by * w + bx) * 4 + 2]);
+
+      const l = (0.299 * R + 0.587 * G + 0.114 * B) / 255;
+      const sT = o.shadowTint * (1 - l);   // 暗部暖调
+      const hT = o.highlightTint * l;       // 亮部冷调
+      R = R + sT * 22 - hT * 8;
+      G = G + sT * 4 + hT * 2;
+      B = B - sT * 16 + hT * 22;
+      d[di] = clamp(R, 0, 255); d[di + 1] = clamp(G, 0, 255); d[di + 2] = clamp(B, 0, 255); d[di + 3] = 255;
+    }
+  }
+  ctx.putImageData(out, 0, 0);
+
+  // 光晕 halation：模糊叠加做辉光
+  if (o.halation > 0) {
+    const tmp = document.createElement('canvas');
+    tmp.width = w; tmp.height = h;
+    const tctx = tmp.getContext('2d');
+    tctx.drawImage(ctx.canvas, 0, 0);
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.globalAlpha = o.halation;
+    ctx.filter = `blur(${Math.max(1, o.halationBlur)}px)`;
+    ctx.drawImage(tmp, 0, 0);
+    ctx.restore();
+  }
+
+  // 漏光 light leak
+  if (o.lightLeakOpacity > 0) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    const fromLeft = o.lightLeakStyle !== 'right';
+    const g = ctx.createLinearGradient(fromLeft ? 0 : w, 0, fromLeft ? w * 0.6 : w * 0.4, 0);
+    g.addColorStop(0, `rgba(255,140,60,${o.lightLeakOpacity})`);
+    g.addColorStop(0.5, `rgba(255,60,120,${o.lightLeakOpacity * 0.4})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+  }
+
+  // 颗粒
+  if (o.grain > 0) {
+    const img = ctx.getImageData(0, 0, w, h);
+    const dd = img.data;
+    for (let y = 0; y < h; y++)
+      for (let x = 0; x < w; x++) {
+        const n = (hash(x, y, 5) - 0.5) * o.grain * 255;
+        const p = (y * w + x) * 4;
+        dd[p] = clamp(dd[p] + n, 0, 255);
+        dd[p + 1] = clamp(dd[p + 1] + n, 0, 255);
+        dd[p + 2] = clamp(dd[p + 2] + n, 0, 255);
+      }
+    ctx.putImageData(img, 0, 0);
+  }
+}
+
+// ============================================================
+//  4. WAVE LINES
+// ============================================================
+function wave(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  ctx.fillStyle = o.background;
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = o.foreground;
+  ctx.lineWidth = o.lineWidth;
+  ctx.lineJoin = 'round';
+
+  const lines = Math.max(2, Math.round(o.lineCount));
+  const step = h / lines;
+  for (let i = 0; i < lines; i++) {
+    const baseY = (i + 0.5) * step;
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += 2) {
+      const [r, g, b] = px(data, w, h, x, baseY);
+      const l = lum(r, g, b);
+      const wobble = Math.sin(x * 0.03 * o.frequency + i * 0.6) * (o.amplitude * 0.15);
+      const y = baseY - l * o.amplitude + wobble;
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+}
+
+// ============================================================
+//  5. CRYSTAL GLASS (Voronoi shatter)
+// ============================================================
+function crystal(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const out = new ImageData(w, h);
+  const d = out.data;
+  const cs = Math.max(4, o.cellSize);
+  const sheen = o.rainbowSheen;
+  const gloss = o.glossiness;
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const gx = Math.floor(x / cs), gy = Math.floor(y / cs);
+      let f1 = 1e9, f2 = 1e9, sxB = x, syB = y, cellId = 0;
+      for (let oy = -1; oy <= 1; oy++)
+        for (let ox = -1; ox <= 1; ox++) {
+          const cgx = gx + ox, cgy = gy + oy;
+          const jx = (cgx + hash(cgx, cgy, 1)) * cs;
+          const jy = (cgy + hash(cgx, cgy, 2)) * cs;
+          const dd = (jx - x) * (jx - x) + (jy - y) * (jy - y);
+          if (dd < f1) { f2 = f1; f1 = dd; sxB = jx; syB = jy; cellId = cgx * 92821 + cgy * 68917; }
+          else if (dd < f2) f2 = dd;
+        }
+      let [r, g, b] = px(data, w, h, sxB, syB);
+
+      // 面片边缘高光
+      const edge = Math.sqrt(f2) - Math.sqrt(f1);
+      const ew = 1.5 + gloss;
+      let bright = 1;
+      if (edge < ew) bright = 1 + (1 - edge / ew) * gloss * 0.5;
+
+      // 彩虹光泽
+      if (sheen > 0) {
+        const hue = (hash(cellId, 0, 3) * 360 + 0);
+        const [hr, hg, hb] = hslToRgb(hue, 0.9, 0.6);
+        const m = sheen * 0.4;
+        r = r * (1 - m) + hr * m;
+        g = g * (1 - m) + hg * m;
+        b = b * (1 - m) + hb * m;
+      }
+      const p = (y * w + x) * 4;
+      d[p] = clamp(r * bright, 0, 255);
+      d[p + 1] = clamp(g * bright, 0, 255);
+      d[p + 2] = clamp(b * bright, 0, 255);
+      d[p + 3] = 255;
+    }
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// ============================================================
+//  6. GLASS PIXEL DISPERSION
+// ============================================================
+function glassDispersion(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bs = Math.max(3, o.blockSize);
+  const dir = o.direction === 'left' ? -1 : 1;
+  ctx.fillStyle = '#08080b';
+  ctx.fillRect(0, 0, w, h);
+
+  for (let by = 0; by < h; by += bs) {
+    for (let bx = 0; bx < w; bx += bs) {
+      const [r, g, b] = px(data, w, h, bx + bs / 2, by + bs / 2);
+      const l = lum(r, g, b);
+      const off = (l - 0.3) * o.refraction * o.streak * bs * dir;
+      // 主体块
+      ctx.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`;
+      ctx.fillRect(bx + off, by, bs + 1, bs + 1);
+      // 彩虹色散拖尾
+      if (o.rainbowSheen > 0 && l > 0.35) {
+        const [hr, hg, hb] = hslToRgb(l * 300, 0.9, 0.6);
+        ctx.save();
+        ctx.globalAlpha = o.rainbowSheen * 0.5;
+        ctx.globalCompositeOperation = 'screen';
+        ctx.fillStyle = `rgb(${hr | 0},${hg | 0},${hb | 0})`;
+        ctx.fillRect(bx + off + dir * bs * 0.5, by, bs, bs + 1);
+        ctx.restore();
+      }
+      // 光泽高光
+      if (o.glossiness > 0 && l > 0.55) {
+        ctx.save();
+        ctx.globalAlpha = o.glossiness * 0.3 * l;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(bx + off, by, bs, Math.max(1, bs * 0.25));
+        ctx.restore();
+      }
+    }
+  }
+}
+
+// ============================================================
+//  7. RIBBON SCAN
+// ============================================================
+function ribbonScan(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cw = Math.max(2, Math.round(o.colWidth));
+  const out = new ImageData(w, h);
+  const d = out.data;
+
+  // 竖条垂直位移 + 明暗压缩
+  for (let bx = 0; bx < w; bx += cw) {
+    const shift = Math.round((hash(bx, 0, 11) * 2 - 1) * o.shiftAmount);
+    const xEnd = Math.min(w, bx + cw);
+    for (let x = bx; x < xEnd; x++) {
+      for (let y = 0; y < h; y++) {
+        const sy = ((y - shift) % h + h) % h;
+        let [r, g, b] = px(data, w, h, x, sy);
+        const l = lum(r, g, b);
+        const shade = 1 - o.shading + o.shading * l; // 加深阴影
+        const p = (y * w + x) * 4;
+        d[p] = r * shade; d[p + 1] = g * shade; d[p + 2] = b * shade; d[p + 3] = 255;
+      }
+    }
+  }
+  ctx.putImageData(out, 0, 0);
+
+  // 胶囊叠加
+  if (o.capsuleDensity > 0) {
+    const theme = THEMES[o.colorTheme] || THEMES.acidGreen;
+    ctx.save();
+    for (let bx = 0; bx < w; bx += cw) {
+      const cxc = bx + cw / 2;
+      for (let y = 0; y < h; y += o.capsuleHeight * 2) {
+        if (hash(bx, y, 21) > o.capsuleDensity) continue;
+        const [r, g, b] = px(data, w, h, cxc, y);
+        if (lum(r, g, b) < o.colorThreshold) continue;
+        const col = theme[Math.floor(hash(bx, y, 5) * theme.length)];
+        ctx.fillStyle = col;
+        roundRect(ctx, cxc - o.capsuleWidth / 2, y, o.capsuleWidth, o.capsuleHeight, o.capsuleWidth / 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  r = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+// ============================================================
+//  8. CONTOUR（等高线，从 contour-effect 整合进来）
+// ============================================================
+function blurField(lum, w, h, radius) {
+  if (radius < 1) return lum;
+  let src = lum, dst = new Float32Array(lum.length);
+  const r = radius, norm = 1 / (2 * r + 1);
+  for (let p = 0; p < 2; p++) {
+    for (let y = 0; y < h; y++) {
+      const row = y * w; let acc = 0;
+      for (let x = -r; x <= r; x++) acc += src[row + Math.min(w - 1, Math.max(0, x))];
+      for (let x = 0; x < w; x++) {
+        dst[row + x] = acc * norm;
+        acc += src[row + Math.min(w - 1, x + r + 1)] - src[row + Math.max(0, x - r)];
+      }
+    }
+    [src, dst] = [dst, src];
+    for (let x = 0; x < w; x++) {
+      let acc = 0;
+      for (let y = -r; y <= r; y++) acc += src[Math.min(h - 1, Math.max(0, y)) * w + x];
+      for (let y = 0; y < h; y++) {
+        dst[y * w + x] = acc * norm;
+        acc += src[Math.min(h - 1, y + r + 1) * w + x] - src[Math.max(0, y - r) * w + x];
+      }
+    }
+    [src, dst] = [dst, src];
+  }
+  return src;
+}
+
+function contour(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const N = w * h;
+  const lm = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const p = i * 4; lm[i] = lum(data[p], data[p + 1], data[p + 2]); }
+  const field = blurField(lm, w, h, Math.round(o.smoothing * 2));
+  const levels = Math.max(2, Math.round(o.levels));
+  const band = new Uint16Array(N);
+  for (let i = 0; i < N; i++) { let v = field[i]; if (o.invert) v = 1 - v; band[i] = Math.min(levels - 1, Math.floor(v * levels)); }
+
+  const [fr, fg, fb] = hexToRgb(o.foreground);
+  const [br, bg, bb] = hexToRgb(o.background);
+  const bgA = clamp(o.backgroundOpacity, 0, 1) * 255;
+  const out = new ImageData(w, h); const d = out.data;
+
+  if (o.filled) {
+    for (let i = 0; i < N; i++) {
+      const t = band[i] / (levels - 1), p = i * 4;
+      d[p] = br + (fr - br) * t; d[p + 1] = bg + (fg - bg) * t; d[p + 2] = bb + (fb - bb) * t; d[p + 3] = 255;
+    }
+  } else {
+    for (let i = 0; i < N; i++) { const p = i * 4; d[p] = br; d[p + 1] = bg; d[p + 2] = bb; d[p + 3] = bgA; }
+  }
+
+  const edge = new Uint8Array(N);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, b = band[i];
+    if ((x + 1 < w && band[i + 1] !== b) || (y + 1 < h && band[i + w] !== b)) edge[i] = 1;
+  }
+  const thick = Math.max(0, Math.round(o.lineWidth) - 1);
+  const draw = (i) => { const p = i * 4; d[p] = fr; d[p + 1] = fg; d[p + 2] = fb; d[p + 3] = 255; };
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (!edge[y * w + x]) continue;
+    if (thick === 0) draw(y * w + x);
+    else for (let dy = -thick; dy <= thick; dy++) { const yy = y + dy; if (yy < 0 || yy >= h) continue; for (let dx = -thick; dx <= thick; dx++) { const xx = x + dx; if (xx >= 0 && xx < w) draw(yy * w + xx); } }
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// ---------- 特征点检测（HUD/Brand/CCTV 共用）----------
+// 在高对比（边缘/细节）处取点，带最小间距，让叠加的 UI 元素落在有信息的位置
+function detectPoints(src, count, seed = 0) {
+  const { width: w, height: h, data } = src;
+  const step = Math.max(4, Math.round(Math.sqrt((w * h) / (count * 45))));
+  const cands = [];
+  for (let y = step; y < h - step; y += step) {
+    for (let x = step; x < w - step; x += step) {
+      const gx = lum(...px(data, w, h, x + step, y)) - lum(...px(data, w, h, x - step, y));
+      const gy = lum(...px(data, w, h, x, y + step)) - lum(...px(data, w, h, x, y - step));
+      const mag = Math.abs(gx) + Math.abs(gy) + hash(x, y, seed) * 0.02;
+      cands.push({ x, y, mag });
+    }
+  }
+  cands.sort((a, b) => b.mag - a.mag);
+  const picked = [];
+  const minD = Math.max(12, Math.min(w, h) / Math.sqrt(count) / 1.3);
+  for (const c of cands) {
+    if (picked.length >= count) break;
+    if (picked.every((p) => (p.x - c.x) ** 2 + (p.y - c.y) ** 2 > minD * minD)) picked.push(c);
+  }
+  return picked;
+}
+
+function drawCorners(ctx, x, y, w, h, len) {
+  ctx.beginPath();
+  ctx.moveTo(x, y + len); ctx.lineTo(x, y); ctx.lineTo(x + len, y);
+  ctx.moveTo(x + w - len, y); ctx.lineTo(x + w, y); ctx.lineTo(x + w, y + len);
+  ctx.moveTo(x + w, y + h - len); ctx.lineTo(x + w, y + h); ctx.lineTo(x + w - len, y + h);
+  ctx.moveTo(x + len, y + h); ctx.lineTo(x, y + h); ctx.lineTo(x, y + h - len);
+  ctx.stroke();
+}
+
+function srcToCanvas(src) {
+  const c = document.createElement('canvas');
+  c.width = src.width; c.height = src.height;
+  c.getContext('2d').putImageData(src, 0, 0);
+  return c;
+}
+
+// ============================================================
+//  9. HUD TRACKER
+// ============================================================
+function hudTracker(ctx, src, o) {
+  const { width: w, height: h } = src;
+  ctx.putImageData(src, 0, 0);
+  if (o.bgDim > 0) { ctx.fillStyle = `rgba(0,0,0,${o.bgDim})`; ctx.fillRect(0, 0, w, h); }
+  const color = o.color;
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = o.lineWidth;
+  const fs = Math.max(9, Math.round(h * 0.016));
+  ctx.font = `${fs}px ui-monospace, monospace`;
+
+  const pts = detectPoints(src, Math.round(o.nodeCount), o.seed);
+  const J = o.jitter * 24;
+  pts.forEach((p, i) => { p.x += (hash(i, 1, o.seed) * 2 - 1) * J; p.y += (hash(i, 2, o.seed) * 2 - 1) * J; });
+
+  // 连线
+  ctx.save(); ctx.globalAlpha = 0.45;
+  if (o.connectionType === 'sequential') {
+    ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y))); ctx.stroke();
+  } else if (o.connectionType === 'nearest') {
+    pts.forEach((p) => {
+      let best = null, bd = 1e9;
+      pts.forEach((q) => { if (q === p) return; const dd = (p.x - q.x) ** 2 + (p.y - q.y) ** 2; if (dd < bd) { bd = dd; best = q; } });
+      if (best) { ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(best.x, best.y); ctx.stroke(); }
+    });
+  }
+  ctx.restore();
+
+  // 节点
+  const ns = Math.max(8, Math.round(h * 0.022));
+  pts.forEach((p, i) => {
+    if (o.nodeStyle === 'box') ctx.strokeRect(p.x - ns / 2, p.y - ns / 2, ns, ns);
+    else { ctx.beginPath(); ctx.moveTo(p.x - ns / 2, p.y); ctx.lineTo(p.x + ns / 2, p.y); ctx.moveTo(p.x, p.y - ns / 2); ctx.lineTo(p.x, p.y + ns / 2); ctx.stroke(); }
+    if (hash(i, 3, o.seed) < o.labelFrequency) {
+      const txt = o.labelStyle === 'coords' ? `${(p.x / w).toFixed(2)}:${(p.y / h).toFixed(2)}` : `${o.customText}${String(i).padStart(2, '0')}`;
+      ctx.fillText(txt, p.x + ns / 2 + 3, p.y - 3);
+    }
+  });
+
+  // 全局框 + 角标
+  if (o.showGlobalBox && pts.length) {
+    const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
+    const x0 = Math.min(...xs) - 14, y0 = Math.min(...ys) - 14;
+    const bw = Math.max(...xs) - Math.min(...xs) + 28, bh = Math.max(...ys) - Math.min(...ys) + 28;
+    ctx.lineWidth = o.lineWidth * 1.5;
+    drawCorners(ctx, x0, y0, bw, bh, Math.min(bw, bh) * 0.12);
+    ctx.fillText(`TRACK ${pts.length} PTS`, x0, y0 - 6);
+  }
+}
+
+// ============================================================
+//  10. CCTV SURVEILLANCE
+// ============================================================
+function cctv(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  // 单色偏蓝 + 对比 + 颗粒
+  const out = new ImageData(w, h); const d = out.data;
+  const [tr, tg, tb] = [90, 130, 200];
+  for (let i = 0; i < w * h; i++) {
+    const p = i * 4;
+    let l = lum(data[p], data[p + 1], data[p + 2]);
+    l = clamp((l - 0.5) * o.contrast + 0.5, 0, 1);
+    const g = l * 255, m = o.monoTint;
+    d[p] = data[p] * (1 - m) + (tr / 255 * g) * m;
+    d[p + 1] = data[p + 1] * (1 - m) + (tg / 255 * g) * m;
+    d[p + 2] = data[p + 2] * (1 - m) + (tb / 255 * g) * m;
+    if (o.grain > 0) { const n = (hash(i % w, (i / w) | 0, 9) - 0.5) * o.grain * 255; d[p] += n; d[p + 1] += n; d[p + 2] += n; }
+    d[p + 3] = 255;
+  }
+  ctx.putImageData(out, 0, 0);
+
+  // 扫描线
+  ctx.save(); ctx.globalAlpha = 0.12; ctx.fillStyle = '#000';
+  for (let y = 0; y < h; y += 3) ctx.fillRect(0, y, w, 1);
+  ctx.restore();
+
+  const srcCanvas = srcToCanvas(src);
+  const col = o.frameColor;
+  const fs = Math.max(10, Math.round(h * 0.02));
+  ctx.font = `${fs}px ui-monospace, monospace`;
+  ctx.lineWidth = 1.5; ctx.strokeStyle = col; ctx.fillStyle = col;
+
+  // 外框
+  if (o.showFrame) { const m = Math.round(h * 0.03); ctx.strokeRect(m, m, w - m * 2, h - m * 2); }
+
+  // 缩放框（callouts）
+  const callouts = [
+    { srcX: .30, srcY: .06, srcW: .28, srcH: .22, dstX: .64, dstY: .07, dstW: .26, dstH: .22, label: o.subjectLabel },
+    { srcX: .34, srcY: .42, srcW: .22, srcH: .18, dstX: .06, dstY: .44, dstW: .22, dstH: .2, label: 'ZOOM 2' },
+  ];
+  callouts.forEach((c) => {
+    const sx = c.srcX * w, sy = c.srcY * h, sw = c.srcW * w, sh = c.srcH * h;
+    const dx = c.dstX * w, dy = c.dstY * h, dw = c.dstW * w, dh = c.dstH * h;
+    ctx.save(); ctx.globalAlpha = 0.6; ctx.strokeRect(sx, sy, sw, sh); ctx.restore();       // 源框
+    ctx.beginPath(); ctx.moveTo(sx + sw, sy); ctx.lineTo(dx, dy); ctx.globalAlpha = 0.35; ctx.stroke(); ctx.globalAlpha = 1; // 连线
+    ctx.drawImage(srcCanvas, sx, sy, sw, sh, dx, dy, dw, dh);                                // 缩放贴图
+    ctx.strokeRect(dx, dy, dw, dh);                                                          // 缩放框
+    if (c.label) ctx.fillText(c.label, dx, dy - 4);
+  });
+
+  // 顶部信息条
+  if (o.showHeader) {
+    ctx.fillText(`● ${o.cameraId}`, w * 0.05, h * 0.05);
+    if (o.showTimestamp) { ctx.textAlign = 'right'; ctx.fillText(`${o.timestamp}  REC`, w * 0.95, h * 0.05); ctx.textAlign = 'left'; }
+  }
+}
+
+// ============================================================
+//  11. BRAND GENERATOR
+// ============================================================
+function brandGenerator(ctx, src, o) {
+  const { width: w, height: h } = src;
+  const theme = { mono: '#ffffff', neon: '#00e5ff', sunset: '#ff7a18', acidGreen: '#b6ff00' }[o.colorTheme] || '#fff';
+  const col = o.colorTheme === 'custom' ? o.accentColor : theme;
+
+  // 背景：压暗的灰度图
+  const g = ctx;
+  const bg = new ImageData(w, h); const d = bg.data; const sd = src.data;
+  for (let i = 0; i < w * h; i++) { const p = i * 4; const l = lum(sd[p], sd[p + 1], sd[p + 2]) * 255 * o.bgBrightness; d[p] = d[p + 1] = d[p + 2] = l; d[p + 3] = 255; }
+  g.putImageData(bg, 0, 0);
+  g.fillStyle = 'rgba(8,8,12,0.45)'; g.fillRect(0, 0, w, h);
+
+  g.strokeStyle = col; g.fillStyle = col; g.lineWidth = o.strokeWidth;
+  const fs = Math.max(9, Math.round(h * 0.016));
+  g.font = `${fs}px ui-monospace, monospace`;
+
+  // 网格
+  if (o.showGrid) {
+    g.save(); g.globalAlpha = 0.12;
+    const gs = w / 16;
+    for (let x = 0; x <= w; x += gs) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); }
+    for (let y = 0; y <= h; y += gs) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
+    g.restore();
+  }
+
+  // 检测点 → 圆 + 星座连线
+  const pts = detectPoints(src, Math.round(o.maxCircles), o.sizeSeed);
+  const maxD = o.connectionMaxDistance;
+  if (o.showConstellation) {
+    g.save(); g.globalAlpha = o.connectionWeight * 0.6;
+    for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+      const dd = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y);
+      if (dd < maxD) { g.beginPath(); g.moveTo(pts[i].x, pts[i].y); g.lineTo(pts[j].x, pts[j].y); g.stroke(); }
+    }
+    g.restore();
+  }
+  pts.forEach((p, i) => {
+    const r = o.minRadius + hash(i, 0, o.sizeSeed) * (o.maxRadius - o.minRadius);
+    g.beginPath(); g.arc(p.x, p.y, r, 0, Math.PI * 2); g.stroke();
+    if (hash(i, 1, o.sizeSeed) > 0.6) { g.beginPath(); g.arc(p.x, p.y, 1.5, 0, Math.PI * 2); g.fill(); }
+  });
+
+  // 圆环链（chain）
+  if (o.chainOn) {
+    const cx = w / 2, cy = h / 2;
+    for (let i = 0; i < o.chainCount; i++) {
+      const a = (i / o.chainCount) * Math.PI * 2 + (o.chainAngle * Math.PI / 180);
+      const rr = o.chainBaseRadius * (0.4 + 0.6 * (i / o.chainCount));
+      const x = cx + Math.cos(a) * rr * 0.5, y = cy + Math.sin(a) * rr * 0.5;
+      g.beginPath(); g.arc(x, y, o.chainMarkerSize * (1 - i / o.chainCount * o.chainSizeRatio), 0, Math.PI * 2); g.stroke();
+    }
+  }
+
+  // 中心十字准星
+  if (o.showCrosshair) {
+    const cx = w / 2, cy = h / 2, s = Math.min(w, h) * 0.06;
+    g.save(); g.globalAlpha = 0.8;
+    g.beginPath(); g.moveTo(cx - s, cy); g.lineTo(cx + s, cy); g.moveTo(cx, cy - s); g.lineTo(cx, cy + s); g.stroke();
+    g.beginPath(); g.arc(cx, cy, s * 0.55, 0, Math.PI * 2); g.stroke(); g.restore();
+  }
+
+  // 四角文字
+  if (o.showText) {
+    const pad = Math.round(w * 0.04);
+    g.textAlign = 'left'; g.fillText(o.topLeftText, pad, pad);
+    g.textAlign = 'right'; g.fillText(o.topRightText, w - pad, pad);
+    g.textAlign = 'left'; g.fillText(o.bottomLeftText, pad, h - pad);
+    g.textAlign = 'right'; g.fillText(o.bottomRightText, w - pad, h - pad);
+    g.textAlign = 'left';
+  }
+}
+
+// ============================================================
+//  12. RAIN REVEAL（静态帧：图像化作发光雨丝）
+// ============================================================
+function rainReveal(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  // 背景
+  ctx.fillStyle = '#05050a';
+  ctx.fillRect(0, 0, w, h);
+  if (o.ghost > 0) {
+    const tc = srcToCanvas(src);
+    ctx.save(); ctx.globalAlpha = o.ghost; ctx.drawImage(tc, 0, 0); ctx.restore();
+  }
+
+  const count = Math.round(o.density * (w * h) / 90000 * 45);
+  const baseLen = h * 0.14;
+  const ang = o.direction * Math.PI / 180 + Math.PI / 2; // 0° = 向下
+  const dx = Math.cos(ang), dy = Math.sin(ang);
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < count; i++) {
+    let x = hash(i, 1, 7) * w, y = hash(i, 2, 7) * h;
+    const [r, g, b] = px(data, w, h, x, y);
+    const l = lum(r, g, b);
+    let qualify = (o.fromHighlights && l > o.threshold) || (o.fromShadows && l < o.threshold);
+    if (o.fromEdges) {
+      const gx = lum(...px(data, w, h, x + 2, y)) - lum(...px(data, w, h, x - 2, y));
+      const gy = lum(...px(data, w, h, x, y + 2)) - lum(...px(data, w, h, x, y - 2));
+      if ((Math.abs(gx) + Math.abs(gy)) * o.edgeBoost > 0.25) qualify = true;
+    }
+    if (!qualify) continue;
+
+    x += (hash(i, 4, 7) * 2 - 1) * o.spread;
+    const len = baseLen * o.streak * (0.4 + hash(i, 3, 7));
+    const x2 = x + dx * len, y2 = y + dy * len;
+    const br = o.bright;
+    const R = clamp(r * br, 0, 255) | 0, G = clamp(g * br, 0, 255) | 0, B = clamp(b * br, 0, 255) | 0;
+    const grad = ctx.createLinearGradient(x, y, x2, y2);
+    grad.addColorStop(0, `rgba(${R},${G},${B},0.9)`);
+    grad.addColorStop(1, `rgba(${r | 0},${g | 0},${b | 0},0)`);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1 + hash(i, 5, 7) * 1.6;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke();
+    if (o.drip > 0 && hash(i, 6, 7) < o.drip) {
+      ctx.fillStyle = `rgba(${R},${G},${B},0.95)`;
+      ctx.beginPath(); ctx.arc(x2, y2, 1.3, 0, 6.29); ctx.fill();
+    }
+  }
+  ctx.restore();
+
+  if (o.floor) {
+    ctx.save(); ctx.globalAlpha = 0.4; ctx.strokeStyle = '#6ea0ff'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, h - 2); ctx.lineTo(w, h - 2); ctx.stroke(); ctx.restore();
+  }
+}
+
+// ============================================================
+//  13. TRACE MOTION（静态帧：基于边缘的墨迹追踪 —— 静图无运动，以边缘代之）
+// ============================================================
+function kineticTrace(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  ctx.fillStyle = o.paperColor;
+  ctx.fillRect(0, 0, w, h);
+
+  const step = Math.max(2, Math.round(7 - o.body / 12));
+  const threshold = 0.02 + (1 - o.sensitivity / 100) * 0.25;
+  const echoes = clamp(Math.round(o.trail / 250), 1, 8);
+  ctx.lineCap = 'round';
+
+  for (let y = step; y < h - step; y += step) {
+    for (let x = step; x < w - step; x += step) {
+      const gx = lum(...px(data, w, h, x + step, y)) - lum(...px(data, w, h, x - step, y));
+      const gy = lum(...px(data, w, h, x, y + step)) - lum(...px(data, w, h, x, y - step));
+      const mag = Math.hypot(gx, gy);
+      if (mag < threshold) continue;
+      const tx = -gy / mag, ty = gx / mag;   // 沿边缘切线方向
+      const nx = gx / mag, ny = gy / mag;     // 梯度（回声偏移）方向
+      const len = o.body * (0.4 + mag);
+      for (let e = 0; e < echoes; e++) {
+        const off = e * o.echoGap;
+        const ex = x + nx * off, ey = y + ny * off;
+        const a = (o.gain / 100) * (1 - e / echoes) * clamp(mag * 4, 0, 1);
+        if (a <= 0.01) continue;
+        let col = o.inkColor;
+        if (o.prismatic) { const [hr, hg, hb] = hslToRgb((e / echoes) * 240 + 200, 0.7, 0.55); col = `rgb(${hr | 0},${hg | 0},${hb | 0})`; }
+        ctx.strokeStyle = col;
+        ctx.globalAlpha = a;
+        ctx.lineWidth = 1 + o.weight * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(ex - tx * len / 2, ey - ty * len / 2);
+        ctx.lineTo(ex + tx * len / 2, ey + ty * len / 2);
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ============================================================
+//  14. CROSSHATCH（交叉排线）
+// ============================================================
+function crosshatch(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bg = o.invert ? [26, 26, 26] : [244, 242, 234];
+  const fg = o.invert ? [244, 242, 234] : [26, 26, 26];
+  ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = `rgb(${fg[0]},${fg[1]},${fg[2]})`; ctx.lineWidth = o.lineWidth; ctx.lineCap = 'round';
+  const layers = Math.max(1, Math.round(o.layers));
+  const spacing = Math.max(2, o.density);
+  const diag = Math.hypot(w, h);
+  for (let L = 0; L < layers; L++) {
+    const ang = (o.angle + L * (180 / layers + 23)) * Math.PI / 180;
+    const thr = (L + 1) / (layers + 1);
+    const dx = Math.cos(ang), dy = Math.sin(ang), nx = -dy, ny = dx;
+    for (let d = -diag; d < diag; d += spacing) {
+      let drawing = false; ctx.beginPath();
+      for (let s = -diag; s < diag; s += 2) {
+        const x = w / 2 + nx * d + dx * s, y = h / 2 + ny * d + dy * s;
+        if (x < 0 || x >= w || y < 0 || y >= h) { drawing = false; continue; }
+        const [r, g, b] = px(data, w, h, x, y);
+        let l = lum(r, g, b); if (o.invert) l = 1 - l;
+        const jit = (hash(x, y, L) - 0.5) * o.randomness;
+        if (l + jit < thr) { if (!drawing) { ctx.moveTo(x, y); drawing = true; } else ctx.lineTo(x, y); } else drawing = false;
+      }
+      ctx.stroke();
+    }
+  }
+}
+
+// ============================================================
+//  15. STITCH POSTER（十字绣）
+// ============================================================
+function stitchPoster(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cell = Math.max(3, Math.round(o.stitch));
+  ctx.fillStyle = '#efeadd'; ctx.fillRect(0, 0, w, h);
+  ctx.lineCap = 'round';
+  const levels = Math.max(2, Math.round(o.colors));
+  for (let by = 0; by < h; by += cell) for (let bx = 0; bx < w; bx += cell) {
+    let [r, g, b] = px(data, w, h, bx + cell / 2, by + cell / 2);
+    const l = lum(r, g, b) * 255;
+    r = clamp(l + (r - l) * o.saturation, 0, 255); g = clamp(l + (g - l) * o.saturation, 0, 255); b = clamp(l + (b - l) * o.saturation, 0, 255);
+    const q = (v) => { let n = v / 255; n = (n - 0.5) * o.contrast + 0.5; return clamp(Math.round(clamp(n, 0, 1) * (levels - 1)) / (levels - 1), 0, 1) * 255; };
+    r = q(r); g = q(g); b = q(b);
+    const jx = (hash(bx, by, 1) - 0.5) * o.jitter * cell * 0.3, jy = (hash(bx, by, 2) - 0.5) * o.jitter * cell * 0.3;
+    const cx = bx + cell / 2 + jx, cy = by + cell / 2 + jy, hs = cell * 0.42;
+    ctx.lineWidth = Math.max(1, cell * 0.18 * (1 + o.thread));
+    ctx.strokeStyle = `rgb(${r | 0},${g | 0},${b | 0})`;
+    ctx.beginPath(); ctx.moveTo(cx - hs, cy - hs); ctx.lineTo(cx + hs, cy + hs); ctx.moveTo(cx + hs, cy - hs); ctx.lineTo(cx - hs, cy + hs); ctx.stroke();
+    if (o.sheen > 0) { ctx.strokeStyle = `rgba(255,255,255,${o.sheen * 0.5})`; ctx.lineWidth = Math.max(1, cell * 0.06); ctx.beginPath(); ctx.moveTo(cx - hs, cy - hs); ctx.lineTo(cx + hs, cy + hs); ctx.stroke(); }
+  }
+}
+
+// ============================================================
+//  16. KILIM CARPET（基里姆地毯）
+// ============================================================
+const KILIM_PALETTES = {
+  'kilim-red': ['#0e2a30', '#3a1414', '#8a1f1f', '#c44a1f', '#e0a040', '#f4e4c1'],
+  'indigo': ['#0a1a2f', '#163a5f', '#2e6b8a', '#6fa8c0', '#c9b28a', '#efe3c8'],
+  'earth': ['#201810', '#4a2f1e', '#7a4a24', '#b07038', '#d8a05a', '#efd9a8'],
+};
+function kilim(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cw = Math.max(2, Math.round(o.stitchSize));
+  const ch = Math.max(2, Math.round(cw * o.stitchAspect));
+  const pal = (KILIM_PALETTES[o.palettePreset] || KILIM_PALETTES['kilim-red']).map(hexToRgb);
+  ctx.fillStyle = `rgb(${pal[0][0]},${pal[0][1]},${pal[0][2]})`; ctx.fillRect(0, 0, w, h);
+  for (let by = 0; by < h; by += ch) for (let bx = 0; bx < w; bx += cw) {
+    const [r, g, b] = px(data, w, h, bx + cw / 2, by + ch / 2);
+    let l = lum(r, g, b); if (o.invert) l = 1 - l;
+    l = clamp(l - o.fieldDarken + (l > o.highlightThreshold ? (o.motifBright - 1) * 0.3 : 0), 0, 1);
+    let idx = Math.min(pal.length - 1, Math.floor(l * pal.length));
+    idx = clamp(idx + Math.round((hash(bx, by, 3) - 0.5) * o.paletteJitter * 2), 0, pal.length - 1);
+    const c = pal[idx];
+    ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(bx, by, cw + 1, ch + 1);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fillRect(bx, by + ch - 1, cw + 1, 1);
+  }
+}
+
+// ============================================================
+//  17. KNITTED EMBROIDERY（针织刺绣）
+// ============================================================
+function embroidery(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cell = Math.max(4, Math.round(o.gridSize));
+  const pal = [o.customColor1, o.customColor2, o.customColor3, o.customColor4].map(hexToRgb);
+  ctx.fillStyle = '#141018'; ctx.fillRect(0, 0, w, h);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (let by = 0; by < h; by += cell) for (let bx = 0; bx < w; bx += cell) {
+    const [r, g, b] = px(data, w, h, bx + cell / 2, by + cell / 2);
+    const l = lum(r, g, b);
+    const c = pal[Math.min(pal.length - 1, Math.floor(l * pal.length))];
+    const cx = bx + cell / 2, cy = by + cell / 2, s = cell * 0.5;
+    if (o.shadowBlur > 0) { ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = Math.max(1.5, cell * 0.3); ctx.beginPath(); ctx.moveTo(cx - s * 0.6 + 1, cy - s * 0.6 + 1); ctx.lineTo(cx + 1, cy + s * 0.5 + 1); ctx.lineTo(cx + s * 0.6 + 1, cy - s * 0.6 + 1); ctx.stroke(); }
+    ctx.strokeStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.lineWidth = Math.max(1.5, cell * 0.28);
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.6, cy - s * 0.6); ctx.lineTo(cx, cy + s * 0.5); ctx.lineTo(cx + s * 0.6, cy - s * 0.6); ctx.stroke();
+  }
+  // 散线
+  if (o.looseThreads > 0) {
+    const n = Math.round(o.looseThreads * w * h / 4000);
+    ctx.lineWidth = 1;
+    for (let i = 0; i < n; i++) {
+      const x = hash(i, 1, 5) * w, y = hash(i, 2, 5) * h;
+      const [r, g, b] = px(data, w, h, x, y);
+      const c = pal[Math.min(pal.length - 1, Math.floor(lum(r, g, b) * pal.length))];
+      ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},0.7)`;
+      const a = hash(i, 3, 5) * 6.28, len = 4 + hash(i, 4, 5) * cell;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); ctx.stroke();
+    }
+  }
+}
+
+// ============================================================
+//  18. VECTOR ENGRAVING（矢量雕刻 / 色调字形网格）
+// ============================================================
+function vgDot(c, x, y, r) { c.beginPath(); c.arc(x, y, r * 0.32, 0, 6.29); c.fill(); }
+function vgPlus(c, x, y, r) { c.beginPath(); c.moveTo(x - r, y); c.lineTo(x + r, y); c.moveTo(x, y - r); c.lineTo(x, y + r); c.stroke(); }
+function vgDiamond(c, x, y, r) { c.beginPath(); c.moveTo(x, y - r); c.lineTo(x + r, y); c.lineTo(x, y + r); c.lineTo(x - r, y); c.closePath(); c.stroke(); }
+function vgAster(c, x, y, r) { for (let a = 0; a < Math.PI; a += Math.PI / 3) { c.beginPath(); c.moveTo(x - Math.cos(a) * r, y - Math.sin(a) * r); c.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r); c.stroke(); } }
+function vgStar(c, x, y, r) { for (let a = 0; a < Math.PI; a += Math.PI / 4) { c.beginPath(); c.moveTo(x - Math.cos(a) * r, y - Math.sin(a) * r); c.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r); c.stroke(); } c.beginPath(); c.arc(x, y, r * 0.4, 0, 6.29); c.stroke(); }
+function vectorTiling(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cell = Math.max(4, Math.round(o.gridSize));
+  const bg = hexToRgb(o.customBgColor), fg = hexToRgb(o.customColor);
+  ctx.fillStyle = `rgb(${bg[0]},${bg[1]},${bg[2]})`; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = `rgb(${fg[0]},${fg[1]},${fg[2]})`; ctx.fillStyle = ctx.strokeStyle;
+  ctx.lineWidth = o.strokeWidth; ctx.lineCap = 'round';
+  const glyphs = [vgDot, vgPlus, vgDiamond, vgAster, vgStar];
+  for (let by = 0; by < h; by += cell) for (let bx = 0; bx < w; bx += cell) {
+    const [r, g, b] = px(data, w, h, bx + cell / 2, by + cell / 2);
+    let l = lum(r, g, b); if (o.invertTonalScale) l = 1 - l;
+    const t = 1 - l; if (t < 0.08) continue;
+    const gi = Math.min(4, Math.floor(t * 5));
+    const jx = (hash(bx, by, 1) - 0.5) * o.jitter * cell * 0.4, jy = (hash(bx, by, 2) - 0.5) * o.jitter * cell * 0.4;
+    const rr = cell * 0.5 * clamp(0.4 + t, 0.4, 1.2);
+    glyphs[gi](ctx, bx + cell / 2 + jx, by + cell / 2 + jy, rr);
+  }
+}
+
+// ============================================================
+//  19. CREATIVE UI COLLAGE（UI 面板拼贴）
+// ============================================================
+const UI_THEMES = {
+  illustrator: ['#ff9a00', '#3a1a00', '#d9d9d9', '#e88a00'],
+  photoshop: ['#2f7fd9', '#0a2540', '#d9d9d9', '#4aa3ff'],
+  original: ['#d94a4a', '#2a2a2a', '#e0e0e0', '#4a90d9'],
+};
+function drawUIPanel(c, x, y, w, h, pal, outlineOnly) {
+  if (!outlineOnly) { c.fillStyle = '#16161c'; c.fillRect(x, y, w, h); }
+  c.strokeStyle = pal[2]; c.lineWidth = 1; c.strokeRect(x, y, w, h);
+  const th = Math.max(6, h * 0.17);
+  c.fillStyle = pal[0]; c.fillRect(x, y, w, th);
+  c.fillStyle = pal[3];
+  for (let i = 0; i < 3; i++) c.fillRect(x + 4, y + th + 4 + i * h * 0.2, w * (0.4 + 0.5 * ((i * 7 % 10) / 10)), Math.max(2, h * 0.07));
+  for (let i = 0; i < 3; i++) { c.fillStyle = [pal[0], pal[1], pal[3]][i]; c.fillRect(x + 4 + i * (w * 0.13), y + h - Math.max(6, h * 0.18), w * 0.1, h * 0.11); }
+}
+function uiCollage(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  ctx.fillStyle = '#0c0c10'; ctx.fillRect(0, 0, w, h);
+  const pw = Math.max(24, Math.round(150 * o.panelScale)), ph = Math.max(18, Math.round(110 * o.panelScale));
+  const step = Math.max(20, Math.round(pw * 0.7 / o.density));
+  const pal = UI_THEMES[o.softwarePreset] || UI_THEMES.original;
+  for (let by = 0; by < h; by += step) for (let bx = 0; bx < w; bx += step) {
+    const [r, g, b] = px(data, w, h, bx, by); const l = lum(r, g, b);
+    if (l < o.minLuminance || l > o.maxLuminance) continue;
+    if (hash(bx, by, 7) > 0.62) continue;
+    const x = bx + (hash(bx, by, 1) - 0.5) * step, y = by + (hash(bx, by, 2) - 0.5) * step;
+    drawUIPanel(ctx, x, y, pw, ph, pal, o.outlineOnly);
+  }
+}
+
+// ============================================================
+//  20. BLOCKIFY（像素方块）
+// ============================================================
+function blockify(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bs = Math.max(2, Math.round(o.blockSize));
+  for (let by = 0; by < h; by += bs) for (let bx = 0; bx < w; bx += bs) {
+    let [r, g, b] = px(data, w, h, bx + bs / 2, by + bs / 2);
+    if (!o.preserveColor) { const l = lum(r, g, b) * 255; r = g = b = l; }
+    ctx.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`;
+    ctx.fillRect(bx, by, bs + 1, bs + 1);
+    if (o.borderWidth > 0) { ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = o.borderWidth; ctx.strokeRect(bx + 0.5, by + 0.5, bs, bs); }
+  }
+}
+
+// ============================================================
+//  21. VORONOI（沃罗诺伊分区）
+// ============================================================
+function voronoi(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cs = Math.max(4, o.cellSize), rnd = o.randomize;
+  const out = new ImageData(w, h); const d = out.data;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const gx = Math.floor(x / cs), gy = Math.floor(y / cs);
+    let f1 = 1e9, f2 = 1e9, sx = x, sy = y;
+    for (let oy = -1; oy <= 1; oy++) for (let ox = -1; ox <= 1; ox++) {
+      const cgx = gx + ox, cgy = gy + oy;
+      const jx = (cgx + 0.5 + (hash(cgx, cgy, 1) - 0.5) * rnd * 2) * cs;
+      const jy = (cgy + 0.5 + (hash(cgx, cgy, 2) - 0.5) * rnd * 2) * cs;
+      const dd = (jx - x) * (jx - x) + (jy - y) * (jy - y);
+      if (dd < f1) { f2 = f1; f1 = dd; sx = jx; sy = jy; } else if (dd < f2) f2 = dd;
+    }
+    let [r, g, b] = px(data, w, h, sx, sy);
+    if (Math.sqrt(f2) - Math.sqrt(f1) < o.edgeWidth) { r *= 0.25; g *= 0.25; b *= 0.25; }
+    const p = (y * w + x) * 4; d[p] = r; d[p + 1] = g; d[p + 2] = b; d[p + 3] = 255;
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// ============================================================
+//  22. 3D TOY BRICKS（积木）
+// ============================================================
+function bricks(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bs = Math.max(6, Math.round(o.blockSize)), bw = Math.max(1, o.bevelWidth);
+  ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, 0, w, h);
+  for (let by = 0; by < h; by += bs) for (let bx = 0; bx < w; bx += bs) {
+    let [r, g, b] = px(data, w, h, bx + bs / 2, by + bs / 2);
+    if (o.colorMode !== 'original') { const l = lum(r, g, b) * 255; r = g = b = l; }
+    ctx.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`; ctx.fillRect(bx, by, bs, bs);
+    // 斜面
+    ctx.fillStyle = 'rgba(255,255,255,0.26)'; ctx.fillRect(bx, by, bs, bw); ctx.fillRect(bx, by, bw, bs);
+    ctx.fillStyle = 'rgba(0,0,0,0.36)'; ctx.fillRect(bx, by + bs - bw, bs, bw); ctx.fillRect(bx + bs - bw, by, bw, bs);
+    // 凸点
+    const cx = bx + bs / 2, cy = by + bs / 2, sr = bs * 0.5 * o.studSize;
+    ctx.fillStyle = `rgb(${clamp(r * 1.06, 0, 255) | 0},${clamp(g * 1.06, 0, 255) | 0},${clamp(b * 1.06, 0, 255) | 0})`;
+    if (o.studShape === 'square') ctx.fillRect(cx - sr, cy - sr, sr * 2, sr * 2);
+    else { ctx.beginPath(); ctx.arc(cx, cy, sr, 0, 6.29); ctx.fill(); }
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1;
+    if (o.studShape === 'square') ctx.strokeRect(cx - sr, cy - sr, sr, sr);
+    else { ctx.beginPath(); ctx.arc(cx, cy, sr, Math.PI, Math.PI * 1.5); ctx.stroke(); }
+  }
+}
+
+// ============================================================
+//  23. OUTLINE（轮廓块 + 星点）
+// ============================================================
+function outline(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cs = Math.max(4, Math.round(o.cellSize));
+  ctx.fillStyle = '#0c0c10'; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = '#dad9d5'; ctx.fillStyle = '#dad9d5'; ctx.lineWidth = o.strokeWidth; ctx.lineJoin = 'round';
+  for (let by = 0; by < h; by += cs) for (let bx = 0; bx < w; bx += cs) {
+    const [r, g, b] = px(data, w, h, bx + cs / 2, by + cs / 2);
+    const t = 1 - lum(r, g, b); if (t < 0.1) continue;
+    const sz = cs * (0.3 + 0.7 * t) * (1 + (hash(bx, by, 1) - 0.5) * o.blockVariety);
+    const cx = bx + cs / 2, cy = by + cs / 2;
+    ctx.strokeStyle = '#dad9d5';
+    if (o.shape === 'circle') { ctx.beginPath(); ctx.arc(cx, cy, sz / 2, 0, 6.29); ctx.stroke(); if (o.fillOpacity > 0) { ctx.globalAlpha = o.fillOpacity; ctx.fill(); ctx.globalAlpha = 1; } }
+    else { ctx.strokeRect(cx - sz / 2, cy - sz / 2, sz, sz); if (o.fillOpacity > 0) { ctx.globalAlpha = o.fillOpacity; ctx.fillRect(cx - sz / 2, cy - sz / 2, sz, sz); ctx.globalAlpha = 1; } }
+  }
+  // 星点
+  const n = Math.round(o.starDensity * w * h / 100);
+  ctx.strokeStyle = `rgba(218,217,213,${o.starOpacity})`; ctx.lineWidth = 1;
+  for (let i = 0; i < n; i++) {
+    const x = hash(i, 1, 9) * w, y = hash(i, 2, 9) * h, s = o.starSize * 2;
+    ctx.beginPath(); ctx.moveTo(x - s, y); ctx.lineTo(x + s, y); ctx.moveTo(x, y - s); ctx.lineTo(x, y + s); ctx.stroke();
+  }
+}
+
+// ============================================================
+//  24. BLOCK MOSAIC（自适应四叉树马赛克 + 墨/纸/点缀）
+// ============================================================
+function blockMosaic(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const [pr, pg, pb] = hexToRgb(o.paperColor), [ir, ig, ib] = hexToRgb(o.inkColor);
+  const accents = [o.accent1, o.accent2, o.accent3].map(hexToRgb);
+  ctx.fillStyle = o.paperColor; ctx.fillRect(0, 0, w, h);
+  const base = Math.max(8, Math.round(o.blockSize)), minS = Math.max(4, base / 4);
+  const detail = (x, y, s) => {
+    const c = lum(...px(data, w, h, x + s / 2, y + s / 2)); let mx = 0;
+    for (const [dx, dy] of [[0.25, 0.25], [0.75, 0.25], [0.25, 0.75], [0.75, 0.75]]) mx = Math.max(mx, Math.abs(lum(...px(data, w, h, x + s * dx, y + s * dy)) - c));
+    return mx;
+  };
+  const cell = (x, y, s) => {
+    const [r, g, b] = px(data, w, h, x + s / 2, y + s / 2); const t = clamp(1 - lum(r, g, b), 0, 1);
+    let R = pr + (ir - pr) * t, G = pg + (ig - pg) * t, B = pb + (ib - pb) * t;
+    if (hash(x, y, o.seed) < o.accentAmount) { const a = accents[Math.floor(hash(x, y, o.seed + 1) * 3)]; R = a[0]; G = a[1]; B = a[2]; }
+    ctx.fillStyle = `rgb(${R | 0},${G | 0},${B | 0})`; ctx.fillRect(x, y, s, s);
+    ctx.strokeStyle = o.inkColor; ctx.lineWidth = 0.5; ctx.strokeRect(x + 0.5, y + 0.5, s, s);
+  };
+  const rec = (x, y, s, depth) => {
+    if (o.subdivide && depth > 0 && s > minS && detail(x, y, s) > o.detailThreshold) { const q = s / 2; rec(x, y, q, depth - 1); rec(x + q, y, q, depth - 1); rec(x, y + q, q, depth - 1); rec(x + q, y + q, q, depth - 1); }
+    else cell(x, y, s);
+  };
+  for (let y = 0; y < h; y += base) for (let x = 0; x < w; x += base) rec(x, y, base, 2);
+}
+
+// ============================================================
+//  25. QUADTREE ZOOM（四叉树放大盒）
+// ============================================================
+function quadtreeZoom(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const sc = srcToCanvas(src);
+  if (o.showBackground) {
+    const bg = new ImageData(w, h); const d = bg.data;
+    for (let i = 0; i < w * h; i++) { const p = i * 4; const l = lum(data[p], data[p + 1], data[p + 2]) * 255 * o.bgBrightness; d[p] = d[p + 1] = d[p + 2] = l; d[p + 3] = 255; }
+    ctx.putImageData(bg, 0, 0);
+  } else { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h); }
+  const minB = Math.max(8, o.minBoxSize), maxB = Math.max(minB, o.maxBoxSize);
+  const detail = (x, y, s) => {
+    const c = lum(...px(data, w, h, x + s / 2, y + s / 2)); let mx = 0;
+    for (const [dx, dy] of [[0.2, 0.2], [0.8, 0.2], [0.2, 0.8], [0.8, 0.8]]) mx = Math.max(mx, Math.abs(lum(...px(data, w, h, x + s * dx, y + s * dy)) - c));
+    return mx;
+  };
+  const leaf = (x, y, s) => {
+    const zs = s / o.zoomScale, cx = x + s / 2, cy = y + s / 2;
+    ctx.drawImage(sc, clamp(cx - zs / 2, 0, w - zs), clamp(cy - zs / 2, 0, h - zs), zs, zs, x, y, s, s);
+    if (o.boxBrightness !== 0) { ctx.fillStyle = `rgba(${o.boxBrightness > 0 ? '255,255,255' : '0,0,0'},${Math.abs(o.boxBrightness)})`; ctx.fillRect(x, y, s, s); }
+    ctx.strokeStyle = o.borderColor; ctx.lineWidth = o.borderWidth; ctx.strokeRect(x + 0.5, y + 0.5, s, s);
+  };
+  const rec = (x, y, s, depth) => {
+    if (depth < o.maxDepth && s > minB && detail(x, y, s) > o.threshold) { const q = s / 2; rec(x, y, q, depth + 1); rec(x + q, y, q, depth + 1); rec(x, y + q, q, depth + 1); rec(x + q, y + q, q, depth + 1); }
+    else leaf(x, y, s);
+  };
+  for (let y = 0; y < h; y += maxB) for (let x = 0; x < w; x += maxB) rec(x, y, maxB, 0);
+}
+
+// ============================================================
+//  26. THRESHOLD（阈值 / 有序抖动）
+// ============================================================
+function threshold(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const out = new ImageData(w, h); const d = out.data;
+  const levels = Math.max(2, Math.round(o.levels));
+  const B = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = (y * w + x) * 4;
+    let l = lum(data[i], data[i + 1], data[i + 2]);
+    l = clamp(l + (0.5 - o.threshold), 0, 1);
+    if (o.dither) l += (B[y & 3][x & 3] / 16 - 0.5) / levels;
+    let q = Math.round(clamp(l, 0, 1) * (levels - 1)) / (levels - 1);
+    if (o.invert) q = 1 - q;
+    const v = q * 255; d[i] = v; d[i + 1] = v; d[i + 2] = v; d[i + 3] = 255;
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// ============================================================
+//  27. EDGE DETECTION（Sobel 边缘）
+// ============================================================
+function edge(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const N = w * h; const gray = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const p = i * 4; gray[i] = lum(data[p], data[p + 1], data[p + 2]); }
+  const on = new Uint8Array(N);
+  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+    const i = y * w + x;
+    const gx = -gray[i - 1 - w] - 2 * gray[i - 1] - gray[i - 1 + w] + gray[i + 1 - w] + 2 * gray[i + 1] + gray[i + 1 + w];
+    const gy = -gray[i - w - 1] - 2 * gray[i - w] - gray[i - w + 1] + gray[i + w - 1] + 2 * gray[i + w] + gray[i + w + 1];
+    if (Math.hypot(gx, gy) > o.threshold) on[i] = 1;
+  }
+  const out = new ImageData(w, h); const d = out.data;
+  const bg = o.invert ? 0 : 255, fg = o.invert ? 255 : 0;
+  for (let i = 0; i < N; i++) { const p = i * 4; d[p] = d[p + 1] = d[p + 2] = bg; d[p + 3] = 255; }
+  const thick = Math.max(0, Math.round(o.lineWidth / 3));
+  const draw = (i) => { const p = i * 4; d[p] = d[p + 1] = d[p + 2] = fg; };
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (!on[y * w + x]) continue;
+    if (thick === 0) draw(y * w + x);
+    else for (let dy = -thick; dy <= thick; dy++) { const yy = y + dy; if (yy < 0 || yy >= h) continue; for (let dx = -thick; dx <= thick; dx++) { const xx = x + dx; if (xx >= 0 && xx < w) draw(yy * w + xx); } }
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// ============================================================
+//  28. CONTOUR TYPE（素描等高线）
+// ============================================================
+function contourType(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const cell = Math.max(3, Math.round(o.cell));
+  ctx.fillStyle = '#0e0e12'; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = '#dad9d5'; ctx.lineCap = 'round';
+  const val = (x, y) => { const l = lum(...px(data, w, h, x, y)); return clamp((l - 0.5) * o.contrast + 0.5, 0, 1); };
+  for (let by = 0; by < h; by += cell) for (let bx = 0; bx < w; bx += cell) {
+    const cx = bx + cell / 2, cy = by + cell / 2;
+    const gx = val(cx + cell, cy) - val(cx - cell, cy);
+    const gy = val(cx, cy + cell) - val(cx, cy - cell);
+    const mag = Math.hypot(gx, gy);
+    if (mag < o.threshold) continue;
+    const tx = -gy / mag, ty = gx / mag;
+    const len = cell * (0.5 + o.lines);
+    ctx.globalAlpha = clamp(mag * 3, 0.2, 1) * clamp(o.lines, 0.2, 1);
+    ctx.lineWidth = 1 + o.lines * 1.5;
+    const jx = (hash(bx, by, o.seed) - 0.5) * o.texture * cell, jy = (hash(bx, by, o.seed + 1) - 0.5) * o.texture * cell;
+    ctx.beginPath(); ctx.moveTo(cx - tx * len / 2 + jx, cy - ty * len / 2 + jy); ctx.lineTo(cx + tx * len / 2 + jx, cy + ty * len / 2 + jy); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ============================================================
+//  29. CONTOUR MAP（地形图：等高线 + 字形 + 框 + 标签 + 刻度）
+// ============================================================
+function contourMap(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const N = w * h;
+  const lm = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const p = i * 4; lm[i] = lum(data[p], data[p + 1], data[p + 2]); }
+  const field = blurField(lm, w, h, Math.round(o.smooth));
+  const bands = Math.max(2, Math.round(o.bands));
+  const band = new Uint16Array(N);
+  for (let i = 0; i < N; i++) band[i] = Math.min(bands - 1, Math.floor(field[i] * bands));
+  const acc = hexToRgb(o.accent);
+  const mapC = [188, 198, 176];
+  const out = new ImageData(w, h); const ld = out.data;
+  for (let i = 0; i < N; i++) { const p = i * 4; ld[p] = 13; ld[p + 1] = 15; ld[p + 2] = 14; ld[p + 3] = 255; }
+  const majEvery = Math.max(1, Math.round(o.multi));
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, b = band[i];
+    if ((x + 1 < w && band[i + 1] !== b) || (y + 1 < h && band[i + w] !== b)) {
+      const major = b % majEvery === 0;
+      const c = major ? acc : mapC, a = clamp(o.lineAlpha * (major ? 1 : 0.55), 0, 1);
+      const p = i * 4;
+      ld[p] = ld[p] * (1 - a) + c[0] * a; ld[p + 1] = ld[p + 1] * (1 - a) + c[1] * a; ld[p + 2] = ld[p + 2] * (1 - a) + c[2] * a;
+    }
+  }
+  ctx.putImageData(out, 0, 0);
+
+  const chars = o.charset === 'digits' ? '0123456789' : o.charset === 'hex' ? '0123456789ABCDEF' : '▲△·+×◦°∙';
+  const gs = Math.max(6, o.glyphSize), sp = Math.max(8, o.spacing);
+  ctx.textBaseline = 'middle';
+  for (let y = sp; y < h; y += sp) for (let x = sp; x < w; x += sp) {
+    const i = y * w + x, l = field[i];
+    if (hash(x, y, o.seed) < o.heroes * 0.5) { ctx.font = `${gs}px ui-monospace, monospace`; ctx.fillStyle = 'rgba(188,198,176,0.8)'; ctx.fillText(chars[Math.floor(hash(x, y, 2) * chars.length)], x, y); }
+    if (hash(x, y, 3) < o.boxes) { const bs = o.boxSize * sp * 0.5; ctx.strokeStyle = `rgba(${acc[0]},${acc[1]},${acc[2]},0.8)`; ctx.lineWidth = 1; ctx.strokeRect(x - bs / 2, y - bs / 2, bs, bs); }
+    if (hash(x, y, 4) < o.labels) { ctx.font = `${gs * 0.6}px ui-monospace, monospace`; ctx.fillStyle = 'rgba(188,198,176,0.7)'; ctx.fillText(((l * 999) | 0).toString().padStart(3, '0'), x + 4, y - 6); }
+    if (hash(x, y, 5) < o.ticks) { ctx.strokeStyle = 'rgba(188,198,176,0.6)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y - 3); ctx.lineTo(x, y + 3); ctx.stroke(); }
+  }
+}
+
+// ============================================================
+//  Type & code 共用
+// ============================================================
+const ASCII_RAMP = ' .:-=+*#%@';
+
+// 30. ASCII
+function ascii(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(4, Math.round(o.cellSize));
+  ctx.fillStyle = o.background; ctx.fillRect(0, 0, w, h);
+  ctx.font = `${s}px ui-monospace, monospace`; ctx.textBaseline = 'top';
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    const [r, g, b] = px(data, w, h, bx + s / 2, by + s / 2);
+    let l = lum(r, g, b); if (o.invert) l = 1 - l;
+    const ch = ASCII_RAMP[Math.floor(l * (ASCII_RAMP.length - 1))];
+    if (ch === ' ') continue;
+    ctx.fillStyle = o.colored ? `rgb(${r | 0},${g | 0},${b | 0})` : o.foreground;
+    ctx.fillText(ch, bx, by);
+  }
+}
+
+// 31. Dither Text
+function ditherText(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(4, Math.round(o.cellSize));
+  const text = ((o.text || 'TYPE').replace(/\s+/g, '') || 'TYPE');
+  const B = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+  ctx.fillStyle = o.invert ? '#ffffff' : '#0d0d0d'; ctx.fillRect(0, 0, w, h);
+  ctx.font = `${s}px ui-monospace, monospace`; ctx.textBaseline = 'top';
+  ctx.fillStyle = o.invert ? '#0d0d0d' : '#e8e8e8';
+  let ci = 0;
+  for (let gy = 0, by = 0; by < h; by += s, gy++) for (let gx = 0, bx = 0; bx < w; bx += s, gx++) {
+    let l = lum(...px(data, w, h, bx + s / 2, by + s / 2)); l = clamp((l - 0.5) * (1 + o.contrast) + 0.5, 0, 1);
+    if (o.invert) l = 1 - l;
+    const t = l + (B[gy & 3][gx & 3] / 16 - 0.5);
+    const ch = text[ci % text.length]; ci++;
+    if (t > o.textThreshold) ctx.fillText(ch, bx, by);
+  }
+}
+
+// 32. Word Mosaic
+const POP_PAL = ['#ef282d', '#1f3fff', '#ffd400', '#0db04b', '#ff7a18', '#111111', '#f4f2ea'];
+function wordMosaic(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const words = (o.text || 'form,color,text,image,grid,shape,type,line').split(',').map((x) => x.trim()).filter(Boolean);
+  const s = Math.max(8, Math.round(o.cellSize)), ch = Math.max(8, Math.round(s * o.cellAspect)), gap = Math.max(0, o.spacing * 3);
+  ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h); ctx.textBaseline = 'middle';
+  let wi = 0;
+  for (let by = 0; by < h; by += ch) for (let bx = 0; bx < w; bx += s) {
+    const big = hash(bx, by, 3) < o.bigCellAmount * 0.25; const cw = big ? s * 2 : s;
+    const [r, g, b] = px(data, w, h, bx + cw / 2, by + ch / 2); const l = lum(r, g, b);
+    ctx.fillStyle = POP_PAL[Math.floor(l * POP_PAL.length) % POP_PAL.length];
+    ctx.fillRect(bx + gap, by + gap, cw - gap * 2, ch - gap * 2);
+    const word = words[wi % words.length]; wi++;
+    ctx.save(); ctx.beginPath(); ctx.rect(bx, by, cw, ch); ctx.clip();
+    ctx.fillStyle = l > 0.6 ? '#111' : '#fff'; ctx.font = `600 ${Math.min(ch * 0.5, cw / Math.max(3, word.length) * 1.7)}px ui-sans-serif, system-ui`;
+    ctx.fillText(word, bx + 4, by + ch / 2); ctx.restore();
+  }
+}
+
+// 33. Matrix Rain（静态帧）
+function matrix(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(6, Math.round(o.cellSize));
+  const chars = (o.customChars && o.customChars.length > 1) ? o.customChars : '0123456789ｱｲｳｴｵｶｷｸｹABCDEF';
+  ctx.fillStyle = '#000802'; ctx.fillRect(0, 0, w, h);
+  ctx.font = `${o.weight} ${s}px ui-monospace, monospace`; ctx.textBaseline = 'top';
+  const col = hexToRgb(o.rainColor); const rows = Math.ceil(h / s);
+  for (let gx = 0, cx = 0; cx < w; cx += s, gx++) {
+    const head = Math.floor(hash(gx, 0, 7) * rows * 2) % rows;
+    for (let gy = 0; gy < rows; gy++) {
+      const y = gy * s;
+      const l = lum(...px(data, w, h, cx + s / 2, y + s / 2));
+      let dist = head - gy; if (dist < 0) dist += rows;
+      const trailA = dist < o.trail ? (1 - dist / o.trail) : 0;
+      const bright = clamp(l * 0.7 + trailA * 0.9, 0, 1);
+      if (bright < 0.06) continue;
+      const ch = chars[Math.floor(hash(gx, gy, 3) * chars.length)];
+      ctx.fillStyle = dist === 0 ? `rgba(225,255,235,${bright})` : `rgba(${col[0]},${col[1]},${col[2]},${bright})`;
+      ctx.fillText(ch, cx, y);
+    }
+  }
+}
+
+// 34. Pixel Code
+function pixelCode(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(5, Math.round(o.cellSize));
+  const chars = o.customChars || '0X8SG>';
+  ctx.fillStyle = '#0a0e14'; ctx.fillRect(0, 0, w, h);
+  ctx.font = `${s}px ui-monospace, monospace`; ctx.textBaseline = 'top';
+  const acc = [o.accentA, o.accentB, o.accentC].map(hexToRgb);
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    const l = lum(...px(data, w, h, bx + s / 2, by + s / 2));
+    const op = clamp(o.opacityMin + (o.opacityMax - o.opacityMin) * l, 0, 1);
+    if (op < 0.03) continue;
+    const ch = chars[Math.floor(hash(bx, by, 3) * chars.length)];
+    if (hash(bx, by, 4) < 0.08) { const a = acc[Math.floor(hash(bx, by, 5) * 3)]; ctx.fillStyle = `rgba(${a[0]},${a[1]},${a[2]},${op})`; }
+    else ctx.fillStyle = `rgba(155,220,180,${op * o.charBrightness})`;
+    ctx.fillText(ch, bx, by);
+  }
+}
+
+// 35. Number Field
+function numberField(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  ctx.fillStyle = o.bgColor; ctx.fillRect(0, 0, w, h);
+  if (o.showLines) {
+    ctx.strokeStyle = `rgba(255,255,255,${o.lineOpacity})`; ctx.lineWidth = o.lineWidth;
+    for (let i = 0; i < o.lineCount; i++) {
+      let x = hash(i, 1, 3) * w, y = hash(i, 2, 3) * h; ctx.beginPath(); ctx.moveTo(x, y);
+      for (let k = 0; k < 46; k++) { const ang = (hash((x * o.flowScale) | 0, (y * o.flowScale) | 0, i) - 0.5) * 6.28 + lum(...px(data, w, h, x, y)) * 3; x += Math.cos(ang) * 7; y += Math.sin(ang) * 7; if (x < 0 || x >= w || y < 0 || y >= h) break; ctx.lineTo(x, y); }
+      ctx.stroke();
+    }
+  }
+  if (o.showNumbers) {
+    ctx.fillStyle = o.inkColor; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
+    const n = Math.round(o.density * 34);
+    for (let i = 0; i < n; i++) {
+      const x = hash(i, 5, 9) * w, y = hash(i, 6, 9) * h; let l = lum(...px(data, w, h, x, y)); if (o.invert) l = 1 - l;
+      if (l < o.threshold) continue;
+      const sz = o.minSize + Math.pow(l, o.sizeGamma) * (o.maxSize - o.minSize);
+      ctx.font = `${sz}px ui-monospace, monospace`;
+      ctx.fillText(((hash(i, 7, 9) * 99) | 0).toString().padStart(2, '0'), x + (hash(i, 8, 9) - 0.5) * o.jitter * 20, y);
+    }
+    ctx.textAlign = 'left';
+  }
+}
+
+// 36. Grid Glyph
+function ggDot(c, x, y, s) { c.beginPath(); c.arc(x + s / 2, y + s / 2, s * 0.12, 0, 6.29); c.fill(); }
+function ggSlash(c, x, y, s) { c.beginPath(); c.moveTo(x + s * 0.15, y + s * 0.85); c.lineTo(x + s * 0.85, y + s * 0.15); c.stroke(); }
+function ggCross(c, x, y, s) { c.beginPath(); c.moveTo(x + s * 0.2, y + s / 2); c.lineTo(x + s * 0.8, y + s / 2); c.moveTo(x + s / 2, y + s * 0.2); c.lineTo(x + s / 2, y + s * 0.8); c.stroke(); }
+function ggBox(c, x, y, s) { c.strokeRect(x + s * 0.2, y + s * 0.2, s * 0.6, s * 0.6); }
+function ggFill(c, x, y, s) { c.fillRect(x + s * 0.15, y + s * 0.15, s * 0.7, s * 0.7); }
+function gridGlyph(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(6, Math.round(o.cellSize));
+  ctx.fillStyle = o.invert ? '#f4f2ea' : '#0d0d0d'; ctx.fillRect(0, 0, w, h);
+  const fg = o.invert ? '#0d0d0d' : '#dad9d5';
+  ctx.strokeStyle = fg; ctx.fillStyle = fg; ctx.lineWidth = o.strokeWidth; ctx.lineCap = 'square';
+  const G = [null, ggDot, ggSlash, ggCross, ggBox, ggFill];
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    let l = lum(...px(data, w, h, bx + s / 2, by + s / 2)); l = clamp((l - 0.5) * (1 + o.contrast) + 0.5, 0, 1); if (o.invert) l = 1 - l;
+    const gi = Math.min(5, Math.floor((1 - l) * 6)); if (G[gi]) G[gi](ctx, bx, by, s);
+  }
+}
+
+// 37. Tag Pills（招牌）
+function capsuleCloud(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const tags = (o.tagsText || 'design,form,color,type,grid,image,shape,line,motion,layout,pixel,vector').split(',').map((x) => x.trim()).filter(Boolean);
+  ctx.fillStyle = '#0d0d0d'; ctx.fillRect(0, 0, w, h);
+  const ph = Math.max(10, o.capsuleHeight), gap = Math.max(1, o.capsuleGap * ph * 0.5), rg = Math.max(1, o.rowGap * ph * 0.5);
+  ctx.font = `${Math.round(ph * 0.5)}px ${o.fontStyle === 'monospace' ? 'ui-monospace, monospace' : 'ui-sans-serif, system-ui'}`; ctx.textBaseline = 'middle';
+  const rad = o.borderRadius > 0 ? ph / 2 : ph * 0.3;
+  let x = gap, y = rg + ph / 2, ti = 0, guard = 0;
+  while (y + ph / 2 < h && guard++ < 6000) {
+    const tag = tags[ti % tags.length]; ti++;
+    const tw = ctx.measureText(tag).width + ph * 0.9;
+    if (x + tw > w - gap) { x = gap; y += ph + rg; if (y + ph / 2 >= h) break; }
+    const [r, g, b] = px(data, w, h, clamp(x + tw / 2, 0, w - 1), y);
+    ctx.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`;
+    roundRect(ctx, x, y - ph / 2, tw, ph, rad); ctx.fill();
+    ctx.fillStyle = lum(r, g, b) > 0.55 ? '#111' : '#f4f2ea';
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y - ph / 2, tw, ph); ctx.clip(); ctx.fillText(tag, x + ph * 0.45, y + 1); ctx.restore();
+    x += tw + gap;
+  }
+}
+
+// 38. Inscribe（发光 ASCII）
+function inscribe(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(4, Math.round(o.cellSize));
+  const ramp = (o.customChars && o.customChars.length) ? o.customChars : '.+/=*2e';
+  ctx.fillStyle = `rgba(8,8,10,1)`; ctx.fillRect(0, 0, w, h);
+  ctx.font = `${o.weight} ${s}px ui-monospace, monospace`; ctx.textBaseline = 'top';
+  ctx.shadowColor = '#7fd0ff';
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    const l = lum(...px(data, w, h, bx + s / 2, by + s / 2));
+    const idx = Math.floor(clamp(l * o.intensity, 0, 1) * (ramp.length - 1));
+    const ch = ramp[idx]; if (!ch || ch === ' ') continue;
+    ctx.shadowBlur = o.glow * 2.5 * l;
+    ctx.fillStyle = `rgba(205,232,255,${clamp(0.3 + l, 0, 1)})`;
+    ctx.fillText(ch, bx, by);
+  }
+  ctx.shadowBlur = 0;
+}
+
+// 39. Data Hatching
+function dataHatch(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(6, Math.round(o.gridSize));
+  ctx.fillStyle = o.bgColor; ctx.fillRect(0, 0, w, h);
+  ctx.font = `${s}px ui-monospace, monospace`; ctx.textBaseline = 'top';
+  const shades = [o.barColorDark, o.barColorMedium, o.barColorLight].map(hexToRgb);
+  const ch = o.hatchChar || '+';
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    const l = lum(...px(data, w, h, bx + s / 2, by + s / 2)); if (l < 0.08) continue;
+    const c = shades[Math.min(2, Math.floor(l * 3))];
+    ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillText(ch, bx, by);
+  }
+  if (o.showHudAxis) {
+    ctx.strokeStyle = o.accentColor; ctx.lineWidth = 1;
+    const ox = w * o.hudOffset, oy = h * o.hudOffset;
+    ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, h); ctx.moveTo(0, oy); ctx.lineTo(w, oy); ctx.stroke();
+    for (let y = 0; y < h; y += s * 3) { ctx.beginPath(); ctx.moveTo(ox - 4, y); ctx.lineTo(ox + 4, y); ctx.stroke(); }
+    for (let x = 0; x < w; x += s * 3) { ctx.beginPath(); ctx.moveTo(x, oy - 4); ctx.lineTo(x, oy + 4); ctx.stroke(); }
+  }
+}
+
+// 40. ASCII Ghost（ASCII 叠在虚化照片上）
+function asciiGhost(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(5, Math.round(o.cell));
+  const sc = srcToCanvas(src);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h);
+  ctx.save(); ctx.globalAlpha = o.photo; ctx.drawImage(sc, 0, 0); ctx.restore();
+  if (o.bloom > 0) { ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = o.bloom * 0.6; ctx.filter = `blur(${o.glow}px)`; ctx.drawImage(sc, 0, 0); ctx.restore(); }
+  const ramp = o.charset === 'dotted' ? ' ·:oO●' : ' .:-=+*#%@';
+  ctx.font = `${s}px ui-monospace, monospace`; ctx.textBaseline = 'top';
+  ctx.save(); if (o.blend) ctx.globalCompositeOperation = 'screen';
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    let [r, g, b] = px(data, w, h, bx + s / 2, by + s / 2); const l = lum(r, g, b);
+    const ch = ramp[Math.floor(clamp(l * o.exposure, 0, 1) * (ramp.length - 1))]; if (!ch || ch === ' ') continue;
+    const lm2 = l * 255; r = clamp(lm2 + (r - lm2) * o.saturation, 0, 255); g = clamp(lm2 + (g - lm2) * o.saturation, 0, 255); b = clamp(lm2 + (b - lm2) * o.saturation, 0, 255);
+    ctx.fillStyle = `rgba(${r | 0},${g | 0},${b | 0},${clamp(o.inkFloor + l, 0, 1)})`;
+    ctx.fillText(ch, bx, by);
+  }
+  ctx.restore();
+}
+
+// ============================================================
+//  Halftone & dither
+// ============================================================
+const BAYER8 = [[0, 48, 12, 60, 3, 51, 15, 63], [32, 16, 44, 28, 35, 19, 47, 31], [8, 56, 4, 52, 11, 59, 7, 55], [40, 24, 36, 20, 43, 27, 39, 23], [2, 50, 14, 62, 1, 49, 13, 61], [34, 18, 46, 30, 33, 17, 45, 29], [10, 58, 6, 54, 9, 57, 5, 53], [42, 26, 38, 22, 41, 25, 37, 21]];
+const rgbs = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
+
+// 41. Halftone
+function halftone(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bg = o.invert ? [10, 10, 10] : [244, 242, 234], fg = o.invert ? [244, 242, 234] : [18, 18, 18];
+  ctx.fillStyle = rgbs(bg); ctx.fillRect(0, 0, w, h); ctx.fillStyle = rgbs(fg);
+  const sp = Math.max(3, o.spacing), ang = o.angle * Math.PI / 180, ca = Math.cos(ang), sa = Math.sin(ang), diag = Math.hypot(w, h);
+  for (let v = -diag; v < diag; v += sp) for (let u = -diag; u < diag; u += sp) {
+    const x = w / 2 + u * ca - v * sa, y = h / 2 + u * sa + v * ca;
+    if (x < 0 || x >= w || y < 0 || y >= h) continue;
+    let l = lum(...px(data, w, h, x, y)); if (o.invert) l = 1 - l;
+    const r = (1 - l) * sp * 0.72 * (o.dotScale + 0.6);
+    if (r < 0.3) continue;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.29); ctx.fill();
+  }
+}
+
+// 42. Dithering (Bayer)
+function dither(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const sc = Math.max(1, Math.round(o.scale)), levels = Math.max(2, Math.round(o.levels));
+  const out = new ImageData(w, h); const d = out.data;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const bx = Math.floor(x / sc) * sc, by = Math.floor(y / sc) * sc;
+    let l = clamp(lum(...px(data, w, h, bx, by)) * o.intensity, 0, 1);
+    l += (hash(x, y, 1) - 0.5) * o.noise;
+    let q = clamp(Math.round((l + (BAYER8[y & 7][x & 7] / 64 - 0.5) / levels) * (levels - 1)) / (levels - 1), 0, 1);
+    if (o.invert) q = 1 - q;
+    const p = (y * w + x) * 4, v = q * 255; d[p] = v; d[p + 1] = v; d[p + 2] = v; d[p + 3] = 255;
+  }
+  ctx.putImageData(out, 0, 0);
+}
+
+// 43. Riso (双墨半调)
+function halftoneLayer(ctx, data, w, h, sp, angDeg, color, valFn, dx, dy) {
+  const ang = angDeg * Math.PI / 180, ca = Math.cos(ang), sa = Math.sin(ang), diag = Math.hypot(w, h);
+  ctx.fillStyle = rgbs(color);
+  for (let v = -diag; v < diag; v += sp) for (let u = -diag; u < diag; u += sp) {
+    const x = w / 2 + u * ca - v * sa, y = h / 2 + u * sa + v * ca; if (x < 0 || x >= w || y < 0 || y >= h) continue;
+    const [r, g, b] = px(data, w, h, x + dx, y + dy); const val = clamp(valFn(r, g, b), 0, 1);
+    const rad = val * sp * 0.78; if (rad < 0.3) continue;
+    ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.29); ctx.fill();
+  }
+}
+function riso(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  ctx.fillStyle = rgbs(hexToRgb(o.paperColor)); ctx.fillRect(0, 0, w, h);
+  const sp = Math.max(3, o.dotSpacing * 2);
+  ctx.save(); ctx.globalCompositeOperation = 'multiply';
+  halftoneLayer(ctx, data, w, h, sp, o.ink1Angle, hexToRgb(o.ink1Color), (r, g, b) => 1 - lum(r, g, b), o.driftX, o.driftY);
+  halftoneLayer(ctx, data, w, h, sp, o.ink2Angle, hexToRgb(o.ink2Color), (r, g, b) => clamp((0.62 - Math.abs(lum(r, g, b) - 0.45)) * 1.5, 0, 1), -o.driftX, -o.driftY);
+  ctx.restore();
+}
+
+// 44. Riso Glow (双墨方块 + 辉光)
+function risoGlow(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bs = Math.max(3, Math.round(o.blockSize)), gap = o.gap, sz = Math.max(1, bs - gap);
+  const A = hexToRgb(o.inkA), B = hexToRgb(o.inkB);
+  ctx.fillStyle = rgbs(hexToRgb(o.bgColor)); ctx.fillRect(0, 0, w, h);
+  ctx.save(); ctx.globalCompositeOperation = o.blend === 'additive' ? 'lighter' : 'source-over';
+  if (o.glow > 0) { ctx.shadowColor = rgbs(A); ctx.shadowBlur = o.glowSize; }
+  for (let by = 0; by < h; by += bs) for (let bx = 0; bx < w; bx += bs) {
+    const l = lum(...px(data, w, h, bx + bs / 2, by + bs / 2));
+    const ai = clamp((1 - l) * o.inkStrength, 0, 1), bi = clamp(l * o.inkStrength, 0, 1);
+    if (bi > 0.12) { ctx.fillStyle = `rgba(${B[0]},${B[1]},${B[2]},${bi})`; ctx.fillRect(bx, by, sz, sz); }
+    if (ai > 0.12) { ctx.fillStyle = `rgba(${A[0]},${A[1]},${A[2]},${ai})`; ctx.fillRect(bx + o.driftX * o.warmSplit, by + o.driftY * o.warmSplit, sz, sz); }
+  }
+  ctx.restore(); ctx.shadowBlur = 0;
+}
+
+// 45. Pixel Dither Glow
+function pixelDither(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bs = Math.max(3, Math.round(o.blockSize));
+  const fg = hexToRgb(o.foregroundColor), bg = hexToRgb(o.backgroundColor);
+  ctx.fillStyle = rgbs(bg); ctx.fillRect(0, 0, w, h);
+  if (o.glow > 0) { ctx.shadowColor = rgbs(fg); ctx.shadowBlur = o.glowSize; }
+  ctx.fillStyle = rgbs(fg);
+  for (let by = 0; by < h; by += bs) for (let bx = 0; bx < w; bx += bs) {
+    const cov = 1 - lum(...px(data, w, h, bx + bs / 2, by + bs / 2));
+    const cx = bx + bs / 2, cy = by + bs / 2;
+    if (cov > o.thresholdCore) ctx.fillRect(bx, by, bs, bs);
+    else if (cov > o.thresholdMid) ctx.fillRect(bx + bs * 0.15, by + bs * 0.15, bs * 0.7, bs * 0.7);
+    else if (cov > o.thresholdLight) { ctx.beginPath(); ctx.arc(cx, cy, bs * 0.3, 0, 6.29); ctx.fill(); }
+    else if (cov > o.thresholdMicro) { ctx.beginPath(); ctx.arc(cx, cy, bs * 0.15, 0, 6.29); ctx.fill(); }
+  }
+  ctx.shadowBlur = 0;
+}
+
+// 46. Pattern Halftone
+function pattern(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(4, Math.round(o.cellSize));
+  const bg = o.invert ? '#000' : '#f4f2ea', fg = o.invert ? '#f4f2ea' : '#111';
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h); ctx.fillStyle = fg; ctx.strokeStyle = fg;
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    let l = clamp((lum(...px(data, w, h, bx + s / 2, by + s / 2)) - 0.5) * (1 + o.contrast) + 0.5 + o.brightness, 0, 1); if (o.invert) l = 1 - l;
+    const t = 1 - l; if (t < 0.06) continue;
+    const kind = Math.floor(hash(bx, by, 7) * (1 + 2 * o.variety)) % 3;
+    const cx = bx + s / 2, cy = by + s / 2, r = s * 0.5 * t;
+    if (kind === 0) { ctx.beginPath(); ctx.arc(cx, cy, r, 0, 6.29); ctx.fill(); }
+    else if (kind === 1) { ctx.lineWidth = Math.max(1, t * s * 0.5); ctx.beginPath(); ctx.moveTo(bx, cy); ctx.lineTo(bx + s, cy); ctx.stroke(); }
+    else ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+  }
+}
+
+// 47. Tone Geometry
+function toneGeometry(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const sp = Math.max(6, o.spacing), ink = hexToRgb(o.inkColor);
+  ctx.fillStyle = rgbs(hexToRgb(o.bgColor)); ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = rgbs(ink);
+  for (let by = 0; by < h; by += sp) for (let bx = 0; bx < w; bx += sp) {
+    let l = lum(...px(data, w, h, bx + sp / 2, by + sp / 2)); if (o.invert) l = 1 - l;
+    const t = 1 - l, cx = bx + sp / 2, cy = by + sp / 2;
+    ctx.strokeStyle = `rgba(${ink[0]},${ink[1]},${ink[2]},${clamp(0.4 + t, 0, 1)})`;
+    if (t > o.highlight) { ctx.lineWidth = o.ringWidth * 1.5; ctx.beginPath(); ctx.arc(cx, cy, sp * 0.42 * o.ringSize + 1, 0, 6.29); ctx.stroke(); }
+    else if (t > o.ringTone) { ctx.lineWidth = Math.max(1, o.barWidth * 4); ctx.beginPath(); ctx.moveTo(cx - sp * 0.42 * o.barLength, cy); ctx.lineTo(cx + sp * 0.42 * o.barLength, cy); ctx.stroke(); }
+    else if (t > o.lineFloor) { ctx.lineWidth = Math.max(0.6, o.lineWidth * 2); ctx.beginPath(); ctx.moveTo(cx - sp * 0.42 * o.lineLength, cy); ctx.lineTo(cx + sp * 0.42 * o.lineLength, cy); ctx.stroke(); }
+  }
+}
+
+// 48. Pixel Press (丝网印刷)
+function paperPrint(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const bs = Math.max(3, Math.round(o.blockSize));
+  const paper = hexToRgb(o.paperColor), mid = hexToRgb(o.midColor), shadow = hexToRgb(o.shadowColor);
+  ctx.fillStyle = rgbs(paper); ctx.fillRect(0, 0, w, h);
+  for (let by = 0; by < h; by += bs) for (let bx = 0; bx < w; bx += bs) {
+    let l = lum(...px(data, w, h, bx + bs / 2, by + bs / 2)); if (o.invert) l = 1 - l;
+    let col = null;
+    if (l < o.shadowThreshold) col = shadow; else if (l < o.midThreshold) col = mid;
+    if (col) { ctx.fillStyle = rgbs(col); ctx.fillRect(bx, by, bs + 1, bs + 1); }
+  }
+  ctx.fillStyle = `rgba(10,10,10,${o.verticalLineIntensity * 0.35})`;
+  for (let y = 0; y < h; y += Math.max(2, o.scanlineSpacing)) ctx.fillRect(0, y, w, o.scanlineThickness);
+  if (o.paperGrain > 0) { const img = ctx.getImageData(0, 0, w, h), dd = img.data; for (let i = 0; i < w * h; i++) { const n = (hash(i % w, (i / w) | 0, 5) - 0.5) * o.paperGrain * 60, p = i * 4; dd[p] += n; dd[p + 1] += n; dd[p + 2] += n; } ctx.putImageData(img, 0, 0); }
+}
+
+// 49. Pixel Poster
+function patChecker(c, x, y, s) { const q = s / 2; for (let i = 0; i < 2; i++)for (let j = 0; j < 2; j++)if ((i + j) % 2 === 0) c.fillRect(x + i * q, y + j * q, q, q); }
+function patDots(c, x, y, s, t) { const n = 3, q = s / n, r = q * 0.42 * (0.5 + t); for (let i = 0; i < n; i++)for (let j = 0; j < n; j++) { c.beginPath(); c.arc(x + i * q + q / 2, y + j * q + q / 2, r, 0, 6.29); c.fill(); } }
+function patCrossP(c, x, y, s) { const th = s * 0.2; c.fillRect(x, y + s / 2 - th / 2, s, th); c.fillRect(x + s / 2 - th / 2, y, th, s); }
+function patBrick(c, x, y, s) { const hh = s / 2; c.fillRect(x, y, s, hh - 1); c.fillRect(x, y + hh, s * 0.5 - 1, hh); c.fillRect(x + s * 0.5, y + hh, s * 0.5, hh); }
+function patDiag(c, x, y, s) { c.save(); c.beginPath(); c.rect(x, y, s, s); c.clip(); c.strokeStyle = c.fillStyle; c.lineWidth = 2; for (let d = -s; d < s; d += 4) { c.beginPath(); c.moveTo(x + d, y); c.lineTo(x + d + s, y + s); c.stroke(); } c.restore(); }
+function patFillP(c, x, y, s) { c.fillRect(x, y, s, s); }
+const POSTER_PATS = [patChecker, patDots, patCrossP, patBrick, patDiag, patFillP];
+function pixelPoster(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(8, Math.round(o.cellSize));
+  const pal = o.palette.map(hexToRgb);
+  ctx.fillStyle = rgbs(hexToRgb(o.paperColor)); ctx.fillRect(0, 0, w, h);
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    let l = lum(...px(data, w, h, bx + s / 2, by + s / 2)); if (o.invert) l = 1 - l;
+    if (o.paperDropout && l > o.paperThreshold) continue;
+    const t = 1 - l;
+    const pi = Math.floor(hash(bx, by, o.seed) * POSTER_PATS.length * clamp(o.variety + 0.35, 0.2, 1)) % POSTER_PATS.length;
+    const col = pal[Math.min(pal.length - 1, Math.floor(t * pal.length))];
+    ctx.fillStyle = rgbs(col);
+    POSTER_PATS[pi](ctx, bx, by, s, t);
+  }
+}
+
+// 50. Cross Stitch（调色板 X 针）
+function crossStitch(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(6, Math.round(o.cellSize));
+  const pal = [o.color1, o.color2, o.color3, o.color4, o.color5, o.color6].map(hexToRgb);
+  ctx.fillStyle = '#f4f0e6'; ctx.fillRect(0, 0, w, h); ctx.lineCap = 'round';
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    const [r, g, b] = px(data, w, h, bx + s / 2, by + s / 2);
+    let best = 0, bd = 1e9;
+    for (let k = 0; k < pal.length; k++) { const dd = (r - pal[k][0]) ** 2 + (g - pal[k][1]) ** 2 + (b - pal[k][2]) ** 2; if (dd < bd) { bd = dd; best = k; } }
+    if (o.skipBg && best === 5) continue;
+    const c = pal[best], cx = bx + s / 2, cy = by + s / 2, hs = s * 0.4;
+    ctx.strokeStyle = rgbs(c); ctx.lineWidth = Math.max(1.5, s * 0.16);
+    ctx.beginPath(); ctx.moveTo(cx - hs, cy - hs); ctx.lineTo(cx + hs, cy + hs); ctx.moveTo(cx + hs, cy - hs); ctx.lineTo(cx - hs, cy + hs); ctx.stroke();
+  }
+  if (o.gridOpacity > 0) {
+    ctx.strokeStyle = `rgba(${hexToRgb(o.gridColor).join(',')},${o.gridOpacity})`; ctx.lineWidth = 0.5;
+    for (let x = 0; x <= w; x += s) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for (let y = 0; y <= h; y += s) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+  }
+}
+
+// 51. Glitch Grid
+function glitchGrid(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(4, Math.round(o.cellSize));
+  ctx.fillStyle = o.invert ? '#f4f2ea' : '#0a0a0d'; ctx.fillRect(0, 0, w, h);
+  const themes = { neon: ['#ff2d7e', '#00e5ff', '#7b2dff', '#b6ff00'], mono: ['#ffffff', '#bbbbbb', '#888888', '#dddddd'], ember: ['#ff5a1f', '#ffd400', '#ff2d2d', '#ffffff'] };
+  const cols = themes[o.colorTheme] || themes.neon;
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    const t = 1 - lum(...px(data, w, h, bx + s / 2, by + s / 2)); if (t < 0.1) continue;
+    const off = hash(bx, by, 7) < o.glitchAmount ? (hash(bx, by, 8) - 0.5) * s * 2.2 : 0;
+    const col = cols[Math.floor(hash(bx, by, 9) * cols.length)];
+    ctx.save(); ctx.globalAlpha = clamp(0.4 + o.vibrancy * t, 0, 1);
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = o.strokeWidth;
+    const kind = Math.floor(hash(bx, by, 3) * 3), x = bx + off;
+    if (kind === 0) ctx.strokeRect(x + 1, by + 1, s - 2, s - 2);
+    else if (kind === 1) { ctx.beginPath(); ctx.moveTo(x, by); ctx.lineTo(x + s, by + s); ctx.stroke(); }
+    else ctx.fillRect(x + s * 0.3, by + s * 0.3, s * 0.4, s * 0.4);
+    ctx.restore();
+  }
+}
+
+// 52. Scatter Mosaic
+function scatterMosaic(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(3, Math.round(o.cell));
+  ctx.fillStyle = '#0d0d0d'; ctx.fillRect(0, 0, w, h);
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    let [r, g, b] = px(data, w, h, bx + s / 2, by + s / 2);
+    let l = clamp((lum(r, g, b) - 0.5) * o.contrast + 0.5, 0, 1);
+    if (l < o.threshold - (hash(bx, by, 1) - 0.5) * o.dither * 0.4) continue;
+    const sx = (hash(bx, by, 2) - 0.5) * o.scatter * s * 3, sy = (hash(bx, by, 3) - 0.5) * o.scatter * s * 2 + hash(bx, by, 4) * o.melt * s * 5;
+    ctx.fillStyle = `rgb(${r | 0},${g | 0},${b | 0})`;
+    const sz = s * (1 - o.chunk * hash(bx, by, 5));
+    ctx.fillRect(bx + sx, by + sy, sz + 1, sz + 1);
+    if (hash(bx, by, 6) < o.floaters * 0.12) ctx.fillRect(bx + sx + (hash(bx, by, 7) - 0.5) * s * 6, by + sy - hash(bx, by, 8) * s * 6, 2, 2);
+  }
+}
+
+// 53. Drift Lines
+function driftLines(ctx, src, o) {
+  const { width: w, height: h, data } = src;
+  ctx.fillStyle = o.invert ? '#f4f2ea' : '#0a0a0a'; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = o.invert ? '#111' : '#f4f2ea';
+  const rows = Math.max(6, Math.round(h / Math.max(6, o.spacing * 0.42)));
+  const step = Math.max(2, o.dotStep * 2);
+  for (let i = 0; i < rows; i++) {
+    const baseY = (i + 0.5) / rows * h;
+    for (let x = 0; x < w; x += step) {
+      const t = 1 - lum(...px(data, w, h, x, baseY)); if (t < o.blackFloor) continue;
+      const off = Math.sin(x * 0.02 * o.zigzag + i * 0.7) * t * o.catchStrength * 12 * o.concentration;
+      const r = o.dotSize * (0.4 + t); ctx.beginPath(); ctx.arc(x, baseY + off, r, 0, 6.29); ctx.fill();
+    }
+  }
+}
+
+// 54-56. Retro / Glyph / Symbol Matrix（共用色阶分带）
+function matrixBands(ctx, src, o, draw) {
+  const { width: w, height: h, data } = src;
+  const s = Math.max(4, Math.round(o.spacing));
+  ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, 0, w, h);
+  for (let by = 0; by < h; by += s) for (let bx = 0; bx < w; bx += s) {
+    const l = lum(...px(data, w, h, bx + s / 2, by + s / 2));
+    let band;
+    if (l > o.highlightThresh) band = 'H'; else if (l > o.ditherThresh) band = 'T'; else if (l > o.midtoneThresh) band = 'M'; else band = 'D';
+    if (band === 'H' && !o.showHighlight) continue;
+    if (band === 'T' && !o.showTransition) continue;
+    if (band === 'M' && !o.showMidtone) continue;
+    if (band === 'D' && !o.showDot) continue;
+    draw(band, bx, by, s, l);
+  }
+}
+function retroMatrix(ctx, src, o) {
+  ctx.fillStyle = '#dfe7dd'; ctx.strokeStyle = '#dfe7dd';
+  matrixBands(ctx, src, o, (band, bx, by, s) => {
+    ctx.fillStyle = '#dfe7dd';
+    if (band === 'H') ctx.fillRect(bx, by, s - 1, s * Math.min(1, o.blockHeight));
+    else if (band === 'T') ctx.fillRect(bx + s * 0.15, by + s * 0.15, s * 0.7, s * 0.7);
+    else if (band === 'M') ctx.fillRect(bx + s * 0.3, by + s * 0.3, s * 0.4, s * 0.4);
+    else { ctx.beginPath(); ctx.arc(bx + s / 2, by + s / 2, s * 0.16, 0, 6.29); ctx.fill(); }
+  });
+}
+function glyphMatrix(ctx, src, o) {
+  const s = Math.max(4, Math.round(o.spacing));
+  ctx.font = `${s}px ui-monospace, monospace`; ctx.textBaseline = 'top'; ctx.fillStyle = '#cfe8ff';
+  const g = o.glyphSet === 'blocks' ? ['█', '▓', '▒', '░'] : o.glyphSet === 'digits' ? ['8', '6', '2', '.'] : ['█', '▚', '◆', '·'];
+  matrixBands(ctx, src, o, (band, bx, by) => {
+    ctx.fillStyle = '#cfe8ff';
+    const ch = band === 'H' ? g[0] : band === 'T' ? g[1] : band === 'M' ? g[2] : g[3];
+    ctx.fillText(ch, bx, by);
+  });
+}
+function symbolMatrix(ctx, src, o) {
+  ctx.lineWidth = o.lineWidth; ctx.strokeStyle = '#e6dccf'; ctx.fillStyle = '#e6dccf'; ctx.lineCap = 'round';
+  matrixBands(ctx, src, o, (band, bx, by, s) => {
+    const cx = bx + s / 2, cy = by + s / 2, r = s * 0.36 * o.symbolScale;
+    ctx.strokeStyle = '#e6dccf'; ctx.fillStyle = '#e6dccf';
+    if (band === 'H') ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+    else if (band === 'T') { ctx.beginPath(); ctx.moveTo(cx - r, cy - r); ctx.lineTo(cx + r, cy + r); ctx.moveTo(cx + r, cy - r); ctx.lineTo(cx - r, cy + r); ctx.stroke(); }
+    else if (band === 'M') { ctx.beginPath(); ctx.arc(cx, cy, r, 0, 6.29); ctx.stroke(); }
+    else { ctx.beginPath(); ctx.arc(cx, cy, s * 0.12, 0, 6.29); ctx.fill(); }
+  });
+}
+
+// ============================================================
+//  注册表
+// ============================================================
+const EFFECTS = {
+  glitch: {
+    label: 'Glitch',
+    apply: glitch,
+    defaults: { density: 0.62, stripHeight: 4, maxShift: 36, colorBoost: 2.4, grain: 0.05, seed: 7 },
+    controls: [
+      { key: 'density', label: '故障密度', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'stripHeight', label: '条带高度', type: 'range', min: 1, max: 20, step: 1 },
+      { key: 'maxShift', label: '最大位移', type: 'range', min: 0, max: 120, step: 1 },
+      { key: 'colorBoost', label: '色差强度', type: 'range', min: 0, max: 8, step: 0.1 },
+      { key: 'grain', label: '颗粒', type: 'range', min: 0, max: 0.4, step: 0.01 },
+      { key: 'seed', label: '随机种子', type: 'range', min: 0, max: 50, step: 1 },
+    ],
+  },
+  pixelSort: {
+    label: 'Pixel Sort',
+    apply: pixelSort,
+    defaults: { threshold: 0.33, streak: 213, randomness: 0.39, reverse: false, vertical: false, seed: 1 },
+    controls: [
+      { key: 'threshold', label: '亮度阈值', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'streak', label: '最大拉丝长度', type: 'range', min: 4, max: 400, step: 1 },
+      { key: 'randomness', label: '随机断裂', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'reverse', label: '反向排序', type: 'check' },
+      { key: 'vertical', label: '竖向', type: 'check' },
+    ],
+  },
+  filmPrism: {
+    label: 'Film Prism',
+    apply: filmPrism,
+    defaults: {
+      aberration: 4, halation: 0.35, halationBlur: 12, lightLeakOpacity: 0.45, lightLeakStyle: 'left',
+      filmContrast: 0.35, filmFade: 0.18, shadowTint: 0.35, highlightTint: 0.25, grain: 0.12,
+    },
+    controls: [
+      { key: 'aberration', label: '色散', type: 'range', min: 0, max: 15, step: 0.5 },
+      { key: 'halation', label: '光晕', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'halationBlur', label: '光晕模糊', type: 'range', min: 1, max: 40, step: 1 },
+      { key: 'lightLeakOpacity', label: '漏光', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'lightLeakStyle', label: '漏光方向', type: 'select', options: ['left', 'right'] },
+      { key: 'filmContrast', label: '对比', type: 'range', min: -0.5, max: 1, step: 0.01 },
+      { key: 'filmFade', label: '褪色', type: 'range', min: 0, max: 0.6, step: 0.01 },
+      { key: 'shadowTint', label: '暗部暖调', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'highlightTint', label: '亮部冷调', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'grain', label: '颗粒', type: 'range', min: 0, max: 0.4, step: 0.01 },
+    ],
+  },
+  wave: {
+    label: 'Wave Lines',
+    apply: wave,
+    defaults: { lineCount: 48, amplitude: 18, frequency: 1, lineWidth: 1.2, foreground: '#ffffff', background: '#0b0b0e' },
+    controls: [
+      { key: 'lineCount', label: '线条数', type: 'range', min: 8, max: 160, step: 1 },
+      { key: 'amplitude', label: '振幅', type: 'range', min: 0, max: 60, step: 1 },
+      { key: 'frequency', label: '频率', type: 'range', min: 0, max: 5, step: 0.1 },
+      { key: 'lineWidth', label: '线宽', type: 'range', min: 0.5, max: 4, step: 0.1 },
+      { key: 'foreground', label: '线色', type: 'color' },
+      { key: 'background', label: '底色', type: 'color' },
+    ],
+  },
+  crystal: {
+    label: 'Crystal Glass',
+    apply: crystal,
+    defaults: { cellSize: 12, glossiness: 1, rainbowSheen: 0.5 },
+    controls: [
+      { key: 'cellSize', label: '晶格大小', type: 'range', min: 4, max: 40, step: 0.5 },
+      { key: 'glossiness', label: '面片光泽', type: 'range', min: 0, max: 4, step: 0.1 },
+      { key: 'rainbowSheen', label: '彩虹光泽', type: 'range', min: 0, max: 1, step: 0.01 },
+    ],
+  },
+  glassDispersion: {
+    label: 'Glass Dispersion',
+    apply: glassDispersion,
+    defaults: { blockSize: 15, streak: 0.4, refraction: 0.92, rainbowSheen: 0.54, glossiness: 0.87, direction: 'right' },
+    controls: [
+      { key: 'blockSize', label: '块大小', type: 'range', min: 4, max: 40, step: 1 },
+      { key: 'refraction', label: '折射强度', type: 'range', min: 0, max: 2, step: 0.01 },
+      { key: 'streak', label: '拖尾', type: 'range', min: 0, max: 2, step: 0.01 },
+      { key: 'rainbowSheen', label: '彩虹色散', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'glossiness', label: '光泽', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'direction', label: '方向', type: 'select', options: ['right', 'left'] },
+    ],
+  },
+  ribbonScan: {
+    label: 'Ribbon Scan',
+    apply: ribbonScan,
+    defaults: {
+      colWidth: 12, shading: 0.65, shiftAmount: 35, capsuleDensity: 0.25, capsuleWidth: 4,
+      capsuleHeight: 12, colorTheme: 'acidGreen', colorThreshold: 0.45,
+    },
+    controls: [
+      { key: 'colWidth', label: '竖条宽', type: 'range', min: 2, max: 40, step: 1 },
+      { key: 'shading', label: '明暗压缩', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'shiftAmount', label: '位移量', type: 'range', min: 0, max: 120, step: 1 },
+      { key: 'capsuleDensity', label: '胶囊密度', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'capsuleWidth', label: '胶囊宽', type: 'range', min: 2, max: 20, step: 1 },
+      { key: 'capsuleHeight', label: '胶囊高', type: 'range', min: 4, max: 40, step: 1 },
+      { key: 'colorThreshold', label: '胶囊亮度阈', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'colorTheme', label: '配色', type: 'select', options: ['acidGreen', 'neon', 'mono', 'sunset'] },
+    ],
+  },
+  contour: {
+    label: 'Contour',
+    apply: contour,
+    defaults: { levels: 11, lineWidth: 1.2, smoothing: 0.8, filled: false, invert: false, foreground: '#ffffff', background: '#101014', backgroundOpacity: 1 },
+    controls: [
+      { key: 'levels', label: '分层', type: 'range', min: 2, max: 30, step: 1 },
+      { key: 'lineWidth', label: '线宽', type: 'range', min: 1, max: 5, step: 0.5 },
+      { key: 'smoothing', label: '模糊', type: 'range', min: 0, max: 3, step: 0.1 },
+      { key: 'filled', label: '填充色带', type: 'check' },
+      { key: 'invert', label: '反相', type: 'check' },
+      { key: 'foreground', label: '线色', type: 'color' },
+      { key: 'background', label: '底色', type: 'color' },
+    ],
+  },
+  hudTracker: {
+    label: 'HUD Tracker',
+    apply: hudTracker,
+    defaults: { nodeCount: 15, connectionType: 'sequential', nodeStyle: 'box', showGlobalBox: true, labelFrequency: 0.6, labelStyle: 'coords', customText: 'TRK_', jitter: 0.2, lineWidth: 1.5, bgDim: 0.3, color: '#00e5ff', seed: 7 },
+    controls: [
+      { key: 'nodeCount', label: '节点数', type: 'range', min: 4, max: 60, step: 1 },
+      { key: 'connectionType', label: '连线', type: 'select', options: ['sequential', 'nearest', 'none'] },
+      { key: 'nodeStyle', label: '节点样式', type: 'select', options: ['box', 'cross'] },
+      { key: 'labelFrequency', label: '标签频率', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'labelStyle', label: '标签内容', type: 'select', options: ['coords', 'custom'] },
+      { key: 'customText', label: '自定义前缀', type: 'text' },
+      { key: 'jitter', label: '抖动', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'lineWidth', label: '线宽', type: 'range', min: 0.5, max: 4, step: 0.1 },
+      { key: 'bgDim', label: '背景压暗', type: 'range', min: 0, max: 0.9, step: 0.01 },
+      { key: 'showGlobalBox', label: '全局框', type: 'check' },
+      { key: 'color', label: '颜色', type: 'color' },
+      { key: 'seed', label: '随机种子', type: 'range', min: 0, max: 50, step: 1 },
+    ],
+  },
+  cctv: {
+    label: 'CCTV',
+    apply: cctv,
+    defaults: { frameColor: '#3973ff', showFrame: true, showHeader: true, showTimestamp: true, cameraId: 'CCTV 01', subjectLabel: 'SUBJECT', timestamp: '13:01:49', monoTint: 0.45, contrast: 1.15, grain: 0.2 },
+    controls: [
+      { key: 'monoTint', label: '单色调', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'contrast', label: '对比', type: 'range', min: 0.5, max: 2, step: 0.01 },
+      { key: 'grain', label: '颗粒', type: 'range', min: 0, max: 0.5, step: 0.01 },
+      { key: 'frameColor', label: 'UI 颜色', type: 'color' },
+      { key: 'cameraId', label: '摄像头 ID', type: 'text' },
+      { key: 'subjectLabel', label: '目标标签', type: 'text' },
+      { key: 'timestamp', label: '时间戳', type: 'text' },
+      { key: 'showFrame', label: '外框', type: 'check' },
+      { key: 'showHeader', label: '信息条', type: 'check' },
+      { key: 'showTimestamp', label: '时间戳/REC', type: 'check' },
+    ],
+  },
+  brandGenerator: {
+    label: 'Brand Generator',
+    apply: brandGenerator,
+    defaults: {
+      maxCircles: 40, minRadius: 4, maxRadius: 24, strokeWidth: 1.1, sizeSeed: 340, connectionMaxDistance: 300, connectionWeight: 0.6,
+      chainOn: true, chainCount: 30, chainAngle: 125, chainBaseRadius: 320, chainSizeRatio: 0.77, chainMarkerSize: 5.5,
+      showGrid: true, showCrosshair: true, showText: true, showConstellation: true, bgBrightness: 0.85, colorTheme: 'mono', accentColor: '#ffffff',
+      topLeftText: 'Design & Strategy', topRightText: 'Your Name', bottomLeftText: 'www.yoursite.com', bottomRightText: 'City, Country',
+    },
+    controls: [
+      { key: 'maxCircles', label: '圆点数', type: 'range', min: 6, max: 80, step: 1 },
+      { key: 'minRadius', label: '最小半径', type: 'range', min: 1, max: 20, step: 1 },
+      { key: 'maxRadius', label: '最大半径', type: 'range', min: 6, max: 50, step: 1 },
+      { key: 'connectionMaxDistance', label: '连线距离', type: 'range', min: 0, max: 500, step: 10 },
+      { key: 'sizeSeed', label: '随机种子', type: 'range', min: 0, max: 999, step: 1 },
+      { key: 'bgBrightness', label: '背景亮度', type: 'range', min: 0, max: 1.5, step: 0.05 },
+      { key: 'colorTheme', label: '配色', type: 'select', options: ['mono', 'neon', 'sunset', 'acidGreen', 'custom'] },
+      { key: 'accentColor', label: '自定义色', type: 'color' },
+      { key: 'chainOn', label: '圆环链', type: 'check' },
+      { key: 'showGrid', label: '网格', type: 'check' },
+      { key: 'showCrosshair', label: '准星', type: 'check' },
+      { key: 'showConstellation', label: '星座连线', type: 'check' },
+      { key: 'showText', label: '四角文字', type: 'check' },
+      { key: 'topLeftText', label: '左上文字', type: 'text' },
+      { key: 'topRightText', label: '右上文字', type: 'text' },
+      { key: 'bottomLeftText', label: '左下文字', type: 'text' },
+      { key: 'bottomRightText', label: '右下文字', type: 'text' },
+    ],
+  },
+  rainReveal: {
+    label: 'Rain Reveal',
+    apply: rainReveal,
+    defaults: { fromHighlights: true, fromShadows: false, fromEdges: false, edgeBoost: 2.5, threshold: 0.4, density: 130, direction: 0, spread: 8, streak: 1.2, drip: 0.5, bright: 1.1, ghost: 0.15, floor: true },
+    controls: [
+      { key: 'density', label: '雨丝密度', type: 'range', min: 10, max: 400, step: 10 },
+      { key: 'streak', label: '雨丝长度', type: 'range', min: 0.2, max: 4, step: 0.1 },
+      { key: 'threshold', label: '亮度阈值', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'spread', label: '横向散布', type: 'range', min: 0, max: 30, step: 1 },
+      { key: 'direction', label: '方向(度)', type: 'range', min: -60, max: 60, step: 1 },
+      { key: 'drip', label: '滴头概率', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'bright', label: '亮度增益', type: 'range', min: 0.5, max: 2.5, step: 0.05 },
+      { key: 'ghost', label: '底图残影', type: 'range', min: 0, max: 0.6, step: 0.01 },
+      { key: 'edgeBoost', label: '边缘增强', type: 'range', min: 0, max: 6, step: 0.1 },
+      { key: 'fromHighlights', label: '源自高光', type: 'check' },
+      { key: 'fromShadows', label: '源自暗部', type: 'check' },
+      { key: 'fromEdges', label: '源自边缘', type: 'check' },
+      { key: 'floor', label: '地面线', type: 'check' },
+    ],
+  },
+  kineticTrace: {
+    label: 'Trace Motion',
+    apply: kineticTrace,
+    defaults: { sensitivity: 60, body: 24, trail: 900, echoGap: 5, gain: 55, weight: 1, prismatic: true, inkColor: '#1d4ed8', paperColor: '#f4f2ea' },
+    controls: [
+      { key: 'sensitivity', label: '灵敏度', type: 'range', min: 0, max: 100, step: 1 },
+      { key: 'body', label: '笔画长度', type: 'range', min: 4, max: 60, step: 1 },
+      { key: 'trail', label: '拖影(回声数)', type: 'range', min: 0, max: 2000, step: 50 },
+      { key: 'echoGap', label: '回声间距', type: 'range', min: 0, max: 20, step: 1 },
+      { key: 'gain', label: '浓度', type: 'range', min: 0, max: 100, step: 1 },
+      { key: 'weight', label: '笔画粗细', type: 'range', min: 0, max: 6, step: 0.5 },
+      { key: 'prismatic', label: '棱镜色', type: 'check' },
+      { key: 'inkColor', label: '墨色', type: 'color' },
+      { key: 'paperColor', label: '纸色', type: 'color' },
+    ],
+  },
+  crosshatch: {
+    label: 'Crosshatch',
+    apply: crosshatch,
+    defaults: { density: 6, layers: 5, angle: 45, lineWidth: 1.4, randomness: 0.08, invert: false },
+    controls: [
+      { key: 'density', label: '线间距', type: 'range', min: 2, max: 20, step: 0.5 },
+      { key: 'layers', label: '层数', type: 'range', min: 1, max: 8, step: 1 },
+      { key: 'angle', label: '基准角度', type: 'range', min: 0, max: 90, step: 1 },
+      { key: 'lineWidth', label: '线宽', type: 'range', min: 0.5, max: 4, step: 0.1 },
+      { key: 'randomness', label: '随机', type: 'range', min: 0, max: 0.5, step: 0.01 },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  stitchPoster: {
+    label: 'Stitch Poster',
+    apply: stitchPoster,
+    defaults: { stitch: 9, thread: 0.26, jitter: 0.5, sheen: 0.35, colors: 6, saturation: 1.5, contrast: 1.15 },
+    controls: [
+      { key: 'stitch', label: '针脚大小', type: 'range', min: 4, max: 24, step: 1 },
+      { key: 'colors', label: '色阶', type: 'range', min: 2, max: 12, step: 1 },
+      { key: 'thread', label: '线粗', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'jitter', label: '抖动', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'sheen', label: '光泽', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'saturation', label: '饱和', type: 'range', min: 0, max: 2, step: 0.05 },
+      { key: 'contrast', label: '对比', type: 'range', min: 0.5, max: 2, step: 0.05 },
+    ],
+  },
+  kilim: {
+    label: 'Kilim Carpet',
+    apply: kilim,
+    defaults: { stitchSize: 5, stitchAspect: 1, fieldDarken: 0.2, motifBright: 1, highlightThreshold: 0.85, paletteJitter: 0.1, palettePreset: 'kilim-red', invert: false },
+    controls: [
+      { key: 'stitchSize', label: '织点大小', type: 'range', min: 2, max: 16, step: 1 },
+      { key: 'stitchAspect', label: '织点纵横比', type: 'range', min: 0.5, max: 2, step: 0.1 },
+      { key: 'fieldDarken', label: '底场压暗', type: 'range', min: 0, max: 0.6, step: 0.01 },
+      { key: 'motifBright', label: '花纹提亮', type: 'range', min: 0.5, max: 2, step: 0.05 },
+      { key: 'paletteJitter', label: '色板抖动', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'palettePreset', label: '配色', type: 'select', options: ['kilim-red', 'indigo', 'earth'] },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  embroidery: {
+    label: 'Embroidery',
+    apply: embroidery,
+    defaults: { gridSize: 14, looseThreads: 0.6, shadowBlur: 3, customColor1: '#1d234a', customColor2: '#c92e2a', customColor3: '#f7f4ec', customColor4: '#e8802a' },
+    controls: [
+      { key: 'gridSize', label: '针脚大小', type: 'range', min: 6, max: 30, step: 1 },
+      { key: 'looseThreads', label: '散线', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'shadowBlur', label: '立体阴影', type: 'range', min: 0, max: 6, step: 1 },
+      { key: 'customColor1', label: '线色 1', type: 'color' },
+      { key: 'customColor2', label: '线色 2', type: 'color' },
+      { key: 'customColor3', label: '线色 3', type: 'color' },
+      { key: 'customColor4', label: '线色 4', type: 'color' },
+    ],
+  },
+  vectorTiling: {
+    label: 'Vector Engraving',
+    apply: vectorTiling,
+    defaults: { gridSize: 14, jitter: 0.5, strokeWidth: 1.2, invertTonalScale: false, customColor: '#ffffff', customBgColor: '#101014' },
+    controls: [
+      { key: 'gridSize', label: '网格大小', type: 'range', min: 6, max: 30, step: 1 },
+      { key: 'jitter', label: '抖动', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'strokeWidth', label: '线宽', type: 'range', min: 0.5, max: 3, step: 0.1 },
+      { key: 'invertTonalScale', label: '色调反转', type: 'check' },
+      { key: 'customColor', label: '线色', type: 'color' },
+      { key: 'customBgColor', label: '底色', type: 'color' },
+    ],
+  },
+  uiCollage: {
+    label: 'UI Collage',
+    apply: uiCollage,
+    defaults: { softwarePreset: 'illustrator', panelScale: 0.42, density: 1.25, minLuminance: 0.06, maxLuminance: 0.82, outlineOnly: false },
+    controls: [
+      { key: 'panelScale', label: '面板大小', type: 'range', min: 0.2, max: 1, step: 0.02 },
+      { key: 'density', label: '密度', type: 'range', min: 0.5, max: 3, step: 0.05 },
+      { key: 'minLuminance', label: '最低亮度', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'maxLuminance', label: '最高亮度', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'softwarePreset', label: '配色主题', type: 'select', options: ['illustrator', 'photoshop', 'original'] },
+      { key: 'outlineOnly', label: '仅描边', type: 'check' },
+    ],
+  },
+  blockify: {
+    label: 'Blockify',
+    apply: blockify,
+    defaults: { blockSize: 20, borderWidth: 0, preserveColor: true },
+    controls: [
+      { key: 'blockSize', label: '方块大小', type: 'range', min: 2, max: 60, step: 1 },
+      { key: 'borderWidth', label: '描边宽', type: 'range', min: 0, max: 4, step: 0.5 },
+      { key: 'preserveColor', label: '保留颜色', type: 'check' },
+    ],
+  },
+  blockMosaic: {
+    label: 'Block Mosaic',
+    apply: blockMosaic,
+    defaults: { blockSize: 48, subdivide: true, detailThreshold: 0.05, accentAmount: 0.11, seed: 94, inkColor: '#1a1a1a', accent1: '#e8472b', accent2: '#4f7fc4', accent3: '#f2c037', paperColor: '#efe9dc' },
+    controls: [
+      { key: 'blockSize', label: '基础块大小', type: 'range', min: 12, max: 96, step: 2 },
+      { key: 'detailThreshold', label: '细分阈值', type: 'range', min: 0.01, max: 0.3, step: 0.005 },
+      { key: 'accentAmount', label: '点缀比例', type: 'range', min: 0, max: 0.5, step: 0.01 },
+      { key: 'seed', label: '随机种子', type: 'range', min: 0, max: 200, step: 1 },
+      { key: 'subdivide', label: '自适应细分', type: 'check' },
+      { key: 'inkColor', label: '墨色', type: 'color' },
+      { key: 'paperColor', label: '纸色', type: 'color' },
+      { key: 'accent1', label: '点缀 1', type: 'color' },
+      { key: 'accent2', label: '点缀 2', type: 'color' },
+      { key: 'accent3', label: '点缀 3', type: 'color' },
+    ],
+  },
+  quadtreeZoom: {
+    label: 'Quadtree Zoom',
+    apply: quadtreeZoom,
+    defaults: { maxDepth: 4, threshold: 0.18, zoomScale: 2, boxBrightness: 0, showBackground: true, bgBrightness: 0.35, borderColor: '#ffffff', borderWidth: 1, minBoxSize: 16, maxBoxSize: 128 },
+    controls: [
+      { key: 'maxDepth', label: '最大深度', type: 'range', min: 1, max: 6, step: 1 },
+      { key: 'threshold', label: '细分阈值', type: 'range', min: 0.02, max: 0.6, step: 0.01 },
+      { key: 'zoomScale', label: '放大倍数', type: 'range', min: 1, max: 4, step: 0.1 },
+      { key: 'minBoxSize', label: '最小盒', type: 'range', min: 8, max: 64, step: 4 },
+      { key: 'maxBoxSize', label: '最大盒', type: 'range', min: 32, max: 256, step: 8 },
+      { key: 'bgBrightness', label: '背景亮度', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'boxBrightness', label: '盒明暗', type: 'range', min: -0.5, max: 0.5, step: 0.05 },
+      { key: 'borderWidth', label: '边框宽', type: 'range', min: 0, max: 3, step: 0.5 },
+      { key: 'showBackground', label: '显示背景', type: 'check' },
+      { key: 'borderColor', label: '边框色', type: 'color' },
+    ],
+  },
+  bricks: {
+    label: '3D Bricks',
+    apply: bricks,
+    defaults: { blockSize: 28, studSize: 0.55, bevelWidth: 1.5, colorMode: 'original', studShape: 'circle' },
+    controls: [
+      { key: 'blockSize', label: '积木大小', type: 'range', min: 8, max: 60, step: 1 },
+      { key: 'studSize', label: '凸点大小', type: 'range', min: 0.2, max: 0.9, step: 0.05 },
+      { key: 'bevelWidth', label: '斜面宽', type: 'range', min: 0.5, max: 5, step: 0.5 },
+      { key: 'studShape', label: '凸点形状', type: 'select', options: ['circle', 'square'] },
+      { key: 'colorMode', label: '颜色', type: 'select', options: ['original', 'mono'] },
+    ],
+  },
+  outline: {
+    label: 'Outline',
+    apply: outline,
+    defaults: { cellSize: 12, shape: 'square', strokeWidth: 1.2, blockVariety: 0.55, starDensity: 0.012, starSize: 1.5, starOpacity: 0.6, fillOpacity: 0 },
+    controls: [
+      { key: 'cellSize', label: '格子大小', type: 'range', min: 4, max: 40, step: 1 },
+      { key: 'strokeWidth', label: '线宽', type: 'range', min: 0.5, max: 4, step: 0.1 },
+      { key: 'blockVariety', label: '大小变化', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'fillOpacity', label: '填充', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'starDensity', label: '星点密度', type: 'range', min: 0, max: 0.05, step: 0.001 },
+      { key: 'starSize', label: '星点大小', type: 'range', min: 0.5, max: 4, step: 0.5 },
+      { key: 'starOpacity', label: '星点透明', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'shape', label: '形状', type: 'select', options: ['square', 'circle'] },
+    ],
+  },
+  voronoi: {
+    label: 'Voronoi',
+    apply: voronoi,
+    defaults: { cellSize: 24, edgeWidth: 1, randomize: 0.33 },
+    controls: [
+      { key: 'cellSize', label: '细胞大小', type: 'range', min: 6, max: 60, step: 1 },
+      { key: 'edgeWidth', label: '边线宽', type: 'range', min: 0, max: 4, step: 0.1 },
+      { key: 'randomize', label: '随机度', type: 'range', min: 0, max: 1, step: 0.01 },
+    ],
+  },
+  threshold: {
+    label: 'Threshold',
+    apply: threshold,
+    defaults: { threshold: 0.58, levels: 2, dither: true, invert: false },
+    controls: [
+      { key: 'threshold', label: '阈值', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'levels', label: '色阶', type: 'range', min: 2, max: 8, step: 1 },
+      { key: 'dither', label: '有序抖动', type: 'check' },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  edge: {
+    label: 'Edge Detection',
+    apply: edge,
+    defaults: { threshold: 0.5, lineWidth: 4, invert: false },
+    controls: [
+      { key: 'threshold', label: '边缘阈值', type: 'range', min: 0.05, max: 2, step: 0.05 },
+      { key: 'lineWidth', label: '线宽', type: 'range', min: 1, max: 12, step: 0.5 },
+      { key: 'invert', label: '反相（白底黑线）', type: 'check' },
+    ],
+  },
+  contourType: {
+    label: 'Contour Type',
+    apply: contourType,
+    defaults: { cell: 12, threshold: 0.06, contrast: 1.3, lines: 0.65, texture: 0.35, seed: 7 },
+    controls: [
+      { key: 'cell', label: '格子大小', type: 'range', min: 4, max: 30, step: 1 },
+      { key: 'threshold', label: '梯度阈值', type: 'range', min: 0, max: 0.3, step: 0.01 },
+      { key: 'contrast', label: '对比', type: 'range', min: 0.5, max: 3, step: 0.1 },
+      { key: 'lines', label: '线强度', type: 'range', min: 0.2, max: 1.5, step: 0.05 },
+      { key: 'texture', label: '笔触抖动', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'seed', label: '随机种子', type: 'range', min: 0, max: 50, step: 1 },
+    ],
+  },
+  contourMap: {
+    label: 'Contour Map',
+    apply: contourMap,
+    defaults: { smooth: 5, bands: 8, multi: 3, lineWidth: 1, lineAlpha: 0.55, charset: 'mixed', glyphSize: 13, spacing: 20, boxes: 0.15, boxSize: 0.9, labels: 0.18, ticks: 0.12, heroes: 0.7, accent: '#ef282d', seed: 101 },
+    controls: [
+      { key: 'smooth', label: '平滑', type: 'range', min: 0, max: 12, step: 1 },
+      { key: 'bands', label: '等高层数', type: 'range', min: 3, max: 20, step: 1 },
+      { key: 'multi', label: '主线间隔', type: 'range', min: 1, max: 6, step: 1 },
+      { key: 'lineAlpha', label: '线透明', type: 'range', min: 0.1, max: 1, step: 0.05 },
+      { key: 'spacing', label: '标注间距', type: 'range', min: 10, max: 48, step: 2 },
+      { key: 'glyphSize', label: '字形大小', type: 'range', min: 8, max: 24, step: 1 },
+      { key: 'heroes', label: '字形密度', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'boxes', label: '方框', type: 'range', min: 0, max: 0.5, step: 0.01 },
+      { key: 'labels', label: '数字标签', type: 'range', min: 0, max: 0.5, step: 0.01 },
+      { key: 'ticks', label: '刻度', type: 'range', min: 0, max: 0.5, step: 0.01 },
+      { key: 'charset', label: '字符集', type: 'select', options: ['mixed', 'digits', 'hex'] },
+      { key: 'accent', label: '主线色', type: 'color' },
+    ],
+  },
+  ascii: {
+    label: 'ASCII',
+    apply: ascii,
+    defaults: { cellSize: 8, colored: false, invert: false, foreground: '#dad9d5', background: '#0d0d0d' },
+    controls: [
+      { key: 'cellSize', label: '字符大小', type: 'range', min: 4, max: 24, step: 1 },
+      { key: 'colored', label: '源色', type: 'check' },
+      { key: 'invert', label: '反相', type: 'check' },
+      { key: 'foreground', label: '字色', type: 'color' },
+      { key: 'background', label: '底色', type: 'color' },
+    ],
+  },
+  asciiGhost: {
+    label: 'ASCII Ghost',
+    apply: asciiGhost,
+    defaults: { cell: 9, charset: 'dotted', exposure: 1, inkFloor: 0.4, photo: 0.55, bloom: 0.55, glow: 14, saturation: 1.5, blend: true },
+    controls: [
+      { key: 'cell', label: '字符大小', type: 'range', min: 5, max: 24, step: 1 },
+      { key: 'photo', label: '照片强度', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'bloom', label: '辉光', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'glow', label: '辉光模糊', type: 'range', min: 0, max: 30, step: 1 },
+      { key: 'exposure', label: '曝光', type: 'range', min: 0.3, max: 2, step: 0.05 },
+      { key: 'inkFloor', label: '字底透明', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'saturation', label: '饱和', type: 'range', min: 0, max: 2.5, step: 0.05 },
+      { key: 'charset', label: '字符集', type: 'select', options: ['dotted', 'ascii'] },
+      { key: 'blend', label: 'Screen 混合', type: 'check' },
+    ],
+  },
+  ditherText: {
+    label: 'Dither Text',
+    apply: ditherText,
+    defaults: { cellSize: 11, text: 'EASTASIAMADE', textThreshold: 0.45, contrast: 0.2, invert: false },
+    controls: [
+      { key: 'cellSize', label: '字符大小', type: 'range', min: 5, max: 24, step: 1 },
+      { key: 'text', label: '文字', type: 'text' },
+      { key: 'textThreshold', label: '显现阈值', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'contrast', label: '对比', type: 'range', min: -0.5, max: 1, step: 0.05 },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  matrix: {
+    label: 'Matrix Rain',
+    apply: matrix,
+    defaults: { cellSize: 12, customChars: '', trail: 20, weight: 700, rainColor: '#00ff41' },
+    controls: [
+      { key: 'cellSize', label: '字符大小', type: 'range', min: 6, max: 24, step: 1 },
+      { key: 'trail', label: '拖尾长度', type: 'range', min: 4, max: 60, step: 1 },
+      { key: 'weight', label: '字重', type: 'range', min: 300, max: 900, step: 100 },
+      { key: 'customChars', label: '自定义字符', type: 'text' },
+      { key: 'rainColor', label: '雨色', type: 'color' },
+    ],
+  },
+  pixelCode: {
+    label: 'Pixel Code',
+    apply: pixelCode,
+    defaults: { cellSize: 11, customChars: '0X8SG>', opacityMin: 0, opacityMax: 1, charBrightness: 0.95, accentA: '#7adfff', accentB: '#ff7a4a', accentC: '#ffffff' },
+    controls: [
+      { key: 'cellSize', label: '字符大小', type: 'range', min: 5, max: 22, step: 1 },
+      { key: 'customChars', label: '字符集', type: 'text' },
+      { key: 'charBrightness', label: '字亮度', type: 'range', min: 0.2, max: 1.5, step: 0.05 },
+      { key: 'opacityMax', label: '最大不透明', type: 'range', min: 0.3, max: 1, step: 0.05 },
+      { key: 'accentA', label: '强调 A', type: 'color' },
+      { key: 'accentB', label: '强调 B', type: 'color' },
+      { key: 'accentC', label: '强调 C', type: 'color' },
+    ],
+  },
+  numberField: {
+    label: 'Number Field',
+    apply: numberField,
+    defaults: { density: 42, minSize: 9, maxSize: 30, threshold: 0.08, sizeGamma: 1.4, jitter: 0.45, showNumbers: true, showLines: true, lineCount: 20, lineOpacity: 0.55, lineWidth: 0.8, flowScale: 0.02, bgColor: '#000000', inkColor: '#ffffff', invert: false },
+    controls: [
+      { key: 'density', label: '数字密度', type: 'range', min: 10, max: 120, step: 2 },
+      { key: 'minSize', label: '最小号', type: 'range', min: 5, max: 24, step: 1 },
+      { key: 'maxSize', label: '最大号', type: 'range', min: 12, max: 60, step: 1 },
+      { key: 'sizeGamma', label: '大小 gamma', type: 'range', min: 0.5, max: 3, step: 0.1 },
+      { key: 'threshold', label: '亮度阈值', type: 'range', min: 0, max: 1, step: 0.01 },
+      { key: 'lineCount', label: '流线数', type: 'range', min: 0, max: 60, step: 1 },
+      { key: 'lineOpacity', label: '流线透明', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'showNumbers', label: '显示数字', type: 'check' },
+      { key: 'showLines', label: '显示流线', type: 'check' },
+      { key: 'invert', label: '反相', type: 'check' },
+      { key: 'inkColor', label: '墨色', type: 'color' },
+      { key: 'bgColor', label: '底色', type: 'color' },
+    ],
+  },
+  gridGlyph: {
+    label: 'Grid Glyph',
+    apply: gridGlyph,
+    defaults: { cellSize: 14, strokeWidth: 1.5, contrast: 0.15, invert: false },
+    controls: [
+      { key: 'cellSize', label: '格子大小', type: 'range', min: 6, max: 30, step: 1 },
+      { key: 'strokeWidth', label: '线宽', type: 'range', min: 0.5, max: 4, step: 0.1 },
+      { key: 'contrast', label: '对比', type: 'range', min: -0.5, max: 1, step: 0.05 },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  capsuleCloud: {
+    label: 'Tag Pills',
+    apply: capsuleCloud,
+    defaults: { capsuleHeight: 20, capsuleGap: 0.5, rowGap: 0.5, borderRadius: 1, fontStyle: 'monospace', tagsText: 'design, form, color, type, grid, image, shape, line, motion, layout, pixel, vector, poster, studio, ink, brush, mono, glyph, matrix, halftone, dither, riso, contour, glass, crystal' },
+    controls: [
+      { key: 'capsuleHeight', label: '胶囊高度', type: 'range', min: 10, max: 44, step: 1 },
+      { key: 'capsuleGap', label: '横向间隙', type: 'range', min: 0, max: 2, step: 0.1 },
+      { key: 'rowGap', label: '行间隙', type: 'range', min: 0, max: 2, step: 0.1 },
+      { key: 'borderRadius', label: '圆角(0=方)', type: 'range', min: 0, max: 1, step: 1 },
+      { key: 'fontStyle', label: '字体', type: 'select', options: ['monospace', 'sans'] },
+      { key: 'tagsText', label: '标签(逗号分隔)', type: 'text' },
+    ],
+  },
+  inscribe: {
+    label: 'Inscribe',
+    apply: inscribe,
+    defaults: { cellSize: 11, customChars: '.+/=*2e', intensity: 2, glow: 2.4, weight: 700 },
+    controls: [
+      { key: 'cellSize', label: '字符大小', type: 'range', min: 5, max: 24, step: 1 },
+      { key: 'customChars', label: '字符集', type: 'text' },
+      { key: 'intensity', label: '强度', type: 'range', min: 0.5, max: 4, step: 0.1 },
+      { key: 'glow', label: '辉光', type: 'range', min: 0, max: 6, step: 0.1 },
+      { key: 'weight', label: '字重', type: 'range', min: 300, max: 900, step: 100 },
+    ],
+  },
+  dataHatch: {
+    label: 'Data Hatching',
+    apply: dataHatch,
+    defaults: { gridSize: 12, hatchChar: '+', barColorLight: '#bcbcbc', barColorMedium: '#787878', barColorDark: '#343434', bgColor: '#161616', showHudAxis: true, hudOffset: 0.5, accentColor: '#ef282d' },
+    controls: [
+      { key: 'gridSize', label: '字符大小', type: 'range', min: 6, max: 24, step: 1 },
+      { key: 'hatchChar', label: '填充字符', type: 'text' },
+      { key: 'hudOffset', label: 'HUD 位置', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'showHudAxis', label: 'HUD 轴', type: 'check' },
+      { key: 'accentColor', label: '轴色', type: 'color' },
+      { key: 'barColorLight', label: '亮色', type: 'color' },
+      { key: 'barColorMedium', label: '中色', type: 'color' },
+      { key: 'barColorDark', label: '暗色', type: 'color' },
+      { key: 'bgColor', label: '底色', type: 'color' },
+    ],
+  },
+  wordMosaic: {
+    label: 'Word Mosaic',
+    apply: wordMosaic,
+    defaults: { cellSize: 44, cellAspect: 0.5, spacing: 0.6, bigCellAmount: 0.46, text: 'design, form, color, text, image, grid, shape, type, line, pattern' },
+    controls: [
+      { key: 'cellSize', label: '格子宽', type: 'range', min: 16, max: 120, step: 2 },
+      { key: 'cellAspect', label: '格子高比', type: 'range', min: 0.3, max: 2, step: 0.05 },
+      { key: 'bigCellAmount', label: '大格比例', type: 'range', min: 0, max: 1, step: 0.02 },
+      { key: 'spacing', label: '间距', type: 'range', min: 0, max: 3, step: 0.1 },
+      { key: 'text', label: '词(逗号分隔)', type: 'text' },
+    ],
+  },
+  halftone: {
+    label: 'Halftone', apply: halftone,
+    defaults: { dotScale: 0.79, spacing: 8, angle: 45, invert: true, dotLight: 0.32 },
+    controls: [
+      { key: 'spacing', label: '网点间距', type: 'range', min: 3, max: 24, step: 1 },
+      { key: 'dotScale', label: '点大小', type: 'range', min: 0.2, max: 1.5, step: 0.05 },
+      { key: 'angle', label: '角度', type: 'range', min: 0, max: 90, step: 1 },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  dither: {
+    label: 'Dithering', apply: dither,
+    defaults: { scale: 3, levels: 3, intensity: 1.1, noise: 0.12, invert: false },
+    controls: [
+      { key: 'scale', label: '像素大小', type: 'range', min: 1, max: 12, step: 1 },
+      { key: 'levels', label: '色阶', type: 'range', min: 2, max: 8, step: 1 },
+      { key: 'intensity', label: '强度', type: 'range', min: 0.5, max: 2, step: 0.05 },
+      { key: 'noise', label: '噪点', type: 'range', min: 0, max: 0.5, step: 0.01 },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  riso: {
+    label: 'Riso', apply: riso,
+    defaults: { dotSpacing: 4, ink1Color: '#ff453a', ink2Color: '#1d4ed8', paperColor: '#f4f0e6', ink1Angle: 15, ink2Angle: 75, driftX: 2, driftY: 3 },
+    controls: [
+      { key: 'dotSpacing', label: '网点间距', type: 'range', min: 2, max: 12, step: 0.5 },
+      { key: 'ink1Angle', label: '墨1角度', type: 'range', min: 0, max: 90, step: 1 },
+      { key: 'ink2Angle', label: '墨2角度', type: 'range', min: 0, max: 90, step: 1 },
+      { key: 'driftX', label: '错位 X', type: 'range', min: -6, max: 6, step: 1 },
+      { key: 'driftY', label: '错位 Y', type: 'range', min: -6, max: 6, step: 1 },
+      { key: 'ink1Color', label: '墨色 1', type: 'color' },
+      { key: 'ink2Color', label: '墨色 2', type: 'color' },
+      { key: 'paperColor', label: '纸色', type: 'color' },
+    ],
+  },
+  risoGlow: {
+    label: 'Riso Glow', apply: risoGlow,
+    defaults: { inkA: '#ff5f38', inkB: '#f7f4ed', bgColor: '#14100e', blockSize: 8, gap: 1, driftX: 3, driftY: 2, warmSplit: 1, inkStrength: 1.05, blend: 'additive', glow: 0, glowSize: 10 },
+    controls: [
+      { key: 'blockSize', label: '方块大小', type: 'range', min: 3, max: 24, step: 1 },
+      { key: 'gap', label: '间隙', type: 'range', min: 0, max: 6, step: 0.5 },
+      { key: 'inkStrength', label: '墨强度', type: 'range', min: 0.3, max: 2, step: 0.05 },
+      { key: 'warmSplit', label: '错位强度', type: 'range', min: 0, max: 3, step: 0.1 },
+      { key: 'glow', label: '辉光', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'glowSize', label: '辉光大小', type: 'range', min: 2, max: 30, step: 1 },
+      { key: 'blend', label: '混合', type: 'select', options: ['additive', 'normal'] },
+      { key: 'inkA', label: '墨 A', type: 'color' },
+      { key: 'inkB', label: '墨 B', type: 'color' },
+      { key: 'bgColor', label: '底色', type: 'color' },
+    ],
+  },
+  pixelDither: {
+    label: 'Pixel Dither', apply: pixelDither,
+    defaults: { blockSize: 12, thresholdCore: 0.75, thresholdMid: 0.5, thresholdLight: 0.28, thresholdMicro: 0.12, foregroundColor: '#ffffff', backgroundColor: '#000000', glow: 0, glowSize: 8 },
+    controls: [
+      { key: 'blockSize', label: '方块大小', type: 'range', min: 4, max: 30, step: 1 },
+      { key: 'thresholdCore', label: '实心阈值', type: 'range', min: 0.4, max: 1, step: 0.02 },
+      { key: 'thresholdMid', label: '中块阈值', type: 'range', min: 0.2, max: 0.8, step: 0.02 },
+      { key: 'thresholdLight', label: '点阈值', type: 'range', min: 0.1, max: 0.6, step: 0.02 },
+      { key: 'thresholdMicro', label: '微点阈值', type: 'range', min: 0, max: 0.4, step: 0.02 },
+      { key: 'glow', label: '辉光', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'glowSize', label: '辉光大小', type: 'range', min: 2, max: 24, step: 1 },
+      { key: 'foregroundColor', label: '前景', type: 'color' },
+      { key: 'backgroundColor', label: '背景', type: 'color' },
+    ],
+  },
+  pattern: {
+    label: 'Pattern Halftone', apply: pattern,
+    defaults: { cellSize: 16, variety: 1, invert: false, contrast: 0, brightness: 0 },
+    controls: [
+      { key: 'cellSize', label: '格子大小', type: 'range', min: 4, max: 30, step: 1 },
+      { key: 'variety', label: '图案多样', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'contrast', label: '对比', type: 'range', min: -0.5, max: 1, step: 0.05 },
+      { key: 'brightness', label: '亮度', type: 'range', min: -0.5, max: 0.5, step: 0.05 },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  toneGeometry: {
+    label: 'Tone Geometry', apply: toneGeometry,
+    defaults: { spacing: 14, lineFloor: 0.12, ringTone: 0.5, highlight: 0.73, lineLength: 1.5, lineWidth: 0.7, ringSize: 0.62, ringWidth: 1.1, barLength: 1.5, barWidth: 0.46, inkColor: '#f1f1ef', bgColor: '#1c1c1c', invert: false },
+    controls: [
+      { key: 'spacing', label: '间距', type: 'range', min: 6, max: 30, step: 1 },
+      { key: 'lineFloor', label: '线阈值', type: 'range', min: 0, max: 0.5, step: 0.02 },
+      { key: 'ringTone', label: '环阈值', type: 'range', min: 0.3, max: 0.9, step: 0.02 },
+      { key: 'highlight', label: '高亮阈值', type: 'range', min: 0.5, max: 1, step: 0.02 },
+      { key: 'ringSize', label: '环大小', type: 'range', min: 0.2, max: 1, step: 0.05 },
+      { key: 'lineLength', label: '线长', type: 'range', min: 0.5, max: 2.5, step: 0.1 },
+      { key: 'invert', label: '反相', type: 'check' },
+      { key: 'inkColor', label: '墨色', type: 'color' },
+      { key: 'bgColor', label: '底色', type: 'color' },
+    ],
+  },
+  paperPrint: {
+    label: 'Pixel Press', apply: paperPrint,
+    defaults: { blockSize: 8, shadowThreshold: 0.32, midThreshold: 0.65, scanlineSpacing: 3, scanlineThickness: 1.5, verticalLineIntensity: 0.55, paperGrain: 0.4, paperColor: '#f4eee0', midColor: '#d4ff2e', shadowColor: '#0a0a0a', invert: false },
+    controls: [
+      { key: 'blockSize', label: '方块大小', type: 'range', min: 3, max: 20, step: 1 },
+      { key: 'shadowThreshold', label: '暗部阈值', type: 'range', min: 0.1, max: 0.6, step: 0.02 },
+      { key: 'midThreshold', label: '中调阈值', type: 'range', min: 0.4, max: 0.9, step: 0.02 },
+      { key: 'scanlineSpacing', label: '扫描线间距', type: 'range', min: 2, max: 8, step: 1 },
+      { key: 'verticalLineIntensity', label: '扫描强度', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'paperGrain', label: '纸纹', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'invert', label: '反相', type: 'check' },
+      { key: 'paperColor', label: '纸色', type: 'color' },
+      { key: 'midColor', label: '中调色', type: 'color' },
+      { key: 'shadowColor', label: '暗部色', type: 'color' },
+    ],
+  },
+  pixelPoster: {
+    label: 'Pixel Poster', apply: pixelPoster,
+    defaults: { cellSize: 24, seed: 4, variety: 0.5, invert: false, paperDropout: false, paperThreshold: 0.92, paperColor: '#f4eee0', palette: ['#141a2e', '#2e4a7a', '#e8e2a8', '#f0884a', '#c43d2e', '#f2c6d6'] },
+    controls: [
+      { key: 'cellSize', label: '格子大小', type: 'range', min: 10, max: 60, step: 2 },
+      { key: 'variety', label: '图案多样', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'seed', label: '随机种子', type: 'range', min: 0, max: 50, step: 1 },
+      { key: 'paperDropout', label: '亮部留白', type: 'check' },
+      { key: 'paperThreshold', label: '留白阈值', type: 'range', min: 0.6, max: 1, step: 0.02 },
+      { key: 'invert', label: '反相', type: 'check' },
+      { key: 'paperColor', label: '纸色', type: 'color' },
+    ],
+  },
+  crossStitch: {
+    label: 'Cross Stitch', apply: crossStitch,
+    defaults: { cellSize: 16, color1: '#e44b3d', color2: '#5872c9', color3: '#5fa055', color4: '#e89860', color5: '#1c1c1c', color6: '#f7f4ec', gridColor: '#b8b3a8', gridOpacity: 0.35, skipBg: true },
+    controls: [
+      { key: 'cellSize', label: '针脚大小', type: 'range', min: 6, max: 40, step: 1 },
+      { key: 'gridOpacity', label: '网格透明', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'skipBg', label: '留白底', type: 'check' },
+      { key: 'color1', label: '线色 1', type: 'color' },
+      { key: 'color2', label: '线色 2', type: 'color' },
+      { key: 'color3', label: '线色 3', type: 'color' },
+      { key: 'color4', label: '线色 4', type: 'color' },
+      { key: 'color5', label: '线色 5', type: 'color' },
+      { key: 'color6', label: '留白色', type: 'color' },
+    ],
+  },
+  glitchGrid: {
+    label: 'Glitch Grid', apply: glitchGrid,
+    defaults: { cellSize: 9, strokeWidth: 2, glitchAmount: 0.68, vibrancy: 0.8, colorTheme: 'neon', invert: false },
+    controls: [
+      { key: 'cellSize', label: '格子大小', type: 'range', min: 4, max: 24, step: 1 },
+      { key: 'strokeWidth', label: '线宽', type: 'range', min: 0.5, max: 5, step: 0.5 },
+      { key: 'glitchAmount', label: '故障量', type: 'range', min: 0, max: 1, step: 0.02 },
+      { key: 'vibrancy', label: '鲜艳度', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'colorTheme', label: '配色', type: 'select', options: ['neon', 'mono', 'ember'] },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  scatterMosaic: {
+    label: 'Scatter Mosaic', apply: scatterMosaic,
+    defaults: { cell: 5, threshold: 0.4, contrast: 1.4, dither: 1, chunk: 0.45, scatter: 0.5, floaters: 0.5, melt: 0.45, seed: 7 },
+    controls: [
+      { key: 'cell', label: '碎块大小', type: 'range', min: 3, max: 20, step: 1 },
+      { key: 'threshold', label: '阈值', type: 'range', min: 0, max: 1, step: 0.02 },
+      { key: 'contrast', label: '对比', type: 'range', min: 0.5, max: 3, step: 0.1 },
+      { key: 'scatter', label: '散布', type: 'range', min: 0, max: 1.5, step: 0.05 },
+      { key: 'melt', label: '融化', type: 'range', min: 0, max: 1.5, step: 0.05 },
+      { key: 'chunk', label: '块收缩', type: 'range', min: 0, max: 1, step: 0.05 },
+      { key: 'floaters', label: '浮点', type: 'range', min: 0, max: 1, step: 0.05 },
+    ],
+  },
+  driftLines: {
+    label: 'Drift Lines', apply: driftLines,
+    defaults: { spacing: 42, catchStrength: 0.85, concentration: 1, blackFloor: 0.12, zigzag: 3.1, dotStep: 1, dotSize: 1.4, invert: false },
+    controls: [
+      { key: 'spacing', label: '行距', type: 'range', min: 12, max: 80, step: 2 },
+      { key: 'catchStrength', label: '偏移强度', type: 'range', min: 0, max: 2, step: 0.05 },
+      { key: 'zigzag', label: '波动', type: 'range', min: 0, max: 8, step: 0.1 },
+      { key: 'dotSize', label: '点大小', type: 'range', min: 0.5, max: 4, step: 0.1 },
+      { key: 'dotStep', label: '点间距', type: 'range', min: 1, max: 6, step: 0.5 },
+      { key: 'blackFloor', label: '暗部下限', type: 'range', min: 0, max: 0.5, step: 0.02 },
+      { key: 'invert', label: '反相', type: 'check' },
+    ],
+  },
+  retroMatrix: {
+    label: 'Retro Matrix', apply: retroMatrix,
+    defaults: { spacing: 8, highlightThresh: 0.58, ditherThresh: 0.68, midtoneThresh: 0.34, blockHeight: 1, showHighlight: true, showTransition: true, showMidtone: true, showDot: true },
+    controls: [
+      { key: 'spacing', label: '格子大小', type: 'range', min: 4, max: 24, step: 1 },
+      { key: 'highlightThresh', label: '高亮阈值', type: 'range', min: 0.3, max: 0.9, step: 0.02 },
+      { key: 'ditherThresh', label: '过渡阈值', type: 'range', min: 0.3, max: 0.9, step: 0.02 },
+      { key: 'midtoneThresh', label: '中调阈值', type: 'range', min: 0.05, max: 0.6, step: 0.02 },
+      { key: 'blockHeight', label: '块高', type: 'range', min: 0.3, max: 1, step: 0.05 },
+      { key: 'showHighlight', label: '高亮', type: 'check' },
+      { key: 'showMidtone', label: '中调', type: 'check' },
+      { key: 'showDot', label: '暗点', type: 'check' },
+    ],
+  },
+  glyphMatrix: {
+    label: 'Glyph Matrix', apply: glyphMatrix,
+    defaults: { spacing: 12, highlightThresh: 0.58, ditherThresh: 0.48, midtoneThresh: 0.34, glyphSet: 'mixed', showHighlight: true, showTransition: true, showMidtone: true, showDot: true },
+    controls: [
+      { key: 'spacing', label: '字形大小', type: 'range', min: 6, max: 28, step: 1 },
+      { key: 'highlightThresh', label: '高亮阈值', type: 'range', min: 0.3, max: 0.9, step: 0.02 },
+      { key: 'ditherThresh', label: '过渡阈值', type: 'range', min: 0.3, max: 0.9, step: 0.02 },
+      { key: 'midtoneThresh', label: '中调阈值', type: 'range', min: 0.05, max: 0.6, step: 0.02 },
+      { key: 'glyphSet', label: '字形集', type: 'select', options: ['mixed', 'blocks', 'digits'] },
+      { key: 'showHighlight', label: '高亮', type: 'check' },
+      { key: 'showMidtone', label: '中调', type: 'check' },
+      { key: 'showDot', label: '暗点', type: 'check' },
+    ],
+  },
+  symbolMatrix: {
+    label: 'Symbol Matrix', apply: symbolMatrix,
+    defaults: { spacing: 10, highlightThresh: 0.58, ditherThresh: 0.48, midtoneThresh: 0.34, symbolScale: 1, lineWidth: 1.2, showHighlight: true, showTransition: true, showMidtone: true, showDot: true },
+    controls: [
+      { key: 'spacing', label: '格子大小', type: 'range', min: 5, max: 24, step: 1 },
+      { key: 'symbolScale', label: '符号大小', type: 'range', min: 0.4, max: 1.5, step: 0.05 },
+      { key: 'lineWidth', label: '线宽', type: 'range', min: 0.5, max: 3, step: 0.1 },
+      { key: 'highlightThresh', label: '高亮阈值', type: 'range', min: 0.3, max: 0.9, step: 0.02 },
+      { key: 'ditherThresh', label: '过渡阈值', type: 'range', min: 0.3, max: 0.9, step: 0.02 },
+      { key: 'midtoneThresh', label: '中调阈值', type: 'range', min: 0.05, max: 0.6, step: 0.02 },
+      { key: 'showHighlight', label: '高亮', type: 'check' },
+      { key: 'showDot', label: '暗点', type: 'check' },
+    ],
+  },
+};
+
+const EFFECT_ORDER = ['glitch', 'pixelSort', 'filmPrism', 'wave', 'crystal', 'glassDispersion', 'ribbonScan', 'contour', 'threshold', 'edge', 'contourType', 'contourMap', 'hudTracker', 'cctv', 'brandGenerator', 'rainReveal', 'kineticTrace', 'crosshatch', 'stitchPoster', 'kilim', 'embroidery', 'vectorTiling', 'uiCollage', 'blockify', 'blockMosaic', 'quadtreeZoom', 'bricks', 'outline', 'voronoi', 'ascii', 'asciiGhost', 'ditherText', 'matrix', 'pixelCode', 'numberField', 'gridGlyph', 'capsuleCloud', 'inscribe', 'dataHatch', 'wordMosaic', 'halftone', 'dither', 'riso', 'risoGlow', 'pixelDither', 'pattern', 'toneGeometry', 'paperPrint', 'pixelPoster', 'crossStitch', 'glitchGrid', 'scatterMosaic', 'driftLines', 'retroMatrix', 'glyphMatrix', 'symbolMatrix'];
+
+
+// ============================================================
+//  东亚制造 · 统一控制器（图片 & 视频/运动 共用同一套效果）
+// ============================================================
+(function () {
+  const MAX = 1000, PW = 440, TW = 106, TH = 68;
+  let PH = 330;
+  const OUT = document.getElementById('stage-canvas');
+  const octx = OUT.getContext('2d', { willReadFrequently: true });
+
+  let mode = 'image';                 // image | video
+  let cur = 'glitch';
+  let params = { ...EFFECTS[cur].defaults };
+
+  // —— 实时墨迹追踪（视频 + Trace Motion 时启用）——
+  const LIVE = { sensitivity: 60, trail: 70, feedbackZoom: 1.01, feedbackSpin: 0, gain: 1.6, dither: true, prismatic: false, showSource: false, mirror: true, inkColor: '#1d4ed8', paperColor: '#f4f2ea' };
+  const LIVE_CONTROLS = [
+    { key: 'sensitivity', label: '灵敏度', type: 'range', min: 0, max: 100, step: 1 },
+    { key: 'trail', label: '拖影持久', type: 'range', min: 0, max: 100, step: 1 },
+    { key: 'feedbackZoom', label: '反馈缩放', type: 'range', min: 1, max: 1.04, step: 0.001, fmt: (v) => v.toFixed(3) },
+    { key: 'feedbackSpin', label: '反馈旋转', type: 'range', min: -0.02, max: 0.02, step: 0.001, fmt: (v) => v.toFixed(3) },
+    { key: 'gain', label: '浓度增益', type: 'range', min: 0.2, max: 4, step: 0.1, fmt: (v) => v.toFixed(1) },
+    { key: 'dither', label: '抖动墨迹', type: 'check' },
+    { key: 'prismatic', label: '棱镜色', type: 'check' },
+    { key: 'showSource', label: '底图残影', type: 'check' },
+    { key: 'mirror', label: '镜像', type: 'check' },
+    { key: 'inkColor', label: '墨色', type: 'color' },
+    { key: 'paperColor', label: '纸色', type: 'color' },
+  ];
+  const isLiveTrace = () => mode === 'video' && cur === 'kineticTrace';
+
+  // —— 图片来源 ——
+  let sourceCanvas = makeSample();
+  function makeSample() {
+    const W = 720, H = 540, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d');
+    const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#2a3f6b'); g.addColorStop(0.5, '#8a4a7a'); g.addColorStop(1, '#e0a04a');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    const blob = (cx, cy, r, col) => { const rg = x.createRadialGradient(cx, cy, 0, cx, cy, r); rg.addColorStop(0, col); rg.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = rg; x.fillRect(0, 0, W, H); };
+    blob(200, 180, 200, 'rgba(255,240,180,.95)'); blob(520, 380, 240, 'rgba(120,200,255,.7)'); blob(560, 140, 130, 'rgba(255,120,160,.7)');
+    x.fillStyle = 'rgba(20,20,30,.85)'; x.beginPath(); x.moveTo(120, 500); x.lineTo(300, 300); x.lineTo(480, 500); x.closePath(); x.fill();
+    x.fillStyle = 'rgba(255,255,255,.9)'; x.beginPath(); x.arc(200, 180, 46, 0, 7); x.fill();
+    return c;
+  }
+
+  // —— 视频来源 + 墨迹缓冲 ——
+  const video = document.createElement('video'); video.muted = true; video.loop = true; video.playsInline = true;
+  let vsrc = 'demo', camStream = null, prevGray = null, rafId = 0, running = false;
+  const work = document.createElement('canvas'), wctx = work.getContext('2d', { willReadFrequently: true });
+  const trail = document.createElement('canvas'), tctx = trail.getContext('2d');
+  const temp = document.createElement('canvas'), tmpctx = temp.getContext('2d');
+  const inkC = document.createElement('canvas'), ictx = inkC.getContext('2d');
+  const demo = document.createElement('canvas'); demo.width = 640; demo.height = 480;
+  const demoCtx = demo.getContext('2d');
+
+  const hx = (hex) => { const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+  const h2 = (h, s, l) => { h /= 360; const a = s * Math.min(l, 1 - l); const f = (n) => { const k = (n + h * 12) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); }; return [f(0) * 255, f(8) * 255, f(4) * 255]; };
+  const cl = (v, a, b) => (v < a ? a : v > b ? b : v);
+  const BAYER = [[0, 48, 12, 60, 3, 51, 15, 63], [32, 16, 44, 28, 35, 19, 47, 31], [8, 56, 4, 52, 11, 59, 7, 55], [40, 24, 36, 20, 43, 27, 39, 23], [2, 50, 14, 62, 1, 49, 13, 61], [34, 18, 46, 30, 33, 17, 45, 29], [10, 58, 6, 54, 9, 57, 5, 53], [42, 26, 38, 22, 41, 25, 37, 21]];
+
+  function sizeVideo(w, h) { PH = h; [work, trail, temp, inkC].forEach((c) => { c.width = w; c.height = h; }); tctx.fillStyle = LIVE.paperColor; tctx.fillRect(0, 0, w, h); }
+  sizeVideo(PW, Math.round(PW * 480 / 640));
+
+  function drawDemo(t) {
+    const c = demoCtx, W = 640, H = 480; c.fillStyle = '#0e0e14'; c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 3; i++) { const a = t * 0.0011 * (i + 1) + i * 2.1; const x = W / 2 + Math.cos(a) * (120 + i * 50); const y = H / 2 + Math.sin(a * 1.3) * (90 + i * 40); const g = c.createRadialGradient(x, y, 0, x, y, 60); g.addColorStop(0, ['#ffffff', '#8fd0ff', '#ffd08f'][i]); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.beginPath(); c.arc(x, y, 60, 0, 7); c.fill(); }
+    c.save(); c.translate(W / 2, H / 2); c.rotate(t * 0.0016); c.fillStyle = '#ff5a7a'; c.fillRect(-160, -6, 320, 12); c.restore();
+  }
+
+  function grab() {
+    const mir = LIVE.mirror && vsrc === 'cam';
+    wctx.save();
+    if (mir) { wctx.translate(PW, 0); wctx.scale(-1, 1); }
+    if (vsrc === 'demo') wctx.drawImage(demo, 0, 0, PW, PH);
+    else if (video.readyState >= 2) wctx.drawImage(video, 0, 0, PW, PH);
+    else { wctx.restore(); return false; }
+    wctx.restore(); return true;
+  }
+
+  function traceInk() {
+    const cur2 = wctx.getImageData(0, 0, PW, PH); const cd = cur2.data, n = PW * PH;
+    const gray = new Uint8ClampedArray(n);
+    for (let i = 0; i < n; i++) { const p = i * 4; gray[i] = (cd[p] * 0.299 + cd[p + 1] * 0.587 + cd[p + 2] * 0.114) | 0; }
+    tmpctx.setTransform(1, 0, 0, 1, 0, 0); tmpctx.clearRect(0, 0, PW, PH);
+    tmpctx.translate(PW / 2, PH / 2); tmpctx.rotate(LIVE.feedbackSpin); tmpctx.scale(LIVE.feedbackZoom, LIVE.feedbackZoom); tmpctx.translate(-PW / 2, -PH / 2);
+    tmpctx.drawImage(trail, 0, 0);
+    const decay = 0.80 + (LIVE.trail / 100) * 0.185;
+    tctx.setTransform(1, 0, 0, 1, 0, 0); tctx.clearRect(0, 0, PW, PH);
+    tctx.fillStyle = LIVE.paperColor; tctx.fillRect(0, 0, PW, PH);
+    tctx.globalAlpha = decay; tctx.drawImage(temp, 0, 0); tctx.globalAlpha = 1;
+    if (prevGray) {
+      const inkImg = ictx.createImageData(PW, PH); const id = inkImg.data;
+      const [ir, ig, ib] = hx(LIVE.inkColor);
+      const thr = (1 - LIVE.sensitivity / 100) * 60 + 6;
+      for (let y = 0; y < PH; y++) for (let x = 0; x < PW; x++) {
+        const i = y * PW + x; const diff = Math.abs(gray[i] - prevGray[i]);
+        if (diff <= thr) continue;
+        const intensity = cl((diff - thr) / (255 - thr) * LIVE.gain, 0, 1);
+        const on = LIVE.dither ? (intensity * 64 > BAYER[y & 7][x & 7]) : (intensity > 0.05);
+        if (!on) continue;
+        const p = i * 4;
+        if (LIVE.prismatic) { const [hr, hg, hb] = h2(200 + intensity * 200, 0.75, 0.55); id[p] = hr; id[p + 1] = hg; id[p + 2] = hb; }
+        else { id[p] = ir; id[p + 1] = ig; id[p + 2] = ib; }
+        id[p + 3] = LIVE.dither ? 255 : cl(intensity * 255, 60, 255);
+      }
+      ictx.putImageData(inkImg, 0, 0); tctx.drawImage(inkC, 0, 0);
+    }
+    prevGray = gray;
+    OUT.width = PW; OUT.height = PH;
+    octx.fillStyle = LIVE.paperColor; octx.fillRect(0, 0, PW, PH);
+    if (LIVE.showSource) { octx.save(); octx.globalAlpha = 0.18; octx.drawImage(work, 0, 0); octx.restore(); }
+    octx.drawImage(trail, 0, 0);
+  }
+
+  function frame(t) {
+    if (!running) return;
+    if (vsrc === 'demo') drawDemo(t);
+    if (grab()) {
+      if (cur === 'kineticTrace') traceInk();
+      else {
+        OUT.width = PW; OUT.height = PH; octx.drawImage(work, 0, 0);
+        try { EFFECTS[cur].apply(octx, octx.getImageData(0, 0, PW, PH), params); } catch (e) {}
+      }
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+  function startLoop() { if (running) return; running = true; rafId = requestAnimationFrame(frame); }
+  function stopLoop() {
+    running = false; cancelAnimationFrame(rafId);
+    if (camStream) { camStream.getTracks().forEach((tk) => tk.stop()); camStream = null; if (vsrc === 'cam') { vsrc = 'demo'; setSrcActive('demo'); document.getElementById('src-status').textContent = '演示运动源运行中'; sizeVideo(PW, Math.round(PW * 480 / 640)); } }
+  }
+
+  // —— 图片渲染 ——
+  function renderStill() {
+    const s = sourceCanvas, sc = Math.min(1, MAX / Math.max(s.width, s.height));
+    const w = Math.round(s.width * sc), h = Math.round(s.height * sc);
+    OUT.width = w; OUT.height = h; octx.clearRect(0, 0, w, h); octx.drawImage(s, 0, 0, w, h);
+    try { EFFECTS[cur].apply(octx, octx.getImageData(0, 0, w, h), params); } catch (e) {}
+  }
+  function rerender() { if (mode === 'image') renderStill(); }
+
+  // —— 卡片（LOOKS）——
+  const cards = document.getElementById('cards');
+  EFFECT_ORDER.forEach((key) => {
+    const card = document.createElement('button');
+    card.className = 'card' + (key === cur ? ' active' : '');
+    const tc = document.createElement('canvas'); tc.className = 'thumb'; tc.width = TW; tc.height = TH;
+    const lab = document.createElement('span'); lab.className = 'clab'; lab.textContent = EFFECTS[key].label;
+    card.appendChild(tc); card.appendChild(lab);
+    card.onclick = () => {
+      cur = key; params = { ...EFFECTS[key].defaults };
+      [...cards.children].forEach((c) => c.classList.toggle('active', c === card));
+      buildControls(); rerender();
+    };
+    cards.appendChild(card);
+  });
+  function renderThumbs() {
+    [...cards.children].forEach((card, idx) => {
+      const key = EFFECT_ORDER[idx]; const tc = card.querySelector('canvas'); const g = tc.getContext('2d', { willReadFrequently: true });
+      g.clearRect(0, 0, TW, TH); g.drawImage(sourceCanvas, 0, 0, TW, TH);
+      try { EFFECTS[key].apply(g, g.getImageData(0, 0, TW, TH), { ...EFFECTS[key].defaults }); } catch (e) {}
+    });
+  }
+
+  // —— 控件 ——
+  const controls = document.getElementById('controls');
+  function buildControls() {
+    controls.innerHTML = '';
+    const live = isLiveTrace();
+    const schema = live ? LIVE_CONTROLS : EFFECTS[cur].controls;
+    const pset = live ? LIVE : params;
+    if (mode === 'video' && cur === 'kineticTrace') {
+      const note = document.createElement('div'); note.className = 'hint-note';
+      note.textContent = '实时墨迹：帧间差分 + 反馈拖影。动起来才有墨。'; controls.appendChild(note);
+    } else if (mode === 'video') {
+      const note = document.createElement('div'); note.className = 'hint-note';
+      note.textContent = '此效果逐帧应用到视频/摄像头画面。'; controls.appendChild(note);
+    }
+    for (const c of schema) {
+      const wrap = document.createElement('div');
+      if (c.type === 'range') {
+        wrap.className = 'ctrl';
+        const disp = c.fmt ? c.fmt(pset[c.key]) : pset[c.key];
+        wrap.innerHTML = `<div class="lab"><b>${c.label}</b><span data-v>${disp}</span></div>`;
+        const inp = document.createElement('input'); inp.type = 'range'; inp.min = c.min; inp.max = c.max; inp.step = c.step; inp.value = pset[c.key];
+        inp.oninput = () => { pset[c.key] = +inp.value; wrap.querySelector('[data-v]').textContent = c.fmt ? c.fmt(+inp.value) : inp.value; rerender(); };
+        wrap.appendChild(inp);
+      } else if (c.type === 'check') {
+        const lb = document.createElement('label'); lb.className = 'chk'; lb.textContent = ' ' + c.label;
+        const inp = document.createElement('input'); inp.type = 'checkbox'; inp.checked = !!pset[c.key];
+        inp.onchange = () => { pset[c.key] = inp.checked; rerender(); };
+        lb.prepend(inp); controls.appendChild(lb); continue;
+      } else if (c.type === 'color') {
+        wrap.className = 'ctrl'; wrap.innerHTML = `<div class="lab"><b>${c.label}</b></div>`;
+        const inp = document.createElement('input'); inp.type = 'color'; inp.value = pset[c.key];
+        inp.oninput = () => { pset[c.key] = inp.value; rerender(); }; wrap.appendChild(inp);
+      } else if (c.type === 'text') {
+        wrap.className = 'ctrl'; wrap.innerHTML = `<div class="lab"><b>${c.label}</b></div>`;
+        const inp = document.createElement('input'); inp.type = 'text'; inp.value = pset[c.key];
+        inp.oninput = () => { pset[c.key] = inp.value; rerender(); }; wrap.appendChild(inp);
+      } else if (c.type === 'select') {
+        wrap.className = 'ctrl'; wrap.innerHTML = `<div class="lab"><b>${c.label}</b></div>`;
+        const sel = document.createElement('select');
+        c.options.forEach((o) => { const op = document.createElement('option'); op.value = o; op.textContent = o; sel.appendChild(op); });
+        sel.value = pset[c.key]; sel.onchange = () => { pset[c.key] = sel.value; rerender(); }; wrap.appendChild(sel);
+      }
+      controls.appendChild(wrap);
+    }
+  }
+
+  // —— 图片拖放 ——
+  const drop = document.getElementById('img-drop');
+  function loadImage(file) {
+    const img = new Image();
+    img.onload = () => { const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight; c.getContext('2d').drawImage(img, 0, 0); sourceCanvas = c; drop.textContent = `已加载：${file.name}（点击可换图）`; renderStill(); renderThumbs(); };
+    img.src = URL.createObjectURL(file);
+  }
+  drop.onclick = () => { const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.onchange = (e) => e.target.files[0] && loadImage(e.target.files[0]); i.click(); };
+  drop.ondragover = (e) => { e.preventDefault(); drop.style.background = '#ffff00'; };
+  drop.ondragleave = () => { drop.style.background = ''; };
+  drop.ondrop = (e) => { e.preventDefault(); drop.style.background = ''; e.dataTransfer.files[0] && loadImage(e.dataTransfer.files[0]); };
+
+  // —— 视频来源切换 ——
+  const status = document.getElementById('src-status');
+  function setSrcActive(k) { document.getElementById('src-demo').classList.toggle('active', k === 'demo'); document.getElementById('src-cam').classList.toggle('active', k === 'cam'); document.getElementById('src-file').classList.toggle('active', k === 'file'); }
+  function setSource(k) {
+    vsrc = k; setSrcActive(k);
+    if (k !== 'cam' && camStream) { camStream.getTracks().forEach((t) => t.stop()); camStream = null; }
+    prevGray = null;
+    if (k === 'demo') { sizeVideo(PW, Math.round(PW * 480 / 640)); status.textContent = '演示运动源运行中'; }
+    else if (k === 'cam') {
+      status.textContent = '正在请求摄像头…';
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { status.textContent = '此环境不支持摄像头，已回退到演示源'; setSource('demo'); return; }
+      navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } })
+        .then((s) => { camStream = s; video.srcObject = s; video.play(); video.onloadedmetadata = () => sizeVideo(PW, Math.round(PW * video.videoHeight / video.videoWidth)); status.textContent = '摄像头运行中（在镜头前动一动）'; })
+        .catch((e) => { status.textContent = '摄像头不可用（' + e.name + '），已回退到演示源'; setSource('demo'); });
+    } else if (k === 'file') { document.getElementById('src-fileInput').click(); }
+  }
+  document.getElementById('src-demo').onclick = () => setSource('demo');
+  document.getElementById('src-cam').onclick = () => setSource('cam');
+  document.getElementById('src-file').onclick = () => setSource('file');
+  document.getElementById('src-fileInput').onchange = (e) => {
+    const f = e.target.files[0]; if (!f) return; video.srcObject = null; video.src = URL.createObjectURL(f); video.play();
+    video.onloadedmetadata = () => sizeVideo(PW, Math.round(PW * video.videoHeight / video.videoWidth));
+    vsrc = 'file'; prevGray = null; setSrcActive('file'); status.textContent = '播放上传视频：' + f.name;
+  };
+
+  // —— 模式切换 ——
+  const bImg = document.getElementById('mode-image'), bVid = document.getElementById('mode-video');
+  function show(m) {
+    mode = m;
+    bImg.classList.toggle('active', m === 'image'); bVid.classList.toggle('active', m === 'video');
+    document.getElementById('srcbar').classList.toggle('hidden', m !== 'video');
+    document.getElementById('img-drop').classList.toggle('hidden', m === 'video');
+    document.getElementById('stage-cap').textContent = m === 'video'
+      ? '任选下方效果逐帧应用到视频/摄像头；选 “Trace Motion” 即实时运动墨迹。'
+      : '56 种效果，选下方卡片切换。真实照片效果最佳。';
+    buildControls();
+    if (m === 'video') startLoop(); else { stopLoop(); renderStill(); }
+  }
+  bImg.onclick = () => show('image');
+  bVid.onclick = () => show('video');
+
+  // —— 按钮 ——
+  document.getElementById('btn-reset').onclick = () => {
+    if (isLiveTrace()) { Object.assign(LIVE, { sensitivity: 60, trail: 70, feedbackZoom: 1.01, feedbackSpin: 0, gain: 1.6, dither: true, prismatic: false, showSource: false, mirror: true, inkColor: '#1d4ed8', paperColor: '#f4f2ea' }); tctx.fillStyle = LIVE.paperColor; tctx.fillRect(0, 0, PW, PH); }
+    else params = { ...EFFECTS[cur].defaults };
+    buildControls(); rerender();
+  };
+  document.getElementById('btn-save').onclick = () => { const a = document.createElement('a'); a.download = cur + '.png'; a.href = OUT.toDataURL(); a.click(); };
+
+  // —— 启动 ——
+  buildControls(); renderStill(); renderThumbs();
+})();
+</script>
+</body>
+</html>
