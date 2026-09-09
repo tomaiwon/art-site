@@ -13,30 +13,58 @@
     />
     <title>东亚制造 — Yi Huang 黄熠</title>
     <link rel="canonical" href="https://yihuang.art/east-asia/" />
-    <link rel="stylesheet" href="./cover.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #f1e8d4;
+      }
+      /* First paint stays paper-only, even before the external CSS arrives. */
+      body[data-cover-state] .atlas-stage {
+        opacity: 0;
+        pointer-events: none;
+      }
+      body #cover-title .cover-title-zh {
+        clip-path: inset(50%);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="./cover.css?v=ee10440f4f5b"
+      onerror="
+        document.documentElement.dataset.coverCssFailed = 'true';
+        window.__eamCoverBoot?.fail();
+      "
+    />
   </head>
-  <body class="observatory" data-cover="true" data-cover-title="sculpture">
+  <body
+    class="observatory"
+    data-cover="true"
+    data-cover-title="sculpture"
+    data-cover-state="loading"
+  >
     <a class="skip-link" href="../effects/">跳到项目内容</a>
     <main class="atlas-panel">
       <div class="atlas-stage">
         <iframe
           id="atlas-frame"
           title="东亚制造：点墨地球与立体字块"
-          src="./frame.html"
+          src="./frame.html?v=f9c077183baa"
+          inert
         ></iframe>
         <div class="atlas-cover">
           <div class="cover-copy">
             <h1 id="cover-title">
               <span class="cover-title-zh" lang="zh-CN">东亚制造</span>
             </h1>
-            <a class="cover-enter" href="../effects/"
+            <a class="cover-enter" href="../effects/" tabindex="-1" inert
               >进入项目<span aria-hidden="true">↗</span></a
             >
           </div>
         </div>
       </div>
       <p class="cover-error" id="cover-error" role="status" hidden>
-        此浏览器暂时无法显示三维视觉。<a href="../effects/">继续查看项目</a>
+        三维视觉暂未能载入。<a href="../effects/">继续查看项目</a>
       </p>
       <noscript
         ><p class="cover-error">
@@ -44,6 +72,51 @@
         </p></noscript
       >
     </main>
-    <script type="module" src="./entry.js"></script>
+    <script>
+      // Independent of the module: a blocked/failed entry script must not leave
+      // an endless blank page. Loading in a background tab is not a failure.
+      (() => {
+        let timer;
+        let suspended = false;
+        const page = document.body;
+        const frame = document.getElementById("atlas-frame");
+        const entry = document.querySelector(".cover-enter");
+        const error = document.getElementById("cover-error");
+        function state(value) {
+          window.clearTimeout(timer);
+          if (document.documentElement.dataset.coverCssFailed === "true")
+            value = "failed";
+          page.dataset.coverState = value;
+          frame.toggleAttribute("inert", value !== "ready");
+          entry.toggleAttribute("inert", value !== "ready");
+          entry.tabIndex = value === "ready" ? 0 : -1;
+          error.hidden = value !== "failed";
+          if (value === "loading" && !document.hidden && !suspended)
+            timer = window.setTimeout(() => state("failed"), 20000);
+        }
+        window.__eamCoverBoot = {
+          loading: () => state("loading"),
+          ready: () => state("ready"),
+          fail: () => state("failed"),
+        };
+        document.addEventListener("visibilitychange", () => {
+          if (page.dataset.coverState === "loading") state("loading");
+        });
+        window.addEventListener("pagehide", () => {
+          suspended = true;
+          state("loading");
+        });
+        window.addEventListener("pageshow", (event) => {
+          suspended = false;
+          if (event.persisted) state("loading");
+        });
+        state("loading");
+      })();
+    </script>
+    <script
+      type="module"
+      src="./entry.js?v=fa03d13926d7"
+      onerror="window.__eamCoverBoot.fail()"
+    ></script>
   </body>
 </html>

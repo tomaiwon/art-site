@@ -289,6 +289,18 @@ body {
 #atlas-frame {
   display: block;
 }
+/* Keep the complete stage rendering at full size, but reveal it as one unit
+   only after the original bridge accepts a current rendered acknowledgement. */
+body[data-cover-state="ready"] .atlas-stage {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 650ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-cover-state="ready"] .atlas-stage {
+    transition: none;
+  }
+}
 .cover-enter {
   text-decoration: none;
 }
