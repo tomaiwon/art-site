@@ -30,7 +30,7 @@
     </style>
     <link
       rel="stylesheet"
-      href="./cover.css?v=ee10440f4f5b"
+      href="./cover.css?v=4bd082bb7b8b"
       onerror="
         document.documentElement.dataset.coverCssFailed = 'true';
         window.__eamCoverBoot?.fail();
@@ -57,9 +57,9 @@
             <h1 id="cover-title">
               <span class="cover-title-zh" lang="zh-CN">东亚制造</span>
             </h1>
-            <a class="cover-enter" href="../effects/" tabindex="-1" inert
-              >进入项目<span aria-hidden="true">↗</span></a
-            >
+            <button class="cover-enter" type="button" disabled inert>
+              正在进行中
+            </button>
           </div>
         </div>
       </div>
@@ -89,7 +89,6 @@
           page.dataset.coverState = value;
           frame.toggleAttribute("inert", value !== "ready");
           entry.toggleAttribute("inert", value !== "ready");
-          entry.tabIndex = value === "ready" ? 0 : -1;
           error.hidden = value !== "failed";
           if (value === "loading" && !document.hidden && !suspended)
             timer = window.setTimeout(() => state("failed"), 20000);

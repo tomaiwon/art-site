@@ -1,7 +1,8 @@
 # East Asia Manufacturing cover
 
 Published presentation only: the existing ink globe and falling traditional glyphs.
-The desktop entry continues to ../effects/; mobile omits the two lower-left elements.
+The desktop button reads 正在进行中 and is disabled; mobile omits the two lower-left elements.
+Accessibility/error fallback links to ../effects/ remain available.
 No news archive, private Atlas company dataset, collector, API or scheduler is included.
 The original NEWS, effects game case and effects/studio are unchanged.
 

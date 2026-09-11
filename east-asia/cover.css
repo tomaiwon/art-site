@@ -304,6 +304,15 @@ body[data-cover-state="ready"] .atlas-stage {
 .cover-enter {
   text-decoration: none;
 }
+.cover-enter:disabled {
+  padding-inline: 22px;
+  background: var(--cover-ink);
+  color: var(--cover-paper);
+  -webkit-text-fill-color: var(--cover-paper);
+  opacity: 1;
+  cursor: default;
+  transition: none;
+}
 .skip-link {
   position: fixed;
   top: 12px;
