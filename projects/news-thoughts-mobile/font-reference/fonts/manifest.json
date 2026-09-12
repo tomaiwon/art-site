@@ -1,0 +1,42 @@
+[
+  {
+    "name": "ibm-plex-mono-light.woff2",
+    "url": "https://raw.githubusercontent.com/IBM/plex/master/packages/plex-mono/fonts/complete/woff2/IBMPlexMono-Light.woff2",
+    "sha256": "d02d3197935e15bcf305b67aacc034da872523e118dc12ffae3382a3a1fa0d0c",
+    "bytes": 49384
+  },
+  {
+    "name": "dm-mono-light.ttf",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/dmmono/DMMono-Light.ttf",
+    "sha256": "c7b3645dc8d28237317b4d017bc47b9ff09a7660758122dacb694a5a82552c24",
+    "bytes": 49752,
+    "webfont": {
+      "name": "dm-mono-light.woff2",
+      "bytes": 20532,
+      "sha256": "75fd1ed3571eeb45e7771b45c1df4641006e6d82dd9a7bed38435c4c8e03f7aa"
+    }
+  },
+  {
+    "name": "inconsolata-variable.ttf",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/inconsolata/Inconsolata%5Bwdth%2Cwght%5D.ttf",
+    "sha256": "23ded25b447074d00659392bf9b1123d89df55cb07b0ad9bfef3366d199b5fcb",
+    "bytes": 347180,
+    "webfont": {
+      "name": "inconsolata-variable.woff2",
+      "bytes": 151800,
+      "sha256": "f7210a11008147a70e9095315ee9c019277044d4b6e39caa78084df455c07364"
+    }
+  },
+  {
+    "name": "DMMono-OFL.txt",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/dmmono/OFL.txt",
+    "sha256": "2bada5ea45c3c63b7f1ea1f88ce9672c9e4f0c42b2c3b7378949084fe55a3066",
+    "bytes": 4484
+  },
+  {
+    "name": "Inconsolata-OFL.txt",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/inconsolata/OFL.txt",
+    "sha256": "29bd0cfd0fb2a45f9b057c834a057724bae1f63b525a8ac83d3e7525706d9f80",
+    "bytes": 4350
+  }
+]

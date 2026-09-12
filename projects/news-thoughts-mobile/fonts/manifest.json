@@ -62,8 +62,8 @@
     },
     {
       "name": "reading-song-sc.woff2",
-      "bytes": 154888,
-      "sha256": "242c895282ad420cbcb4cc05d6442b4a7b3cf3e98bfe3c520c3047f3b8383221"
+      "bytes": 162036,
+      "sha256": "a3991786b0c4917628513fda53893f4ca2bb09ebe27f6695715c3a87a302bf2d"
     },
     {
       "name": "ibm-plex-mono-regular.woff2",
@@ -74,6 +74,27 @@
       "name": "ibm-plex-mono-semibold.woff2",
       "bytes": 50600,
       "sha256": "6a825b4824c01cbb401e829e5a066a1818411bcb3538b5a5792c5ca9b82343c3"
+    },
+    {
+      "name": "dm-mono-light.woff2",
+      "bytes": 20532,
+      "sha256": "75fd1ed3571eeb45e7771b45c1df4641006e6d82dd9a7bed38435c4c8e03f7aa",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/dmmono/DMMono-Light.ttf",
+      "sourceSha256": "c7b3645dc8d28237317b4d017bc47b9ff09a7660758122dacb694a5a82552c24"
+    },
+    {
+      "name": "dm-mono-regular.woff2",
+      "bytes": 20660,
+      "sha256": "cd2823597a1863dad34cbd99e4b627509cae031da0b12e4064182aa5de4fdb92",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/dmmono/DMMono-Regular.ttf",
+      "sourceSha256": "55b4c98f123daebb3ed27947ba47b2af00554fc6284d639a540bcef5e6258ad2"
+    },
+    {
+      "name": "dm-mono-medium.woff2",
+      "bytes": 20868,
+      "sha256": "f1aa4dee3497d56263e4a980fcc6c0585702517a901fc2eff46a94a87e0f4ad0",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/dmmono/DMMono-Medium.ttf",
+      "sourceSha256": "fd327daf461db87b44a87def475d251bf03b997f7c07d9680592d75dbbfaad0b"
     }
   ]
 }

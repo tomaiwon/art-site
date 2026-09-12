@@ -8,6 +8,36 @@
   let queued = false;
   let returnScrollY = 0;
   let destination = null;
+  let menuAnimation = null;
+  let closing = false;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function animateMenu(from, to, duration) {
+    if (reducedMotion.matches || typeof menu.animate !== "function") return null;
+    const animation = menu.animate(
+      [{ transform: from }, { transform: to }],
+      { duration, easing: "cubic-bezier(.22, 1, .36, 1)", fill: "forwards" },
+    );
+    // Cancellation is expected when closing before the entrance has finished.
+    animation.finished.catch(() => {});
+    menuAnimation = animation;
+    return animation;
+  }
+
+  function closeMenu() {
+    if (!menu.open || closing) return;
+    closing = true;
+    const from = getComputedStyle(menu).transform;
+    menuAnimation?.cancel();
+    menuAnimation = null;
+    const animation = animateMenu(from, "translateX(100%)", 240);
+    if (animation) {
+      const finish = () => {
+        if (menuAnimation === animation && closing) menu.close();
+      };
+      animation.finished.then(finish, finish);
+    } else menu.close();
+  }
 
   function updateNavigation() {
     header.classList.toggle("is-scrolled", window.scrollY > 32);
@@ -46,6 +76,7 @@
     }
   }
   menuButton.addEventListener("click", () => {
+    if (menu.open || closing) return;
     returnScrollY = window.scrollY;
     destination = null;
     menu.style.setProperty(
@@ -56,8 +87,18 @@
     menu.querySelector(".menu-scroll").scrollTop = 0;
     document.documentElement.classList.add("menu-is-open");
     menuButton.setAttribute("aria-expanded", "true");
+    const animation = animateMenu("translateX(100%)", "translateX(0)", 320);
+    animation?.finished.then(() => {
+      if (menuAnimation !== animation || closing) return;
+      animation.cancel();
+      menuAnimation = null;
+    }, () => {});
   });
-  closeButton.addEventListener("click", () => menu.close());
+  closeButton.addEventListener("click", closeMenu);
+  menu.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeMenu();
+  });
   menu.addEventListener("keydown", (event) => {
     if (event.key !== "Tab") return;
     const focusable = [...menu.querySelectorAll("a[href], button")];
@@ -72,6 +113,9 @@
     }
   });
   menu.addEventListener("close", () => {
+    closing = false;
+    menuAnimation?.cancel();
+    menuAnimation = null;
     document.documentElement.classList.remove("menu-is-open");
     menuButton.setAttribute("aria-expanded", "false");
     if (destination) {
@@ -89,6 +133,10 @@
   });
   for (const link of menu.querySelectorAll("a")) {
     link.addEventListener("click", (event) => {
+      if (closing) {
+        event.preventDefault();
+        return;
+      }
       if (
         event.button !== 0 ||
         event.metaKey ||
@@ -104,12 +152,13 @@
         event.preventDefault();
         destination = { target, hash };
       }
-      menu.close();
+      closeMenu();
     });
   }
   window.addEventListener("scroll", scheduleUpdate, { passive: true });
   window.addEventListener("resize", scheduleUpdate, { passive: true });
   window.addEventListener("pageshow", scheduleUpdate);
+  document.addEventListener("reading:languagechange", scheduleUpdate);
   new ResizeObserver(scheduleUpdate).observe(header);
   updateNavigation();
 })();

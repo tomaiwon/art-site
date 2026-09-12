@@ -1,4 +1,25 @@
 @font-face {
+  font-family: "DM Mono";
+  src: url("fonts/dm-mono-light.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("fonts/dm-mono-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("fonts/dm-mono-medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
   font-family: "Yi Reading Serif";
   src: url("fonts/reading-serif-roman.woff2") format("woff2");
   font-style: normal;
@@ -14,23 +35,9 @@
 }
 @font-face {
   font-family: "Yi Reading Song";
-  src: url("fonts/reading-song-sc.woff2") format("woff2");
+  src: url("fonts/reading-song-sc.woff2?v=languages-1") format("woff2");
   font-style: normal;
   font-weight: 250 900;
-  font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Mono";
-  src: url("fonts/ibm-plex-mono-regular.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Mono";
-  src: url("fonts/ibm-plex-mono-semibold.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 600 700;
   font-display: swap;
 }
 :root {
@@ -39,8 +46,8 @@
   --muted: #68645f;
   --rule: #ccc5be;
   --serif: "Yi Reading Serif", "Yi Reading Song", "Songti SC", serif;
-  --mono: "IBM Plex Mono", "Yi Reading Song", monospace;
-  --ui: "IBM Plex Mono", "Yi Reading Song", sans-serif;
+  --mono: "DM Mono", "Yi Reading Song", monospace;
+  --ui: "DM Mono", "Yi Reading Song", sans-serif;
   --header-height: 110px;
 }
 * {
@@ -169,39 +176,38 @@ a {
   flex-shrink: 0;
   cursor: pointer;
 }
-.menu-icon {
-  width: 34px;
-  height: 24px;
-  position: relative;
-  display: block;
+/* Small, shared vector primitives stay consistent at any display scale. */
+.icon-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icon {
+  display: inline-block;
+  width: 1.15em;
+  height: 1.15em;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -0.16em;
 }
-.menu-icon > span {
-  position: absolute;
-  width: 100%;
-  height: 1.5px;
-  background: currentColor;
-  left: 0;
+.menu-icon { width: 34px; height: 34px; stroke-linecap: square; }
+.header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 300 .875rem/1 var(--ui);
+  cursor: pointer;
 }
-.menu-icon > span:nth-child(1) {
-  top: 1px;
-}
-.menu-icon > span:nth-child(2) {
-  top: 11px;
-}
-.menu-icon > span:nth-child(3) {
-  top: 21px;
-}
-.menu-close .menu-icon > span:nth-child(1) {
-  top: 11px;
-  transform: rotate(45deg);
-}
-.menu-close .menu-icon > span:nth-child(2) {
-  opacity: 0;
-}
-.menu-close .menu-icon > span:nth-child(3) {
-  top: 11px;
-  transform: rotate(-45deg);
-}
+.language-toggle .icon { width: 18px; height: 18px; }
+.language-toggle:hover { text-decoration: underline; text-underline-offset: 4px; }
 html.menu-is-open,
 html.menu-is-open body {
   overflow: hidden;
@@ -226,7 +232,7 @@ html.menu-is-open body {
   flex-direction: column;
 }
 .reading-menu::backdrop {
-  background: var(--paper);
+  background: rgb(25 24 23 / 12%);
 }
 .menu-header {
   flex-shrink: 0;
@@ -253,9 +259,6 @@ html.menu-is-open body {
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 20px 28px max(28px, env(safe-area-inset-bottom));
-}
-.reading-menu[open] .menu-scroll {
-  animation: menu-enter 0.18s ease-out;
 }
 .menu-primary,
 .menu-secondary {
@@ -326,16 +329,6 @@ html.menu-is-open body {
   font-weight: 600;
   margin-top: 12px;
 }
-@keyframes menu-enter {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 .issue-bar {
   display: flex;
   align-items: stretch;
@@ -352,7 +345,7 @@ html.menu-is-open body {
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
-.issue-number > span {
+.issue-number > .issue-date {
   font-size: 0.75rem;
   color: var(--muted);
 }
@@ -437,12 +430,6 @@ h1 {
   margin: 20px 0 13px;
   text-wrap: balance;
 }
-.english-title {
-  font:
-    italic 1rem/1.55 var(--serif);
-  color: var(--muted);
-  margin-bottom: 22px;
-}
 .article-meta {
   font-family: var(--mono);
   display: flex;
@@ -456,7 +443,7 @@ h1 {
 }
 .article-meta strong {
   font-family: var(--mono);
-  font-weight: 600;
+  font-weight: 500;
   margin-left: 5px;
 }
 .article-meta time {
@@ -599,7 +586,8 @@ h3 a:hover {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  white-space: nowrap;
+  gap: 8px;
+  max-width: 100%;
 }
 .chart-story {
   margin-top: 26px;
@@ -627,7 +615,7 @@ h3 a:hover {
 }
 .chart-row {
   display: grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: minmax(64px, 5.5rem) 1fr;
   gap: 8px;
   align-items: center;
   margin-top: 17px;
@@ -640,6 +628,7 @@ h3 a:hover {
   display: block;
   font: 0.75rem/1.8 var(--ui);
   color: var(--muted);
+  font-weight: 300;
 }
 .chart-track {
   min-width: 0;
@@ -847,7 +836,7 @@ h3 a:hover {
   .issue-number {
     padding-left: 16px;
   }
-  .issue-number > span {
+  .issue-number > .issue-date {
     display: none;
   }
   .reading-column {
@@ -883,4 +872,44 @@ h3 a:hover {
     transition: none !important;
     animation: none !important;
   }
+}
+
+.menu-primary a,
+.menu-secondary a,
+.menu-index,
+.issue-number,
+.issue-nav a,
+.article-meta,
+.eyebrow,
+.intro-label,
+.story-end > .meta,
+.section-heading > span,
+.site-footer > p {
+  font-family: var(--mono);
+  font-weight: 300;
+}
+.menu-primary a { text-align: right; }
+.menu-secondary a { text-align: right; }
+.menu-primary a, .menu-secondary a { max-width: 100%; }
+.menu-primary a[aria-current]::before { flex-shrink: 0; }
+.menu-primary a > span, .menu-secondary a > span { min-width: 0; }
+.wordmark { flex-shrink: 1; min-width: 0; }
+.publication-name { overflow-wrap: anywhere; }
+.masthead { gap: 12px; }
+.issue-bar { flex-wrap: wrap; }
+.issue-number { padding-right: 12px; }
+.issue-nav { margin-left: auto; }
+.article-meta, .item-footer, .story-end, .section-heading { flex-wrap: wrap; }
+.item-footer > .meta { min-width: 0; }
+.cover-figure > figcaption { flex-wrap: wrap; }
+.section-more { gap: 14px; }
+.energy-figure > figcaption { gap: 12px; flex-wrap: wrap; }
+.energy-figure > figcaption > span:first-child { font: inherit; color: inherit; }
+html:lang(en) .article-body { line-height: 1.75; }
+html:lang(en) .menu-pick h2 { line-height: 1.25; }
+html:lang(en) h3 { line-height: 1.3; }
+@media (max-width: 420px) {
+  .issue-number > .issue-date { display: none; }
+  .issue-nav a { min-width: 0; padding-inline: 12px; }
+  .header-actions { gap: 6px; }
 }
