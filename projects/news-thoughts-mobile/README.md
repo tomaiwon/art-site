@@ -6,6 +6,10 @@
 
 纯静态 HTML/CSS/JavaScript，无构建或服务端依赖。沿用移动试刊 002 的整页排版、吸顶导航、全屏目录、背景滚动锁定和阅读位置恢复。该样页为设计测试，没有自动采集或发布功能。
 
+阅读字体：西文标题、正文与斜体使用 Source Serif 4，中文使用思源宋体，日期、栏目与辅助文字使用 IBM Plex Mono。字体随本站托管，不依赖设备是否安装，也不依赖外部字体服务。保留原有布局和菜单交互。
+
+Adobe 字体经过网页转换／字符子集处理，依照原许可证的保留字体名称要求，内部名称改为 `Yi Reading Serif` 与 `Yi Reading Song`；实际字形来自上述原字体。来源、版本与许可证见 `fonts/README.md`。更新中文内容时，应重新生成中文字库子集并核对字符覆盖。
+
 内容来源：
 
 - 选读及视觉参考：[Works in Progress, The world’s most complex machine](https://worksinprogress.co/issue/the-worlds-most-complex-machine/)，Neil Hacker，2026-04-23。中文短导读为测试样页整理。

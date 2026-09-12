@@ -1,0 +1,79 @@
+{
+  "sources": [
+    {
+      "name": "SourceSerif4Variable-Roman.ttf",
+      "url": "https://raw.githubusercontent.com/adobe-fonts/source-serif/release/VAR/SourceSerif4Variable-Roman.ttf",
+      "bytes": 1204208,
+      "sha256": "14d360ee1b76655da9276628b229e11671bc1f5d1083636144db6677d452cf55"
+    },
+    {
+      "name": "SourceSerif4Variable-Italic.ttf",
+      "url": "https://raw.githubusercontent.com/adobe-fonts/source-serif/release/VAR/SourceSerif4Variable-Italic.ttf",
+      "bytes": 850036,
+      "sha256": "6a059a64838978d54e8fab71ed86b0d82e948c0e12b2664d0c15166326dcff82"
+    },
+    {
+      "name": "SourceHanSerifCN-VF.ttf",
+      "url": "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/Variable/TTF/Subset/SourceHanSerifCN-VF.ttf",
+      "bytes": 25125104,
+      "sha256": "8e052cbcdbd0f03496c9ad05da7d57901549286d5efd30f3caf66a393f6c389b"
+    },
+    {
+      "name": "IBMPlexMono-Regular.woff2",
+      "url": "https://raw.githubusercontent.com/IBM/plex/master/packages/plex-mono/fonts/complete/woff2/IBMPlexMono-Regular.woff2",
+      "bytes": 49248,
+      "sha256": "ba204497f16b6d334cee9d1e963a831b73e3a56e1d6300a8489d18df7214b350"
+    },
+    {
+      "name": "IBMPlexMono-SemiBold.woff2",
+      "url": "https://raw.githubusercontent.com/IBM/plex/master/packages/plex-mono/fonts/complete/woff2/IBMPlexMono-SemiBold.woff2",
+      "bytes": 50600,
+      "sha256": "6a825b4824c01cbb401e829e5a066a1818411bcb3538b5a5792c5ca9b82343c3"
+    },
+    {
+      "name": "SourceSerif4-OFL.txt",
+      "url": "https://raw.githubusercontent.com/adobe-fonts/source-serif/release/LICENSE.md",
+      "bytes": 4491,
+      "sha256": "c21d7293d87b6d7ab1d0229a2f55b77f33a7613a6a4e66f6693d68d7d8d09464"
+    },
+    {
+      "name": "SourceHanSerif-OFL.txt",
+      "url": "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/LICENSE.txt",
+      "bytes": 4463,
+      "sha256": "9ff5bb567e1b92c801fc1069e5fbf992ff8efccacb9db94e5959a5b3ba9bb903"
+    },
+    {
+      "name": "IBMPlexMono-OFL.txt",
+      "url": "https://raw.githubusercontent.com/IBM/plex/master/packages/plex-mono/fonts/complete/woff2/license.txt",
+      "bytes": 4360,
+      "sha256": "91c25c350d3cac39da2736d74f7ba37ef648f5237a4e330a240615bc8d8c4360"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "reading-serif-roman.woff2",
+      "bytes": 428152,
+      "sha256": "f8b189a994f6462f1703326b31f601063e24b59e3230da2563af637db7864800"
+    },
+    {
+      "name": "reading-serif-italic.woff2",
+      "bytes": 346064,
+      "sha256": "02c20a5aa357dbe66c7eb1e70dde0c7aa52b08bd9ea5f1725ce0f504a5dc9cad"
+    },
+    {
+      "name": "reading-song-sc.woff2",
+      "bytes": 154888,
+      "sha256": "242c895282ad420cbcb4cc05d6442b4a7b3cf3e98bfe3c520c3047f3b8383221"
+    },
+    {
+      "name": "ibm-plex-mono-regular.woff2",
+      "bytes": 49248,
+      "sha256": "ba204497f16b6d334cee9d1e963a831b73e3a56e1d6300a8489d18df7214b350"
+    },
+    {
+      "name": "ibm-plex-mono-semibold.woff2",
+      "bytes": 50600,
+      "sha256": "6a825b4824c01cbb401e829e5a066a1818411bcb3538b5a5792c5ca9b82343c3"
+    }
+  ]
+}
