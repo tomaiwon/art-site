@@ -177,7 +177,9 @@
     margin:18px 0 26px 0;
     max-width:860px;
   }
-  #practice{scroll-margin-top:32px;}
+  #practice,#tests{scroll-margin-top:32px;}
+  #tests-mobile{scroll-margin-top:56px;}
+  .mobile-test-title{font-family:"Songti SC","Noto Serif CJK SC",serif;}
   .group-head{
     margin:0 0 10px 0;
     line-height:1.2;
@@ -340,6 +342,7 @@
   .cat-info{
     padding:14px 20px 18px;
   }
+  .cat-link .cat-test-thumb{height:auto;}
   .cat-name-zh{
     font-family:"ZFont","EFont",sans-serif;
     font-size:18px;
@@ -389,7 +392,7 @@
   <a href="support.html">support</a>
 </nav>
 
-<!-- 移动端：五个分类卡 -->
+<!-- 移动端：分类卡 -->
 <ul class="cat-list">
   <li class="cat-item">
     <a class="cat-link" href="films.html">
@@ -433,6 +436,15 @@
       <div class="cat-info">
         <span class="cat-name-zh">过往实践</span>
         <span class="cat-name-en">Practice Series</span>
+      </div>
+    </a>
+  </li>
+  <li class="cat-item" id="tests-mobile">
+    <a class="cat-link" href="work-test.html">
+      <img class="cat-test-thumb" src="projects/news-thoughts-mobile/assets/asml-highna-cleanroom.jpg" alt="" loading="lazy" width="2560" height="1343">
+      <div class="cat-info">
+        <span class="cat-name-zh">测试</span>
+        <span class="cat-name-en">Tests</span>
       </div>
     </a>
   </li>
@@ -746,12 +758,23 @@
           <span class="name"><a href="projects/as-fabers-go-by.html">三十天计划</a></span>
       </ul>
     </section>
+    <section class="group" id="tests" aria-label="Tests">
+      <h2 class="group-head">
+        <span class="name group-title-zh" style="display:block">测试</span>
+        <span class="name group-title-en" style="display:block">Tests</span>
+      </h2>
+      <ul class="list">
+        <li class="item">
+          <span class="year">2026.09</span>
+          <span class="name"><a class="mobile-test-title" href="projects/news-thoughts-mobile/">NEWS 与沉思录 · 移动版</a></span>
+        </li>
+      </ul>
+    </section>
   </main>
 </div><!-- /.desktop-content -->
 
 </body>
 </html>
-
 
 
 
