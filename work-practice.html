@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Yi Huang — Practice Series</title>
+<script>
+  (() => {
+    const desktop = window.matchMedia('(min-width: 861px)');
+    const showDesktopPractice = () => {
+      if (desktop.matches) window.location.replace('work.html#practice');
+    };
+    showDesktopPractice();
+    desktop.addEventListener('change', showDesktopPractice);
+  })();
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
 <style>
