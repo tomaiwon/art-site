@@ -1,0 +1,392 @@
+@font-face {
+  font-family: "EA GuYin Wordmark";
+  src: url("./guyin-wordmark.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0041-005A, U+4E1C, U+4E9A, U+5236, U+9020;
+}
+
+/* D-027: oversized globe cover; halftone is a globe material, not a newspaper layout. */
+.observatory[data-cover="true"] {
+  --cover-paper: #f1e8d4;
+  --cover-ink: #211e18;
+  --focus: #263fbd;
+  background: var(--cover-paper);
+  color: var(--cover-ink);
+}
+.observatory[data-cover="true"] .ambient,
+.observatory[data-cover="true"] .app-header,
+.observatory[data-cover="true"] #workspace > :not(.research-layout),
+.observatory[data-cover="true"] .research-feed,
+.observatory[data-cover="true"] .atlas-heading,
+.observatory[data-cover="true"] .atlas-caption {
+  display: none;
+}
+.observatory[data-cover="true"] .page {
+  max-width: none;
+  padding: 0;
+}
+.observatory[data-cover="true"] .research-layout {
+  display: block;
+  max-width: none;
+}
+.observatory[data-cover="true"] .atlas-panel {
+  position: relative;
+  top: auto;
+  border: 0;
+  background: transparent;
+}
+.observatory[data-cover="true"] .atlas-stage {
+  height: max(720px, 100svh);
+  overflow: hidden;
+}
+.observatory[data-cover="true"] #atlas-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--cover-paper);
+}
+.atlas-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  color: var(--cover-ink);
+  font-family: var(--ui-font);
+}
+
+.cover-copy {
+  position: absolute;
+  top: clamp(150px, 21vh, 260px);
+  left: clamp(32px, 7vw, 130px);
+  width: min(34vw, 480px);
+}
+
+#cover-title {
+  display: grid;
+  gap: 18px;
+  margin: 0 0 28px;
+  color: var(--cover-ink);
+}
+.cover-title-zh {
+  font:
+    400 clamp(50px, 5.5vw, 84px)/1.18 "EA GuYin Wordmark",
+    "Songti SC",
+    "STSong",
+    serif;
+  letter-spacing: 0.08em;
+  font-synthesis: none;
+}
+.cover-title-en {
+  display: grid;
+  font:
+    400 clamp(58px, 5.5vw, 86px)/0.98 "EA GuYin Wordmark",
+    "Iowan Old Style",
+    "Times New Roman",
+    serif;
+  letter-spacing: 0.012em;
+  font-synthesis: none;
+  text-transform: uppercase;
+}
+.cover-title-en > span:last-child {
+  font-size: 0.54em;
+  line-height: 1.35;
+  letter-spacing: 0.045em;
+}
+.cover-enter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  min-height: 54px;
+  padding: 8px 10px 8px 22px;
+  border: 1px solid var(--cover-ink);
+  border-radius: 999px;
+  background: var(--cover-ink);
+  color: var(--cover-paper);
+  font: 500 16px/1.5 var(--ui-font);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 160ms ease;
+}
+.cover-enter > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #f1e8d470;
+  border-radius: 50%;
+  font-size: 23px;
+  transition: transform 180ms ease;
+}
+.cover-enter:hover {
+  background: #40392c;
+}
+.cover-enter:hover > span {
+  transform: rotate(45deg);
+}
+.cover-enter:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 5px;
+}
+.observatory[data-cover="true"] .atlas-fallback {
+  inset: auto 30px 110px auto;
+  z-index: 3;
+  width: min(400px, calc(100% - 60px));
+  padding: 24px;
+  border: 1px solid #b2a995;
+  background: var(--cover-paper);
+  color: var(--cover-ink);
+  font: 14px/1.8 var(--ui-font);
+}
+#atlas-cover-return {
+  margin-left: auto;
+  font-size: 12px;
+  min-height: 44px;
+}
+@media (min-width: 761px) and (aspect-ratio > 1/1) {
+  .observatory[data-cover-title="sculpture"] .cover-copy {
+    top: auto;
+    bottom: max(clamp(30px, 5vh, 72px), calc(720px - 100svh + 30px));
+    left: clamp(28px, 4.5vw, 80px);
+    width: min(38vw, 560px);
+  }
+  .observatory[data-cover-title="sculpture"] #cover-title {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .observatory[data-cover-title="sculpture"] .cover-title-zh {
+    display: block;
+    height: max(270px, calc(100svh - 230px));
+    line-height: 1.4;
+    pointer-events: none;
+  }
+  .observatory[data-cover-title="sculpture"][data-sculpture-ready="true"]
+    .cover-title-zh {
+    color: transparent;
+  }
+  .observatory[data-cover-title="sculpture"] .cover-title-en {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.55em;
+    max-width: 220px;
+    align-self: start;
+    background: var(--cover-paper);
+    font: 500 clamp(12px, 1.08vw, 18px)/1.5 var(--ui-font);
+    letter-spacing: 0.14em;
+  }
+  .observatory[data-cover-title="sculpture"] .cover-title-en > span:last-child {
+    font-size: 1em;
+    line-height: inherit;
+    letter-spacing: inherit;
+  }
+  .cover-copy {
+    width: min(38vw, 540px);
+  }
+  #cover-title {
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .cover-title-zh {
+    font-size: clamp(54px, 6.8vw, 116px);
+  }
+  .cover-title-en {
+    font-size: clamp(34px, 4vw, 68px);
+    line-height: 1.08;
+  }
+  .cover-title-en > span:last-child {
+    font-size: 0.57em;
+    line-height: 1.45;
+  }
+}
+@media (min-width: 761px) and (aspect-ratio > 1/1) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+}
+@media (max-width: 760px), (max-aspect-ratio: 1/1) {
+  .observatory[data-cover="true"] .atlas-stage {
+    height: max(780px, 100svh);
+  }
+
+  .cover-copy {
+    top: 122px;
+    left: 28px;
+    width: calc(100% - 56px);
+  }
+  #cover-title {
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .cover-title-zh {
+    font-size: clamp(44px, 11.5vw, 60px);
+  }
+  .cover-title-en {
+    font-size: clamp(46px, 12.4vw, 66px);
+  }
+  .cover-enter {
+    min-height: 48px;
+    padding-block: 7px;
+  }
+  .cover-enter > span {
+    width: 30px;
+    height: 30px;
+  }
+  .observatory[data-cover="true"][data-cover-title="sculpture"] .atlas-stage {
+    height: 100svh;
+  }
+  .observatory[data-cover-title="sculpture"] .cover-copy {
+    top: auto;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    left: max(24px, env(safe-area-inset-left));
+    width: calc(100% - 48px);
+  }
+  .observatory[data-cover-title="sculpture"] #cover-title {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .observatory[data-cover-title="sculpture"] .cover-title-zh {
+    font-size: clamp(38px, 10vw, 54px);
+    pointer-events: none;
+  }
+  /* Keep an accessible title, but do not repeat the rendered glyph sculpture. */
+  .observatory[data-cover-title="sculpture"][data-sculpture-ready="true"]
+    .cover-title-zh {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .observatory[data-cover-title="sculpture"] .cover-title-en,
+  .observatory[data-cover-title="sculpture"] .cover-enter {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover-enter,
+  .cover-enter > span {
+    transition: none;
+  }
+  .cover-enter:hover > span {
+    transform: none;
+  }
+}
+html,
+body {
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  --ui-font:
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+}
+.atlas-panel {
+  position: relative;
+}
+#atlas-frame {
+  display: block;
+}
+/* Keep the complete stage rendering at full size, but reveal it as one unit
+   only after the original bridge accepts a current rendered acknowledgement. */
+body[data-cover-state="ready"] .atlas-stage {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 650ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-cover-state="ready"] .atlas-stage {
+    transition: none;
+  }
+}
+.cover-enter {
+  text-decoration: none;
+}
+.cover-enter:disabled {
+  padding-inline: 22px;
+  background: var(--cover-ink);
+  color: var(--cover-paper);
+  -webkit-text-fill-color: var(--cover-paper);
+  opacity: 1;
+  cursor: default;
+  transition: none;
+}
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  padding: 12px;
+  color: #211e18;
+  background: #f1e8d4;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+.cover-error {
+  position: absolute;
+  z-index: 4;
+  left: 24px;
+  bottom: 24px;
+  max-width: calc(100% - 48px);
+  padding: 18px;
+  background: #f1e8d4;
+  color: #211e18;
+  font: 16px/1.7 var(--ui-font);
+}
+.cover-error a {
+  color: inherit;
+}
+
+/* Archive navigation is independent of the preserved renderer's boot state. */
+@font-face {
+  font-family: "Archive Print";
+  src: url("./archive-label.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+.archive-nav {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  left: max(20px, env(safe-area-inset-left));
+  right: max(20px, env(safe-area-inset-right));
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #211e18;
+  font:
+    400 14px/1.5 "Archive Print",
+    "Songti SC",
+    serif;
+  pointer-events: none;
+}
+.archive-nav a,
+.archive-nav span {
+  background: #f1e8d4;
+  padding: 6px 8px;
+}
+.archive-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;
+}
+.archive-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.archive-nav a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+/* Keep this node for the frozen bridge, but omit the original project-status UI. */
+.cover-enter {
+  display: none;
+}

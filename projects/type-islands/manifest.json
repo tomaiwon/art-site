@@ -1,0 +1,63 @@
+{
+  "format": "eam-practice-cover-archive-v1",
+  "title": "字落成洲",
+  "date": "2026.09",
+  "source": {
+    "path": "east-asia/",
+    "commit": "a3bb63569df0cc2cdf8cf0121e4bcd1f3890137c"
+  },
+  "assets": {
+    "README.md": {
+      "bytes": 1228,
+      "sha256": "67f07b35c92f83600f5719e26c2071668191d870516e1d96e766fc310dce7319"
+    },
+    "THIRD_PARTY_NOTICES.txt": {
+      "bytes": 62987,
+      "sha256": "37b2ea57ecc1ef20c727808e8b4ea2ab15a11323b026ed8f49603513aace3735"
+    },
+    "archive-label.woff2": {
+      "bytes": 9172,
+      "sha256": "bc57426ae79cba6d04db4961d4f23bc102993bfd7bbf7f642b3fec997ba7f90d"
+    },
+    "cover.css": {
+      "bytes": 9225,
+      "sha256": "ce0246f654092f7245d2842c2513f81057a369acb7d3375e3eb221bfdf3af022"
+    },
+    "entry.js": {
+      "bytes": 3382,
+      "sha256": "fa03d13926d7c153f2552c31d189593cd6e65fdf61be646e2ca4ff69f2736a86"
+    },
+    "entry.js.LEGAL.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "frame.css": {
+      "bytes": 3429,
+      "sha256": "d713738a9a55aa484d82c71f779d5168104454f2a93abbcbfa58dacca767334d"
+    },
+    "frame.css.LEGAL.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "frame.html": {
+      "bytes": 526,
+      "sha256": "3d36892b93313647772c3634c52497e8c76feb612134fb07ce9d7dd9d4793ded"
+    },
+    "frame.js": {
+      "bytes": 2273034,
+      "sha256": "979026b0147284cb59c90601831a98c2105cc81d1c8b811ad3358d3dddc5fc63"
+    },
+    "frame.js.LEGAL.txt": {
+      "bytes": 1964,
+      "sha256": "bdaa28e167a688b61d1fffbffab65ac107060b7a2e44a70399be616c25bf21ba"
+    },
+    "guyin-wordmark.woff2": {
+      "bytes": 18528,
+      "sha256": "97d699f5ed6dff2f724a5f8d7bebe70c91aa698236864d108df04271e030c7d0"
+    },
+    "index.html": {
+      "bytes": 4264,
+      "sha256": "bd99b09f40e0ce0cae7a96b5b6aef262d482cc25abeb0b7c5d5173c3e1f0f881"
+    }
+  }
+}

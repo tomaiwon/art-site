@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f1e8d4" />
+    <meta
+      name="description"
+      content="字落成洲，2026年九月。点墨地球与自由下坠的立体汉字，一次互动视觉实践。"
+    />
+    <title>字落成洲 — 2026.09 · Yi Huang</title>
+    <link rel="canonical" href="https://yihuang.art/projects/type-islands/" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #f1e8d4;
+      }
+      /* First paint stays paper-only, even before the external CSS arrives. */
+      body[data-cover-state] .atlas-stage {
+        opacity: 0;
+        pointer-events: none;
+      }
+      body #cover-title .cover-title-zh {
+        clip-path: inset(50%);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="./cover.css?v=archive-20260912"
+      onerror="
+        document.documentElement.dataset.coverCssFailed = 'true';
+        window.__eamCoverBoot?.fail();
+      "
+    />
+  </head>
+  <body
+    class="observatory"
+    data-cover="true"
+    data-cover-title="sculpture"
+    data-cover-state="loading"
+  >
+    <a class="skip-link" href="../../work-practice.html">返回过往实践</a>
+    <nav class="archive-nav" aria-label="作品导航">
+      <a href="../../work-practice.html">过往实践</a>
+      <span>字落成洲 · 2026.09</span>
+    </nav>
+    <main class="atlas-panel">
+      <div class="atlas-stage">
+        <iframe
+          id="atlas-frame"
+          title="字落成洲：点墨地球与立体字块"
+          src="./frame.html?v=3d36892b9331"
+          inert
+        ></iframe>
+        <div class="atlas-cover">
+          <div class="cover-copy">
+            <h1 id="cover-title">
+              <span class="cover-title-zh" lang="zh-CN">字落成洲</span>
+            </h1>
+            <button class="cover-enter" type="button" disabled inert>
+              正在进行中
+            </button>
+          </div>
+        </div>
+      </div>
+      <p class="cover-error" id="cover-error" role="status" hidden>
+        三维视觉暂未能载入。<a href="../../work-practice.html">返回过往实践</a>
+      </p>
+      <noscript
+        ><p class="cover-error">
+          动态视觉需要 JavaScript。<a href="../../work-practice.html"
+            >返回过往实践</a
+          >
+        </p></noscript
+      >
+    </main>
+    <script>
+      // Independent of the module: a blocked/failed entry script must not leave
+      // an endless blank page. Loading in a background tab is not a failure.
+      (() => {
+        let timer;
+        let suspended = false;
+        const page = document.body;
+        const frame = document.getElementById("atlas-frame");
+        const entry = document.querySelector(".cover-enter");
+        const error = document.getElementById("cover-error");
+        function state(value) {
+          window.clearTimeout(timer);
+          if (document.documentElement.dataset.coverCssFailed === "true")
+            value = "failed";
+          page.dataset.coverState = value;
+          frame.toggleAttribute("inert", value !== "ready");
+          entry.toggleAttribute("inert", value !== "ready");
+          error.hidden = value !== "failed";
+          if (value === "loading" && !document.hidden && !suspended)
+            timer = window.setTimeout(() => state("failed"), 20000);
+        }
+        window.__eamCoverBoot = {
+          loading: () => state("loading"),
+          ready: () => state("ready"),
+          fail: () => state("failed"),
+        };
+        document.addEventListener("visibilitychange", () => {
+          if (page.dataset.coverState === "loading") state("loading");
+        });
+        window.addEventListener("pagehide", () => {
+          suspended = true;
+          state("loading");
+        });
+        window.addEventListener("pageshow", (event) => {
+          suspended = false;
+          if (event.persisted) state("loading");
+        });
+        state("loading");
+      })();
+    </script>
+    <script
+      type="module"
+      src="./entry.js?v=fa03d13926d7"
+      onerror="window.__eamCoverBoot.fail()"
+    ></script>
+  </body>
+</html>
