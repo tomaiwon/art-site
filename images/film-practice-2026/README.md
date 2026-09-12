@@ -19,4 +19,6 @@ scan images are presented upright. There is no crop, retouch, or generated image
 Original scans are not included in the website repository.
 
 `Z-film-practice.woff2` is a small subset of the site's existing approved Chinese
-typeface. Only the new entries and gallery pages use it; existing type remains unchanged.
+typeface. Only the new archive entries use it; existing type remains unchanged.
+Gallery pages follow the existing photography layout: a single BACK link,
+a 760px image column, and the same heading and navigation typography.
