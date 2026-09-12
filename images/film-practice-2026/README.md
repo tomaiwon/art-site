@@ -2,10 +2,10 @@
 
 Four photography entries in Practice Series, ordered newest first:
 
-- 2026.08 — 威尼斯：双年展 (34 photographs)
-- Late 2026.07 — 阿尔勒：摄影术二百年 (74 photographs)
-- Late 2026.07 — 马赛：晒后假日下 (32 photographs)
-- 2026.05 — 剑桥：洋务时刻 (14 photographs)
+- 2026.08 — 双年展 (34 photographs)
+- Late 2026.07 — 摄影术二百年 (74 photographs)
+- Late 2026.07 — 晒后假日下 (32 photographs)
+- 2026.05 — 洋务时刻 (14 photographs)
 
 The artist supplied the titles, months and photographs. Dates have month precision;
 no exact shooting day is inferred. July entries retain the artist's supplied order.
