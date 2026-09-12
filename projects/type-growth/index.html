@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta
+      name="description"
+      content="测试字生：汉字聚合、生长与散开的互动效果。2026年九月，过往实践。"
+    />
+    <title>测试字生 — 2026.09 · Yi Huang</title>
+    <link rel="icon" href="data:," />
+    <link
+      rel="preload"
+      href="./print-study.woff2?v=20260912"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="./study.css?v=20260912" />
+  </head>
+  <body>
+    <main class="study">
+      <header class="masthead">
+        <a class="back-link" href="../../work-practice.html">过往实践</a>
+        <span class="edition">2026.09 · 测试字生</span>
+      </header>
+      <canvas id="field" aria-hidden="true"></canvas>
+      <div class="title">
+        <p class="eyebrow" lang="en">Type, becoming.</p>
+        <h1>字<span>生</span></h1>
+      </div>
+      <p class="sr-only">
+        漢字由散落的排字逐漸聚合成枝幹，小字簇在枝頭綻開，然後散回紙面。動畫循環播放，可暫停或重播；鼠標或手指附近的字會輕輕散開後回位。
+      </p>
+      <p id="fallback" class="fallback" hidden>
+        此瀏覽器暫時無法顯示字墨動畫。
+      </p>
+      <noscript
+        ><p class="fallback">開啟 JavaScript 後可觀看字墨動畫。</p></noscript
+      >
+      <footer class="footer">
+        <p class="hint">
+          <span class="mouse-hint">移動鼠標，輕拂字墨</span
+          ><span class="touch-hint">輕觸字墨</span>
+        </p>
+        <div class="actions" aria-label="動畫控制">
+          <button id="pause" type="button" aria-label="暫停動畫" disabled>
+            暫停
+          </button>
+          <button id="replay" type="button" disabled>重播</button>
+        </div>
+      </footer>
+      <div class="time-track" aria-hidden="true">
+        <div id="time-fill"></div>
+      </div>
+    </main>
+    <script type="module" src="./study.mjs?v=20260912"></script>
+  </body>
+</html>
