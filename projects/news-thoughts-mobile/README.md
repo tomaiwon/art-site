@@ -1,6 +1,6 @@
 # NEWS 与沉思录 · 移动版测试
 
-入口：WORK → 测试 → NEWS 与沉思录 · 移动版。
+入口：WORK → 测试 → 沉思录。
 
 移动分类页为 `/work-test.html`；桌面访问分类页时回到 `/work.html#tests`，沿用网站现有的双端入口方式。样页路径为 `/projects/news-thoughts-mobile/`，菜单和页脚可返回测试分类。
 
