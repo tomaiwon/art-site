@@ -518,9 +518,9 @@ h1 {
   margin-top: 44px;
 }
 .section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  align-items: center;
   gap: 20px;
   padding: 15px 0;
   border-top: 2px solid var(--ink);
@@ -531,9 +531,21 @@ h1 {
     700 1.875rem/1.2 var(--serif);
   letter-spacing: -0.04em;
 }
-.section-heading > span {
+.section-label {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+.section-index {
   font: 0.75rem var(--mono);
   color: var(--muted);
+}
+.section-emblem {
+  display: block;
+  width: 96px;
+  height: 80px;
+  overflow: hidden;
+  mix-blend-mode: multiply;
 }
 .news-item {
   padding: 24px 0 25px;
@@ -870,7 +882,7 @@ h3 a:hover {
 .eyebrow,
 .intro-label,
 .story-end > .meta,
-.section-heading > span,
+.section-index,
 .site-footer > p {
   font-family: var(--mono);
   font-weight: 300;
@@ -884,7 +896,7 @@ h3 a:hover {
 .issue-bar { flex-wrap: wrap; }
 .issue-number { padding-right: 12px; }
 .issue-nav { margin-left: auto; }
-.article-meta, .item-footer, .story-end, .section-heading { flex-wrap: wrap; }
+.article-meta, .item-footer, .story-end { flex-wrap: wrap; }
 .item-footer > .meta { min-width: 0; }
 .cover-figure > figcaption { flex-wrap: wrap; }
 .section-more { gap: 14px; }
