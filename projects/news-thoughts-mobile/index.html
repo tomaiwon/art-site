@@ -10,9 +10,9 @@
     <link rel="icon" href="data:," />
     <link rel="preload" href="fonts/reading-song-sc.woff2?v=languages-1" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="fonts/reading-serif-roman.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=section-emblems-3" />
-    <script src="i18n.js?v=section-emblems-3" defer></script>
-    <script src="app.js?v=languages-1" defer></script>
+    <link rel="stylesheet" href="styles.css?v=studio-social-1" />
+    <script src="i18n.js?v=studio-social-1" defer></script>
+    <script src="app.js?v=studio-social-1" defer></script>
   </head>
   <body id="top">
     <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -25,6 +25,9 @@
         <symbol id="icon-left" viewBox="0 0 24 24"><path d="M20 12H4m7-7-7 7 7 7" /></symbol>
         <symbol id="icon-down" viewBox="0 0 24 24"><path d="M12 4v16m-7-7 7 7 7-7" /></symbol>
         <symbol id="icon-up" viewBox="0 0 24 24"><path d="M12 20V4m-7 7 7-7 7 7" /></symbol>
+        <symbol id="icon-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".9" fill="currentColor" stroke="none" /></symbol>
+        <symbol id="icon-wechat" viewBox="0 0 24 24"><path d="M14.5 8.5c-.7-3.5-5.4-5.3-9.2-3.2C1.5 7.4 1.1 11.8 4.8 14l-.7 2.5 2.8-1.4 1.8.3" /><path d="M21.7 14.4c0-2.9-2.7-5.2-6-5.2s-6 2.3-6 5.2 2.7 5.2 6 5.2l1.9-.3 2.8 1.4-.7-2.5c1.3-.9 2-2.3 2-3.8Z" /><g fill="currentColor" stroke="none"><circle cx="6.5" cy="8.5" r=".8" /><circle cx="10.5" cy="8.5" r=".8" /><circle cx="13.5" cy="13.5" r=".8" /><circle cx="17.5" cy="13.5" r=".8" /></g></symbol>
+        <symbol id="icon-email" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="1" /><path d="m3 6 9 7 9-7" /></symbol>
       </defs>
     </svg>
     <a class="skip-link" href="#main"><span data-i18n="skip">跳到正文</span></a>
@@ -66,6 +69,15 @@
           <a class="" href="https://yihuang.art/news.html" target="_blank" rel="noopener noreferrer"><span data-i18n="allNews">见闻存档</span> <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-external"></use></svg></a>
           <a class="" href="https://yihuang.art/thoughts.html" target="_blank" rel="noopener noreferrer"><span data-i18n="thoughtsArchive">沉思录存档</span> <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-external"></use></svg></a>
         </nav>
+        <nav class="menu-social" aria-label="工作室" data-i18n-aria-label="studioLinks">
+          <a href="https://www.instagram.com/yihuang_art" target="_blank" rel="noopener noreferrer" aria-label="Instagram: @yihuang_art" title="Instagram: @yihuang_art"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-instagram"></use></svg></a>
+          <button class="wechat-toggle" type="button" aria-label="WeChat: ARTOMAI" title="WeChat: ARTOMAI" aria-expanded="false" aria-controls="menu-wechat"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-wechat"></use></svg></button>
+          <a href="mailto:yihuangart09@gmail.com" aria-label="yihuangart09@gmail.com" title="yihuangart09@gmail.com"><svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-email"></use></svg></a>
+        </nav>
+        <figure class="menu-wechat" id="menu-wechat" hidden>
+          <img src="../../images/qrcode-wechat.jpg" width="888" height="1128" alt="WeChat: ARTOMAI" loading="lazy" />
+          <figcaption>ARTOMAI</figcaption>
+        </figure>
         <aside class="menu-pick" aria-labelledby="menu-pick-title">
           <p data-i18n="thinkFurther" class="menu-pick-label">接着想一想</p>
           <h2 data-i18n="chipTitle" id="menu-pick-title">芯片进步的多层共创与价值分配</h2>

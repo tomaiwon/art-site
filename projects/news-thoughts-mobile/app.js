@@ -3,6 +3,8 @@
   const menu = document.querySelector(".reading-menu");
   const menuButton = document.querySelector(".site-header .menu-toggle");
   const closeButton = menu.querySelector(".menu-close");
+  const wechatButton = menu.querySelector(".wechat-toggle");
+  const wechatCard = menu.querySelector(".menu-wechat");
   const navLinks = [...document.querySelectorAll("a[data-nav]")];
   const sections = [...document.querySelectorAll("[data-section]")];
   let queued = false;
@@ -95,6 +97,10 @@
     }, () => {});
   });
   closeButton.addEventListener("click", closeMenu);
+  wechatButton.addEventListener("click", () => {
+    wechatCard.hidden = !wechatCard.hidden;
+    wechatButton.setAttribute("aria-expanded", String(!wechatCard.hidden));
+  });
   menu.addEventListener("cancel", (event) => {
     event.preventDefault();
     closeMenu();
@@ -113,6 +119,8 @@
     }
   });
   menu.addEventListener("close", () => {
+    wechatCard.hidden = true;
+    wechatButton.setAttribute("aria-expanded", "false");
     closing = false;
     menuAnimation?.cancel();
     menuAnimation = null;

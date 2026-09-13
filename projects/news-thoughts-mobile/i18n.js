@@ -20,6 +20,7 @@
   "backTests": "Back to tests",
   "allNews": "News archive",
   "thoughtsArchive": "Reflections archive",
+  "studioLinks": "Studio links",
   "thinkFurther": "A further thought",
   "chipTitle": "Shared progress and value across the chip industry",
   "chipIntro": "From one lithography machine to collaboration and value across the semiconductor industry.",
