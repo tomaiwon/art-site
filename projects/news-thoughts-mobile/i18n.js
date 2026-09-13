@@ -3,7 +3,7 @@
   "description": "News and reflections by Yi Huang, on art, technology, industry and everyday life.",
   "pageTitle": "News & Reflections — Issue 002",
   "skip": "Skip to content",
-  "home": "Yi Huang, back to selected reading",
+  "home": "Studio Yi Huang, back to selected reading",
   "name": "YI HUANG",
   "publication": "News & Reflections",
   "openMenu": "Open reading menu",
