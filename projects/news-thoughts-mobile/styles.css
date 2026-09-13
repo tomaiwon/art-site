@@ -133,7 +133,7 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 12px 20px;
+  padding: 8px 20px;
   min-height: 66px;
   transition:
     min-height 0.15s,
@@ -141,7 +141,7 @@ a {
 }
 .wordmark {
   display: block;
-  flex: 0 1 200px;
+  flex: 0 1 144px;
   min-width: 0;
 }
 .wordmark:hover {
@@ -747,7 +747,7 @@ h3 a:hover {
     padding-inline: 32px;
   }
   .wordmark {
-    flex-basis: 240px;
+    flex-basis: 168px;
   }
   .issue-number {
     padding-left: 32px;
