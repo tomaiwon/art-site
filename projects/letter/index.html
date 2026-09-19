@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>书之痕</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#f4f2f4;
+    font:12px/1.4 "SF Mono",Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
+  #cv{display:block;width:100%;height:100%;cursor:crosshair;touch-action:none}
+  .hud{position:fixed;pointer-events:none;color:#9a7f8c;
+    letter-spacing:.16em;text-transform:uppercase;font-size:10px}
+  .tl{top:18px;left:20px;line-height:1.8}
+  .tl b{display:block;color:#c4546c;font-weight:700;letter-spacing:.2em}
+  .tr{top:18px;right:20px;text-align:right;line-height:1.9}
+  .tr i{font-style:normal;color:#5b5f9e}
+  .bl{bottom:18px;left:20px;line-height:1.9}
+  .br{bottom:18px;right:20px;text-align:right;opacity:.6}
+  kbd{font:inherit;border:1px solid rgba(154,127,140,.45);padding:1px 5px;border-radius:2px}
+  /* 窄屏下左右两条会撞在一起，右边那条收掉 */
+  @media (max-width:760px){ .br,.tr{display:none} }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="hud tl">
+  <b>书之痕</b>
+  <div>A letter, shattered</div>
+</div>
+<div class="hud tr">
+  <div>SHARDS <i id="sn">2</i></div>
+  <div>SEEDS <i id="st">2</i></div>
+</div>
+<div class="hud bl">
+  <div>在纸上按住拖动 就裂开</div>
+  <div><kbd>空格</kbd> 复原　<kbd>A</kbd> 全碎　<kbd>W</kbd> 做旧　<kbd>S</kbd> 存图</div>
+</div>
+<div class="hud br">Text reflows into every shard</div>
+
+<script>
+/* =====================================================================
+ * 书之痕 —— 一封信被敲碎，字重新流进每一块碎片
+ *
+ * 关键不在「裂」，在「裂完之后」：
+ * 碎片里的字不是把原来那页裁开，而是整段文字重新流一遍 ——
+ * 每一行能放几个字，由碎片在那个高度上有多宽决定，放不下就从中间断开。
+ * 所以窄的碎片上只剩一两个字母竖着排，大的碎片上还是完整的句子。
+ * 这就是参照图里「同一句话在不同碎片上密度完全不一样」的来源。
+ *
+ * 碎法用递归切线：凸多边形被一条直线切开永远还是两个凸多边形，
+ * 于是「某一行有多宽」只要一次扫描线求交，不用处理多段区间。
+ * 切完两半各往法线方向推开一点，位移由父节点往下累加 ——
+ * 跟真的敲碎一块玻璃一样，越晚裂的缝越细。
+ * ===================================================================== */
+
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d', { alpha:false });
+
+let W=0, H=0, DPR=1;
+
+/* 纸、格子、红线、蓝字 —— 全部取自参照 */
+/* 两套配色。做旧不是单纯压个黄色滤镜 —— 纸要暖、要黄，
+   而红线和蓝字会褪色、去饱和，往灰里走 */
+const FRESH = { bg:'#f4f2f4', paper:'#fdf8fa', grid:'#f0c9d5',
+                edge:'#d2566e', text:'#4a51b0', mark:'#6f63c8' };
+const AGED  = { bg:'#e9e2d0', paper:'#f8f1e0', grid:'#ddb2b0',
+                edge:'#b03a33', text:'#454da8', mark:'#5f5cae' };
+let aged = true;
+let P = AGED;
+
+const LETTER = (
+"My dearest, — I have started this letter eleven times and each time the "+
+"paper went cold before the sentence did. Today the rain came in sideways "+
+"and I thought of the winter you stood under the awning with both hands in "+
+"your sleeves, refusing to admit you were cold. I have kept the ticket stub. "+
+"I have kept the receipt from the noodle shop where you laughed so hard the "+
+"man at the next table turned around. These are not important things. They "+
+"are only the things that survived. "+
+"How is the light where you are? Here it arrives late and leaves early, and "+
+"in between it lies across the floorboards like something asleep. I move the "+
+"chair so it falls on the chair. I move the cup so it falls on the cup. It is "+
+"a small occupation but it fills the hours between the post arriving and the "+
+"post not arriving. "+
+"If this reaches you torn, do not blame the distance. Blame me, who folded it "+
+"too many times, who could not decide which half to send first. Read it in any "+
+"order. It says the same thing everywhere. — Yours, still, and without any "+
+"particular hope of being answered, but yours."
+).replace(/\s+/g,' ');
+
+/* ---------- 随机 ---------- */
+function mulberry32(a){
+  return function(){
+    a|=0; a=a+0x6D2B79F5|0;
+    let t=Math.imul(a^a>>>15, 1|a);
+    t=t+Math.imul(t^t>>>7, 61|t)^t;
+    return ((t^t>>>14)>>>0)/4294967296;
+  };
+}
+let rnd = mulberry32(1);
+const rr = (a,b)=> a+(b-a)*rnd();
+
+/* ---------- 版面 ---------- */
+let PAGE, FS, LH, CW, PAD, GRIDPX, COLW, GUT, INSET;
+const CHARS = 42;                 // 一栏装多少个等宽字符，参照里差不多是这个数
+function layout(){
+  const m  = Math.min(W/0.70, H/1.00) * 0.86;   // 0.86 是纸四周的留白
+  const pw = m*0.70, ph = m*1.00;  // 接近 A4 的竖比例
+  PAGE = { x:(W-pw)/2, y:(H-ph)/2, w:pw, h:ph };
+  GUT  = pw*0.055;
+  COLW = (pw-GUT)/2;
+  /* 先量出「1px 字号时一个字符多宽」，再反推字号 —— 直接猜字号会让
+     每栏的字符数随屏幕乱跳，参照里那种整齐的灰度就没了 */
+  ctx.font = '100px "Courier New",Courier,ui-monospace,monospace';
+  const unit = ctx.measureText('MMMMMMMMMM').width/1000;
+  FS   = COLW*0.93/(CHARS*unit);
+  LH   = FS*1.42;
+  PAD  = FS*0.85;
+  INSET= LH*0.62;                 // 每块往里收这么多，裂口的白槽就是 2×它
+  CW   = FS*unit;
+  GRIDPX = Math.max(3.5, CW*0.42); // 参照里一个字高大约两格半
+  ctx.font = FS+'px "Courier New",Courier,ui-monospace,monospace';
+}
+
+/* ---------- 碎片 ---------- */
+let shards=[];
+
+function rect(x,y,w,h){ return [x,y, x+w,y, x+w,y+h, x,y+h]; }
+
+/* ---------- 细胞 ----------
+ * 参照里的碎片不是玻璃那种「一刀切到底」的直边块，而是三条边交于一点、
+ * 每个夹角都接近 120° 的多边形 —— 那是 Voronoi（干裂的泥、细胞壁）。
+ * 所以不再维护切割树：只维护一堆「核」，每次敲就在那儿多撒几颗，
+ * 整张图重新算一遍 Voronoi。核密的地方细胞就小，核稀的地方就留大块。
+ */
+let seeds=[];          // { x, y, col, r1..r4 }  r* 是这颗核自己的随机数，
+                       // 存下来是为了重算时细胞的抖动不会跳
+let marks=[];          // 蓝色毛刺，存页面坐标，重算后再归到各自的细胞里
+
+function addSeed(x, y, col){
+  seeds.push({ x, y, col,
+    r1:rnd(), r2:rnd(), r3:rnd(), r4:rnd() });
+}
+
+function reset(){
+  rnd = mulberry32((Math.random()*1e9)|0);
+  seeds=[]; marks=[];
+  addSeed(PAGE.x+COLW*0.5,            PAGE.y+PAGE.h*0.5, 0);
+  addSeed(PAGE.x+COLW*1.5+GUT,        PAGE.y+PAGE.h*0.5, 1);
+  rebuild();
+}
+
+function colRect(c){
+  return c===0 ? rect(PAGE.x, PAGE.y, COLW, PAGE.h)
+               : rect(PAGE.x+COLW+GUT, PAGE.y, COLW, PAGE.h);
+}
+function colOf(x){
+  return x < PAGE.x+COLW+GUT*0.5 ? 0 : 1;
+}
+
+/* 半平面裁剪：留下离 p 比离 q 近的一半 */
+function clipHalf(poly, px,py, qx,qy){
+  const mx=(px+qx)*0.5, my=(py+qy)*0.5, dx=qx-px, dy=qy-py;
+  const out=[]; const n=poly.length;
+  for(let i=0;i<n;i+=2){
+    const j=(i+2)%n;
+    const ax=poly[i], ay=poly[i+1], bx=poly[j], by=poly[j+1];
+    const da=(ax-mx)*dx+(ay-my)*dy;
+    const db=(bx-mx)*dx+(by-my)*dy;
+    if(da<=0) out.push(ax,ay);
+    if((da<=0)!==(db<=0)){
+      const t=da/(da-db);
+      out.push(ax+(bx-ax)*t, ay+(by-ay)*t);
+    }
+  }
+  return out;
+}
+
+function insetConvex(poly, e){
+  const n=poly.length/2;
+  if(n<3) return null;
+  /* 内移量一旦达到内切圆半径，各边的交点顺序就反了，收出来是个蝴蝶结。
+     内切圆半径 = 2*面积/周长，这个判据是准的，不用事后猜 */
+  let per=0;
+  for(let i=0;i<n;i++){
+    const j=(i+1)%n;
+    per += Math.hypot(poly[j*2]-poly[i*2], poly[j*2+1]-poly[i*2+1]);
+  }
+  if(per<1e-6 || e >= 0.88 * 2*area(poly)/per) return null;
+  let cx=0, cy=0;
+  for(let i=0;i<n;i++){ cx+=poly[i*2]; cy+=poly[i*2+1]; }
+  cx/=n; cy/=n;
+  const L=[];
+  for(let i=0;i<n;i++){
+    const j=(i+1)%n;
+    const ax=poly[i*2], ay=poly[i*2+1], bx=poly[j*2], by=poly[j*2+1];
+    let ex=bx-ax, ey=by-ay;
+    const d=Math.hypot(ex,ey); if(d<1e-6) return null;
+    ex/=d; ey/=d;
+    let nx=ey, ny=-ex;
+    if((cx-ax)*nx + (cy-ay)*ny < 0){ nx=-nx; ny=-ny; }
+    L.push([ax+nx*e, ay+ny*e, ex, ey]);
+  }
+  const out=[];
+  for(let i=0;i<n;i++){
+    const a=L[i], b=L[(i+1)%n];
+    const den=a[2]*b[3]-a[3]*b[2];
+    if(Math.abs(den)<1e-9) return null;
+    const t=((b[0]-a[0])*b[3]-(b[1]-a[1])*b[2])/den;
+    out.push(a[0]+a[2]*t, a[1]+a[3]*t);
+  }
+  return out;
+}
+function rotateVerts(poly, cx, cy, r){
+  const c=Math.cos(r), si=Math.sin(r);
+  for(let i=0;i<poly.length;i+=2){
+    const x=poly[i]-cx, y=poly[i+1]-cy;
+    poly[i]   = cx + x*c - y*si;
+    poly[i+1] = cy + x*si + y*c;
+  }
+}
+function area(p){
+  let a=0;
+  for(let i=0;i<p.length;i+=2){
+    const j=(i+2)%p.length;
+    a += p[i]*p[j+1] - p[j]*p[i+1];
+  }
+  return Math.abs(a)/2;
+}
+function centroid(p){
+  let x=0,y=0;
+  for(let i=0;i<p.length;i+=2){ x+=p[i]; y+=p[i+1]; }
+  return [x/(p.length/2), y/(p.length/2)];
+}
+function pointInPoly(p, lx, ly){
+  const n=p.length;
+  let sign=0;
+  for(let i=0;i<n;i+=2){
+    const j=(i+2)%n;
+    const d=(p[j]-p[i])*(ly-p[i+1]) - (p[j+1]-p[i+1])*(lx-p[i]);
+    if(d>1e-9){ if(sign<0) return false; sign=1; }
+    else if(d<-1e-9){ if(sign>0) return false; sign=-1; }
+  }
+  return true;
+}
+function inside(s, x, y){ return pointInPoly(s.poly, x, y); }
+
+/* 重算整张 Voronoi。核只跟同一栏的核竞争，所以中间那条栏沟一直在 */
+function rebuild(){
+  shards=[];
+  for(let i=0;i<seeds.length;i++){
+    const s=seeds[i];
+    let poly = colRect(s.col);
+    for(let j=0;j<seeds.length && poly.length>=6;j++){
+      if(j===i || seeds[j].col!==s.col) continue;
+      poly = clipHalf(poly, s.x,s.y, seeds[j].x,seeds[j].y);
+    }
+    if(poly.length<6) continue;
+    const raw = poly.slice();                 // 收之前的形状，用来归置毛刺
+
+    /* 细胞整体挪一点点再微转，最后统一往里收。缝主要来自「收」，
+       所以每条边两侧都留一样宽的白槽 —— 参照里正是均匀的一圈 */
+    const dx=(s.r1-0.5)*INSET*0.9, dy=(s.r2-0.5)*INSET*0.9;
+    for(let k=0;k<poly.length;k+=2){ poly[k]+=dx; poly[k+1]+=dy; }
+    const [cx,cy]=centroid(poly);
+    let dmax=1;
+    for(let k=0;k<poly.length;k+=2){
+      const d=Math.hypot(poly[k]-cx, poly[k+1]-cy);
+      if(d>dmax) dmax=d;
+    }
+    rotateVerts(poly, cx, cy, (s.r3-0.5)*2*INSET*0.45/dmax);
+    const ins = insetConvex(poly, INSET);
+    if(!ins) continue;
+    shards.push({ poly:ins, raw, ox:dx, oy:dy, lines:null, marks:[] });
+  }
+  /* 毛刺归到所在的细胞里 */
+  for(const m of marks){
+    for(const sh of shards){
+      if(pointInPoly(sh.raw, m.x, m.y)){ sh.marks.push(m); break; }
+    }
+  }
+}
+
+/* ---------- 敲 ----------
+ * 敲一下 = 在那儿撒几颗核。撒得密，那片就碎成小细胞；
+ * 没撒到的地方整块留着，于是「能连着读的大块」和「只剩一个字母的渣」
+ * 能同时存在。
+ */
+const MINCELL = ()=> (LH*3.2)*(CW*3.2);
+
+function seedAt(x, y, spread, n){
+  const col = colOf(x);
+  const x0 = col===0 ? PAGE.x : PAGE.x+COLW+GUT;
+  let added=0;
+  for(let i=0;i<n;i++){
+    const px = x + (rnd()-0.5)*spread*2;
+    const py = y + (rnd()-0.5)*spread*2;
+    if(px < x0 || px > x0+COLW || py < PAGE.y || py > PAGE.y+PAGE.h) continue;
+    /* 离已有的核太近就不撒了，否则会挤出没法收的细长细胞 */
+    let ok=true;
+    for(const q of seeds){
+      if(q.col===col && Math.hypot(q.x-px,q.y-py) < Math.sqrt(MINCELL())*0.72){ ok=false; break; }
+    }
+    if(!ok) continue;
+    addSeed(px, py, col);
+    added++;
+  }
+  if(added && rnd()<0.5){
+    marks.push({ x, y, a:rnd()*6.283, L:rr(LH*1.8, LH*4.6), s:(rnd()*1e9)|0 });
+  }
+  return added;
+}
+
+function crackAt(x, y){
+  const sp = Math.min(W,H)*(0.02+rnd()*0.05);
+  return seedAt(x, y, sp, 2+(rnd()*4|0)) > 0;
+}
+/* 沿一段路径撒，拖动时就是「这一路都裂开」 */
+function crackSeg(x0,y0, x1,y1){
+  const L=Math.hypot(x1-x0,y1-y0);
+  const steps=Math.max(1, Math.round(L/(Math.sqrt(MINCELL())*0.9)));
+  let any=0;
+  for(let i=0;i<=steps;i++){
+    const t=i/steps;
+    any += seedAt(x0+(x1-x0)*t, y0+(y1-y0)*t, Math.sqrt(MINCELL())*0.55, 2);
+  }
+  return any>0;
+}
+
+function spanAt(poly, y){
+  let lo=Infinity, hi=-Infinity;
+  const n=poly.length;
+  for(let i=0;i<n;i+=2){
+    const j=(i+2)%n;
+    const ay=poly[i+1], by=poly[j+1];
+    if((ay<=y)===(by<=y)) continue;
+    const t=(y-ay)/(by-ay);
+    const x=poly[i]+(poly[j]-poly[i])*t;
+    if(x<lo) lo=x;
+    if(x>hi) hi=x;
+  }
+  return hi>lo ? [lo,hi] : null;
+}
+function refresh(){
+  rnd = mulberry32(0xA5E ^ shards.length);
+  /* 阅读顺序：先左栏从上到下，再右栏。按原始位置排，跟推开多少无关 */
+  const mid = PAGE.x + PAGE.w/2;
+  const ord = shards.map((s,i)=>{
+    const [cx,cy]=centroid(s.poly);
+    return { i, col: cx<mid?0:1, cy, cx };
+  }).sort((a,b)=> a.col-b.col || a.cy-b.cy || a.cx-b.cx);
+
+  let cur = 0;
+  for(const o of ord){
+    const s = shards[o.i];
+    const p = s.poly;
+    let minY=Infinity, maxY=-Infinity;
+    for(let i=1;i<p.length;i+=2){ if(p[i]<minY)minY=p[i]; if(p[i]>maxY)maxY=p[i]; }
+    const lines=[];
+    for(let y=minY+PAD+LH*0.78; y<maxY-PAD*0.4; y+=LH){
+      const sp = spanAt(p, y);
+      if(!sp) continue;
+      const x0=sp[0]+PAD, x1=sp[1]-PAD;
+      const n = Math.floor((x1-x0)/CW);
+      if(n<1) continue;
+      /* 一封信填不满整页时从头再接一遍 —— 正好是「反复重读」的意思，
+         也保证不会出现一整栏只有格子没有字的情况 */
+      let t = '';
+      for(let k=0;k<n;k++) t += LETTER[(cur+k) % LETTER.length];
+      cur += n;
+      /* 做旧用的随行参数：墨深浅、整行的错位、偶尔卡键 */
+      const ink  = 0.64 + 0.36*Math.pow(rnd(), 0.6);
+      const jx   = (rnd()-0.5)*FS*0.16;
+      const jy   = (rnd()-0.5)*FS*0.13;
+      const stick= rnd() < 0.07;
+      const wob  = stick ? Array.from({length:7}, ()=> (rnd()-0.5)*FS*0.22) : null;
+      lines.push({ x:(x0+x1)/2, y, t, ink, jx, jy, stick, wob });
+    }
+    s.lines = lines;
+  }
+  document.getElementById('sn').textContent = shards.length;
+  document.getElementById('st').textContent = seeds.length;
+}
+
+/* ---------- 蓝色毛刺箭头 ---------- */
+function drawMark(m){
+  const r = mulberry32(m.s);
+  const tx = m.x + Math.cos(m.a)*m.L, ty = m.y + Math.sin(m.a)*m.L;
+  ctx.strokeStyle = P.mark; ctx.lineWidth = Math.max(0.5, FS*0.045);
+  ctx.globalAlpha = 0.75;
+  ctx.beginPath(); ctx.moveTo(m.x,m.y); ctx.lineTo(tx,ty); ctx.stroke();
+  /* 箭头 */
+  for(const d of [-0.36, 0.36]){
+    ctx.beginPath(); ctx.moveTo(tx,ty);
+    ctx.lineTo(tx-Math.cos(m.a+d)*m.L*0.17, ty-Math.sin(m.a+d)*m.L*0.17);
+    ctx.stroke();
+  }
+  /* 尾巴上那一撮散开的毛 */
+  const back = m.a + Math.PI;
+  for(let i=0;i<14;i++){
+    const a = back + (r()-0.5)*1.25;
+    const l = m.L*(0.18+r()*0.42);
+    ctx.globalAlpha = 0.30 + r()*0.45;
+    ctx.beginPath(); ctx.moveTo(m.x,m.y);
+    ctx.quadraticCurveTo(m.x+Math.cos(a)*l*0.6 + (r()-0.5)*l*0.3,
+                         m.y+Math.sin(a)*l*0.6 + (r()-0.5)*l*0.3,
+                         m.x+Math.cos(a)*l, m.y+Math.sin(a)*l);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ---------- 做旧图层 ----------
+ * 霉斑、纤维颗粒、折痕、暗角，一次性烤成一张和画布同尺寸的图，
+ * 用 multiply 叠上去。关键是「污渍长在纸上」：每块碎片按自己挪开的量
+ * (ox,oy) 去取样，所以碎片一移开，斑点跟着走，缝两侧的纹理对不上 ——
+ * 这才像一张真的被撕碎的旧纸，而不是蒙了一层脏玻璃。
+ */
+const ageCv = document.createElement('canvas');
+const actx  = ageCv.getContext('2d');
+
+function buildAge(){
+  ageCv.width=W; ageCv.height=H;
+  const a=actx;
+  a.globalCompositeOperation='source-over';
+  a.fillStyle='#ffffff'; a.fillRect(0,0,W,H);
+  const r = mulberry32(20260919);
+  const U = Math.min(W,H);
+
+  /* 大片不匀的暖色底 —— 纸不会整张一个颜色 */
+  for(let i=0;i<18;i++){
+    const x=r()*W, y=r()*H, rad=U*(0.10+r()*0.34);
+    const g=a.createRadialGradient(x,y,0,x,y,rad);
+    const al=0.018+r()*0.032;
+    g.addColorStop(0,'rgba(196,166,116,'+al+')');
+    g.addColorStop(1,'rgba(196,166,116,0)');
+    a.fillStyle=g; a.fillRect(x-rad,y-rad,rad*2,rad*2);
+  }
+  /* 几块大的水渍 */
+  for(let i=0;i<5;i++){
+    const x=r()*W, y=r()*H, rad=U*(0.05+r()*0.10);
+    const g=a.createRadialGradient(x,y,rad*0.35,x,y,rad);
+    g.addColorStop(0,  'rgba(168,126,68,0.030)');
+    g.addColorStop(0.82,'rgba(158,112,56,0.075)');
+    g.addColorStop(1,  'rgba(158,112,56,0)');
+    a.fillStyle=g; a.fillRect(x-rad,y-rad,rad*2,rad*2);
+  }
+  /* 霉斑：一簇一簇的小点，不是均匀撒的 */
+  for(let c=0;c<40;c++){
+    const cx=r()*W, cy=r()*H, spread=U*(0.012+r()*0.055);
+    const n=3+(r()*9|0);
+    for(let i=0;i<n;i++){
+      const x=cx+(r()-0.5)*spread*2, y=cy+(r()-0.5)*spread*2;
+      const rad=U*(0.0022+r()*0.0085);
+      const g=a.createRadialGradient(x,y,0,x,y,rad);
+      const al=0.14+r()*0.30;
+      g.addColorStop(0,'rgba(150,104,52,'+al+')');
+      g.addColorStop(0.55,'rgba(158,116,66,'+(al*0.55)+')');
+      g.addColorStop(1,'rgba(158,116,66,0)');
+      a.fillStyle=g; a.fillRect(x-rad,y-rad,rad*2,rad*2);
+    }
+  }
+  /* 折痕：一条暗、紧挨着一条亮，才像纸被折过而不是画了条线 */
+  for(let i=0;i<3;i++){
+    const vert = r()<0.55;
+    const t = 0.22+r()*0.56;
+    const w = U*0.010;
+    const x0 = vert ? W*t : 0, y0 = vert ? 0 : H*t;
+    const g = vert ? a.createLinearGradient(x0-w,0,x0+w,0)
+                   : a.createLinearGradient(0,y0-w,0,y0+w);
+    g.addColorStop(0,   'rgba(140,110,70,0)');
+    g.addColorStop(0.42,'rgba(140,110,70,0.16)');
+    g.addColorStop(0.52,'rgba(255,252,246,0.55)');
+    g.addColorStop(1,   'rgba(140,110,70,0)');
+    a.fillStyle=g;
+    if(vert) a.fillRect(x0-w,0,w*2,H); else a.fillRect(0,y0-w,W,w*2);
+  }
+  /* 暗角 */
+  const vg=a.createRadialGradient(W/2,H/2,U*0.30, W/2,H/2,U*0.86);
+  vg.addColorStop(0,'rgba(120,96,60,0)');
+  vg.addColorStop(1,'rgba(120,96,60,0.11)');
+  a.fillStyle=vg; a.fillRect(0,0,W,H);
+
+  /* 纤维颗粒：半分辨率生成再放大，又便宜又比逐像素噪点柔和 */
+  const nw=Math.max(1,W>>1), nh=Math.max(1,H>>1);
+  const nz=document.createElement('canvas'); nz.width=nw; nz.height=nh;
+  const nctx=nz.getContext('2d');
+  const img=nctx.createImageData(nw,nh), d=img.data;
+  for(let i=0;i<nw*nh;i++){
+    const v=240+((r()*16)|0);
+    d[i*4]=v; d[i*4+1]=v-1; d[i*4+2]=v-4; d[i*4+3]=255;
+  }
+  nctx.putImageData(img,0,0);
+  a.globalAlpha=0.42;
+  a.imageSmoothingEnabled=true;
+  a.drawImage(nz,0,0,W,H);
+  a.globalAlpha=1;
+}
+
+/* ---------- 画 ---------- */
+function shardPath(s){
+  ctx.beginPath();
+  ctx.moveTo(s.poly[0], s.poly[1]);
+  for(let i=2;i<s.poly.length;i+=2) ctx.lineTo(s.poly[i], s.poly[i+1]);
+  ctx.closePath();
+}
+function draw(){
+  ctx.fillStyle=P.bg; ctx.fillRect(0,0,W,H);
+  ctx.font = FS+'px "Courier New",Courier,ui-monospace,monospace';
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+
+  for(const s of shards){
+    /* 没有 ctx.transform —— 碎片只是个窗口，纸纹和字都画在屏幕坐标里，
+       所以碎片转了，格子还是正的、字还是横的（参照就是这样） */
+    shardPath(s);
+    if(aged){
+      /* 先带阴影铺一次底：纸片是摞在桌面上的，不是印在桌面上的 */
+      ctx.save();
+      ctx.shadowColor='rgba(112,92,62,0.34)';
+      ctx.shadowBlur=INSET*1.35;
+      ctx.shadowOffsetX=INSET*0.30; ctx.shadowOffsetY=INSET*0.42;
+      ctx.fillStyle=P.paper; ctx.fill();
+      ctx.restore();
+    }
+    ctx.save();
+    ctx.clip();
+    ctx.fillStyle=P.paper; ctx.fill();
+
+    /* 方格按纸的原点排，所以碎片一推开，格子就对不上了 —— 参照里正是这样 */
+    ctx.strokeStyle=P.grid; ctx.lineWidth=DPR*0.55;
+    ctx.beginPath();
+    let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+    for(let i=0;i<s.poly.length;i+=2){
+      if(s.poly[i]<minX)minX=s.poly[i]; if(s.poly[i]>maxX)maxX=s.poly[i];
+      if(s.poly[i+1]<minY)minY=s.poly[i+1]; if(s.poly[i+1]>maxY)maxY=s.poly[i+1];
+    }
+    const ax=PAGE.x+s.ox, ay=PAGE.y+s.oy;      // 纸纹跟着这块纸挪，但不转
+    const g0x=Math.floor((minX-ax)/GRIDPX)*GRIDPX+ax;
+    const g0y=Math.floor((minY-ay)/GRIDPX)*GRIDPX+ay;
+    for(let x=g0x;x<=maxX;x+=GRIDPX){ ctx.moveTo(x,minY); ctx.lineTo(x,maxY); }
+    for(let y=g0y;y<=maxY;y+=GRIDPX){ ctx.moveTo(minX,y); ctx.lineTo(maxX,y); }
+    ctx.stroke();
+
+    /* 字：一行行深浅不一，偶尔一行像卡了键，逐字抖一下 */
+    ctx.fillStyle=P.text;
+    if(s.lines) for(const l of s.lines){
+      if(aged){
+        ctx.globalAlpha = l.ink;
+        if(l.stick){
+          ctx.textAlign='left';
+          let x = l.x - l.t.length*CW/2;
+          for(let k=0;k<l.t.length;k++){
+            ctx.fillText(l.t[k], x + l.jx, l.y + l.jy + l.wob[k%l.wob.length]);
+            x += CW;
+          }
+          ctx.textAlign='center';
+        }else{
+          ctx.fillText(l.t, l.x + l.jx, l.y + l.jy);
+        }
+      }else{
+        ctx.fillText(l.t, l.x, l.y);
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    for(const m of s.marks) drawMark(m);
+
+    if(aged){
+      /* 整张纸的旧痕，按这块纸挪开的量取样 */
+      ctx.globalCompositeOperation='multiply';
+      ctx.drawImage(ageCv, s.ox, s.oy);
+      ctx.globalCompositeOperation='source-over';
+      /* 断口内缘泛黄：裁剪还在，所以描出去的那一半会被切掉，
+         剩下的正好是一圈由外向内淡开的黄 —— canvas 没有内阴影，只能这么做 */
+      shardPath(s);
+      ctx.lineJoin='round';
+      for(const [w,al] of [[INSET*2.6,0.05],[INSET*1.5,0.07],[INSET*0.7,0.09]]){
+        ctx.strokeStyle='rgba(148,112,62,'+al+')';
+        ctx.lineWidth=Math.max(1,w); ctx.stroke();
+      }
+    }
+    ctx.restore();   // 解除裁剪
+
+    /* 必须重建一次路径：上面画格子时 beginPath 已经把轮廓冲掉了，
+       而 restore() 只还原状态、不还原当前路径 */
+    shardPath(s);
+    ctx.strokeStyle=P.edge; ctx.lineWidth=Math.max(0.7, DPR*0.72);
+    ctx.lineJoin='round'; ctx.stroke();
+  }
+}
+
+/* ---------- 交互 ---------- */
+let drag=false, lastCrack=0, idle=0;
+
+function hit(e){
+  const r=cv.getBoundingClientRect();
+  return [(e.clientX-r.left)*DPR, (e.clientY-r.top)*DPR];
+}
+let px0=0, py0=0;
+cv.addEventListener('pointerdown', e=>{
+  drag=true; idle=0; cv.setPointerCapture(e.pointerId);
+  const [x,y]=hit(e); px0=x; py0=y;
+  if(crackAt(x,y)){ rebuild(); refresh(); }
+  draw();
+});
+cv.addEventListener('pointermove', e=>{
+  if(!drag) return;
+  idle=0;
+  const now=performance.now();
+  if(now-lastCrack < 90) return;
+  const [x,y]=hit(e);
+  if(Math.hypot(x-px0, y-py0) < LH*1.5) return;   // 攒够一段再裂
+  lastCrack=now;
+  /* 拖出来的这一段就是裂纹本身，沿途的碎片被同一条线切开 */
+  if(crackSeg(px0,py0, x,y)){ rebuild(); refresh(); draw(); }
+  px0=x; py0=y;
+});
+const up=()=>{ drag=false; };
+cv.addEventListener('pointerup', up);
+cv.addEventListener('pointercancel', up);
+
+addEventListener('keydown', e=>{
+  if(e.code==='Space'){ e.preventDefault(); reset(); draw(); idle=0; }
+  else if(e.key==='a'||e.key==='A'){ shatter(14); idle=0; }
+  else if(e.key==='s'||e.key==='S'){ save(); }
+  else if(e.key==='w'||e.key==='W'){ aged=!aged; P = aged?AGED:FRESH; draw(); }
+});
+function shatter(n){
+  /* 成簇地撒，不是均匀撒 —— 均匀撒出来每块一样大，又变回马赛克 */
+  for(let k=0;k<n;k++){
+    const col = rnd()<0.5?0:1;
+    const x0 = col===0 ? PAGE.x : PAGE.x+COLW+GUT;
+    const cx = x0 + rnd()*COLW, cy = PAGE.y + rnd()*PAGE.h;
+    seedAt(cx, cy, Math.min(W,H)*(0.02+rnd()*0.09), 2+(rnd()*6|0));
+  }
+  rebuild(); refresh(); draw();
+}
+function save(){
+  cv.toBlob(b=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download='letter-'+shards.length+'.png';
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  }, 'image/png');
+}
+
+/* ---------- 起来 ---------- */
+function resize(){
+  DPR = Math.min(2, devicePixelRatio||1);
+  W = cv.width  = Math.round(innerWidth *DPR);
+  H = cv.height = Math.round(innerHeight*DPR);
+  cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px';
+  layout();
+  buildAge();
+  reset();
+  draw();
+}
+addEventListener('resize', resize);
+
+/* 没人动的时候自己慢慢裂，页面不至于是张死图 */
+function tick(){
+  if(!drag){
+    idle++;
+    if(idle > 150 && shards.length < 60 && idle % 26 === 0){
+      const col = rnd()<0.5?0:1;
+      const x0 = col===0 ? PAGE.x : PAGE.x+COLW+GUT;
+      if(seedAt(x0+rnd()*COLW, PAGE.y+rnd()*PAGE.h,
+                Math.min(W,H)*(0.02+rnd()*0.07), 2+(rnd()*4|0))>0){
+        rebuild(); refresh(); draw();
+      }
+    }
+  }
+  requestAnimationFrame(tick);
+}
+resize();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
