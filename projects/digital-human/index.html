@@ -1,18 +1,62 @@
 <!doctype html>
-<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>数字人 · 黄熠</title>
-<meta name="description" content="黄熠工作室的数字人实验：一段基于个人肖像的动态短片。">
-<style>
-:root{font-family:Inter,"PingFang SC",system-ui,sans-serif;color:#e9e8e4;background:#181b1a;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:1320px;margin:auto;padding:28px 5vw}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #3a403b;padding-bottom:20px;font-size:11px;letter-spacing:.1em;color:#afb7b0}article{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(250px,.85fr);gap:7%;align-items:center;padding:30px 0}figure{margin:0;position:relative}video,img{display:block;width:100%;aspect-ratio:1122/1402;object-fit:contain;max-height:76vh;border-radius:3px;background:#242724}#original{display:none}.compare video{display:none}.compare #original{display:block}figcaption{display:flex;justify-content:space-between;font-size:11px;color:#9da79e;margin-top:10px}.label{font-size:11px;letter-spacing:.13em;color:#acbda7}h1{font-size:clamp(32px,4.1vw,54px);font-weight:450;letter-spacing:-.055em;line-height:1.25;margin:19px 0}p{font-size:14px;line-height:1.9;color:#afb8af}button{font:inherit;font-size:12px;border:1px solid #677665;border-radius:99px;padding:12px 21px;color:#f0f5ec;background:none;cursor:pointer}button.primary{background:#c7d3bf;color:#212921;border-color:#c7d3bf}button:focus-visible{outline:2px solid white;outline-offset:5px}.controls{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 18px}.caption{font-size:15px;line-height:1.9;border-top:1px solid #3a403b;padding-top:20px;color:#d2d9cf}.note{font-size:11px;line-height:1.9;color:#8c978d}.foot{border-top:1px solid #3a403b;padding-top:18px;display:flex;justify-content:space-between;gap:18px;font-size:11px;color:#909b90}a{color:#c7d3bf}#status{font-size:11px;color:#aabd9f;min-height:20px}@media(max-width:680px){main{padding:20px 23px}article{grid-template-columns:1fr;gap:28px}.foot{display:block;line-height:2}video,img{max-height:55vh}h1{font-size:34px;margin:10px 0}header{font-size:10px}.controls{margin:18px 0}}
-</style>
-<main><header><strong>STUDIO / MOVING PORTRAIT</strong><span>数字人 · 测试</span></header>
-<article><figure id="frame"><video aria-label="数字人自我介绍短片" id="film" controls playsinline preload="metadata" poster="assets/portrait.png" src="assets/intro.mp4"></video><img id="original" src="assets/portrait.png" alt="黄熠的半写实数字肖像原稿"><figcaption><span>黄熠 · 动态肖像</span><span id="length">短片预览</span></figcaption></figure>
-<section><div class="label">PORTRAIT IN MOTION / 02</div><h1>让这张脸，<br>开口说话。</h1><p>以黄熠的肖像为起点，尝试一个会开口说话的数字形象。<br>这是一段关于面容、动作与声音的早期实验。</p><div class="controls"><button class="primary" id="play">播放试片</button><button id="compare" aria-pressed="false">对照原稿</button></div><div id="status" role="status">点击播放，才会发出声音</div><p class="caption">“你好，我是工作室的数字讲解员。”</p><p class="note">本版为预先生成的视频样片，支持播放和原稿对照，暂不支持实时对话。</p><p class="note">配音使用合成男声，非本人声音克隆。</p></section></article>
-<div class="foot"><span>数字人实验 · 2026.09</span><a href="../../work-test.html">← 返回测试</a></div></main>
-<script>
-const film=document.getElementById('film'),frame=document.getElementById('frame'),button=document.getElementById('play'),compare=document.getElementById('compare'),status=document.getElementById('status');
-function original(on){frame.classList.toggle('compare',on);compare.setAttribute('aria-pressed',String(on));compare.textContent=on?'回到动态':'对照原稿';if(on)film.pause();}
-button.onclick=async()=>{original(false);film.currentTime=0;try{await film.play()}catch{status.textContent='暂时无法播放，请点击视频内的播放按钮重试。'}};
-compare.onclick=()=>original(compare.getAttribute('aria-pressed')!=='true');
-film.onplay=()=>{button.textContent='从头播放';status.textContent='正在播放'};film.onpause=()=>{if(!film.ended)status.textContent='已暂停'};film.onended=()=>{button.textContent='再看一次';status.textContent='播放完毕 · 可切换原稿对照'};film.onloadedmetadata=()=>document.getElementById('length').textContent=film.duration.toFixed(2)+' 秒';film.onerror=()=>status.textContent='短片加载失败，请刷新重试。';document.addEventListener('visibilitychange',()=>{if(document.hidden)film.pause()});window.addEventListener('pagehide',()=>film.pause());
-</script></html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f3f1ea">
+  <meta name="description" content="黄熠的数字肖像实验。一张肖像，一次眨眼，一句问候。">
+  <title>数字人 · 黄熠</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css?v=portrait-1">
+  <script src="player.js?v=portrait-1" defer></script>
+</head>
+<body data-view="motion" data-playback="idle">
+  <a class="skip-link" href="#main">跳到作品</a>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="wordmark" href="../../index.html" aria-label="黄熠工作室首页">YI HUANG<span>黄熠</span></a>
+      <a class="back-link" href="../../work-test.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7"/></svg><span>返回测试</span></a>
+    </header>
+    <main id="main">
+      <article class="portrait-study" aria-labelledby="title">
+        <div class="introduction">
+          <p class="eyebrow"><span class="accent-mark" aria-hidden="true"></span>肖像实验<span class="index">NO. 05 / 2026</span></p>
+          <h1 id="title">数字人<span lang="en">Almost me.</span></h1>
+          <p class="intro-copy">一张肖像，一次眨眼，一句问候。<br>让屏幕里的另一个我，离真实近一点。</p>
+          <button class="primary-play" id="primary-play" type="button" aria-controls="film"><span id="primary-label">听我说一句</span><span class="button-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></button>
+          <p class="sound-note">点击播放，声音才会响起</p>
+          <div class="transcript" aria-label="短片字幕"><span class="small-label">这一次，我说</span><blockquote>“你好，我是工作室的<br>数字讲解员。”</blockquote><span class="transcript-rule" aria-hidden="true"></span></div>
+        </div>
+        <figure class="portrait" aria-labelledby="portrait-caption">
+          <div class="portrait-heading">
+            <span class="small-label">YI HUANG / DIGITAL PORTRAIT</span>
+            <div class="view-switch" role="group" aria-label="肖像视图"><button id="motion-tab" type="button" aria-pressed="true" aria-controls="portrait-stage">动态</button><button id="original-tab" type="button" aria-pressed="false" aria-controls="portrait-stage">原稿</button></div>
+          </div>
+          <div class="portrait-frame">
+            <div id="portrait-stage" class="portrait-stage">
+              <video id="film" aria-label="数字人自我介绍短片" aria-describedby="transcript-text" controls playsinline preload="none" poster="assets/portrait.png" src="assets/intro.mp4"></video>
+              <img id="original" src="assets/portrait.png" width="1122" height="1402" alt="黄熠的半写实数字肖像原稿" hidden>
+              <span class="view-label" aria-hidden="true"><span class="motion-label">动态肖像</span><span class="original-label">肖像原稿</span></span>
+            </div>
+            <div id="player-controls" class="player-controls" aria-label="短片播放控制" hidden>
+              <button id="transport-play" class="icon-button transport-play" type="button" aria-label="播放短片" aria-controls="film"><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7Z"/></svg><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><svg class="replay-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
+              <span id="elapsed" class="time-code">0:00</span>
+              <input id="seek" class="seek" aria-label="播放进度" type="range" min="0" max="3.28" value="0" step="0.01">
+              <span id="duration" class="time-code">0:03</span>
+              <button id="mute" class="icon-button mute" type="button" aria-label="静音" aria-pressed="false"><svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4-6 5H2v6h4l6 5 0-16ZM16 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg><svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4-6 5H2v6h4l6 5 0-16ZM17 9l5 6m0-6-5 6"/></svg></button>
+            </div>
+          </div>
+          <figcaption id="portrait-caption"><p id="status" role="status">等待一句问候</p><span class="portrait-number">PORTRAIT STUDY — 01</span></figcaption>
+          <span id="transcript-text" class="mobile-transcript">“你好，我是工作室的数字讲解员。”</span>
+        </figure>
+      </article>
+      <footer class="study-footer">
+        <div class="study-meta"><span class="small-label">关于这次实验</span><span>2026.05</span></div>
+        <p>以个人肖像为起点，探索面容、动作与声音之间的距离。<br><span>当前为视频样片，暂不支持实时对话。配音使用合成男声，非本人声音克隆。</span></p>
+        <a class="footer-link" href="../../work-test.html">更多实验<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
