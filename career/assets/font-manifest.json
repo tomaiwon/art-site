@@ -1,0 +1,14 @@
+{
+  "family": "Yi Career Song",
+  "sourceFamily": "Source Han Serif CN VF",
+  "sourceVersion": "2.002",
+  "weightRange": [
+    250,
+    900
+  ],
+  "sourceSha256": "44d3ce675c9f7630d6d8f37d1617c9ffed36d9f53040ecf81505ece08dfeb3f8",
+  "outputSha256": "ecee526616976275d8a32eddfa8918f363e5444226d8823164b75161b19cf0ca",
+  "chineseCharacters": 469,
+  "missingChineseCharacters": 0,
+  "bytes": 195836
+}
