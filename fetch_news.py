@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Daily News Digest — 艺术 · 电影 · AI · 半导体 · 国际时事
-每天伦敦时间 10:00 自动运行（GitHub Actions），生成 news.html 并提交
+每天伦敦时间 10:00 自动运行（GitHub Actions），生成 daily.html 并提交
 """
 
 import feedparser
@@ -109,13 +109,13 @@ FEEDS = {
 MAX_PER_SOURCE   = 3
 MAX_PER_CATEGORY = 12
 
-# CI 环境输出到仓库根目录 news.html；本地输出到桌面
+# CI 环境输出到仓库根目录 daily.html；本地输出到桌面
 if IS_CI:
-    OUTPUT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'news.html')
+    OUTPUT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'daily.html')
 else:
-    OUTPUT_PATH  = os.path.expanduser('~/Desktop/cc_test/news.html')
+    OUTPUT_PATH  = os.path.expanduser('~/Desktop/cc_test/daily.html')
     GITHUB_REPO  = os.path.expanduser('~/Desktop/art-site')
-    GITHUB_PAGE  = os.path.join(GITHUB_REPO, 'news.html')
+    GITHUB_PAGE  = os.path.join(GITHUB_REPO, 'daily.html')
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
@@ -266,7 +266,7 @@ def build_section(key, meta, items):
         f'</section>'
     )
 
-# ── Cloth interaction (injected into every generated news.html) ───────────
+# ── Cloth interaction (injected into every generated daily.html) ───────────
 _CLOTH_CSS = """
   #cloth-canvas{position:fixed;inset:0;z-index:50;display:none;opacity:0;pointer-events:none;transition:opacity 1.1s ease-in-out;}
   #white-veil{position:fixed;inset:0;z-index:51;background:#ffffff;opacity:0;pointer-events:none;transition:opacity 0.9s ease-in-out;}"""
@@ -331,7 +331,7 @@ function paintStatic(){
   const LM=70,CONTENT_W=Math.min(TEX_W-LM-220,760);
   let y=72;
   sc.font='bold 28px EFont,ZFont,sans-serif';sc.fillStyle='#111';sc.textAlign='left';
-  sc.fillText('NEWS',LM,y+26);y+=26+18;
+  sc.fillText('DAILY',LM,y+26);y+=26+18;
   sc.font='400 13px EFont,ZFont,sans-serif';sc.fillStyle='#888';
   sc.fillText('NEXT UPDATE',LM,y+13);y+=13+36;
   const groups=parseContent();
@@ -354,8 +354,9 @@ function paintStatic(){
 }
 
 const navItems=[
-  {text:'ABOUT',  href:'index.html'},
+  {text:'ABOUT',  href:'about.html'},
   {text:'WORK',   href:'work.html'},
+  {text:'NEWS',   href:'news.html'},
   {text:'CONTACT',href:'contact.html'},
   {text:'SUPPORT',href:'support.html'},
 ];
@@ -677,14 +678,15 @@ def generate_html(sections_html):
 <body>
 
 <nav class="top-nav" aria-label="Primary">
-  <a href="index.html">ABOUT</a>
+  <a href="about.html">ABOUT</a>
   <a href="work.html">WORK</a>
+  <a href="news.html">NEWS</a>
   <a href="contact.html">CONTACT</a>
   <a href="support.html">SUPPORT</a>
 </nav>
 
 <main class="page">
-  <h1 class="page-title"><a href="thoughts.html">NEWS</a></h1>
+  <h1 class="page-title"><a href="thoughts.html">DAILY</a></h1>
   <div class="next-update">NEXT UPDATE &nbsp;<span id="countdown">--:--:--</span></div>
 <script>(function(){{
     function secs(){{
@@ -722,14 +724,14 @@ def push_to_github():
         subprocess.run(['git', '-C', GITHUB_REPO, 'pull', '--rebase'],
                        check=True, capture_output=True)
         shutil.copy(OUTPUT_PATH, GITHUB_PAGE)
-        subprocess.run(['git', '-C', GITHUB_REPO, 'add', 'news.html'],
+        subprocess.run(['git', '-C', GITHUB_REPO, 'add', 'daily.html'],
                        check=True, capture_output=True)
         subprocess.run(['git', '-C', GITHUB_REPO, 'commit', '-m',
                         f'news: {date_str}'],
                        check=True, capture_output=True)
         subprocess.run(['git', '-C', GITHUB_REPO, 'push'],
                        check=True, capture_output=True)
-        print(f'  [GitHub] ✓ 已推送 → yihuang.art/news.html')
+        print(f'  [GitHub] ✓ 已推送 → yihuang.art/daily.html')
     except subprocess.CalledProcessError as e:
         print(f'  [GitHub] 推送失败: {e.stderr.decode().strip()}')
 
