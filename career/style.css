@@ -1,4 +1,4 @@
-@import url('reading.css?v=studio-2');
+@import url('reading.css?v=personal-3');
 
 /* The reading UI is shared in spirit, but these files only style /career/. */
 :root { --header-height:132px; }
@@ -139,3 +139,110 @@ html.js-ready .menu-toggle { display:grid; }
   .detail-flow { grid-template-columns:1fr; }
 }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+
+/* Personal identity and a quieter navigation, built on the reading typography. */
+:root { --header-height:73px; }
+.masthead,.site-header.is-scrolled .masthead,.menu-header .masthead { min-height:72px; padding-block:10px; }
+.identity { display:inline-flex; align-items:baseline; gap:13px; flex-shrink:0; white-space:nowrap; }
+.identity:hover { text-decoration:none; }
+.identity > span:first-child { font:600 1.5rem/1.4 var(--serif); letter-spacing:-.03em; }
+.identity-zh { font-size:.9375rem; }
+.header-actions { gap:26px; }
+.personal-nav { display:flex; align-items:center; gap:28px; }
+.personal-nav a { display:inline-flex; min-height:44px; align-items:center; position:relative; font-size:.9375rem; }
+.personal-nav a[aria-current]::after { content:""; position:absolute; bottom:5px; left:0; right:0; height:1px; background:var(--ink); }
+.menu-icon { width:26px; height:26px; stroke-width:1.3; }
+.menu-scroll { max-width:724px; padding:34px 32px max(32px, env(safe-area-inset-bottom)); }
+.menu-primary,.menu-secondary { align-items:stretch; }
+.menu-primary a { justify-content:flex-start; gap:24px; min-height:68px; font:500 2rem/1.4 var(--serif); text-align:left; }
+.nav-index { font:300 .75rem/1.5 var(--mono); color:var(--muted); min-width:22px; }
+.menu-primary a[aria-current]::before { display:none; }
+.menu-primary a[aria-current] { text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:9px; }
+.menu-projects { margin-top:30px; padding-top:24px; border-top:1px solid var(--rule); }
+.menu-label { font:300 .75rem/1.7 var(--ui); color:var(--muted); letter-spacing:.02em; }
+.menu-secondary { margin-top:12px; }
+.menu-secondary a { justify-content:space-between; flex-wrap:wrap; gap:0 14px; padding:8px 0; text-align:left; font:400 1rem/1.7 var(--serif); }
+.menu-secondary a span { font:italic .9375rem/1.7 var(--serif); color:var(--muted); }
+.menu-contact { margin-top:auto; padding-top:38px; }
+.menu-contact p { font-size:.875rem; color:var(--muted); }
+.menu-contact a { font-family:var(--serif); font-size:1rem; overflow-wrap:anywhere; }
+.portfolio-intro { padding-block:66px 50px; }
+.portfolio-intro .intro-label { font-size:.6875rem; letter-spacing:.12em; margin:0; }
+.portfolio-intro h1 { display:flex; align-items:baseline; flex-wrap:wrap; gap:6px 28px; margin:20px 0 16px; font-size:4rem; line-height:1.25; letter-spacing:-.04em; }
+.name-en { font-style:italic; font-weight:400; letter-spacing:-.045em; }
+.personal-role { font-size:1.375rem; line-height:1.7; font-weight:500; text-wrap:pretty; }
+.intro-bio { max-width:600px; font-size:1.125rem; line-height:1.95; margin-top:21px; }
+.intro-education { margin-top:18px; font:400 .875rem/1.8 var(--serif); color:var(--muted); }
+.intro-education span { margin-inline:5px; }
+.intro-actions { display:flex; gap:28px; align-items:center; margin-top:23px; }
+.project-kicker { color:var(--muted); gap:12px; }
+.project-kicker .underlined-label { color:var(--ink); }
+.workflow-project { margin-top:64px; }
+.workflow-preview { display:grid; grid-template-columns:230px minmax(0,1fr); align-items:start; gap:32px; padding-top:8px; }
+.workflow-sample a { display:block; }
+.workflow-sample img { width:100%; height:auto; border:1px solid var(--rule); }
+.workflow-sample figcaption { font-size:.6875rem; line-height:1.7; color:var(--muted); margin-top:9px; }
+.workflow-summary .feature-title { font-size:2rem; margin-bottom:7px; }
+.workflow-summary > p:not(.original-title):not(.project-status) { font-size:1.0625rem; line-height:1.9; margin-top:20px; }
+.workflow-summary .project-status { font:300 .75rem/1.7 var(--ui); color:var(--muted); margin-top:18px; }
+.workflow-summary .text-link { margin-top:14px; }
+.profile { margin-top:74px; }
+.career-section-heading { grid-template-columns:90px minmax(0,1fr); gap:22px; border-top:1px solid var(--ink); border-bottom:0; padding-top:24px; }
+.section-number { font:italic 1rem/1.5 var(--serif); padding:0; }
+.section-heading h2 { font-size:1.75rem; letter-spacing:-.025em; }
+.profile-grid { margin-top:18px; }
+.statement { font-size:1.4375rem; }
+.practice-note { border-left:1px solid var(--rule); padding-left:23px; margin-top:38px; }
+.practice-note h3 { margin:12px 0 9px; font-size:1.25rem; }
+.practice-note > p:not(.menu-label) { font-size:1rem; line-height:1.9; color:var(--muted); }
+.practice-note .small-link { margin-top:8px; }
+.contact > .availability { margin-top:14px; font-size:.8125rem; line-height:1.9; color:var(--muted); }
+.footer-title span { font-size:.875rem; font-weight:400; margin-left:7px; }
+.footer-links { display:flex; gap:22px; }
+.site-footer > p { font-family:var(--serif); font-weight:400; }
+.research-note summary { min-height:44px; padding-block:8px; }
+.research-note summary:focus-visible { outline:2px solid var(--ink); outline-offset:5px; }
+@media(max-width:759px) {
+  :root { --header-height:65px; }
+  .masthead,.site-header.is-scrolled .masthead,.menu-header .masthead { min-height:64px; padding-block:8px; }
+  .identity > span:first-child { font-size:1.375rem; }
+  .identity-zh { font-size:.875rem; }
+  html.js-ready .personal-nav { display:none; }
+  .masthead { flex-wrap:wrap; }
+  .personal-nav { gap:20px; }
+  .header-actions { gap:0; }
+  .menu-scroll { padding:24px 20px max(28px, env(safe-area-inset-bottom)); }
+  .menu-primary a { min-height:62px; font-size:1.75rem; }
+  .menu-secondary a { font-size:.9375rem; }
+  .menu-secondary a span { font-size:.875rem; }
+  .portfolio-intro { padding-block:40px 37px; }
+  .portfolio-intro h1 { font-size:2.625rem; gap:6px 20px; margin-block:18px 16px; }
+  .portfolio-intro .name-en { font-size:2.625rem; }
+  .personal-role { font-size:1.125rem; }
+  .intro-bio { font-size:1.0625rem; margin-top:18px; }
+  .intro-education { font-size:.8125rem; margin-top:16px; }
+  .intro-actions { margin-top:16px; }
+  .workflow-project { margin-top:44px; }
+  .workflow-preview { grid-template-columns:126px minmax(0,1fr); gap:22px; }
+  .workflow-summary .feature-title { font-size:1.5rem; }
+  .workflow-summary .original-title { font-size:.875rem; }
+  .workflow-summary > p:not(.original-title):not(.project-status) { font-size:1rem; margin-top:15px; }
+  .workflow-summary .text-link { font-size:.8125rem; }
+  .profile { margin-top:48px; }
+  .career-section-heading { grid-template-columns:70px minmax(0,1fr); gap:14px; }
+  .section-heading h2 { font-size:1.5rem; }
+  .statement { font-size:1.25rem; }
+  .story-end > .meta { width:100%; }
+}
+@media(max-width:480px) {
+  .workflow-preview { grid-template-columns:1fr; gap:24px; }
+  .workflow-sample { max-width:240px; width:75%; }
+  .workflow-summary .feature-title { font-size:1.75rem; }
+}
+@media(max-width:359px) {
+  .portfolio-intro h1,.portfolio-intro .name-en { font-size:2.375rem; }
+  .portfolio-intro h1 { gap:6px 16px; }
+  .menu-scroll { padding-inline:16px; }
+  .project-kicker { font-size:.6875rem; }
+  .statement br { display:none; }
+}

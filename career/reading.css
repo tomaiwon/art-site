@@ -1,41 +1,41 @@
 @font-face {
   font-family: "DM Mono";
-  src: url("../projects/news-thoughts-mobile/fonts/dm-mono-light.woff2") format("woff2");
+  src: url("assets/dm-mono-light.woff2") format("woff2");
   font-style: normal;
   font-weight: 300;
   font-display: swap;
 }
 @font-face {
   font-family: "DM Mono";
-  src: url("../projects/news-thoughts-mobile/fonts/dm-mono-regular.woff2") format("woff2");
+  src: url("assets/dm-mono-regular.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "DM Mono";
-  src: url("../projects/news-thoughts-mobile/fonts/dm-mono-medium.woff2") format("woff2");
+  src: url("assets/dm-mono-medium.woff2") format("woff2");
   font-style: normal;
   font-weight: 500;
   font-display: swap;
 }
 @font-face {
   font-family: "Yi Reading Serif";
-  src: url("../projects/news-thoughts-mobile/fonts/reading-serif-roman.woff2") format("woff2");
+  src: url("assets/reading-serif-roman.woff2") format("woff2");
   font-style: normal;
   font-weight: 200 900;
   font-display: swap;
 }
 @font-face {
   font-family: "Yi Reading Serif";
-  src: url("../projects/news-thoughts-mobile/fonts/reading-serif-italic.woff2") format("woff2");
+  src: url("assets/reading-serif-italic.woff2") format("woff2");
   font-style: italic;
   font-weight: 200 900;
   font-display: swap;
 }
 @font-face {
   font-family: "Yi Reading Song";
-  src: url("assets/reading-song-career.woff2") format("woff2");
+  src: url("assets/reading-song-career.woff2?v=personal-3") format("woff2");
   font-style: normal;
   font-weight: 250 900;
   font-display: swap;

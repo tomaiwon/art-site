@@ -23,7 +23,7 @@ document.querySelectorAll('[data-load-video]').forEach(button => {
   });
 });
 
-// Keep the Studio reading menu's native dialog and compact sticky header.
+// Native dialog navigation and a stable anchor offset on every page.
 (() => {
   const header = document.querySelector('.site-header');
   const menu = document.querySelector('.reading-menu');
@@ -41,7 +41,7 @@ document.querySelectorAll('[data-load-video]').forEach(button => {
     header.classList.toggle('is-scrolled', window.scrollY > 32);
     const height = header.getBoundingClientRect().height;
     document.documentElement.style.setProperty('--header-height', `${height}px`);
-    let current = sections.length ? '' : 'projects';
+    let current = sections.length ? '' : (document.body.dataset.currentSection || 'projects');
     for (const section of sections) {
       if (section.getBoundingClientRect().top <= height + 40) current = section.dataset.section;
     }
