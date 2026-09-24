@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>News 动态 — Yi Huang 黄熠</title>
+<meta name="description" content="Exhibitions, screenings and new work by Yi Huang. 黄熠的展览、放映与新作。">
+<link rel="canonical" href="https://yihuang.art/career/news.html">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+<script>document.documentElement.className+=' js';</script>
+<link rel="preload" as="font" href="../fonts/E.ttf" type="font/ttf" crossorigin>
+<link rel="preload" as="font" href="assets/Z-career.woff2" type="font/woff2" crossorigin>
+
+<style>
+  /* 字体：英 E / 中 Z / 数字 N（沿用主站字体） */
+  @font-face{font-family:"EFont";src:url("../fonts/E.ttf") format("truetype");font-weight:400 700;font-style:normal;font-display:swap;}
+  @font-face{font-family:"ZFont";src:url("assets/Z-career.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:block;}
+  @font-face{font-family:"NFont";src:url("../fonts/N.ttf") format("truetype");font-weight:400 700;font-style:normal;font-display:swap;}
+
+  :root{
+    --ink:#111;
+    --mute:#8a8a8a;
+    --soft:#4a4a4a;
+    --rule:#e4e4e4;
+    --gut:70px;
+  }
+  body{
+    margin:0;
+    background:#fff;
+    color:var(--ink);
+    font-family:"EFont","ZFont","PingFang SC","Noto Sans SC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  a{color:inherit;}
+  .zh{font-family:"ZFont","EFont","PingFang SC","Noto Sans SC",sans-serif;}
+
+  /* ── 页眉：左字标，右导航（中英） ── */
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:22px 30px 0 var(--gut);
+  }
+  .wordmark{
+    text-decoration:none;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:2.5px;
+    line-height:1.5;
+  }
+  .wordmark .zh{letter-spacing:4px;margin-left:8px;}
+  .nav{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:2.5px;
+  }
+  .nav a{text-decoration:none;line-height:1;}
+  .nav a .zh{font-size:14px;letter-spacing:2px;margin-left:8px;color:var(--mute);vertical-align:middle;}
+  .nav a:hover{text-decoration:underline;text-underline-offset:5px;}
+  .nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:5px;}
+
+  /* ── 刊头 ── */
+  .hero{padding:40px var(--gut) 0;}
+  .hero h1{
+    margin:0;
+    font-size:clamp(72px, 12vw, 190px);
+    line-height:.86;
+    font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .hero h1 .zh{
+    font-size:.42em;
+    letter-spacing:.08em;
+    margin-left:.25em;
+    vertical-align:.12em;
+  }
+  .dek{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 28px;
+    margin:26px 0 0;
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:1px;
+    color:var(--soft);
+  }
+  .dek .zh{font-weight:400;}
+
+  /* ── 筛选 ── */
+  .filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 24px;
+    margin:44px var(--gut) 80px;
+    padding:14px 0;
+    border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--rule);
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:1.6px;
+  }
+  .filters button{
+    font:inherit;
+    letter-spacing:inherit;
+    color:var(--mute);
+    background:none;
+    border:0;
+    padding:0;
+    cursor:pointer;
+  }
+  .filters button .zh{font-weight:400;margin-left:4px;letter-spacing:1px;}
+  .filters button:hover{color:var(--ink);}
+  .filters button[aria-pressed="true"]{color:var(--ink);text-decoration:underline;text-underline-offset:6px;}
+
+  /* ── 条目：12 栏网格，图文左右交错 ── */
+  .feed{list-style:none;margin:0;padding:0 var(--gut);counter-reset:n;}
+  .item{
+    display:grid;
+    grid-template-columns:repeat(12, minmax(0,1fr));
+    column-gap:28px;
+    align-items:end;
+    margin:0 0 140px;
+  }
+  .item[hidden]{display:none;}
+
+  .media{
+    grid-column:1 / span 8;
+    grid-row:1;
+    margin:0;
+    overflow:hidden;
+    background:#f2f2f2;
+    display:block;
+  }
+  .media img{
+    width:100%;
+    height:auto;
+    display:block;
+    transition:transform 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .item a.media:hover img{transform:scale(1.035);}
+  .text{grid-column:9 / span 4;grid-row:1;}
+
+  .item.flip .media{grid-column:5 / span 8;}
+  .item.flip .text{grid-column:1 / span 4;}
+
+  /* 竖图、方图：窄一些 */
+  .item.tall .media{grid-column:2 / span 5;}
+  .item.tall .text{grid-column:8 / span 5;}
+  .item.tall.flip .media{grid-column:7 / span 5;}
+  .item.tall.flip .text{grid-column:1 / span 5;}
+
+  /* 纯文字条：大字排版 */
+  .item.type-only .text{grid-column:1 / span 12;}
+  .item.type-only .title-en{font-size:clamp(44px, 7vw, 104px);line-height:.95;}
+  .item.type-only .title-zh{font-size:clamp(22px, 2.4vw, 34px);}
+  .item.type-only .desc{max-width:640px;}
+
+  /* 编号：01、02……由脚本按当前可见顺序生成 */
+  .no{
+    display:block;
+    font-family:"NFont","EFont",sans-serif;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:2px;
+    margin:0 0 18px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--ink);
+  }
+  .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px 14px;
+    margin:0 0 14px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1.8px;
+    color:var(--mute);
+    text-transform:uppercase;
+  }
+  .meta .kind{color:var(--ink);}
+  .meta .zh{letter-spacing:1px;text-transform:none;}
+
+  .title-en{
+    display:block;
+    margin:0;
+    font-size:30px;
+    font-weight:700;
+    line-height:1.1;
+    letter-spacing:.2px;
+    text-decoration:none;
+  }
+  a.title-en:hover{text-decoration:underline;text-underline-offset:6px;}
+  .title-zh{
+    display:block;
+    margin-top:10px;
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:.12em;
+  }
+  .venue{
+    margin:16px 0 0;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.8px;
+    line-height:1.6;
+    color:var(--soft);
+  }
+  .venue .zh{display:block;font-weight:400;letter-spacing:1px;}
+  .desc{
+    margin:14px 0 0;
+    font-size:14px;
+    line-height:1.65;
+    color:var(--soft);
+  }
+  .desc .zh{display:block;margin-top:6px;font-size:14px;line-height:1.8;color:var(--mute);}
+  .more{
+    display:inline-block;
+    margin-top:18px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-decoration:none;
+    border-bottom:1px solid currentColor;
+  }
+
+  .foot{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:0 var(--gut);
+    padding:18px 0 40px;
+    border-top:1px solid var(--ink);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1.2px;
+    color:var(--mute);
+  }
+  .foot a{text-decoration:none;}
+  .foot a:hover{color:var(--ink);}
+
+  /* ── 滚动进场 ── */
+  .js .item .media,
+  .js .item .text{
+    opacity:0;
+    transform:translateY(38px);
+    transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1);
+  }
+  .js .item .text{transition-delay:.12s;}
+  .js .item.in .media,
+  .js .item.in .text{opacity:1;transform:none;}
+
+  @media (prefers-reduced-motion:reduce){
+    .js .item .media,.js .item .text{opacity:1;transform:none;transition:none;}
+    .media img{transition:none;}
+  }
+
+  @media (max-width:860px){
+    :root{--gut:22px;}
+    .masthead{padding:18px 22px 0;}
+    .nav{font-size:15px;letter-spacing:1.5px;gap:8px;}
+    .nav a .zh{font-size:11px;margin-left:5px;}
+    .hero{padding-top:36px;}
+    .dek{font-size:13px;}
+    .filters{margin:32px var(--gut) 48px;font-size:12px;gap:8px 16px;}
+    .item,
+    .item.flip,
+    .item.tall,
+    .item.tall.flip{display:block;margin-bottom:80px;}
+    .media{margin-bottom:18px;}
+    .title-en{font-size:24px;}
+    .title-zh{font-size:17px;}
+  }
+</style>
+</head>
+
+<body>
+
+<header class="masthead">
+  <a class="wordmark" href="./">YI HUANG<span class="zh">黄熠</span></a>
+  <nav class="nav" aria-label="Primary">
+    <a href="news.html" aria-current="page">NEWS<span class="zh">动态</span></a>
+    <a href="../work.html">WORK<span class="zh">作品</span></a>
+    <a href="../index.html">ABOUT<span class="zh">关于</span></a>
+    <a href="../contact.html">CONTACT<span class="zh">联系</span></a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>News<span class="zh">动态</span></h1>
+    <p class="dek">
+      <span>Exhibitions, screenings &amp; new work — London / Changsha</span>
+      <span class="zh">展览、放映与新作 —— 伦敦 / 长沙</span>
+    </p>
+  </section>
+
+  <div class="filters" role="group" aria-label="Filter 筛选">
+    <button type="button" data-filter="all" aria-pressed="true">ALL<span class="zh">全部</span></button>
+    <button type="button" data-filter="exhibition" aria-pressed="false">EXHIBITION<span class="zh">展览</span></button>
+    <button type="button" data-filter="screening" aria-pressed="false">SCREENING<span class="zh">放映</span></button>
+    <button type="button" data-filter="photography" aria-pressed="false">PHOTOGRAPHY<span class="zh">摄影</span></button>
+    <button type="button" data-filter="work" aria-pressed="false">NEW WORK<span class="zh">新作</span></button>
+  </div>
+
+  <!--
+    新增一条动态：复制一个 <li class="item">，放在最上面。
+    · data-kind：exhibition / screening / photography / work，决定筛选归类
+    · 有图：图放 career/assets/news/，长边 1600px webp；竖图或方图给 li 加 class="tall"
+    · 没图：li 用 class="item type-only"，去掉 <a class="media">
+    · 编号和图文左右交错由脚本自动处理
+    · 新增中文字后需重新生成 assets/Z-career.woff2（见 README）
+  -->
+  <ol class="feed" id="feed">
+
+    <li class="item type-only" data-kind="work">
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">New Work</span><span class="zh">新作</span><span>Sep 2026</span><span>In Progress</span><span class="zh">进行中</span></p>
+        <a class="title-en" href="../east-asia/">Confucian Silence</a>
+        <span class="title-zh zh">东亚制造</span>
+        <p class="desc">
+          A new chapter of the Digital Media Ontology Series, now in progress.
+          <span class="zh">数字媒介本体系列新章，正在进行中。</span>
+        </p>
+        <a class="more" href="../east-asia/">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item tall" data-kind="photography">
+      <a class="media" href="../projects/venice-2026.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/venice-2026.webp" width="1038" height="1600" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Photography</span><span class="zh">摄影</span><span>Aug 2026</span></p>
+        <a class="title-en" href="../projects/venice-2026.html">Venice</a>
+        <span class="title-zh zh">双年展</span>
+        <p class="desc">
+          Film photography, 34 frames.
+          <span class="zh">胶片摄影，34 张。</span>
+        </p>
+        <a class="more" href="../projects/venice-2026.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item" data-kind="photography">
+      <a class="media" href="../projects/arles-2026.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/arles-2026.webp" width="1600" height="1038" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Photography</span><span class="zh">摄影</span><span>Jul 2026</span></p>
+        <a class="title-en" href="../projects/arles-2026.html">Arles</a>
+        <span class="title-zh zh">摄影术二百年</span>
+        <p class="desc">
+          Film photography, 74 frames.
+          <span class="zh">胶片摄影，74 张。</span>
+        </p>
+        <a class="more" href="../projects/arles-2026.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item tall" data-kind="photography">
+      <a class="media" href="../projects/marseille-2026.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/marseille-2026.webp" width="1023" height="1600" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Photography</span><span class="zh">摄影</span><span>Jul 2026</span></p>
+        <a class="title-en" href="../projects/marseille-2026.html">Marseille</a>
+        <span class="title-zh zh">晒后假日下</span>
+        <p class="desc">
+          Film photography, 32 frames.
+          <span class="zh">胶片摄影，32 张。</span>
+        </p>
+        <a class="more" href="../projects/marseille-2026.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item" data-kind="exhibition">
+      <a class="media" href="../projects/asfablesgoby.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/rca-degree-show.webp" width="1600" height="988" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Exhibition</span><span class="zh">展览</span><span>Jun 2026</span></p>
+        <a class="title-en" href="../projects/asfablesgoby.html">RCA Degree Show</a>
+        <span class="title-zh zh">皇家艺术学院毕业展</span>
+        <p class="venue">Royal College of Art, London<span class="zh">英国皇家艺术学院，伦敦</span></p>
+        <p class="desc">
+          Work in progress from <em>As Fables Go By</em> — moving image, ceramics and installation.
+          <span class="zh">展出《洋务运动》的阶段性成果，包括影像、陶瓷与装置。</span>
+        </p>
+        <a class="more" href="../projects/asfablesgoby.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item" data-kind="photography">
+      <a class="media" href="../projects/cambridge-2026.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/cambridge-2026.webp" width="1600" height="1048" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Photography</span><span class="zh">摄影</span><span>May 2026</span></p>
+        <a class="title-en" href="../projects/cambridge-2026.html">Cambridge</a>
+        <span class="title-zh zh">洋务时刻</span>
+        <p class="desc">
+          Film photography, 14 frames.
+          <span class="zh">胶片摄影，14 张。</span>
+        </p>
+        <a class="more" href="../projects/cambridge-2026.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item" data-kind="screening">
+      <a class="media" href="../projects/theexperience.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/moming-tang.webp" width="1080" height="608" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Screening</span><span class="zh">放映</span><span>Apr 2026</span></p>
+        <a class="title-en" href="../projects/theexperience.html">The Experience</a>
+        <span class="title-zh zh">《关中往事》放映</span>
+        <p class="venue">Moming Tang<span class="zh">莫名堂</span></p>
+        <p class="desc">
+          Screened as an independent moving-image work, continuing the media-history chapter of the Digital Media Ontology Series.
+          <span class="zh">作为独立影像放映，延续数字媒介本体系列的媒介历史分章。</span>
+        </p>
+        <a class="more" href="../projects/theexperience.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item tall" data-kind="screening">
+      <a class="media" href="../projects/theexperience.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/bjiff.webp" width="960" height="960" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Selection</span><span class="zh">入选</span><span>Mar 2026</span></p>
+        <a class="title-en" href="../projects/theexperience.html">The Experience — Selected Work</a>
+        <span class="title-zh zh">《关中往事》入选</span>
+        <p class="venue">33rd Beijing College Student Film Festival, Beijing International Film Festival<span class="zh">北京国际电影节 · 第三十三届北京大学生电影节 · 国际大学生原创影片单元</span></p>
+        <a class="more" href="../projects/theexperience.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item" data-kind="screening">
+      <a class="media" href="../projects/asfablesgoby.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/genius-cinema.webp" width="800" height="450" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Screening</span><span class="zh">放映</span><span>Mar 2026</span></p>
+        <a class="title-en" href="../projects/asfablesgoby.html">As Fables Go By — Trailer</a>
+        <span class="title-zh zh">《洋务运动》预告片放映</span>
+        <p class="venue">Genius Cinema</p>
+        <p class="desc">
+          Trailer screening, followed by a public discussion.
+          <span class="zh">放映《洋务运动》预告片，并参与公共讨论。</span>
+        </p>
+        <a class="more" href="../projects/asfablesgoby.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item" data-kind="exhibition">
+      <a class="media" href="../projects/passingby.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/rca-wip.webp" width="1600" height="1066" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Exhibition</span><span class="zh">展览</span><span>Feb 2026</span></p>
+        <a class="title-en" href="../projects/passingby.html">Passing By</a>
+        <span class="title-zh zh">RCA 当代艺术实践中期展</span>
+        <p class="venue">RCA CAP Work-in-Progress Show, Royal College of Art, London<span class="zh">英国皇家艺术学院，伦敦</span></p>
+        <p class="desc">
+          <em>Passing By</em> presented at the Contemporary Art Practice work-in-progress show.
+          <span class="zh">在当代艺术实践专业中期展上展出《Passing By》。</span>
+        </p>
+        <a class="more" href="../projects/passingby.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+    <li class="item" data-kind="work">
+      <a class="media" href="../projects/barbican.html" tabindex="-1" aria-hidden="true">
+        <img src="assets/news/barbican.webp" width="1600" height="927" loading="lazy" decoding="async" alt="">
+      </a>
+      <div class="text">
+        <span class="no"></span>
+        <p class="meta"><span class="kind">Workshop</span><span class="zh">工作坊</span><span>Jan 2026</span></p>
+        <a class="title-en" href="../projects/barbican.html">The Urgency of the Arts</a>
+        <span class="title-zh zh">艺术的紧迫性工作坊</span>
+        <p class="venue">Barbican, London<span class="zh">伦敦</span></p>
+        <p class="desc">
+          <em>Barbican</em> — Software Layer, Digital Media Ontology Series. With David Stothard and David Leung. 3′38″.
+          <span class="zh">《Barbican》，数字媒介本体系列 · 软件层。与 David Stothard、David Leung 共同制作。</span>
+        </p>
+        <a class="more" href="../projects/barbican.html">VIEW 查看 →</a>
+      </div>
+    </li>
+
+  </ol>
+</main>
+
+<footer class="foot">
+  <span>© 2026 TOMATONE PICTURES STUDIO</span>
+  <a href="../index.html">YIHUANG.ART ↗</a>
+</footer>
+
+<script>
+(function(){
+  var items = Array.prototype.slice.call(document.querySelectorAll('#feed .item'));
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  /* 编号 + 图文左右交错：按当前可见条目重排 */
+  function relayout(){
+    var shown = 0, pics = 0;
+    items.forEach(function(li){
+      if(li.hidden) return;
+      shown++;
+      var no = li.querySelector('.no');
+      if(no) no.textContent = 'N° ' + pad(shown);
+      if(li.classList.contains('type-only')) return;
+      li.classList.toggle('flip', pics % 2 === 1);
+      pics++;
+    });
+  }
+
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.filters button'));
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){
+      var f = b.getAttribute('data-filter');
+      buttons.forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      items.forEach(function(li){
+        li.hidden = !(f === 'all' || li.getAttribute('data-kind') === f);
+      });
+      relayout();
+    });
+  });
+  relayout();
+
+  if(!('IntersectionObserver' in window)){
+    items.forEach(function(li){ li.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin:'0px 0px -8% 0px', threshold:0.08 });
+  items.forEach(function(li){ io.observe(li); });
+})();
+</script>
+</body>
+</html>

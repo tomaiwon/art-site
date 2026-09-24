@@ -146,9 +146,9 @@
 <body>
 
 <nav class="top-nav" aria-label="Primary">
-  <a href="about.html">ABOUT</a>
+  <a href="index.html">ABOUT</a>
   <a href="work.html">WORK</a>
-  <a href="daily.html">AUTOMATIC</a>
+  <a href="news.html">AUTOMATIC</a>
   <a href="contact.html">CONTACT</a>
 </nav>
 
@@ -561,9 +561,9 @@ function paintStatic() {
 
 // ── Draw texture (static + nav overlay at scroll position) ─────────────────
 const navItems = [
-  { text:'ABOUT',     href:'about.html'   },
+  { text:'ABOUT',     href:'index.html'   },
   { text:'WORK',      href:'work.html'    },
-  { text:'AUTOMATIC', href:'daily.html'   },
+  { text:'AUTOMATIC', href:'news.html'    },
   { text:'CONTACT',   href:'contact.html' },
 ];
 let hoveredNav = -1;
@@ -811,7 +811,7 @@ window.addEventListener('keydown', e => {
     // Cloth → White → Navigate
     clothState = 2;
     veil.style.opacity = '1';
-    setTimeout(() => { window.location.href = 'daily.html'; }, 1000);
+    setTimeout(() => { window.location.href = 'news.html'; }, 1000);
   }
 });
 
