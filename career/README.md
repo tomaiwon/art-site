@@ -4,7 +4,7 @@
 
 本目录沿用原网站的静态 HTML 和 GitHub Pages 发布方式，无额外构建依赖。
 
-- `index.html`：个人介绍、两项精选作品、教育、分组能力与联系方式；未完成的AI视频计划单列在「关于我」。
+- `index.html`：沿用新版沉思录的「首图—导读—栏目图文」结构，依次呈现《洋务运动》《情迷海南岛》与AI内容流程；教育及联系方式放在后半段，未完成的AI视频计划单独标注。
 - `as-fables-go-by.html`：24分钟影像的求职案例、按需加载的既有 Vimeo 播放器与原艺术页入口。
 - `ai-content-workflow.html`：人工在环内容工作流及真实图文成品。
 - `ai-video-workflow.html`：计划中的30–60秒案例，尚未完成；新增真实作品后再更新状态。
@@ -14,7 +14,9 @@
 
 内容依据：用户提供的《求职.docx》、原站公开履历和作品、已有东亚制造图文流程及成品。项目时长、职责、教育与职业方向以本次求职文档为准。未编造效率、用户或传播数据。
 
-视觉基础为原站「见闻与沉思录 / Studio」的纸色底、宋体正文、细线分节与连续阅读布局；个人身份使用黄熠 / Yi Huang文字标识、单层导航与第一人称介绍。字体资源独立保存在本目录：Source Serif 4、DM Mono，以及单独生成的思源宋体子集 `assets/reading-song-career.woff2`。中文子集覆盖当前 HTML 与脚本文案，来源、版本及散列记录在 `assets/font-manifest.json`，各字体授权见 `assets/*-OFL.txt`。后续新增中文需重新检查字形覆盖。
+视觉基础为原站「见闻与沉思录 / Studio」的完整阅读骨架：签名标志、双层页头、原栏目插图、纸色底、宋体正文、细线分节与全屏目录。首页以作品图像开场，求职资料位于「关于」及联系区。字体资源独立保存在本目录：Source Serif 4、DM Mono，以及单独生成的思源宋体子集 `assets/reading-song-career.woff2`。中文子集覆盖当前 HTML 与脚本文案，来源、版本及散列记录在 `assets/font-manifest.json`，各字体授权见 `assets/*-OFL.txt`。后续新增中文需重新检查字形覆盖。
+
+本次选图依据：`assets/film-cover.png`完整复制原站`images/yw1.png`，原站`films.html`将它作为《洋务运动》封面，保持800×450完整画幅；`assets/remote-fantasy.png`复制`images/no6.png`，作者、项目内容及技术以`projects/remotefantasy.html`为据，2024.12见`work.html`；`assets/editorial-output-007.jpg`是现有真实图文成品，产品配图来源保留。栏目插图与标志原样复制自新版沉思录，其人物区域沿用原SVG视框显示。
 
 原站页面及资源不作修改。艺术档案入口收在页脚；影片旧档案标明「早期项目档案」，与本次文档确认的已完成状态区分。Vimeo 播放器仅在读者点击后加载，外部观看链接常驻。导航支持键盘 Escape 关闭、焦点返回与页内栏目跳转；AI视频计划页归属「关于」。
 
