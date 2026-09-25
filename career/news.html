@@ -2,7 +2,7 @@
 <html lang="zh-Hans">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>news — Yi Huang</title>
 <meta name="description" content="Exhibitions, screenings and new work by Yi Huang. 黄熠的展览、放映与新作。">
 <link rel="canonical" href="https://yihuang.art/career/news.html">
@@ -11,55 +11,73 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
 
 <style>
+  /* 照公众号消息页（NOWNESS 现在）的观看方式：顶部账号栏 / 居中窄列卡片 / 底部菜单栏 */
   :root{
-    --accent:#e4553b;
     --ink:#111;
-    --bar:#8c8c8c;
     --page:#f7f7f7;
     --panel:#ededed;
-    --sub:#8a8a8a;
-    --stamp:#a8a8a8;
-    --pad:22px;
-    --serif:"Times New Roman",Times,"Liberation Serif","Nimbus Roman",serif;
+    --line:#e2e2e2;
+    --sub:#888;
+    --stamp:#a3a3a3;
+    --icon:#333;
+    --col:500px;          /* 内容列宽：两侧留白随窗口变宽 */
+    --gut:22px;           /* 手机上两侧最小留白 */
+    --topbar:60px;
+    --tabbar:62px;
     --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Helvetica Neue",Arial,sans-serif;
-    /* 字标字体：细几何无衬线，接近 NOWNESS */
     --mark:"Futura","Century Gothic","Avenir Next","Avenir","Josefin Sans","Helvetica Neue",Arial,sans-serif;
   }
-  body{margin:0;background:var(--page);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+  html{background:var(--page);}
+  body{
+    margin:0;
+    background:var(--page);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
   a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;}
 
-  /* ── 页眉（沿用入口页的斜体字标 + 三道杠） ── */
-  .head{display:flex;justify-content:space-between;align-items:flex-start;padding:0 var(--pad) 0 0;}
-  .logo{display:block;margin-left:-.07em;font-family:var(--serif);font-style:italic;font-size:38px;line-height:.86;letter-spacing:-.02em;}
-  .logo span{display:block;}
-  .burger{margin-top:24px;width:30px;height:26px;padding:0;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;}
-  .burger i{display:block;height:3px;background:var(--bar);}
-  .section{margin:18px var(--pad) 4px;font-family:"Gill Sans","Gill Sans MT",Calibri,"Trebuchet MS",sans-serif;font-weight:400;font-size:24px;color:var(--accent);}
+  /* ── 顶部账号栏 ── */
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:5;
+    height:var(--topbar);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    background:var(--page);
+    border-bottom:1px solid var(--line);
+  }
+  .account{font-size:19px;font-weight:500;letter-spacing:.2px;}
+  .me{display:flex;width:28px;height:28px;color:var(--icon);}
+  .me svg{width:100%;height:100%;}
 
-  /* ── 卡片流：公众号消息样式 ── */
-  .feed{list-style:none;margin:0 auto;padding:0 var(--pad) 10px;max-width:560px;}
-
-  /* 卡片之间的时间戳 */
+  /* ── 居中窄列 ── */
+  .feed{
+    list-style:none;
+    margin:0 auto;
+    padding:6px var(--gut) calc(var(--tabbar) + 40px + env(safe-area-inset-bottom));
+    max-width:var(--col);
+  }
   .stamp{
     display:block;
-    margin:26px 0 16px;
+    margin:32px 0 30px;
     text-align:center;
-    font-size:14px;
-    letter-spacing:.5px;
+    font-size:15px;
+    letter-spacing:.3px;
     color:var(--stamp);
   }
 
   .card{
     display:block;
     overflow:hidden;
-    border-radius:10px;
+    border-radius:8px;
     background:var(--panel);
     -webkit-tap-highlight-color:transparent;
-    transition:transform .25s ease;
   }
-  .card:active{transform:scale(.985);}
-
-  /* 图片区：固定宽高比，居中叠白色字标 */
   .cover{
     position:relative;
     aspect-ratio:2.35 / 1;
@@ -71,7 +89,7 @@
     content:"";
     position:absolute;
     inset:0;
-    background:radial-gradient(ellipse at center, rgba(0,0,0,.38), rgba(0,0,0,.08) 75%);
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.34), rgba(0,0,0,.06) 75%);
   }
   .mark{
     position:absolute;
@@ -84,84 +102,99 @@
     text-shadow:0 1px 12px rgba(0,0,0,.25);
     pointer-events:none;
   }
-  .mark b{
-    display:block;
-    font-family:var(--mark);
-    font-weight:400;
-    font-size:clamp(30px, 9.4vw, 46px);
-    letter-spacing:.01em;
-  }
-  .mark i{
-    display:block;
-    margin-top:4px;
-    font-family:var(--sans);
-    font-size:clamp(14px, 4.2vw, 19px);
-    font-weight:500;
-  }
-  /* 首条：图更高，像公众号头条 */
-  .lead .cover{aspect-ratio:16 / 10;}
+  .mark b{display:block;font-family:var(--mark);font-weight:400;font-size:clamp(28px, 8.4vw, 40px);letter-spacing:.01em;}
+  .mark i{display:block;margin-top:3px;font-size:clamp(13px, 3.8vw, 17px);font-weight:500;}
 
-  /* 文字区 */
-  .body{padding:15px 16px 17px;}
-  .title{
-    display:block;
+  .body{padding:20px 22px 24px;}
+  .title{display:block;font-size:17px;line-height:1.45;font-weight:400;}
+  .sub{display:block;margin-top:12px;font-size:16px;line-height:1.6;color:var(--sub);}
+  .card:hover .title{text-decoration:underline;text-underline-offset:3px;}
+
+  /* ── 底部菜单栏 ── */
+  .tabbar{
+    position:fixed;
+    left:0;right:0;bottom:0;
+    z-index:6;
+    background:#fff;
+    border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .tabs{
+    display:flex;
+    align-items:stretch;
+    height:var(--tabbar);
+    max-width:760px;
+    margin:0 auto;
+  }
+  .group{position:relative;flex:1;display:flex;}
+  .tab{
+    position:relative;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:0 6px;
+    border:0;
+    background:none;
+    cursor:pointer;
     font-size:17px;
-    line-height:1.45;
-    font-weight:400;
-    color:var(--ink);
+    white-space:nowrap;
   }
-  .sub{
-    display:block;
-    margin-top:6px;
-    font-size:15px;
-    line-height:1.5;
-    color:var(--sub);
+  .group + .group::before,
+  .group + .tab::before{
+    content:"";
+    position:absolute;
+    left:0;top:18px;bottom:18px;
+    width:1px;
+    background:var(--line);
   }
+  .tab .ham{width:16px;height:12px;display:flex;flex-direction:column;justify-content:space-between;}
+  .tab .ham i{display:block;height:1.5px;background:var(--icon);}
+  .tab.icon{flex:0 0 64px;}
+  .tab.icon svg{width:26px;height:26px;color:var(--icon);}
 
-  .foot{padding:30px 17px 40px;text-align:center;font-size:12px;color:var(--stamp);}
-
-  /* ── 菜单 ── */
-  .menu{position:fixed;inset:0;z-index:10;background:#fff;display:none;flex-direction:column;padding:88px var(--pad) 0;}
-  .menu.open{display:flex;}
-  .menu a{font-family:var(--serif);font-style:italic;font-size:40px;line-height:1.25;}
-  .menu a[aria-current="page"]{color:var(--accent);}
-  .menu .close{position:absolute;top:18px;right:var(--pad);width:30px;height:30px;border:0;background:none;cursor:pointer;}
-  .menu .close::before,.menu .close::after{content:"";position:absolute;left:0;top:13px;width:30px;height:3px;background:var(--bar);transform:rotate(45deg);}
-  .menu .close::after{transform:rotate(-45deg);}
-
-  @media (min-width:861px){
-    .head{padding-right:40px;}
-    .logo{font-size:64px;}
-    .burger{margin-top:32px;}
-    .section{font-size:30px;margin:28px 40px 4px;}
-    .menu{padding:140px 40px 0;}
-    .menu a{font-size:64px;}
-    .menu .close{top:28px;right:40px;}
+  /* 子菜单：从菜单栏上方弹出 */
+  .pop{
+    position:absolute;
+    bottom:calc(100% + 10px);
+    left:50%;
+    transform:translateX(-50%);
+    min-width:150px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:0 6px 24px rgba(0,0,0,.08);
+    display:none;
+    flex-direction:column;
+    padding:4px 0;
   }
-  @media (prefers-reduced-motion:reduce){.card{transition:none;}}
+  .pop.open{display:flex;}
+  /* 最左侧的子菜单贴左对齐，避免在手机上超出屏幕 */
+  .group:first-child .pop{left:8px;transform:none;}
+  .pop a{padding:13px 18px;font-size:16px;text-align:center;white-space:nowrap;}
+  .pop a + a{border-top:1px solid #f0f0f0;}
+  .pop a:hover{background:#f7f7f7;}
+
+  @media (max-width:420px){
+    .tab{font-size:15px;gap:7px;}
+    .tab.icon{flex-basis:52px;}
+  }
 </style>
 </head>
 
 <body>
 
-<header class="head">
-  <a class="logo" href="./" aria-label="Yi Huang — home"><span>Yi</span><span>Huang</span></a>
-  <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button>
+<header class="topbar">
+  <a class="account" href="./">YI HUANG 动态</a>
+  <a class="me" href="../index.html" aria-label="About 关于">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c1.2-3.8 4.3-5.7 8-5.7s6.8 1.9 8 5.7"/></svg>
+  </a>
 </header>
 
-<nav class="menu" id="menu" aria-label="Menu">
-  <button class="close" type="button" aria-label="Close"></button>
-  <a href="news.html" aria-current="page">news</a>
-  <a href="../work.html">works</a>
-  <a href="../index.html">about</a>
-  <a href="../contact.html">contact</a>
-</nav>
-
 <main>
-  <h1 class="section">news</h1>
-
   <!--
-    新增一条：复制一组「时间戳 + 卡片」放到最上面（第一条加 class="lead" 会显示成大头条）。
+    新增一条：复制一组「时间戳 + 卡片」（一个 <li>）放到最上面。
     · 字标下的小字：exhibits 展览 / screens 放映 / photographs 摄影 / presents 其他
     · 图放 career/assets/news/（长边 1600px webp），竖图用 style="object-position:50% 40%" 调取景
     · 标题一行中文，副标题一行补充（可中英混排）
@@ -169,15 +202,15 @@
   <ol class="feed">
 
     <li>
-      <time class="stamp">2026.09</time>
-      <a class="card lead" href="../east-asia/">
+      <time class="stamp" datetime="2026-09">2026年9月</time>
+      <a class="card" href="../east-asia/">
         <div class="cover"><img src="assets/entry/00.webp" width="2000" height="1297" alt="" style="object-position:50% 45%"><div class="mark"><b>YI HUANG</b><i>presents</i></div></div>
         <div class="body"><span class="title">新作进行中：东亚制造</span><span class="sub">Confucian Silence · 数字媒介本体系列新章</span></div>
       </a>
     </li>
 
     <li>
-      <time class="stamp">2026.08</time>
+      <time class="stamp" datetime="2026-08">2026年8月</time>
       <a class="card" href="../projects/venice-2026.html">
         <div class="cover"><img src="assets/news/venice-2026.webp" width="1038" height="1600" loading="lazy" alt="" style="object-position:50% 40%"><div class="mark"><b>YI HUANG</b><i>photographs</i></div></div>
         <div class="body"><span class="title">双年展</span><span class="sub">Venice · 胶片摄影 34 张</span></div>
@@ -185,7 +218,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.07</time>
+      <time class="stamp" datetime="2026-07">2026年7月</time>
       <a class="card" href="../projects/arles-2026.html">
         <div class="cover"><img src="assets/news/arles-2026.webp" width="1600" height="1038" loading="lazy" alt=""><div class="mark"><b>YI HUANG</b><i>photographs</i></div></div>
         <div class="body"><span class="title">摄影术二百年</span><span class="sub">Arles · 胶片摄影 74 张</span></div>
@@ -193,7 +226,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.07</time>
+      <time class="stamp" datetime="2026-07">2026年7月</time>
       <a class="card" href="../projects/marseille-2026.html">
         <div class="cover"><img src="assets/news/marseille-2026.webp" width="1023" height="1600" loading="lazy" alt="" style="object-position:50% 22%"><div class="mark"><b>YI HUANG</b><i>photographs</i></div></div>
         <div class="body"><span class="title">晒后假日下</span><span class="sub">Marseille · 胶片摄影 32 张</span></div>
@@ -201,7 +234,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.06</time>
+      <time class="stamp" datetime="2026-06">2026年6月</time>
       <a class="card" href="../projects/asfablesgoby.html">
         <div class="cover"><img src="assets/news/rca-degree-show.webp" width="1600" height="1066" loading="lazy" alt="" style="object-position:50% 55%"><div class="mark"><b>YI HUANG</b><i>exhibits</i></div></div>
         <div class="body"><span class="title">《洋务运动》亮相皇家艺术学院毕业展</span><span class="sub">影像、陶瓷与装置 · RCA Degree Show, London</span></div>
@@ -209,7 +242,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.05</time>
+      <time class="stamp" datetime="2026-05">2026年5月</time>
       <a class="card" href="../projects/cambridge-2026.html">
         <div class="cover"><img src="assets/news/cambridge-2026.webp" width="1600" height="1048" loading="lazy" alt=""><div class="mark"><b>YI HUANG</b><i>photographs</i></div></div>
         <div class="body"><span class="title">洋务时刻</span><span class="sub">Cambridge · 胶片摄影 14 张</span></div>
@@ -217,7 +250,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.04</time>
+      <time class="stamp" datetime="2026-04">2026年4月</time>
       <a class="card" href="../projects/theexperience.html">
         <div class="cover"><img src="assets/news/moming-tang.webp" width="1080" height="608" loading="lazy" alt=""><div class="mark"><b>YI HUANG</b><i>screens</i></div></div>
         <div class="body"><span class="title">《关中往事》在莫名堂放映</span><span class="sub">The Experience · 数字媒介本体系列 · 媒介历史分章</span></div>
@@ -225,7 +258,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.03</time>
+      <time class="stamp" datetime="2026-03">2026年3月</time>
       <a class="card" href="../projects/theexperience.html">
         <div class="cover"><img src="assets/news/bjiff.webp" width="960" height="960" loading="lazy" alt="" style="object-position:50% 45%"><div class="mark"><b>YI HUANG</b><i>presents</i></div></div>
         <div class="body"><span class="title">《关中往事》入选第三十三届北京大学生电影节</span><span class="sub">北京国际电影节 · 国际大学生原创影片单元</span></div>
@@ -233,7 +266,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.03</time>
+      <time class="stamp" datetime="2026-03">2026年3月</time>
       <a class="card" href="../projects/asfablesgoby.html">
         <div class="cover"><img src="assets/news/genius-cinema.webp" width="800" height="450" loading="lazy" alt=""><div class="mark"><b>YI HUANG</b><i>screens</i></div></div>
         <div class="body"><span class="title">《洋务运动》预告片放映</span><span class="sub">As Fables Go By · Genius Cinema，映后公共讨论</span></div>
@@ -241,7 +274,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.02</time>
+      <time class="stamp" datetime="2026-02">2026年2月</time>
       <a class="card" href="../projects/passingby.html">
         <div class="cover"><img src="assets/news/rca-wip.webp" width="1600" height="1066" loading="lazy" alt=""><div class="mark"><b>YI HUANG</b><i>exhibits</i></div></div>
         <div class="body"><span class="title">《Passing By》亮相 RCA 中期展</span><span class="sub">当代艺术实践专业 · Royal College of Art, London</span></div>
@@ -249,7 +282,7 @@
     </li>
 
     <li>
-      <time class="stamp">2026.01</time>
+      <time class="stamp" datetime="2026-01">2026年1月</time>
       <a class="card" href="../projects/barbican.html">
         <div class="cover"><img src="assets/news/barbican.webp" width="1600" height="927" loading="lazy" alt=""><div class="mark"><b>YI HUANG</b><i>presents</i></div></div>
         <div class="body"><span class="title">艺术的紧迫性工作坊</span><span class="sub">《Barbican》· 与 David Stothard、David Leung 共同制作</span></div>
@@ -259,21 +292,55 @@
   </ol>
 </main>
 
-<footer class="foot">© 2021-2026 Yi Huang</footer>
+<nav class="tabbar" aria-label="Menu 菜单">
+  <div class="tabs">
+    <div class="group">
+      <button class="tab" type="button" aria-expanded="false" aria-controls="pop-work"><span class="ham" aria-hidden="true"><i></i><i></i><i></i></span>作品</button>
+      <div class="pop" id="pop-work">
+        <a href="../work-digital.html">数字媒介本体系列</a>
+        <a href="../work-arthistory.html">艺术史系列</a>
+        <a href="../work-practice.html">过往实践</a>
+        <a href="../films.html">叙事影像</a>
+        <a href="../work.html">全部作品</a>
+      </div>
+    </div>
+    <div class="group">
+      <button class="tab" type="button" aria-expanded="false" aria-controls="pop-read"><span class="ham" aria-hidden="true"><i></i><i></i><i></i></span>阅读</button>
+      <div class="pop" id="pop-read">
+        <a href="../writing.html">文章</a>
+        <a href="../news.html">每日简报</a>
+      </div>
+    </div>
+    <a class="tab" href="../index.html">关于</a>
+    <a class="tab icon" href="../contact.html" aria-label="Contact 联系">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M7.5 10h9M7.5 14h6"/></svg>
+    </a>
+  </div>
+</nav>
 
 <script>
 (function(){
-  var menu = document.getElementById('menu');
-  var burger = document.querySelector('.burger');
-  var close = menu.querySelector('.close');
-  function set(open){
-    menu.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    (open ? close : burger).focus();
+  /* 底部菜单：点开子菜单，点别处关闭 */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tabbar button.tab'));
+  function closeAll(except){
+    tabs.forEach(function(t){
+      if(t === except) return;
+      t.setAttribute('aria-expanded','false');
+      document.getElementById(t.getAttribute('aria-controls')).classList.remove('open');
+    });
   }
-  burger.addEventListener('click', function(){ set(true); });
-  close.addEventListener('click', function(){ set(false); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && menu.classList.contains('open')) set(false); });
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.stopPropagation();
+      var pop = document.getElementById(t.getAttribute('aria-controls'));
+      var open = !pop.classList.contains('open');
+      closeAll(t);
+      pop.classList.toggle('open', open);
+      t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+  document.addEventListener('click', function(){ closeAll(null); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(null); });
 })();
 </script>
 </body>
