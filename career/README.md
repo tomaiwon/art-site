@@ -8,9 +8,9 @@
 
 - `index.html`：入口。整屏作品图交叉淡入轮播；左上角橙红色斜体衬线大字 "Yi / Huang"，左侧出血；右下角白色小字 ©。点击任意处进入 `news.html`。
   轮播图列表在页面底部脚本的 `SLIDES` 数组里，图放 `assets/entry/`（长边 2000px webp）。轮播图统一选暗调画面，保证每一张都能当封面、橙红名字始终清晰；第一张为威尼斯胶片金色人头。当前 9 张为试选，待作者挑定。
-- `news.html`：白底。左上角黑色斜体小字标（左侧出血），右上角灰色三道杠菜单（全屏白底斜体菜单：news / works / about / contact）；
-  橙红色小写无衬线栏目名 "news"；每条为英文斜体标题 → 日期与中文标题 → 满宽大图。
-  新增条目：复制一个 `<li class="item">` 放到最上面，图放 `assets/news/`（长边 1600px webp）。
+- `news.html`：NOWNESS 公众号式卡片流。浅灰底；左上角斜体小字标，右上角三道杠菜单（全屏斜体菜单：news / works / about / contact）；
+  橙红色 "news"；每条为居中灰色日期 → 圆角卡片（图片叠白色 "YI HUANG" 字标与 exhibits / screens / photographs / presents 小字，下方浅灰文字区：黑色标题 + 灰色副标题）。
+  新增条目：复制一个 `<li>`（时间戳 + 卡片）放到最上面，图放 `assets/news/`（长边 1600px webp）。
 
 字体只用系统衬线（Times 系）与无衬线，不再加载子集字体。
 
