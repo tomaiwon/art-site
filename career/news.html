@@ -71,6 +71,10 @@
     color:var(--stamp);
   }
 
+  /* 同一月份只显示一次日期，后续卡片直接接在下面 */
+  .stamp.same{display:none;}
+  .stamp.same + .card{margin-top:22px;}
+
   .card{
     display:block;
     overflow:hidden;
@@ -320,6 +324,14 @@
 
 <script>
 (function(){
+  /* 同一月份的日期只写一次 */
+  var prev = null;
+  Array.prototype.forEach.call(document.querySelectorAll('.feed .stamp'), function(t){
+    var key = t.getAttribute('datetime') || t.textContent;
+    if(key === prev) t.classList.add('same');
+    prev = key;
+  });
+
   /* 底部菜单：点开子菜单，点别处关闭 */
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.tabbar button.tab'));
   function closeAll(except){
