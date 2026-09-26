@@ -12,6 +12,7 @@
       position:fixed; inset:0; z-index:100;
       display:flex; flex-direction:column;
       align-items:center; justify-content:center; gap:16px;
+      box-sizing:border-box; padding:24px; text-align:center;
       background:rgba(255,255,255,0.96); transition:opacity 1s ease;
       font-family:"Courier New",Courier,monospace;
     }
@@ -24,6 +25,14 @@
       transition:background 200ms;
     }
     #start-btn:hover { background:rgba(0,0,0,0.05); }
+    #start-btn:disabled { cursor:wait; opacity:0.6; }
+    #start-btn:focus-visible { outline:2px solid #111; outline-offset:5px; }
+    #start-message {
+      max-width:460px; margin:0; color:#444;
+      font-size:12px; line-height:1.8; white-space:pre-line;
+    }
+    .camera-note { max-width:460px; margin:0; font-size:10px; line-height:1.7; color:#666; }
+    .back-link { margin-top:8px; font-size:11px; color:#555; text-underline-offset:4px; }
     #cam-status {
       position:fixed; right:16px; top:16px; z-index:200;
       font-family:"Courier New",Courier,monospace; font-size:10px; letter-spacing:1px;
@@ -40,8 +49,11 @@
   <canvas id="c"></canvas>
   <video id="webcam-video" autoplay playsinline muted></video>
   <div id="start-overlay">
-    <button id="start-btn">[ ENTER ]</button>
-    <div style="font-size:9px;letter-spacing:1.8px;color:rgba(0,0,0,0.30);">CAMERA REQUIRED</div>
+    <button id="start-btn" type="button" aria-describedby="start-message">[ ENABLE CAMERA / 开启摄像头 ]</button>
+    <p id="start-message" role="status" aria-live="polite">正在申请摄像头，请在浏览器提示中选择允许。
+Please allow camera access in your browser.</p>
+    <p class="camera-note">画面仅在本机生成作品，不会上传；不使用麦克风。<br>Video stays on your device. No microphone is used.</p>
+    <a class="back-link" href="memory-entropy.html">BACK TO WORK / 返回作品介绍</a>
   </div>
   <div id="cam-status"></div>
   <div id="countdown"></div>
@@ -180,13 +192,48 @@ class Sensor {
     this.data    = new Uint8Array(SENS_W * SENS_H);
     this.prevRaw = null;
     this.presenceVal = 0; this.motionVal = 0;
+    this.stream = null;
+    this.generation = 0;
   }
   async init() {
+    const generation = ++this.generation;
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { width:{ideal:640}, height:{ideal:360}, facingMode:'user' }
+      video: { width:{ideal:640}, height:{ideal:360}, facingMode:'user' },
+      audio: false
     });
-    this.video.srcObject = stream; this.video.play();
-    return new Promise(r => { this.video.onloadedmetadata = r; });
+    // Permission can arrive after the visitor has left the page.
+    if (generation !== this.generation) {
+      stream.getTracks().forEach(track => track.stop());
+      throw new DOMException('Camera request is no longer active.', 'AbortError');
+    }
+    this.stream = stream;
+    this.video.srcObject = stream;
+    let playbackTimeout;
+    try {
+      await Promise.race([
+        this.video.play(),
+        new Promise((_, reject) => {
+          playbackTimeout = setTimeout(() => reject(new Error('Video playback timed out.')), 12000);
+        })
+      ]);
+    } catch (cause) {
+      const error = new Error('Camera video could not start.');
+      error.name = 'PlaybackError';
+      error.cause = cause;
+      throw error;
+    } finally {
+      clearTimeout(playbackTimeout);
+    }
+  }
+  stop() {
+    this.generation++;
+    if (this.stream) this.stream.getTracks().forEach(track => track.stop());
+    this.stream = null;
+    this.video.pause();
+    this.video.srcObject = null;
+    this.prevRaw = null;
+    this.data.fill(0);
+    this.presenceVal = 0; this.motionVal = 0;
   }
   update() {
     if (this.video.readyState < 2) return;
@@ -240,18 +287,73 @@ function doCamCapture() {
 // ─────────────────────────────────────────────────────
 const overlay  = document.getElementById('start-overlay');
 const startBtn = document.getElementById('start-btn');
-startBtn.addEventListener('click', async () => {
-  startBtn.textContent = '...'; startBtn.disabled = true;
+const startMessage = document.getElementById('start-message');
+let starting = false, startupVersion = 0, hideOverlayTimer;
+
+function cameraErrorMessage(error) {
+  switch (error.name) {
+    case 'SecureContextError':
+      return '摄像头需要安全连接，请通过 HTTPS 打开本站。\nCamera access requires HTTPS (or localhost).';
+    case 'UnsupportedError':
+      return '当前浏览器无法申请摄像头。请用 Safari、Chrome 或 Edge 打开本站。\nOpen this page in a browser that supports camera access.';
+    case 'NotAllowedError':
+    case 'SecurityError':
+      return '摄像头访问未获允许。请在浏览器的本站权限中允许摄像头，并检查系统是否允许该浏览器使用摄像头，然后重试。若在应用内打开，请改用浏览器。\nAllow camera access in site and system settings, then retry. If embedded in an app, open in your browser.';
+    case 'NotFoundError':
+      return '未找到可用的摄像头。请连接或启用摄像头后重试。\nNo camera found. Connect or enable a camera, then retry.';
+    case 'NotReadableError':
+      return '摄像头无法读取，可能正被其他应用占用。请关闭其他摄像头应用并检查系统权限，然后重试。\nThe camera could not be read. Close other camera apps and check system permissions, then retry.';
+    case 'OverconstrainedError':
+      return '当前摄像头不支持所需的视频设置，请尝试其他摄像头或浏览器。\nThis camera cannot use the requested video settings. Try another camera or browser.';
+    case 'PlaybackError':
+      return '已获得摄像头权限，但视频未能开始播放。请点击重试。\nCamera access succeeded, but video playback failed. Please retry.';
+    default:
+      return '摄像头未能启动，请检查设备与浏览器权限后重试。\nThe camera could not start. Check your device and browser permissions, then retry.';
+  }
+}
+
+async function startExperience() {
+  if (starting || sensorRunning) return;
+  starting = true;
+  const version = ++startupVersion;
+  startBtn.textContent = '[ REQUESTING CAMERA / 正在申请 ]';
+  startBtn.disabled = true;
+  startMessage.textContent = '请在浏览器提示中允许摄像头。如果没有看到弹窗，请检查地址栏旁的摄像头图标或本站权限。\nAllow camera access in your browser. If no prompt appears, check the camera icon or site permissions beside the address bar.';
   try {
     camEl.textContent = 'CAM...';
+    if (!window.isSecureContext) throw { name: 'SecureContextError' };
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw { name: 'UnsupportedError' };
     await sensor.init();
+    if (version !== startupVersion) return;
     sensorRunning = true; camEl.textContent = '● CAM';
     nextCapAt = Date.now() + 1200;
+    overlay.classList.add('hidden');
+    hideOverlayTimer = setTimeout(() => { overlay.style.display = 'none'; }, 1050);
   } catch(e) {
-    camEl.textContent = 'NO CAM'; console.warn('cam:', e);
+    if (version !== startupVersion) return;
+    sensor.stop();
+    camEl.textContent = 'NO CAM';
+    startMessage.textContent = cameraErrorMessage(e);
+    startBtn.textContent = '[ RETRY CAMERA / 重试摄像头 ]';
+    startBtn.disabled = false;
+    console.warn('cam:', e);
+  } finally {
+    if (version === startupVersion) starting = false;
   }
-  overlay.classList.add('hidden');
-  setTimeout(() => { overlay.style.display = 'none'; }, 1050);
+}
+
+startBtn.addEventListener('click', startExperience);
+window.addEventListener('pagehide', () => {
+  startupVersion++;
+  clearTimeout(hideOverlayTimer);
+  sensor.stop();
+  starting = false; sensorRunning = false; nextCapAt = 0;
+});
+window.addEventListener('pageshow', event => {
+  if (!event.persisted) return;
+  overlay.style.display = '';
+  overlay.classList.remove('hidden');
+  startExperience();
 });
 
 // ─────────────────────────────────────────────────────
@@ -369,6 +471,7 @@ function loop(ts) {
 }
 
 requestAnimationFrame(loop);
+startExperience();
 </script>
 </body>
 </html>
