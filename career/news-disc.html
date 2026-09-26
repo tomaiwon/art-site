@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>news — Yi Huang</title>
+<meta name="description" content="Exhibitions, screenings and new work by Yi Huang. 黄熠的展览、放映与新作。">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+
+<style>
+  /* 光盘轮换版 news：参考 Ravi Klaassens 的 A24 概念站（3D 光盘浏览片单）
+     每条动态是一张会转的光盘；滚轮 / 滑动 / 方向键 / 点击两侧光盘切换；点正中的光盘进入作品页 */
+  :root{
+    --accent:#e4553b;
+    --ink:#f4f1ec;
+    --mute:rgba(244,241,236,.55);
+    --disc:min(62vw, 58vh, 560px);
+    --serif:"Times New Roman",Times,"Liberation Serif","Nimbus Roman",serif;
+    --sans:"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif;
+  }
+  html,body{height:100%;margin:0;overflow:hidden;}
+  body{
+    background:#0b0a0a;
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    touch-action:none;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ── 背景：当前光盘的图，大幅模糊压暗 ── */
+  .bg{position:fixed;inset:-60px;z-index:0;}
+  .bg div{
+    position:absolute;inset:0;
+    background-size:cover;background-position:center;
+    filter:blur(48px) saturate(1.2) brightness(.32);
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .bg div.on{opacity:1;}
+  .grain{
+    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.08;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  /* ── 页眉 ── */
+  .head{
+    position:fixed;top:0;left:0;right:0;z-index:5;
+    display:flex;justify-content:space-between;align-items:flex-start;
+    padding:18px 22px;
+  }
+  .logo{font-family:var(--serif);font-style:italic;font-size:30px;line-height:.9;color:var(--accent);}
+  .logo span{display:block;}
+  .nav{display:flex;gap:18px;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding-top:6px;}
+  .nav a{opacity:.75;}
+  .nav a:hover,.nav a[aria-current]{opacity:1;}
+  .nav .list{padding:3px 8px;border:1px solid rgba(244,241,236,.4);border-radius:20px;margin-top:-4px;}
+
+  /* ── 舞台：光盘横向轮换（coverflow） ── */
+  .stage{
+    position:fixed;inset:0;z-index:2;
+    perspective:1400px;
+    perspective-origin:50% 45%;
+  }
+  .rail{position:absolute;left:50%;top:45%;width:0;height:0;transform-style:preserve-3d;}
+  .disc{
+    position:absolute;
+    width:var(--disc);height:var(--disc);
+    left:calc(var(--disc) / -2);top:calc(var(--disc) / -2);
+    transform-style:preserve-3d;
+    transition:transform .9s cubic-bezier(.2,.7,.15,1), opacity .9s ease, filter .9s ease;
+    cursor:pointer;
+    will-change:transform;
+  }
+  .disc[aria-hidden="true"]{pointer-events:none;}
+  .disc .shadow{
+    position:absolute;inset:6%;border-radius:50%;
+    box-shadow:0 40px 90px rgba(0,0,0,.65);
+    transform:translateZ(-2px);
+  }
+  /* 转动层：图 + 盘面文字 */
+  .spin{
+    position:absolute;inset:0;border-radius:50%;overflow:hidden;
+    animation:spin 14s linear infinite;
+    animation-play-state:paused;
+  }
+  .disc.active .spin{animation-play-state:running;animation-duration:9s;}
+  .disc.near .spin{animation-play-state:running;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .spin img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+    -webkit-mask:radial-gradient(circle, transparent 0 5.6%, #000 5.9%);
+            mask:radial-gradient(circle, transparent 0 5.6%, #000 5.9%);
+  }
+  .spin svg{position:absolute;inset:0;width:100%;height:100%;}
+  .spin text{font-family:var(--sans);font-size:3.1px;font-weight:700;letter-spacing:.55px;fill:#fff;}
+  /* 不转的层：透明盘心 + 彩虹反光 + 边缘高光（反光不跟着转才像真的光盘） */
+  .hub{
+    position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,
+      transparent 0 5.9%,
+      rgba(210,214,222,.55) 6.1% 14.6%,
+      rgba(255,255,255,.35) 14.8% 15.3%,
+      rgba(20,20,24,.35) 15.5% 17.2%,
+      transparent 17.5%);
+  }
+  .sheen{
+    position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    background:
+      conic-gradient(from 200deg,
+        rgba(255,60,160,.0), rgba(255,60,160,.32), rgba(80,220,255,.30), rgba(255,240,90,.26),
+        rgba(255,60,160,.0) 40%, rgba(120,255,200,.22) 62%, rgba(140,120,255,.28) 80%, rgba(255,60,160,.0));
+    mix-blend-mode:screen;
+    -webkit-mask:radial-gradient(circle, transparent 0 17%, #000 22%, #000 97%, transparent 99%);
+            mask:radial-gradient(circle, transparent 0 17%, #000 22%, #000 97%, transparent 99%);
+    opacity:.75;
+  }
+  .rim{
+    position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.35), inset 0 0 0 3px rgba(0,0,0,.25);
+    background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,.08));
+  }
+
+  /* ── 文字：左下标题，右下计数 ── */
+  .info{
+    position:fixed;left:22px;right:22px;bottom:calc(22px + env(safe-area-inset-bottom));z-index:4;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+    pointer-events:none;
+  }
+  .meta{display:flex;gap:12px;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--mute);margin-bottom:10px;}
+  .meta .kind{color:var(--accent);}
+  .title{
+    margin:0;
+    font-size:clamp(30px, 6.4vw, 84px);
+    line-height:1;
+    font-weight:700;
+    letter-spacing:-.01em;
+    max-width:16em;
+  }
+  .sub{margin-top:10px;font-size:14px;line-height:1.5;color:var(--mute);max-width:40em;}
+  .swap{transition:opacity .45s ease, transform .45s ease;}
+  .swap.out{opacity:0;transform:translateY(12px);}
+  .count{
+    flex:none;text-align:right;
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(28px, 5vw, 60px);line-height:1;
+  }
+  .count small{display:block;margin-top:10px;font-family:var(--sans);font-style:normal;font-size:10px;font-weight:700;letter-spacing:1.8px;color:var(--mute);}
+
+  /* 两侧箭头（桌面） */
+  .arrow{
+    position:fixed;top:45%;z-index:4;transform:translateY(-50%);
+    width:44px;height:44px;border-radius:50%;
+    border:1px solid rgba(244,241,236,.35);background:rgba(0,0,0,.2);color:var(--ink);
+    font-size:18px;cursor:pointer;
+  }
+  .arrow.prev{left:22px;} .arrow.next{right:22px;}
+  .arrow:hover{border-color:var(--ink);}
+
+  @media (max-width:760px){
+    :root{--disc:min(78vw, 46vh);}
+    .rail{top:42%;}
+    .logo{font-size:26px;}
+    .nav{gap:12px;font-size:10px;letter-spacing:1.2px;}
+    .nav .hide-m{display:none;}
+    .arrow{display:none;}
+    .title{font-size:clamp(26px, 8vw, 40px);}
+    .sub{font-size:13px;}
+    .count{font-size:30px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .spin{animation:none;}
+    .disc{transition:none;}
+  }
+</style>
+</head>
+
+<body>
+
+<div class="bg" id="bg"></div>
+<div class="grain"></div>
+
+<header class="head">
+  <a class="logo" href="./" aria-label="Yi Huang — home"><span>Yi</span><span>Huang</span></a>
+  <nav class="nav" aria-label="Primary">
+    <a class="hide-m" href="../work.html">Works</a>
+    <a class="hide-m" href="../index.html">About</a>
+    <a class="hide-m" href="../contact.html">Contact</a>
+    <a class="list" href="news.html">List 列表</a>
+  </nav>
+</header>
+
+<main class="stage" id="stage" aria-roledescription="carousel" aria-label="News 动态">
+  <div class="rail" id="rail"></div>
+</main>
+
+<button class="arrow prev" type="button" aria-label="Previous 上一张">←</button>
+<button class="arrow next" type="button" aria-label="Next 下一张">→</button>
+
+<div class="info" aria-live="polite">
+  <div class="swap" id="text">
+    <div class="meta"><span class="kind" id="kind"></span><span id="date"></span></div>
+    <h1 class="title" id="title"></h1>
+    <div class="sub" id="sub"></div>
+  </div>
+  <div class="count"><span id="idx"></span><small>SCROLL · SWIPE · CLICK</small></div>
+</div>
+
+<script>
+(function(){
+  /* 动态数据：新增一条就在最前面加一行。图放 career/assets/news/（长边 1600px webp） */
+  var ITEMS = [
+    { date:'2026.09', kind:'New Work 新作',    title:'东亚制造',            sub:'Confucian Silence — 数字媒介本体系列新章，进行中',            img:'assets/entry/00.webp',           href:'../east-asia/' },
+    { date:'2026.08', kind:'Photography 摄影', title:'双年展',              sub:'Venice — 胶片摄影 34 张',                                     img:'assets/news/venice-2026.webp',    href:'../projects/venice-2026.html' },
+    { date:'2026.07', kind:'Photography 摄影', title:'摄影术二百年',        sub:'Arles — 胶片摄影 74 张',                                      img:'assets/news/arles-2026.webp',     href:'../projects/arles-2026.html' },
+    { date:'2026.07', kind:'Photography 摄影', title:'晒后假日下',          sub:'Marseille — 胶片摄影 32 张',                                  img:'assets/news/marseille-2026.webp', href:'../projects/marseille-2026.html' },
+    { date:'2026.06', kind:'Exhibition 展览',  title:'RCA Degree Show',     sub:'《洋务运动》影像、陶瓷与装置 — Royal College of Art, London', img:'assets/news/rca-degree-show.webp',href:'../projects/asfablesgoby.html' },
+    { date:'2026.05', kind:'Photography 摄影', title:'洋务时刻',            sub:'Cambridge — 胶片摄影 14 张',                                  img:'assets/news/cambridge-2026.webp', href:'../projects/cambridge-2026.html' },
+    { date:'2026.04', kind:'Screening 放映',   title:'The Experience',      sub:'《关中往事》放映 — 莫名堂 Moming Tang',                       img:'assets/news/moming-tang.webp',    href:'../projects/theexperience.html' },
+    { date:'2026.03', kind:'Selection 入选',   title:'The Experience',      sub:'《关中往事》入选第三十三届北京大学生电影节',                  img:'assets/news/bjiff.webp',          href:'../projects/theexperience.html' },
+    { date:'2026.03', kind:'Screening 放映',   title:'As Fables Go By',     sub:'《洋务运动》预告片放映 — Genius Cinema',                      img:'assets/news/genius-cinema.webp',  href:'../projects/asfablesgoby.html' },
+    { date:'2026.02', kind:'Exhibition 展览',  title:'Passing By',          sub:'RCA 当代艺术实践中期展 — Royal College of Art, London',       img:'assets/news/rca-wip.webp',        href:'../projects/passingby.html' },
+    { date:'2026.01', kind:'Workshop 工作坊',  title:'The Urgency of the Arts', sub:'《Barbican》艺术的紧迫性工作坊 — London',                  img:'assets/news/barbican.webp',       href:'../projects/barbican.html' }
+  ];
+
+  var rail = document.getElementById('rail');
+  var bg = document.getElementById('bg');
+  var N = ITEMS.length;
+  var cur = 0;
+  var discs = [], bgs = [];
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  /* 生成光盘 */
+  ITEMS.forEach(function(it, i){
+    var d = document.createElement('a');
+    d.className = 'disc';
+    d.href = it.href;
+    d.setAttribute('aria-label', it.title + ' — ' + it.sub);
+    var en = it.kind.replace(/[^A-Za-z ]/g, '').trim().toUpperCase();
+    var ring = 'YI HUANG · ' + it.date + ' · ' + en + ' · N° ' + pad(i + 1) + ' · ';
+    d.innerHTML =
+      '<div class="shadow"></div>' +
+      '<div class="spin">' +
+        '<img src="' + it.img + '" alt="" decoding="async"' + (i > 2 ? ' loading="lazy"' : '') + '>' +
+        '<svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="r' + i + '" d="M50,50 m-20,0 a20,20 0 1,1 40,0 a20,20 0 1,1 -40,0"/></defs>' +
+        '<text><textPath href="#r' + i + '" textLength="125" lengthAdjust="spacing">' + ring + '</textPath></text></svg>' +
+      '</div>' +
+      '<div class="hub"></div><div class="sheen"></div><div class="rim"></div>';
+    /* 让每张盘起始角度不同，转起来不齐 */
+    d.querySelector('.spin').style.animationDelay = (-i * 1.7) + 's';
+    d.addEventListener('click', function(e){
+      if(i !== cur){ e.preventDefault(); go(i); }
+    });
+    rail.appendChild(d);
+    discs.push(d);
+
+    var b = document.createElement('div');
+    b.style.backgroundImage = 'url("' + it.img + '")';
+    bg.appendChild(b);
+    bgs.push(b);
+  });
+
+  /* 按与当前的距离摆位：正中朝前，两侧向后退并转开 */
+  function layout(){
+    var w = window.innerWidth;
+    var gap = Math.min(w * 0.36, 420);
+    discs.forEach(function(d, i){
+      var off = i - cur;
+      var a = Math.abs(off);
+      var x = off * gap * (a > 1 ? 0.92 : 1);
+      var z = -a * 260;
+      var ry = -Math.sign(off) * Math.min(a * 38, 62);
+      d.style.transform = 'translate3d(' + x + 'px,0,' + z + 'px) rotateY(' + ry + 'deg)';
+      d.style.opacity = a > 3 ? 0 : (a === 0 ? 1 : 0.85 - a * 0.18);
+      d.style.filter = a === 0 ? 'none' : 'brightness(' + (0.75 - a * 0.1) + ')';
+      d.style.zIndex = 100 - a;
+      d.classList.toggle('active', a === 0);
+      d.classList.toggle('near', a === 1);
+      d.setAttribute('aria-hidden', a > 3 ? 'true' : 'false');
+      d.tabIndex = a === 0 ? 0 : -1;
+    });
+    bgs.forEach(function(b, i){ b.classList.toggle('on', i === cur); });
+  }
+
+  /* 文字：先淡出，换内容，再淡入 */
+  var text = document.getElementById('text');
+  var tTimer;
+  function setText(){
+    var it = ITEMS[cur];
+    text.classList.add('out');
+    clearTimeout(tTimer);
+    tTimer = setTimeout(function(){
+      document.getElementById('kind').textContent = it.kind;
+      document.getElementById('date').textContent = it.date;
+      document.getElementById('title').textContent = it.title;
+      document.getElementById('sub').textContent = it.sub;
+      document.getElementById('idx').textContent = pad(cur + 1) + ' / ' + pad(N);
+      text.classList.remove('out');
+    }, 220);
+  }
+
+  function go(i){
+    var n = Math.max(0, Math.min(N - 1, i));
+    if(n === cur) return;
+    cur = n;
+    layout();
+    setText();
+  }
+
+  /* 滚轮：累计到阈值才翻一张，翻完短暂锁定 */
+  var acc = 0, lock = false;
+  window.addEventListener('wheel', function(e){
+    e.preventDefault();
+    if(lock) return;
+    acc += Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if(Math.abs(acc) > 50){
+      go(cur + (acc > 0 ? 1 : -1));
+      acc = 0; lock = true;
+      setTimeout(function(){ lock = false; }, 650);
+    }
+  }, { passive:false });
+
+  /* 触摸 / 鼠标拖动 */
+  var sx = null, sy = null, moved = false;
+  function start(x, y){ sx = x; sy = y; moved = false; }
+  function end(x, y){
+    if(sx === null) return;
+    var dx = x - sx, dy = y - sy;
+    var d = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+    if(Math.abs(d) > 40){ moved = true; go(cur + (d < 0 ? 1 : -1)); }
+    sx = sy = null;
+  }
+  window.addEventListener('touchstart', function(e){ start(e.touches[0].clientX, e.touches[0].clientY); }, { passive:true });
+  window.addEventListener('touchend', function(e){ end(e.changedTouches[0].clientX, e.changedTouches[0].clientY); });
+  window.addEventListener('mousedown', function(e){ start(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', function(e){ end(e.clientX, e.clientY); });
+  /* 拖动后松手不算点击 */
+  rail.addEventListener('click', function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+
+  window.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') go(cur + 1);
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(cur - 1);
+    if(e.key === 'Enter') window.location.href = ITEMS[cur].href;
+  });
+  document.querySelector('.arrow.prev').addEventListener('click', function(){ go(cur - 1); });
+  document.querySelector('.arrow.next').addEventListener('click', function(){ go(cur + 1); });
+  window.addEventListener('resize', layout);
+
+  layout();
+  setText();
+})();
+</script>
+</body>
+</html>
