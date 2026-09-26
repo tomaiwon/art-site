@@ -1,0 +1,1754 @@
+<!doctype html>
+<html lang="en" class="is-loading">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Yi Huang — News</title>
+<meta name="description" content="Exhibitions, screenings and new work by Yi Huang. 黄熠的展览、放映与新作。">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.178.0/examples/jsm/"
+} }
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+<style>
+  /* 纯复刻 a24.raviklaassens.com（Ravi Klaassens 的 A24 概念站）首页：
+     浅灰底 + 颗粒 / 顶部居中导航（手机为底部白色停靠栏）+ Index 片单 / 左上信息面板 / 底部两条评语 /
+     Three.js 光盘：相机 FOV 40、距离 4.4，整组绕 X、Y 各转 -30°，沿弧线排开。
+     字体：PP Eiko → Instrument Serif，PP Neue Montreal → Inter，PP Museum → Instrument Serif（付费字体未授权，暂用替代） */
+  :root{
+    --bg:#f2f2f2;
+    --fg:#000;
+    --accent:#e4553b;
+    --serif:"Instrument Serif","PP Eiko","Songti SC","STSong","Noto Serif SC",serif;
+    --sans:"Inter","PP Neue Montreal","PingFang SC","Noto Sans SC",Arial,sans-serif;
+    --ease:cubic-bezier(.32,.72,0,1);
+
+    /* 原站的流式字号：容器宽 / (理想宽 / 16) */
+    --size-container-ideal:1920;
+    --size-container-min:992px;
+    --size-container-max:3840px;
+    --size-container-fluid:100dvw;
+    --size-container:clamp(var(--size-container-min), var(--size-container-fluid), var(--size-container-max));
+    --size-font:calc(var(--size-container) / (var(--size-container-ideal) / 16));
+  }
+  @media screen and (min-width:992px) and (min-aspect-ratio:11/5){ :root{ --size-container-fluid:min(100dvw, calc(100dvh * 16 / 9)); } }
+  @media screen and (max-width:991px){ :root{ --size-container-ideal:991; --size-container-min:768px; --size-container-max:991px; } }
+  @media screen and (max-width:767px){ :root{ --size-container-ideal:767; --size-container-min:480px; --size-container-max:767px; } }
+  @media screen and (max-width:479px){ :root{ --size-container-ideal:479; --size-container-min:320px; --size-container-max:479px; } }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--fg);}
+  body{
+    font-family:var(--sans);font-size:var(--size-font);font-weight:500;line-height:1.4;letter-spacing:-.025em;
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+    -webkit-tap-highlight-color:transparent;overscroll-behavior:none;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;letter-spacing:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;}
+  p,h1,h2{margin:0;}
+  :focus:not(:focus-visible){outline:0;}
+  .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;}
+
+  /* ── 字级（原站 heading-s / heading-xs / subheading-xs / paragraph-m） ── */
+  .heading-s{font-family:var(--serif);font-weight:400;font-size:2.5em;line-height:1.1;letter-spacing:-.04em;text-transform:uppercase;}
+  .heading-xs{font-family:var(--serif);font-weight:400;font-size:1.75em;line-height:1.1;letter-spacing:-.04em;text-transform:uppercase;}
+  .subheading-xs{font-family:var(--serif);font-weight:400;font-size:.625em;line-height:1.3;letter-spacing:.2em;text-transform:uppercase;}
+  .paragraph-m{font-size:1.125em;line-height:1.4;letter-spacing:-.025em;}
+  .text-right{text-align:right;}
+  .text-center{text-align:center;}
+  @media (max-width:991px){
+    .heading-s{font-size:2em;}
+    .heading-xs{font-size:1.375em;}
+  }
+  @media (max-width:767px){
+    .heading-s{font-size:1.5em;}
+  }
+
+  /* ── 颗粒（原站 .grain：opacity .2，逐帧跳位） ── */
+  .grain{
+    position:fixed;inset:-1em;z-index:99;pointer-events:none;opacity:.2;
+    background-size:7.8125em;background-position:50%;
+    animation:grain .5s steps(1) infinite;
+  }
+  @keyframes grain{
+    0%{background-position:50% 50%}17%{background-position:12% 71%}33%{background-position:83% 24%}
+    50%{background-position:37% 9%}67%{background-position:66% 88%}83%{background-position:5% 42%}
+  }
+
+  /* ── 主画面 ── */
+  .hero{position:fixed;inset:0;overflow:hidden;outline:0;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;}
+  .hero[data-dragging]{cursor:grabbing;}
+  .experience-canvas{position:absolute;inset:0;z-index:2;pointer-events:none;}
+  .experience-canvas canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .container{position:relative;z-index:3;height:100%;padding:0 .5em;pointer-events:none;}
+  .experience_wrap{height:100%;padding:.5em 0;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;}
+
+  .experience_info{display:flex;flex-direction:column;gap:.5em;width:100%;max-width:20.8333%;}
+  .title-alt{margin-top:-.35em;}
+  .info-content{display:flex;flex-direction:column;align-items:flex-end;width:100%;}
+  .info-content_panel{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:1em;width:100%;padding:.25em 0;}
+  .divider-horizontal{position:absolute;left:0;right:0;top:0;height:.5px;background:var(--fg);transform-origin:0 50%;}
+  .info-content_label-wrap{padding-top:.3em;flex:none;}
+
+  .testimonial_wrap{display:flex;justify-content:center;align-items:flex-end;gap:.5em;margin:0 auto;padding-bottom:2.5em;}
+  .testimonial{display:flex;flex-direction:column;gap:1.625em;min-width:var(--testimonial-width, 20rem);}
+  .testimonial__text{display:flex;flex-direction:column;gap:.325em;}
+  .testimonial [data-quote-line]{display:block;}
+  @media (max-width:991px){
+    .experience_info{max-width:50%;}
+    .testimonial_wrap{padding-bottom:6em;}
+  }
+  @media (max-width:767px){
+    .experience_info{max-width:100%;}
+    .testimonial_wrap{display:none;}
+  }
+
+  /* 文字遮罩切换（原站 data-disc-mask / data-disc-line-mask） */
+  [data-mask]{display:block;position:relative;min-width:0;}
+  [data-mask="clip"]{overflow:hidden;}
+  .line-mask{display:block;overflow:hidden;}
+  .line{display:block;will-change:transform;}
+
+  /* ── 导航（桌面：顶部居中；≤991：底部白色停靠栏） ── */
+  .nav{
+    --nav-open-height:24em;--nav-scroll-fade:3em;--nav-open-duration:.62s;--nav-close-duration:.46s;
+    position:fixed;top:0;left:0;right:0;z-index:100;color:var(--fg);
+  }
+  .nav-container{position:relative;z-index:1;width:100%;padding:0 3em;}
+  .nav-bg,.nav-dropdown{
+    position:absolute;top:0;left:0;right:0;margin:0 auto;width:28em;height:0;overflow:hidden;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:height var(--nav-close-duration) var(--ease), opacity calc(var(--nav-close-duration) * .6) var(--ease), visibility 0s linear calc(var(--nav-close-duration) * .6);
+  }
+  .nav-bg{z-index:1;background:#fff;}
+  .nav-inner{position:relative;z-index:2;display:flex;justify-content:center;align-items:center;padding-top:.5em;}
+  .nav-list{display:flex;justify-content:center;align-items:center;margin:0;padding:0;list-style:none;}
+  .nav-list > li{display:flex;align-items:center;}
+  .nav-logo{position:relative;z-index:2;display:flex;align-items:center;padding:.5em 1em;font-family:var(--serif);font-style:italic;font-size:1.35em;line-height:.83;letter-spacing:-.02em;white-space:nowrap;}
+  .nav-link{position:relative;z-index:2;display:flex;align-items:center;gap:.375em;padding:.5em 1em;border-radius:.25em;transition:opacity .3s var(--ease);}
+  .nav-link[data-page="other"]{opacity:.6;}
+  .nav-link[data-page="other"]:hover{opacity:1;}
+  .nav-link__label{position:relative;display:block;font-size:1.125em;line-height:1;letter-spacing:-.025em;}
+  /* 悬停时文字上翻 */
+  .hov{display:block;overflow:hidden;}
+  .hov > span{display:block;transition:transform .5s var(--ease);}
+  .hov > span::after{content:attr(data-text);display:block;position:absolute;top:130%;left:0;}
+  .hov{position:relative;}
+  @media (hover:hover) and (pointer:fine){ .nav-link:hover .hov > span{transform:translateY(-130%);} }
+  .nav-page-dot{position:absolute;left:50%;bottom:.1em;width:.3em;height:.3em;margin-left:-.15em;border-radius:50%;background:currentColor;pointer-events:none;}
+  /* Index：文字与数量上下切换 */
+  .idx-label{position:relative;display:block;overflow:hidden;transition:width .5s var(--ease);}
+  .idx-label span{display:block;transition:transform .5s var(--ease);white-space:nowrap;}
+  .idx-label .idx-count{position:absolute;left:0;top:0;transform:translateY(130%);}
+  .nav[data-dropdown="open"] .idx-label .idx-word{transform:translateY(-130%);}
+  .nav[data-dropdown="open"] .idx-label .idx-count{transform:translateY(0);}
+  @media (hover:hover) and (pointer:fine){
+    .idx-btn:hover .idx-label .idx-word{transform:translateY(-130%);}
+    .idx-btn:hover .idx-label .idx-count{transform:translateY(0);}
+  }
+  .idx-icon{width:.875em;height:.875em;transition:transform var(--nav-close-duration) var(--ease);}
+  .nav[data-dropdown="open"] .idx-icon{transform:rotate(180deg);transition-duration:var(--nav-open-duration);}
+  /* 加载中：Projecting + 转圈 */
+  .nav-list > li.nav-loading-item{display:none;}
+  html.is-loading .nav-list > li.nav-loading-item{display:flex;}
+  html.is-loading .nav-list > li:not(.nav-loading-item):not(.li-logo){display:none;}
+  .nav-loading{display:flex;align-items:center;gap:.5em;padding:.5em 1em;opacity:.6;}
+  .nav-loading i{width:.8em;height:.8em;border-radius:50%;border:1.5px solid currentColor;border-top-color:transparent;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .nav-list > li.enter{animation:navIn .7s var(--ease) both;}
+  @keyframes navIn{from{transform:translateY(105%);opacity:0;}}
+
+  /* 下拉片单 */
+  .nav-dropdown{z-index:1;padding-top:5em;}
+  .nav[data-dropdown="open"] .nav-bg,.nav[data-dropdown="open"] .nav-dropdown{
+    height:var(--nav-open-height);opacity:1;visibility:visible;
+    transition:height var(--nav-open-duration) var(--ease), opacity calc(var(--nav-open-duration) * .45) var(--ease), visibility 0s;
+  }
+  .nav[data-dropdown="open"] .nav-dropdown{pointer-events:auto;}
+  .nav-dropdown__content{
+    --fade-top:0;--fade-bottom:1;
+    height:100%;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:none;touch-action:pan-y;
+    -webkit-mask-image:linear-gradient(to bottom,#0000 0,#000 calc(var(--nav-scroll-fade) * var(--fade-top)),#000 calc(100% - var(--nav-scroll-fade) * var(--fade-bottom)),#0000 100%);
+            mask-image:linear-gradient(to bottom,#0000 0,#000 calc(var(--nav-scroll-fade) * var(--fade-top)),#000 calc(100% - var(--nav-scroll-fade) * var(--fade-bottom)),#0000 100%);
+  }
+  .nav-dropdown__content::-webkit-scrollbar{display:none;}
+  .nav-dropdown__list{padding:0 6em 5em;}
+  .dd-link{position:relative;display:flex;width:100%;padding:.25em;overflow:hidden;transition:color .14s var(--ease);}
+  .dd-link__bg{position:absolute;inset:0;background:var(--fg);transform:scaleY(0);transform-origin:50% 100%;transition:transform .45s var(--ease);pointer-events:none;}
+  .dd-link__inner{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;width:100%;min-width:0;pointer-events:none;}
+  .dd-link__label{font-size:1.125em;line-height:1.4;letter-spacing:-.025em;}
+  .dd-link__inner > .dd-link__label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-right:.5em;}
+  .dd-year{display:inline-block;flex:none;overflow:hidden;vertical-align:bottom;}
+  .dd-year .dd-link__label{display:block;transform:translateY(110%);transition:transform .45s var(--ease);}
+  .dd-link[aria-current="true"],.dd-link:focus-visible{color:var(--bg);}
+  .dd-link[aria-current="true"] .dd-link__bg,.dd-link:focus-visible .dd-link__bg{transform:scaleY(1);}
+  .dd-link[aria-current="true"] .dd-year .dd-link__label,.dd-link:focus-visible .dd-year .dd-link__label{transform:none;}
+  @media (hover:hover) and (pointer:fine){
+    .dd-link:hover{color:var(--bg);}
+    .dd-link:hover .dd-link__bg{transform:scaleY(1);}
+    .dd-link:hover .dd-year .dd-link__label{transform:none;}
+  }
+  .nav-dropdown__scrollbar{position:absolute;right:1em;top:32%;bottom:32%;z-index:4;width:.375em;background:#d9d9d9;opacity:0;transform:translateY(.5em);transition:opacity .3s var(--ease), transform .46s var(--ease);}
+  .nav[data-dropdown="open"] .nav-dropdown__scrollbar{opacity:1;transform:none;transition:opacity .31s var(--ease) .12s, transform .62s var(--ease) .12s;}
+  .nav-dropdown__scrollbar i{position:absolute;left:0;right:0;top:0;height:50%;background:var(--fg);}
+  .page-bg{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity var(--nav-close-duration) var(--ease);}
+  .nav[data-dropdown="open"] ~ .page-bg{opacity:1;pointer-events:auto;transition-duration:var(--nav-open-duration);}
+
+  @media (max-width:991px){
+    .nav{
+      --nav-dock-height:3.5em;--nav-dock-inset:1em;--nav-open-height:min(25em, 62vh);
+      --nav-dock-open-width:min(100%, max(var(--nav-dock-width, 100%), 23.75em));
+      top:auto;bottom:0;padding:0 var(--nav-dock-inset) calc(var(--nav-dock-inset) + env(safe-area-inset-bottom, 0px));
+    }
+    .nav-container{padding:0;}
+    .nav-bg{
+      top:auto;bottom:0;left:50%;right:auto;margin:0;transform:translateX(-50%);
+      width:var(--nav-dock-width, 100%);max-width:100%;height:var(--nav-dock-height);opacity:1;visibility:visible;
+      transition:height var(--nav-close-duration) var(--ease), width var(--nav-close-duration) var(--ease);
+    }
+    .nav[data-dropdown="open"] .nav-bg{width:var(--nav-dock-open-width);transition:height var(--nav-open-duration) var(--ease), width var(--nav-open-duration) var(--ease);}
+    .nav-inner{height:var(--nav-dock-height);padding-top:0;}
+    .nav-list{
+      width:calc(var(--nav-dock-width, 100%) - 1em);max-width:100%;gap:.25em;
+      transition:width var(--nav-close-duration) var(--ease);
+    }
+    .nav[data-dropdown="open"] .nav-list{width:calc(var(--nav-dock-open-width) - 1em);transition-duration:var(--nav-open-duration);}
+    .nav-list > li.li-logo,.nav-list > li:last-child{flex:1 1 0;min-width:0;}
+    .nav-list > li:last-child{justify-content:flex-end;}
+    .nav-logo{font-size:1.5em;padding:.5em .75em;}
+    .nav-link{padding:.5em .75em;}
+    .nav-link__label{font-size:1em;}
+    .idx-icon{transform:rotate(180deg);}
+    .nav[data-dropdown="open"] .idx-icon{transform:rotate(0deg);}
+    .nav-dropdown{
+      top:auto;bottom:var(--nav-dock-height);left:50%;right:auto;margin:0;transform:translateX(-50%);
+      width:var(--nav-dock-open-width);padding-top:0;
+    }
+    .nav[data-dropdown="open"] .nav-dropdown{height:calc(var(--nav-open-height) - var(--nav-dock-height));}
+    .nav-dropdown__list{padding:3em 4em 1em;}
+    .dd-link{padding:.6em .5em;}
+    .dd-link__label{font-size:1em;}
+    .nav.is-hidden{opacity:0;pointer-events:none;transition:opacity .3s;}
+  }
+
+  /* ── 预告片灯箱（原站 trailer-lightbox） ── */
+  .lb{position:fixed;inset:0;z-index:95;color:#fff;visibility:hidden;pointer-events:none;}
+  .lb.is-open{visibility:visible;pointer-events:auto;}
+  .lb-plate{position:absolute;inset:0;background:#000;clip-path:inset(50% 50% 50% 50%);}
+  .lb-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;}
+  .lb-frame{position:relative;width:min(100vw, calc(100dvh * 16 / 9));aspect-ratio:16/9;background:#000;}
+  .lb-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;}
+  .lb-shield{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .lb-center{width:2em;height:2em;opacity:0;transition:opacity .3s var(--ease);}
+  .lb-shield:hover .lb-center{opacity:1;}
+  .lb-ui{position:absolute;left:1.5em;right:1.5em;display:flex;align-items:center;gap:1.5em;opacity:0;}
+  .lb-top{top:3.5em;justify-content:space-between;align-items:flex-start;}
+  .lb-bottom{bottom:1.5em;}
+  .lb-meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:.2em .5em;max-width:28em;}
+  .lb-meta .paragraph-m{font-size:1.05em;}
+  .lb-ctl{font-family:var(--serif);font-size:1.35em;line-height:1;letter-spacing:-.04em;text-transform:uppercase;white-space:nowrap;}
+  .lb-ctl .ico{display:none;width:1.1em;height:1.1em;}
+  .lb-actions{display:flex;gap:1.25em;}
+  .lb-time{font-family:var(--serif);font-size:.85em;letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .lb-timeline{position:relative;flex:1;height:1.5em;cursor:pointer;}
+  .lb-timeline i{position:absolute;left:0;top:50%;height:1px;margin-top:-.5px;}
+  .lb-timeline .rule{right:0;background:rgba(255,255,255,.35);}
+  .lb-timeline .buf{width:0;background:rgba(255,255,255,.55);}
+  .lb-timeline .prog{width:0;background:#fff;}
+  .lb-volume{position:relative;width:4em;height:1.5em;cursor:pointer;}
+  .lb-volume i{position:absolute;left:0;top:50%;height:1px;margin-top:-.5px;}
+  .lb-volume .rule{right:0;background:rgba(255,255,255,.35);}
+  .lb-volume .lvl{width:100%;background:#fff;}
+  .lb-unmute{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:auto;display:block;padding:.6em 1.1em;border:1px solid rgba(255,255,255,.6);font-family:var(--serif);font-size:1.35em;line-height:1;letter-spacing:-.04em;text-transform:uppercase;}
+  .lb-unmute:hover{background:#fff;color:#000;}
+  .lb[data-muted="false"] .lb-unmute{display:none;}
+  .nav.on-dark{color:#fff;}
+  @media (max-width:767px){
+    .lb-top{top:1.5em;}
+    .lb-meta{display:none;}
+    .lb-ctl .txt{display:none;}
+    .lb-ctl .ico{display:block;}
+    .lb-close .txt,.lb-project .txt{display:inline;}
+    .lb-close .ico,.lb-project .ico{display:none;}
+    .lb-volume{display:none;}
+    .lb-bottom{gap:1em;}
+    .lb-top{justify-content:flex-end;}
+  }
+
+  /* 无 WebGL 时的平面替代 */
+  .fallback{position:absolute;left:50%;top:50%;z-index:2;width:min(60vw,60vh);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;display:none;pointer-events:none;}
+  .fallback img{width:100%;height:100%;object-fit:cover;}
+  html.no-webgl .fallback{display:block;}
+
+  @media (prefers-reduced-motion:reduce){
+    .grain{animation:none;}
+    .hov > span,.idx-label span,.dd-link__bg,.dd-year .dd-link__label{transition:none;}
+  }
+</style>
+</head>
+
+<body>
+<div class="grain" id="grain" aria-hidden="true"></div>
+
+<!-- 导航 -->
+<nav class="nav" id="nav" aria-label="Main" data-dropdown="closed">
+  <div class="nav-container">
+    <div class="nav-bg" id="navBg"></div>
+    <div class="nav-inner">
+      <ul class="nav-list" id="navList">
+        <li class="li-logo"><a class="nav-logo" href="./" aria-label="Yi Huang home">Yi Huang</a></li>
+        <li class="nav-loading-item" aria-live="polite"><span class="nav-loading"><span class="nav-link__label">Projecting</span><i aria-hidden="true"></i></span></li>
+        <li><a class="nav-link" href="news-disc.html" aria-current="page" data-page="current"><span class="nav-link__label hov"><span data-text="News">News</span></span><span class="nav-page-dot" aria-hidden="true"></span></a></li>
+        <li><a class="nav-link" href="../work.html" data-page="other"><span class="nav-link__label hov"><span data-text="Works">Works</span></span></a></li>
+        <li>
+          <button class="nav-link idx-btn" id="idxBtn" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="navDropdown">
+            <span class="nav-link__label idx-label" id="idxLabel"><span class="idx-word">Index</span><span class="idx-count" id="idxCount" aria-hidden="true"></span></span>
+            <svg class="idx-icon" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 5 7 9.5 11.5 5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="nav-dropdown" id="navDropdown" aria-hidden="true">
+      <div class="nav-dropdown__content" id="ddContent">
+        <div class="nav-dropdown__list" id="ddList" role="list"></div>
+      </div>
+      <div class="nav-dropdown__scrollbar" id="ddBar" aria-hidden="true"><i id="ddBarProg"></i></div>
+    </div>
+  </div>
+</nav>
+<div class="page-bg" id="pageBg" aria-hidden="true"></div>
+
+<main>
+  <section class="hero" id="hero" tabindex="0" role="group" aria-roledescription="carousel" aria-label="News disc gallery"
+           aria-keyshortcuts="ArrowLeft ArrowRight Home End Enter Space" aria-describedby="discHelp">
+    <h1 class="sr-only">Yi Huang — News 动态</h1>
+    <div class="experience-canvas" id="canvasWrap" aria-hidden="true"></div>
+    <div class="fallback" aria-hidden="true"><img id="fallbackImg" alt=""></div>
+
+    <div class="container">
+      <div class="experience_wrap">
+        <div class="experience_info" data-group="0">
+          <div data-mask><p class="heading-s" data-t="title"></p></div>
+          <div data-mask><p class="paragraph-m title-alt" data-t="alt"></p></div>
+          <div class="info-content">
+            <div class="info-content_panel">
+              <div class="divider-horizontal" data-rule></div>
+              <div class="info-content_label-wrap"><div data-mask><p class="subheading-xs" data-t="label">Type 类型</p></div></div>
+              <div data-mask><p class="paragraph-m text-right" data-t="type"></p></div>
+            </div>
+            <div class="info-content_panel">
+              <div class="divider-horizontal" data-rule></div>
+              <div class="info-content_label-wrap"><div data-mask><p class="subheading-xs" data-t="label">Date 日期</p></div></div>
+              <div data-mask><p class="paragraph-m text-right" data-t="date"></p></div>
+            </div>
+            <div class="info-content_panel">
+              <div class="divider-horizontal" data-rule></div>
+              <div class="info-content_label-wrap"><div data-mask><p class="subheading-xs" data-t="label">Venue 地点</p></div></div>
+              <div data-mask><p class="paragraph-m text-right" data-t="venue"></p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial_wrap" id="testimonials" data-group="1" aria-hidden="true">
+          <div class="testimonial">
+            <div class="testimonial__text">
+              <div data-mask><p class="subheading-xs text-center" data-t="pub0"></p></div>
+              <div data-mask><p class="heading-xs text-center" data-t="quote0"></p></div>
+            </div>
+          </div>
+          <div class="testimonial">
+            <div class="testimonial__text">
+              <div data-mask><p class="subheading-xs text-center" data-t="pub1"></p></div>
+              <div data-mask><p class="heading-xs text-center" data-t="quote1"></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sr-only" id="discHelp">Use the left and right arrow keys to browse. Press Enter to open the item in front, or Space to flip the disc over.</p>
+    <p class="sr-only" id="live" aria-live="polite" aria-atomic="true"></p>
+  </section>
+</main>
+
+<!-- 预告片灯箱 -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Trailer" data-muted="true" aria-hidden="true">
+  <div class="lb-plate" id="lbPlate"></div>
+  <div class="lb-stage" id="lbStage"><div class="lb-frame" id="lbFrame"></div></div>
+  <button class="lb-shield" id="lbShield" type="button" aria-label="Play or pause">
+    <svg class="lb-center" id="lbCenter" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1" fill="#fff"/><rect x="14" y="4" width="4" height="16" rx="1" fill="#fff"/></svg>
+  </button>
+  <div class="lb-ui lb-top">
+    <div class="lb-meta" id="lbMeta"></div>
+    <div class="lb-actions">
+      <a class="lb-ctl lb-project" id="lbProject" href="#"><span class="txt">View project</span></a>
+      <button class="lb-ctl lb-close" id="lbClose" type="button"><span class="txt">Close</span></button>
+    </div>
+  </div>
+  <button class="lb-ui lb-unmute" id="lbUnmute" type="button">Tap for sound</button>
+  <div class="lb-ui lb-bottom">
+    <button class="lb-ctl" id="lbPlay" type="button" aria-label="Pause">
+      <span class="txt">Pause</span>
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path id="lbPlayIco" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+    </button>
+    <span class="lb-time" id="lbTime">00:00 / 00:00</span>
+    <div class="lb-timeline" id="lbTimeline" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><i class="rule"></i><i class="buf" id="lbBuf"></i><i class="prog" id="lbProg"></i></div>
+    <button class="lb-ctl" id="lbSound" type="button" aria-label="Sound">
+      <span class="txt">Sound</span>
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path id="lbSoundWave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+    <div class="lb-volume" id="lbVolume" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" tabindex="0"><i class="rule"></i><i class="lvl" id="lbVolLvl"></i></div>
+    <button class="lb-ctl" id="lbMax" type="button" aria-label="Maximize">
+      <span class="txt">Maximize</span>
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ── 动态数据：新增一条就在最前面加一项。图放 career/assets/news/（长边 1600px webp）；有 Vimeo 视频就填 vimeo，点光盘会弹出播放器 ── */
+window.ITEMS = [
+  { title:'Confucian Silence', alt:'东亚制造', type:'New Work 新作', date:'2026.09', venue:['Digital Media Ontology Series','数字媒介本体系列'],
+    notes:[['Digital Media Ontology Series','A New Chapter, In Progress'],['数字媒介本体系列','新章，正在进行中']],
+    img:'assets/entry/00.webp', href:'../east-asia/' },
+  { title:'双年展', alt:'Venice — film photography', type:'Photography 摄影', date:'2026.08', venue:['Venice 威尼斯','34 frames 张'],
+    notes:[['Film Photography','Thirty-Four Frames, Venice'],['胶片摄影','威尼斯，三十四张']],
+    img:'assets/news/venice-2026.webp', href:'../projects/venice-2026.html' },
+  { title:'摄影术二百年', alt:'Arles — film photography', type:'Photography 摄影', date:'2026.07', venue:['Arles 阿尔勒','74 frames 张'],
+    notes:[['Film Photography','Seventy-Four Frames, Arles'],['胶片摄影','阿尔勒，七十四张']],
+    img:'assets/news/arles-2026.webp', href:'../projects/arles-2026.html' },
+  { title:'晒后假日下', alt:'Marseille — film photography', type:'Photography 摄影', date:'2026.07', venue:['Marseille 马赛','32 frames 张'],
+    notes:[['Film Photography','Thirty-Two Frames, Marseille'],['胶片摄影','马赛，三十二张']],
+    img:'assets/news/marseille-2026.webp', href:'../projects/marseille-2026.html' },
+  { title:'RCA Degree Show', alt:'皇家艺术学院毕业展', type:'Exhibition 展览', date:'2026.06', venue:['Royal College of Art','London 伦敦'],
+    notes:[['As Fables Go By','Moving Image, Ceramics, Installation'],['《洋务运动》','影像、陶瓷与装置']],
+    img:'assets/news/rca-degree-show.webp', href:'../projects/asfablesgoby.html', vimeo:'1170432048' },
+  { title:'洋务时刻', alt:'Cambridge — film photography', type:'Photography 摄影', date:'2026.05', venue:['Cambridge 剑桥','14 frames 张'],
+    notes:[['Film Photography','Fourteen Frames, Cambridge'],['胶片摄影','剑桥，十四张']],
+    img:'assets/news/cambridge-2026.webp', href:'../projects/cambridge-2026.html' },
+  { title:'The Experience', alt:'《关中往事》放映', type:'Screening 放映', date:'2026.04', venue:['Moming Tang 莫名堂'],
+    notes:[['Digital Media Ontology Series','The Media-History Chapter'],['数字媒介本体系列','媒介历史分章']],
+    img:'assets/news/moming-tang.webp', href:'../projects/theexperience.html', vimeo:'1156675386' },
+  { title:'The Experience', alt:'入选第三十三届北京大学生电影节', type:'Selection 入选', date:'2026.03', venue:['33rd Beijing College Student Film Festival','北京国际电影节'],
+    notes:[['Beijing International Film Festival','International College Student Original Film'],['北京国际电影节','国际大学生原创影片单元']],
+    img:'assets/news/bjiff.webp', href:'../projects/theexperience.html', vimeo:'1156675386' },
+  { title:'As Fables Go By', alt:'《洋务运动》预告片放映', type:'Screening 放映', date:'2026.03', venue:['Genius Cinema'],
+    notes:[['Trailer Screening','Followed By A Public Discussion'],['预告片放映','映后公共讨论']],
+    img:'assets/news/genius-cinema.webp', href:'../projects/asfablesgoby.html', vimeo:'1170432048' },
+  { title:'Passing By', alt:'RCA 当代艺术实践中期展', type:'Exhibition 展览', date:'2026.02', venue:['Royal College of Art','London 伦敦'],
+    notes:[['Contemporary Art Practice','Work-in-Progress Show'],['当代艺术实践','中期展']],
+    img:'assets/news/rca-wip.webp', href:'../projects/passingby.html' },
+  { title:'The Urgency of the Arts', alt:'艺术的紧迫性工作坊', type:'Workshop 工作坊', date:'2026.01', venue:['Barbican','London 伦敦'],
+    notes:[['Barbican — Software Layer','With David Stothard & David Leung'],['《Barbican》软件层','与 David Stothard、David Leung 共同制作']],
+    img:'assets/news/barbican.webp', href:'../projects/barbican.html', vimeo:'1156540641' }
+];
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+
+const ITEMS = window.ITEMS;
+const COUNT = ITEMS.length;
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const html = document.documentElement;
+const hero = $('hero');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const touchLayoutMQ = matchMedia('(max-width: 991px)');
+const touchLayout = () => touchLayoutMQ.matches;
+const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const gsap = window.gsap;
+
+/* 原站的缓动：cubic-bezier(.32,.72,0,1)（discGlide / energy） */
+function bezier(x1, y1, x2, y2){
+  const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+  const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+  const sx = (t) => ((ax * t + bx) * t + cx) * t;
+  const sy = (t) => ((ay * t + by) * t + cy) * t;
+  const dx = (t) => (3 * ax * t + 2 * bx) * t + cx;
+  return (x) => {
+    if(x <= 0) return 0; if(x >= 1) return 1;
+    let t = x;
+    for(let i = 0; i < 8; i++){ const e = sx(t) - x; if(Math.abs(e) < 1e-6) break; const d = dx(t); if(Math.abs(d) < 1e-6) break; t -= e / d; }
+    return sy(clamp(t, 0, 1));
+  };
+}
+const glide = bezier(.32, .72, 0, 1);
+
+/* ─────────────── 颗粒 ─────────────── */
+(() => {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const x = c.getContext('2d'); const d = x.createImageData(128, 128);
+  for(let i = 0; i < d.data.length; i += 4){ d.data[i] = d.data[i + 1] = d.data[i + 2] = 0; d.data[i + 3] = Math.random() * 21; }
+  x.putImageData(d, 0, 0);
+  $('grain').style.backgroundImage = `url(${c.toDataURL()})`;
+})();
+
+/* ─────────────── 导航与 Index 片单 ─────────────── */
+const nav = $('nav'), idxBtn = $('idxBtn'), ddList = $('ddList'), ddContent = $('ddContent');
+$('idxCount').textContent = COUNT;
+ITEMS.forEach((it, i) => {
+  const row = document.createElement('div'); row.setAttribute('role', 'listitem');
+  const a = document.createElement('a');
+  a.className = 'dd-link'; a.href = it.href;
+  a.innerHTML = '<span class="dd-link__bg" aria-hidden="true"></span><span class="dd-link__inner"><h2 class="dd-link__label"></h2><span class="dd-year"><span class="dd-link__label"></span></span></span>';
+  a.querySelector('h2').textContent = it.title;
+  a.querySelector('.dd-year .dd-link__label').textContent = it.date;
+  a.addEventListener('click', (e) => { e.preventDefault(); setDropdown(false); gallery?.goTo(i, 'click'); });
+  row.appendChild(a); ddList.appendChild(row);
+});
+function sizeIndexLabel(){
+  const label = $('idxLabel');
+  const open = nav.dataset.dropdown === 'open' || (finePointer && idxBtn.matches(':hover'));
+  const el = label.querySelector(open ? '.idx-count' : '.idx-word');
+  label.style.width = el.scrollWidth + 'px';
+}
+idxBtn.addEventListener('mouseenter', sizeIndexLabel);
+idxBtn.addEventListener('mouseleave', sizeIndexLabel);
+function setDropdown(open){
+  nav.dataset.dropdown = open ? 'open' : 'closed';
+  idxBtn.setAttribute('aria-expanded', String(open));
+  $('navDropdown').setAttribute('aria-hidden', String(!open));
+  sizeIndexLabel();
+  if(open){
+    const cur = ddList.querySelector('[aria-current="true"]');
+    /* 当前条目停在列表顶部（前面留一行） */
+    if(cur){
+      const row = cur.getBoundingClientRect(), box = ddList.getBoundingClientRect();
+      ddContent.scrollTop = Math.max(0, row.top - box.top - row.height);
+    }
+    updateDropdownScroll();
+  }
+}
+idxBtn.addEventListener('click', (e) => { e.stopPropagation(); setDropdown(nav.dataset.dropdown !== 'open'); });
+$('pageBg').addEventListener('click', () => setDropdown(false));
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && nav.dataset.dropdown === 'open'){ setDropdown(false); idxBtn.focus(); } });
+function updateDropdownScroll(){
+  const max = ddContent.scrollHeight - ddContent.clientHeight;
+  const p = max > 0 ? ddContent.scrollTop / max : 0;
+  ddContent.style.setProperty('--fade-top', clamp(ddContent.scrollTop / 40, 0, 1).toFixed(3));
+  ddContent.style.setProperty('--fade-bottom', clamp((max - ddContent.scrollTop) / 40, 0, 1).toFixed(3));
+  const bar = $('ddBar'), prog = $('ddBarProg');
+  const ratio = max > 0 ? ddContent.clientHeight / ddContent.scrollHeight : 1;
+  prog.style.height = (ratio * 100) + '%';
+  prog.style.transform = `translateY(${p * (1 - ratio) / ratio * 100}%)`;
+  bar.style.visibility = max > 0 ? '' : 'hidden';
+}
+ddContent.addEventListener('scroll', updateDropdownScroll, { passive:true });
+/* 滚轮在片单里只滚片单 */
+ddContent.addEventListener('wheel', (e) => e.stopPropagation(), { passive:true });
+
+/* 手机停靠栏宽度 = 内容宽度 */
+function sizeDock(){
+  if(!touchLayout()){ nav.style.removeProperty('--nav-dock-width'); return; }
+  const list = $('navList');
+  let w = 0; [...list.children].forEach((li) => { if(getComputedStyle(li).display !== 'none') w += li.firstElementChild.getBoundingClientRect().width; });
+  const em = parseFloat(getComputedStyle(nav).fontSize);
+  nav.style.setProperty('--nav-dock-width', Math.ceil(w + em * 2.75) + 'px');
+}
+
+/* ─────────────── 信息面板：写入 + 遮罩切换（原站 disc transitions） ─────────────── */
+const T = { settleDelay:100, dragRevealCap:500, outDuration:.4, outLineStagger:.016, outItemStagger:.016, outShift:-120,
+            inDuration:.7, inLineStagger:.05, inItemStagger:.035, inGroupGap:.06, inShift:120, heightDuration:.5, reverseSpeed:1.6 };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+const CJK = /[　-鿿＀-￯]/;
+
+/* 两行平衡断句（原站影评的做法） */
+function balance(text){
+  const t = String(text).trim();
+  if(/\s/.test(t)){
+    const w = t.split(/\s+/); if(w.length < 2) return [t];
+    let best = 1, score = Infinity;
+    for(let k = 1; k < w.length; k++){
+      const a = w.slice(0, k).join(' '), b = w.slice(k).join(' ');
+      const s = Math.abs(a.length - b.length) + Math.abs(k - (w.length - k)) * 2;
+      if(s < score){ score = s; best = k; }
+    }
+    return [w.slice(0, best).join(' '), w.slice(best).join(' ')];
+  }
+  const m = t.match(/^(.+?[，、：])(.+)$/);
+  return m ? [m[1], m[2]] : [t];
+}
+
+function writePanel(i){
+  const it = ITEMS[i];
+  const set = (k, v) => hero.querySelectorAll(`[data-t="${k}"]`).forEach((el) => { el.innerHTML = v; });
+  set('title', esc(it.title));
+  set('alt', esc(it.alt));
+  set('type', esc(it.type));
+  set('date', esc(it.date));
+  set('venue', it.venue.map(esc).join('<br>'));
+  it.notes.forEach((n, k) => {
+    set('pub' + k, esc(n[0]));
+    set('quote' + k, balance(n[1]).map((l) => `<span data-quote-line>${esc(l)}</span>`).join(''));
+  });
+  hero.dataset.writtenIndex = i;
+}
+
+/* 影评宽度统一为最宽那条（原站 --testimonial-width） */
+function measureTestimonials(){
+  const wrap = $('testimonials'); if(getComputedStyle(wrap).display === 'none') return;
+  const probe = wrap.querySelector('.testimonial').cloneNode(true);
+  Object.assign(probe.style, { position:'absolute', left:'-100000px', top:'0', width:'max-content', minWidth:'0', visibility:'hidden' });
+  hero.querySelector('.experience_wrap').appendChild(probe);
+  let max = 0;
+  ITEMS.forEach((it) => it.notes.forEach((n) => {
+    probe.querySelector('[data-t^="pub"]').textContent = n[0];
+    probe.querySelector('[data-t^="quote"]').innerHTML = balance(n[1]).map((l) => `<span data-quote-line>${esc(l)}</span>`).join('');
+    max = Math.max(max, probe.offsetWidth);
+  }));
+  probe.remove();
+  hero.style.setProperty('--testimonial-width', Math.ceil(max) + 'px');
+}
+
+/* 把一段文字拆成逐行（每行一个遮罩） */
+function splitLines(el){
+  if(el.dataset.plain != null) return [...el.querySelectorAll('.line')];
+  el.dataset.plain = el.innerHTML;
+  const blocks = el.innerHTML.split(/<br\s*\/?>/i);
+  const tmp = document.createElement('div');
+  el.innerHTML = '';
+  const tokenSpans = [];
+  blocks.forEach((b, bi) => {
+    const block = document.createElement('span'); block.style.display = 'block';
+    tmp.innerHTML = b;
+    const hasQuoteLines = tmp.querySelector('[data-quote-line]');
+    if(hasQuoteLines){ [...tmp.children].forEach((q) => { const s = document.createElement('span'); s.style.display = 'block'; s.dataset.forced = '1'; s.textContent = q.textContent; block.appendChild(s); tokenSpans.push(s); }); }
+    else{
+      const text = tmp.textContent;
+      const toks = text.match(/[　-鿿＀-￯]|[^\s　-鿿＀-￯]+|\s+/g) || [];
+      toks.forEach((tk) => {
+        if(/^\s+$/.test(tk)){ block.appendChild(document.createTextNode(tk)); return; }
+        const s = document.createElement('span'); s.textContent = tk; block.appendChild(s); tokenSpans.push(s);
+      });
+    }
+    block.dataset.block = bi;
+    el.appendChild(block);
+  });
+  /* 按 offsetTop 分行 */
+  const lines = [];
+  let cur = null, top = null, curBlock = null;
+  tokenSpans.forEach((s) => {
+    const b = s.parentNode;
+    const tp = s.offsetTop;
+    if(s.dataset.forced || b !== curBlock || top === null || Math.abs(tp - top) > 2){ cur = []; lines.push(cur); top = tp; curBlock = b; }
+    cur.push(s);
+  });
+  const texts = lines.map((ln) => {
+    const first = ln[0], last = ln[ln.length - 1];
+    let t = '', n = first;
+    while(n){ t += n.textContent; if(n === last) break; n = n.nextSibling; }
+    return t.trim();
+  });
+  el.innerHTML = texts.map((t) => `<span class="line-mask"><span class="line">${esc(t)}</span></span>`).join('');
+  return [...el.querySelectorAll('.line')];
+}
+function unsplit(el){
+  if(el.dataset.plain == null) return;
+  el.innerHTML = el.dataset.plain; delete el.dataset.plain;
+}
+
+const flow = (() => {
+  const items = [];
+  hero.querySelectorAll('[data-group]').forEach((g) => {
+    const group = +g.dataset.group;
+    g.querySelectorAll('[data-t], [data-rule]').forEach((el) => {
+      items.push({ el, group, kind: el.hasAttribute('data-rule') ? 'rule' : 'text', mask: el.closest('[data-mask]') });
+    });
+  });
+  let state = 'hidden', outTl = null, inTl = null, lastChange = 0, poll = 0, pending = -1;
+  const setMasks = (clip) => items.forEach((it) => it.mask && it.mask.setAttribute('data-mask', clip ? 'clip' : ''));
+  const lockHeights = () => items.forEach((it) => { if(it.mask && !it.mask.style.height) it.mask.style.height = it.mask.offsetHeight + 'px'; });
+  const unlockHeights = () => items.forEach((it) => { if(it.mask) it.mask.style.height = ''; });
+  const visible = (it) => it.el.offsetParent !== null;
+
+  function hideAll(){
+    items.forEach((it) => it.kind === 'rule' ? gsap.set(it.el, { scaleX:0, transformOrigin:'left center' }) : gsap.set(it.el, { autoAlpha:0 }));
+  }
+  function out(){
+    if(reduce || state === 'hidden') return;
+    if(state === 'revealing' && inTl){
+      const tl = inTl; inTl = null; outTl = tl; state = 'hidden';
+      tl.eventCallback('onComplete', null);
+      tl.eventCallback('onReverseComplete', outDone);
+      tl.timeScale(T.reverseSpeed).reverse();
+      schedule(); return;
+    }
+    state = 'hidden';
+    lockHeights(); setMasks(true);
+    outTl = gsap.timeline({ onComplete: outDone });
+    items.forEach((it, k) => {
+      const at = k * T.outItemStagger;
+      if(it.kind === 'rule'){ outTl.to(it.el, { scaleX:0, transformOrigin:'right center', duration:T.outDuration, ease:glide, overwrite:'auto' }, at); return; }
+      const lines = visible(it) ? splitLines(it.el) : [it.el];
+      gsap.set(it.el, { autoAlpha:1 });
+      outTl.to(lines, { yPercent:T.outShift, duration:T.outDuration, ease:glide, stagger:T.outLineStagger, overwrite:'auto' }, at);
+    });
+    schedule();
+  }
+  function outDone(){
+    const tl = outTl; outTl = null;
+    if(tl) tl.kill();
+    items.forEach((it) => { if(it.kind !== 'rule'){ gsap.set(it.el, { autoAlpha:0 }); unsplit(it.el); gsap.set(it.el, { clearProps:'transform' }); } });
+    schedule();
+  }
+  function reveal(i){
+    inTl?.kill();
+    lockHeights();
+    writePanel(i);
+    if(reduce){ gsap.set(items.map((it) => it.el), { clearProps:'all' }); unlockHeights(); setMasks(false); state = 'visible'; return; }
+    state = 'revealing'; setMasks(true);
+    items.forEach((it) => {
+      if(it.kind === 'rule'){ gsap.set(it.el, { scaleX:0, transformOrigin:'left center' }); return; }
+      gsap.set(it.el, { clearProps:'transform' });
+      it.lines = visible(it) ? splitLines(it.el) : [it.el];
+      gsap.set(it.lines, { yPercent:T.inShift });
+      gsap.set(it.el, { autoAlpha:1 });
+    });
+    inTl = gsap.timeline({ onComplete: () => {
+      inTl = null;
+      items.forEach((it) => { if(it.kind !== 'rule') unsplit(it.el); });
+      gsap.set(items.map((it) => it.el), { clearProps:'opacity,visibility,transform' });
+      unlockHeights(); setMasks(false); state = 'visible';
+    } });
+    /* 遮罩高度跟着新内容伸缩 */
+    items.forEach((it) => {
+      if(!it.mask) return;
+      const from = it.mask.offsetHeight; it.mask.style.height = 'auto';
+      const to = it.mask.offsetHeight; it.mask.style.height = from + 'px';
+      if(Math.abs(from - to) > .5) inTl.to(it.mask, { height:to, duration:T.heightDuration, ease:glide }, 0);
+    });
+    let at = 0, g = items[0].group;
+    items.forEach((it) => {
+      if(it.group !== g){ g = it.group; at += T.inGroupGap; }
+      if(it.kind === 'rule') inTl.to(it.el, { scaleX:1, duration:T.inDuration, ease:glide, overwrite:'auto' }, at);
+      else inTl.to(it.lines, { yPercent:0, duration:T.inDuration, ease:glide, stagger:T.inLineStagger, overwrite:'auto' }, at);
+      at += T.inItemStagger;
+    });
+  }
+  function tick(){
+    poll = 0;
+    const now = performance.now();
+    if(state === 'hidden' && !outTl && pending >= 0 && gallery?.canReveal()){
+      const wait = hero.hasAttribute('data-dragging') ? T.dragRevealCap : T.settleDelay;
+      if(now - lastChange >= wait){ const i = gallery.index(); pending = -1; reveal(i); return; }
+    }
+    if(outTl || state === 'hidden') schedule();
+  }
+  function schedule(delay = 40){ clearTimeout(poll); poll = setTimeout(tick, delay); }
+  return {
+    init(i){ writePanel(i); if(reduce){ state = 'visible'; return; } hideAll(); state = 'hidden'; pending = i; lastChange = performance.now(); schedule(T.settleDelay); },
+    change(i){ pending = i; lastChange = performance.now(); if(reduce){ writePanel(i); return; } out(); schedule(T.settleDelay); },
+    forceOut(){ pending = -1; if(state !== 'hidden') out(); },
+    release(i){ pending = i; lastChange = performance.now(); schedule(T.settleDelay); },
+  };
+})();
+
+/* ─────────────── 盘面贴图：作品图 + 沿边弧形小字 + 底部标题与字标（照原站 disc.webp 的版式） ─────────────── */
+function discSides(it){
+  return [it.type, ...it.venue, it.date, 'Yi Huang'].join('  ·  ').toUpperCase();
+}
+function drawArc(ctx, text, cx, cy, r, startDeg, size, color){
+  ctx.save();
+  ctx.font = `400 ${size}px "IBM Plex Mono", Menlo, monospace`;
+  ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const track = size * .28;
+  let a = startDeg * Math.PI / 180;
+  const maxA = a + Math.PI * 1.12;
+  for(const ch of text){
+    const w = ctx.measureText(ch).width + track;
+    const da = w / r;
+    if(a + da > maxA) break;
+    const mid = a + da / 2;
+    ctx.save();
+    ctx.translate(cx + r * Math.cos(mid), cy + r * Math.sin(mid));
+    ctx.rotate(mid + Math.PI / 2);
+    ctx.fillText(ch, 0, 0);
+    ctx.restore();
+    a += da;
+  }
+  ctx.restore();
+}
+function luminance(ctx, x, y, w, h){
+  const d = ctx.getImageData(x, y, w, h).data; let s = 0, n = 0;
+  for(let i = 0; i < d.length; i += 16){ s += .2126 * d[i] + .7152 * d[i + 1] + .0722 * d[i + 2]; n++; }
+  return s / n / 255;
+}
+function wrapTitle(ctx, text, maxW){
+  const words = CJK.test(text) && !/\s/.test(text) ? [...text] : text.split(/\s+/);
+  const joiner = CJK.test(text) && !/\s/.test(text) ? '' : ' ';
+  const lines = []; let cur = '';
+  words.forEach((w) => { const t = cur ? cur + joiner + w : w; if(ctx.measureText(t).width > maxW && cur){ lines.push(cur); cur = w; } else cur = t; });
+  if(cur) lines.push(cur);
+  return lines;
+}
+function makeDiscArt(img, it, size){
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const R = size / 2;
+  ctx.save();
+  ctx.beginPath(); ctx.arc(R, R, R, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = '#0c0c0e'; ctx.fillRect(0, 0, size, size);
+  const ar = img.naturalWidth / img.naturalHeight;
+  let w = size, h = size; if(ar > 1) w = h * ar; else h = w / ar;
+  ctx.drawImage(img, R - w / 2, R - h / 2, w, h);
+  ctx.restore();
+
+  /* 沿上缘的弧形小字（原站：DIRECTED BY … · 演员 … · 年份 · A24） */
+  drawArc(ctx, discSides(it), R, R, R * .905, 196, size * .0175, 'rgba(255,255,255,.88)');
+
+  /* 底部：标题 + Yi Huang 字标，亮底用橙红、暗底用白 */
+  const lum = luminance(ctx, Math.round(size * .2), Math.round(size * .66), Math.round(size * .6), Math.round(size * .24));
+  const color = lum > .55 ? '#e4553b' : '#ffffff';
+  ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  let fs = size * .105;
+  ctx.font = `400 ${fs}px "Instrument Serif", "Songti SC", "STSong", serif`;
+  let lines = wrapTitle(ctx, it.title.toUpperCase(), size * .62);
+  if(lines.length > 2){ fs *= .78; ctx.font = `400 ${fs}px "Instrument Serif", "Songti SC", "STSong", serif`; lines = wrapTitle(ctx, it.title.toUpperCase(), size * .66).slice(0, 3); }
+  const lh = fs * .92;
+  const baseY = size * .79 - (lines.length - 1) * lh;
+  lines.forEach((l, k) => ctx.fillText(l, R, baseY + k * lh));
+  ctx.font = `italic 400 ${size * .05}px "Instrument Serif", serif`;
+  ctx.fillText('Yi Huang', R, size * .875);
+  return c;
+}
+
+/* ─────────────── Three.js 光盘（参数照原站） ─────────────── */
+const P = {
+  texGrain:.59, texPrint:.35, texScratches:.36, texGloss:1,
+  frontClearcoat:.8, frontRough:.42, frontMetal:.48,
+  backBaseColor:'#1A1E2A', backRough:.23, backMetal:1, backClearcoat:.34, backIridescence:1, backIridIOR:1.86, backIridThickness:900, backRadialDetail:1,
+  edgeColor:'#FFFFFF', edgeRoughness:.04, edgeMetalness:.55, edgeBleed:.026,
+  hubColor:'#FFFFFF', hubTransmission:.68, hubRoughness:.38, hubIOR:2, hubMatrixWidth:.4, hubFrostedEdge:.54,
+  discThickness:.01, edgeBevel:1, holeSize:.14, hubSize:.24,
+  galleryScale:1.08, hGap:2.3, depthGap:1, activeDiscY:.06, galleryRotX:-30, galleryRotY:-30, inactiveScale:.8,
+  cameraDistance:4.4, cameraFOV:40, exposure:.86, environmentIntensity:1,
+  keyIntensity:.75, keyColor:'#FFF9E8', keyX:3.5, keyY:-8, fillIntensity:.3, rimIntensity:.75, rimColor:'#499FF5', topStripIntensity:1.9, fogColor:'#FFFFFF',
+  hoverTilt:.21, dragSensitivity:.95, dragVelocitySmoothing:.32, dragMaxVelocity:.5, friction:.89, maxSpinAngle:180, resetDuration:1.2, dragStartDistance:5, snapDuration:.46,
+  flowLean:.055, flowLeanMax:.3, flowBank:.32, flowDip:.014, flowDipMax:.09,
+  followTight:15, followBase:11, followFalloff:1.15, followMin:6.5, spawnSlide:.9, snapFreq:9.5, snapDamping:12,
+  wipePush:.012, wipePushMax:.5, wipeSpin:.009, wipeSpinMax:.4, wipeMinSpeed:9, pushDamping:4.5, pushReturn:3.4, pressDepth:.55, pressTilt:1.5,
+  flightRecede:2.2, flightStagger:.45, flightStaggerIn:.28, flightStaggerMax:4, flightPopScale:.35, flightPopScaleIn:.02,
+  touchFlickVelocity:.035, touchPeek:1, touchMinScale:.3, touchMaxScale:3, touchGap:2.2, touchDepth:.5, touchLeadMaxHeight:.6, touchDropY:1, touchActiveScale:1.5, touchInactiveScale:.6,
+  wheelNoiseFloor:.3, wheelStepThreshold:6, wheelEventCap:24, wheelEnvelopeTau:550, wheelRiseFactor:1.2, wheelTickGap:34, wheelTickRatio:1, wheelPauseGap:130, wheelIdleReset:150,
+  wheelMinStepTick:90, wheelMinStepFlick:190, wheelSustainDelay:480, wheelSustainRatio:.8,
+  scribbleColor:'#000000', scribbleFps:10, scribblePoints:24, scribbleJitter:.028, scribbleLoops:2, scribbleLoopGap:.045, scribblePadding:.06, scribbleWidth:.012,
+  scribbleSweep:.68, scribbleSweepJitter:.4, scribbleIn:[.3,.5,.72], scribbleOut:[.72,.5,.3], scribbleLag:15,
+  artResolution:1024,
+};
+
+let gallery = null;
+
+function valueNoise(x, y){ const v = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return v - Math.floor(v); }
+function heightToNormal(hm, size){
+  const d = new Uint8ClampedArray(size * size * 4);
+  for(let y = 0; y < size; y++) for(let x = 0; x < size; x++){
+    const l = hm[y * size + Math.max(0, x - 1)], r = hm[y * size + Math.min(size - 1, x + 1)];
+    const u = hm[Math.max(0, y - 1) * size + x], dn = hm[Math.min(size - 1, y + 1) * size + x];
+    let nx = l - r, ny = u - dn, nz = 1; const k = 1 / Math.hypot(nx, ny, nz);
+    const i = (y * size + x) * 4;
+    d[i] = (nx * k * .5 + .5) * 255; d[i + 1] = (ny * k * .5 + .5) * 255; d[i + 2] = (nz * k * .5 + .5) * 255; d[i + 3] = 255;
+  }
+  return d;
+}
+/* 盘面凹凸：同心光学纹 + 印刷颗粒 + 划痕与灰尘 */
+function frontNormalData(size){
+  const hm = new Float32Array(size * size), c = size / 2;
+  for(let y = 0; y < size; y++) for(let x = 0; x < size; x++){
+    const r = Math.hypot(x - c, y - c) + 1e-4;
+    hm[y * size + x] = Math.sin(r * .6) * .02 + (valueNoise(x * .4, y * .4) - .5) * .5 * P.texPrint;
+  }
+  const scratches = Math.floor(30 * P.texScratches);
+  for(let s = 0; s < scratches; s++){
+    const ang = Math.random() * Math.PI * 2, len = 30 + Math.random() * 220, sx = Math.random() * size, sy = Math.random() * size;
+    const depth = (Math.random() * .7 + .2) * P.texScratches;
+    for(let t = 0; t < len; t++){
+      const px = Math.round(sx + Math.cos(ang) * t), py = Math.round(sy + Math.sin(ang) * t);
+      if(px < 1 || py < 1 || px >= size - 1 || py >= size - 1) continue;
+      hm[py * size + px] -= depth;
+    }
+  }
+  for(let s = 0, n = Math.floor(500 * P.texScratches); s < n; s++){
+    hm[Math.floor(Math.random() * size) * size + Math.floor(Math.random() * size)] += (Math.random() - .5) * P.texScratches * 1.2;
+  }
+  return heightToNormal(hm, size);
+}
+function backNormalData(size){
+  const hm = new Float32Array(size * size), c = size / 2;
+  for(let y = 0; y < size; y++) for(let x = 0; x < size; x++){
+    const r = Math.hypot(x - c, y - c);
+    hm[y * size + x] = Math.sin(r * 3.2) * .5 * P.backRadialDetail + (valueNoise(x * .6, y * .6) - .5) * .06 * P.backRadialDetail;
+  }
+  return heightToNormal(hm, size);
+}
+function roughData(size, front){
+  const d = new Uint8ClampedArray(size * size * 4), c = size / 2;
+  for(let y = 0; y < size; y++) for(let x = 0; x < size; x++){
+    let r;
+    if(front){
+      r = P.frontRough + (valueNoise(x * 2.3, y * 2.3) - .5) * .35 * P.texGrain + (valueNoise(x * .5, y * .5) - .5) * .3 * P.texPrint;
+      r -= (Math.sin(Math.hypot(x - c, y - c) / (size * .5) * 14) * .5 + .5) * .5 * P.texGloss;
+    }else{
+      const rr = Math.hypot(x - c, y - c);
+      r = P.backRough + Math.sin(rr * 1.6) * .06 * P.backRadialDetail + (valueNoise(x * 1.2, y * 1.2) - .5) * .04 * P.backRadialDetail;
+    }
+    const v = clamp(r, .02, 1) * 255, i = (y * size + x) * 4;
+    d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
+  }
+  return d;
+}
+function dataCanvas(data, size){
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  c.getContext('2d').putImageData(new ImageData(data, size, size), 0, 0); return c;
+}
+/* 环境：暗色渐变 + 几条横向亮带（反射出盘面上的高光条） */
+function envCanvas(){
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 512;
+  const x = c.getContext('2d'); const g = x.createLinearGradient(0, 0, 0, 512);
+  g.addColorStop(0, '#25282f'); g.addColorStop(.5, '#0e0f13'); g.addColorStop(1, '#020203');
+  x.fillStyle = g; x.fillRect(0, 0, 1024, 512);
+  const w = .07;
+  [[.14, w, 1], [.4, w * .7, .6], [.26, w * 1.1, .85], [.62, w * .5, .35]].forEach(([p, h, s]) => {
+    const b = x.createLinearGradient(0, 512 * (p - h), 0, 512 * (p + h));
+    b.addColorStop(0, 'rgba(255,255,255,0)'); b.addColorStop(.5, `rgba(255,255,255,${Math.max(.1, .85 * s)})`); b.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = b; x.fillRect(0, 512 * (p - h), 1024, 512 * h * 2);
+  });
+  return c;
+}
+function hubMatrixCanvas(){
+  const c = document.createElement('canvas'); c.width = c.height = 512;
+  const x = c.getContext('2d'); const g = x.createRadialGradient(256, 256, 40.96, 256, 256, 256);
+  g.addColorStop(0, '#d9dde4'); g.addColorStop(.42, '#f0f2f5'); g.addColorStop(.72, '#cfd4dc'); g.addColorStop(1, '#b8bec8');
+  x.fillStyle = g; x.fillRect(0, 0, 512, 512);
+  x.lineWidth = 1;
+  [.255, .285, .315, .345].forEach((r, k) => { x.strokeStyle = `rgba(255,255,255,${.14 - k * .018})`; x.beginPath(); x.arc(256, 256, 512 * r, 0, Math.PI * 2); x.stroke(); });
+  return c;
+}
+
+async function initGallery(){
+  let renderer;
+  try{ renderer = new THREE.WebGLRenderer({ alpha:true, antialias:true, powerPreference:'high-performance' }); }
+  catch(e){ return null; }
+  const mobile = matchMedia('(max-width: 767px)').matches;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? 1.5 : 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = P.exposure;
+  renderer.setClearColor(0, 0);
+  if('transmissionResolutionScale' in renderer) renderer.transmissionResolutionScale = .5;
+  const wrap = $('canvasWrap');
+  wrap.appendChild(renderer.domElement);
+  RectAreaLightUniformsLib.init();
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(P.fogColor, 7, 14);
+  const camera = new THREE.PerspectiveCamera(P.cameraFOV, 1, .1, 100);
+  camera.position.set(0, 0, P.cameraDistance); camera.lookAt(0, 0, 0);
+  const G0 = new THREE.Group();
+  G0.rotation.x = THREE.MathUtils.degToRad(P.galleryRotX);
+  G0.rotation.y = THREE.MathUtils.degToRad(P.galleryRotY);
+  G0.scale.setScalar(P.galleryScale);
+  scene.add(G0);
+  scene.add(new THREE.AmbientLight(0xffffff, .25));
+  const key = new THREE.DirectionalLight(P.keyColor, P.keyIntensity); key.position.set(P.keyX, P.keyY, 6); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, P.fillIntensity); fill.position.set(-5, -2, 4); scene.add(fill);
+  const rim = new THREE.DirectionalLight(P.rimColor, P.rimIntensity); rim.position.set(0, 3, -6); scene.add(rim);
+  const strip = new THREE.RectAreaLight(0xffffff, P.topStripIntensity, 6, .4); strip.position.set(0, 3.2, 3); strip.lookAt(0, 0, 0); scene.add(strip);
+
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envTex = new THREE.CanvasTexture(envCanvas()); envTex.mapping = THREE.EquirectangularReflectionMapping;
+  scene.environment = pmrem.fromEquirectangular(envTex).texture;
+  scene.environmentIntensity = P.environmentIntensity;
+  envTex.dispose(); pmrem.dispose();
+
+  const aniso = renderer.capabilities.getMaxAnisotropy();
+  const tex = (canvas, cs = THREE.NoColorSpace) => { const t = new THREE.CanvasTexture(canvas); t.colorSpace = cs; t.anisotropy = aniso; return t; };
+  const frontNormal = tex(dataCanvas(frontNormalData(1024), 1024));
+  const backNormal = tex(dataCanvas(backNormalData(1024), 1024));
+  const frontRough = tex(dataCanvas(roughData(512, true), 512));
+  const backRough = tex(dataCanvas(roughData(512, false), 512));
+  const matrixTex = tex(hubMatrixCanvas(), THREE.SRGBColorSpace);
+  const ph = document.createElement('canvas'); ph.width = ph.height = 16; const phx = ph.getContext('2d'); phx.fillStyle = '#0c0c0e'; phx.fillRect(0, 0, 16, 16);
+  const placeholder = tex(ph, THREE.SRGBColorSpace);
+
+  /* 几何：盘面环 + 背面 + 外缘倒角 + 透明盘心（三圈） */
+  const holeR = P.holeSize, hubR = P.hubSize, th = P.discThickness, outerR = 1 - P.edgeBleed;
+  const planarUV = (g) => { const p = g.attributes.position, uv = g.attributes.uv; for(let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) * .5 + .5, p.getY(i) * .5 + .5); uv.needsUpdate = true; return g; };
+  const frontGeo = planarUV(new THREE.RingGeometry(hubR, outerR, 220, 1));
+  const backGeo = planarUV(new THREE.RingGeometry(hubR, outerR, 220, 1));
+  const edgeGeo = (() => {
+    const e = th / 2, b = .0015 + P.edgeBevel * Math.min(th * .55, .018);
+    const g = new THREE.LatheGeometry([
+      new THREE.Vector2(outerR, e), new THREE.Vector2(1 - b, e), new THREE.Vector2(1, e - b),
+      new THREE.Vector2(1, -e + b), new THREE.Vector2(1 - b, -e), new THREE.Vector2(outerR, -e)], 256);
+    g.computeVertexNormals(); return g;
+  })();
+  /* 盘心圆环：内外壁 + 波浪形上下表面 */
+  function hubRing(rIn, rOut, h, wave, seg){
+    const o = h / 2, a = Math.max(.002, rIn), span = Math.max(1e-4, rOut - a);
+    const pts = [new THREE.Vector2(a, -o), new THREE.Vector2(a, o)];
+    for(let k = 0; k <= 5; k++){ const t = k / 5; pts.push(new THREE.Vector2(a + span * t, o * (1 - wave) + o * wave * (.6 + .4 * Math.cos(t * Math.PI * 3)))); }
+    pts.push(new THREE.Vector2(rOut, o * .92), new THREE.Vector2(rOut, -o * .92));
+    for(let k = 5; k >= 0; k--){ const t = k / 5; pts.push(new THREE.Vector2(a + span * t, -(o * (1 - wave) + o * wave * (.6 + .4 * Math.cos(t * Math.PI * 3))))); }
+    const g = new THREE.LatheGeometry(pts, seg); g.computeVertexNormals(); return g;
+  }
+  const hr = holeR, band = hubR - hr, frostOut = hr + band * .34, matrixOut = frostOut + band * P.hubMatrixWidth, hh = th * 1.02;
+  const hubGeo = hubRing(matrixOut, hubR, hh, .22, 160);
+  const matrixGeo = hubRing(frostOut, matrixOut, hh * .88, .12, 128);
+  const frostGeo = hubRing(hr, frostOut, hh * .96, .4, 128);
+  const pickGeo = new THREE.CircleGeometry(1, 24);
+  const pickMat = new THREE.MeshBasicMaterial({ visible:false, side:THREE.DoubleSide, depthWrite:false });
+
+  const backMat = new THREE.MeshPhysicalMaterial({
+    color:new THREE.Color(P.backBaseColor), roughness:P.backRough, metalness:P.backMetal, roughnessMap:backRough,
+    clearcoat:P.backClearcoat, clearcoatRoughness:.06, iridescence:P.backIridescence, iridescenceIOR:P.backIridIOR,
+    iridescenceThicknessRange:[140, P.backIridThickness], normalMap:backNormal, normalScale:new THREE.Vector2(.5, .5), envMapIntensity:1.5 });
+  const edgeMat = new THREE.MeshPhysicalMaterial({ color:new THREE.Color(P.edgeColor), roughness:P.edgeRoughness, metalness:P.edgeMetalness,
+    clearcoat:.7, clearcoatRoughness:.05, envMapIntensity:1.8, side:THREE.DoubleSide });
+  const hubMat = new THREE.MeshPhysicalMaterial({ color:new THREE.Color(P.hubColor), roughness:P.hubRoughness, metalness:0, transmission:P.hubTransmission,
+    thickness:.6, ior:P.hubIOR, clearcoat:1, clearcoatRoughness:.04, envMapIntensity:1.3, transparent:true, side:THREE.DoubleSide });
+  const matrixMat = new THREE.MeshPhysicalMaterial({ color:new THREE.Color(0xdfe3e9), map:matrixTex, roughness:.28, metalness:.82,
+    clearcoat:.7, clearcoatRoughness:.12, envMapIntensity:1.45, side:THREE.DoubleSide });
+  const frostMat = new THREE.MeshPhysicalMaterial({ color:new THREE.Color(0xeef1f5), roughness:.25 + P.hubFrostedEdge * .55, metalness:0,
+    transmission:(1 - P.hubFrostedEdge) * .5, thickness:.3, ior:1.5, clearcoat:.4, clearcoatRoughness:.3, envMapIntensity:.9, transparent:true, side:THREE.DoubleSide });
+
+  const discs = ITEMS.map((it, index) => {
+    const group = new THREE.Group(), spin = new THREE.Group(); group.add(spin);
+    const frontMat = new THREE.MeshPhysicalMaterial({
+      map:placeholder, roughness:P.frontRough, metalness:P.frontMetal, roughnessMap:frontRough, clearcoat:P.frontClearcoat,
+      clearcoatRoughness:.18 * (1 - P.texGloss), normalMap:frontNormal, normalScale:new THREE.Vector2(.3, .3), envMapIntensity:.85 });
+    const front = new THREE.Mesh(frontGeo, frontMat), back = new THREE.Mesh(backGeo, backMat), edge = new THREE.Mesh(edgeGeo, edgeMat);
+    const hub = new THREE.Mesh(hubGeo, hubMat), matrix = new THREE.Mesh(matrixGeo, matrixMat), frost = new THREE.Mesh(frostGeo, frostMat);
+    front.position.z = th / 2 + 6e-4; back.position.z = -th / 2 - 6e-4; back.rotation.y = Math.PI;
+    edge.rotation.x = hub.rotation.x = matrix.rotation.x = frost.rotation.x = Math.PI / 2;
+    spin.add(front, back, edge, hub, matrix, frost);
+    const pick = new THREE.Mesh(pickGeo, pickMat); pick.renderOrder = -1; pick.userData.index = index; group.add(pick);
+    G0.add(group);
+    return { index, group, spin, pick, frontMat, hover:0, spinX:0, spinY:0, resetTween:null, fresh:true,
+             pushX:0, pushY:0, pushZ:0, pushVX:0, pushVY:0, pushVZ:0, pushRotX:0, pushRotY:0, pushRotVX:0, pushRotVY:0 };
+  });
+  const picks = discs.map((d) => d.pick);
+
+  /* 盘面贴图异步生成 */
+  const artSize = clamp(P.artResolution, 512, 1536);
+  const fontsReady = Promise.all([
+    document.fonts.load(`400 40px "Instrument Serif"`), document.fonts.load(`italic 400 40px "Instrument Serif"`),
+    document.fonts.load(`400 20px "IBM Plex Mono"`)]).catch(() => {});
+  const artCache = new Map();
+  function loadArt(i){
+    if(artCache.has(i)) return artCache.get(i);
+    const p = new Promise((resolve) => {
+      const img = new Image(); img.decoding = 'async';
+      img.onload = async () => {
+        await fontsReady;
+        const t = tex(makeDiscArt(img, ITEMS[i], artSize), THREE.SRGBColorSpace);
+        try{ renderer.initTexture(t); }catch(e){}
+        discs[i].frontMat.map = t; discs[i].frontMat.needsUpdate = true; kick(2); resolve();
+      };
+      img.onerror = () => { console.warn('Could not load disc artwork:', ITEMS[i].img); resolve(); };
+      img.src = ITEMS[i].img;
+    });
+    artCache.set(i, p); return p;
+  }
+
+  /* ── 状态 ── */
+  let L = 0;              /* 连续位置（浮点） */
+  let W = -1;             /* 当前正前方的条目 */
+  let dragVel = 0, spring = 0, flowVel = 0, lastL = 0;
+  let hovered = -1, grabbed = -1, dragging = false, pointerDown = false, pointerId = -1, touchPtr = false, keyboardNav = false;
+  let flight = false, force = 3, raf = 0, last = performance.now(), ready = false, dragSpan = 0, T0 = P.galleryScale;
+  const Gf = { others:1, active:1, inbound:false };
+  const tweenL = { value:0 };
+  let targetLock = -1, goSeq = 0;
+  const ndc = new THREE.Vector2(), ray = new THREE.Raycaster(), hitUV = { x:0, y:0 };
+  let ptrNX = 0, ptrNY = 0, pickDirty = false, lastMoveT = 0, lastMX = 0, lastMY = 0, mvx = 0, mvy = 0;
+  let downX = 0, downY = 0, prevX = 0, prevY = 0, prevT = 0, pressCandidate = -1, suppressClickUntil = 0;
+
+  const kick = (n = 2) => { force = Math.max(force, n); start(); };
+  const activeIdx = () => Math.round(clamp(L, 0, COUNT - 1));
+  const tweening = () => gsap.isTweening(tweenL);
+
+  function setActive(i){
+    if(i === W) return;
+    W = i;
+    hero.dataset.activeIndex = i;
+    ddList.querySelectorAll('.dd-link').forEach((a, k) => a.setAttribute('aria-current', String(k === i)));
+    clearTimeout(setActive.t);
+    setActive.t = setTimeout(() => { $('live').textContent = `${ITEMS[i].title}, ${i + 1} of ${COUNT}`; }, 350);
+    [i, i - 1, i + 1, i - 2, i + 2].forEach((k) => { if(k >= 0 && k < COUNT) loadArt(k); });
+    flow.change(i);
+    kick();
+  }
+
+  /* 手机：相邻盘刚好露出屏幕边缘（原站 touchFit） */
+  const tv = new THREE.Vector3(), iq = new THREE.Quaternion();
+  const touchOffset = (m, out) => { const n = Math.min(Math.abs(m), 2.5); return out.set(m * P.touchGap, -n * P.touchDropY, -n * P.touchDepth); };
+  const touchLocal = (m) => { touchOffset(m, tv); iq.copy(G0.quaternion).invert(); return tv.applyQuaternion(iq); };
+  const projX = (scale, m) => { touchOffset(m, tv).multiplyScalar(scale).project(camera); return tv.x; };
+  const reach = (scale) => Math.max(Math.abs(projX(scale, 1)), Math.abs(projX(scale, -1)));
+  function fitTouch(){
+    camera.updateMatrixWorld();
+    if(!touchLayout()){ G0.scale.setScalar(T0); dragSpan = 0; return; }
+    const peek = Math.max(.6, P.touchPeek);
+    let lo = T0 * P.touchMinScale, hi = T0 * Math.max(1, P.touchMaxScale), r;
+    if(reach(lo) > peek) r = lo; else if(reach(hi) < peek) r = hi;
+    else{ for(let k = 0; k < 24; k++){ const m = (lo + hi) / 2; if(reach(m) > peek) hi = m; else lo = m; } r = (lo + hi) / 2; }
+    const lead = Math.max(.5, P.touchActiveScale), cap = clamp(P.touchLeadMaxHeight, .2, 1);
+    tv.set(0, lead * r, 0).project(camera); if(tv.y > cap) r *= cap / tv.y;
+    G0.scale.setScalar(r);
+    const avg = (Math.abs(projX(r, 1)) + Math.abs(projX(r, -1))) / 2;
+    dragSpan = avg > .05 ? clamp(2 / avg, 1, 4) : 0;
+  }
+  function resize(){
+    const w = Math.max(1, wrap.clientWidth), h = Math.max(1, wrap.clientHeight);
+    let pr = Math.min(devicePixelRatio || 1, w <= 767 ? 1.5 : 2);
+    if(w * h * pr * pr > 12e6) pr = Math.sqrt(12e6 / (w * h));
+    renderer.setPixelRatio(pr); renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    fitTouch(); kick(3);
+  }
+
+  /* ── 排布：每一帧把每张盘推向目标位置（原站 layout） ── */
+  function layout(dt, snap){
+    const n = activeIdx();
+    const flowOn = !reduce && !flight;
+    const lean = flowOn ? clamp(Math.sign(flowVel) * Math.sqrt(Math.abs(flowVel)) * P.flowLean, -P.flowLeanMax, P.flowLeanMax) : 0;
+    const dip = flowOn ? Math.min(P.flowDipMax, Math.abs(flowVel) * P.flowDip) : 0;
+    const followK = dragging ? P.followTight : P.followBase;
+    const touch = touchLayout();
+    const leadScale = touch ? Math.max(.5, P.touchActiveScale) : 1;
+    const restScale = touch ? clamp(P.touchInactiveScale, .2, 1) : P.inactiveScale;
+    let residual = 0;
+    discs.forEach((d) => {
+      const p = d.index, m = p - L, h = Math.abs(m), isActive = p === n;
+      const a = m * .35, v = Math.max(th * 3, .12, P.depthGap);
+      let x = Math.sin(a) * P.hGap * 2.4, y = (isActive ? P.activeDiscY : 0) - dip * (isActive ? .7 : 1), z = -Math.cos(a) * v * 2.4 + v * 2.4;
+      if(touch){ const o = touchLocal(m); x = o.x; y += o.y; z = o.z; }
+      let rx = 0, ry = -a + lean * (isActive ? 1 : 1.12);
+      if(touch) ry = clamp(-m, 0, 1) * -2 * THREE.MathUtils.degToRad(P.galleryRotY) + lean * (isActive ? 1 : 1.12);
+      const rz = -lean * P.flowBank * (isActive ? .7 : 1);
+      const base = isActive ? leadScale : Math.max(restScale, 1 - h * (1 - restScale) * (touch ? 1 : .6));
+      let s, vis = true;
+      if(isActive) s = base * Gf.active;
+      else{
+        const e = clamp(Gf.others, 0, 2), inb = Gf.inbound;
+        const st = clamp(inb ? P.flightStaggerIn : P.flightStagger, 0, .9), rmax = Math.max(1, Math.round(P.flightStaggerMax));
+        const lag = (Math.min(h, rmax) / rmax) * st, span = Math.max(.1, 1 - st);
+        const o = clamp((Math.min(1, e) - lag) / span, 0, 1);
+        const k = (inb ? glide(o) : o * (2 - o)) + Math.max(0, e - 1);
+        vis = k > clamp(inb ? P.flightPopScaleIn : P.flightPopScale, 0, .9);
+        s = base * k;
+        const rec = 1 - Math.min(1, k); if(rec > 1e-4) z -= rec * P.flightRecede;
+      }
+      d.group.visible = vis;
+      const hv = (hovered === p && grabbed < 0) ? 1 : 0;
+      d.hover += (hv - d.hover) * Math.min(1, dt * 10);
+      if(d.hover > .001){ rx += d.hover * P.hoverTilt * ptrNY; ry += d.hover * P.hoverTilt * ptrNX; }
+      const kk = clamp(followK - h * P.followFalloff, P.followMin, P.followTight);
+      const A = snap || reduce || flight ? 1 : Math.min(1, dt * kk);
+      if(flight){ d.pushX = d.pushY = d.pushZ = d.pushVX = d.pushVY = d.pushVZ = d.pushRotX = d.pushRotY = d.pushRotVX = d.pushRotVY = 0; }
+      else{
+        const mag = Math.abs(d.pushX) + Math.abs(d.pushY) + Math.abs(d.pushZ) + Math.abs(d.pushVX) + Math.abs(d.pushVY) + Math.abs(d.pushVZ)
+                  + Math.abs(d.pushRotX) + Math.abs(d.pushRotY) + Math.abs(d.pushRotVX) + Math.abs(d.pushRotVY);
+        if(mag > 8e-4){
+          const damp = Math.exp(-P.pushDamping * dt), ret = Math.min(1, dt * P.pushReturn);
+          d.pushX += d.pushVX * dt; d.pushVX *= damp; d.pushY += d.pushVY * dt; d.pushVY *= damp; d.pushZ += d.pushVZ * dt; d.pushVZ *= damp;
+          d.pushRotX += d.pushRotVX * dt; d.pushRotVX *= damp; d.pushRotY += d.pushRotVY * dt; d.pushRotVY *= damp;
+          d.pushX -= d.pushX * ret; d.pushY -= d.pushY * ret; d.pushZ -= d.pushZ * ret; d.pushRotX -= d.pushRotX * ret; d.pushRotY -= d.pushRotY * ret;
+          x += d.pushX; y += d.pushY; z += d.pushZ; residual += mag;
+        }else if(mag > 0){ d.pushX = d.pushY = d.pushZ = d.pushVX = d.pushVY = d.pushVZ = d.pushRotX = d.pushRotY = d.pushRotVX = d.pushRotVY = 0; }
+      }
+      const g = d.group;
+      if(d.fresh){ g.position.set(x, y, z); g.rotation.set(rx, ry, rz); g.scale.setScalar(s); d.fresh = false; }
+      else{
+        g.position.x += (x - g.position.x) * A; g.position.y += (y - g.position.y) * A; g.position.z += (z - g.position.z) * A;
+        g.scale.setScalar(g.scale.x + (s - g.scale.x) * A);
+        g.rotation.x += (rx - g.rotation.x) * A; g.rotation.y += (ry - g.rotation.y) * A; g.rotation.z += (rz - g.rotation.z) * A;
+      }
+      if(grabbed !== p && !d.resetTween) d.spinX += (0 - d.spinX) * Math.min(1, dt * 2.5);
+      d.spin.rotation.x = d.spinX + d.pushRotX;
+      d.spin.rotation.y = d.spinY + d.pushRotY;
+      g.renderOrder = Math.round(500 + g.position.z * 10 - p * .01);
+      residual += Math.abs(x - g.position.x) + Math.abs(y - g.position.y) + Math.abs(z - g.position.z) + Math.abs(s - g.scale.x)
+                + Math.abs(rx - g.rotation.x) + Math.abs(ry - g.rotation.y) + Math.abs(rz - g.rotation.z) + Math.abs(hv - d.hover);
+      if(grabbed !== p) residual += Math.abs(d.spinX);
+      if(d.resetTween) residual += 1;
+    });
+    return residual;
+  }
+
+  /* ── 手绘圈（悬停正前方的盘时出现，10fps 抖动重画） ── */
+  const scribble = new THREE.Group(); scribble.visible = false; G0.add(scribble);
+  const segs = P.scribblePoints * 3;
+  const scribbleMat = new THREE.MeshBasicMaterial({ color:new THREE.Color(P.scribbleColor), side:THREE.DoubleSide, depthWrite:false, toneMapped:false, fog:false });
+  const loops = [];
+  for(let k = 0; k < P.scribbleLoops; k++){
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array((segs + 1) * 2 * 3), 3));
+    const idx = []; for(let s = 0; s < segs; s++){ const t = s * 2; idx.push(t, t + 1, t + 2, t + 1, t + 3, t + 2); }
+    geo.setIndex(idx);
+    const mesh = new THREE.Mesh(geo, scribbleMat); mesh.renderOrder = 900; scribble.add(mesh); loops.push(geo);
+  }
+  function drawLoop(k, amount){
+    const geo = loops[k], pos = geo.getAttribute('position');
+    const radius = 1 + P.scribblePadding + k * P.scribbleLoopGap, half = P.scribbleWidth * .5;
+    const sweep = clamp(P.scribbleSweep * (1 + (Math.random() - .5) * P.scribbleSweepJitter), .12, 1) * amount;
+    const total = Math.PI * 2 * sweep, start = Math.random() * Math.PI * 2;
+    const jit = []; for(let q = 0; q <= P.scribblePoints; q++) jit.push(1 + (Math.random() - .5) * 2 * P.scribbleJitter);
+    for(let s = 0; s <= segs; s++){
+      const t = s / segs, ang = start + t * total;
+      const u = t * P.scribblePoints * sweep, i0 = Math.floor(u), i1 = Math.min(P.scribblePoints, i0 + 1), f = u - i0, sm = f * f * (3 - 2 * f);
+      const j = jit[i0] * (1 - sm) + jit[i1] * sm;
+      const taper = Math.min(1, Math.min(t, 1 - t) * 14 + .15);
+      const r0 = radius * j - half * taper, r1 = radius * j + half * taper, c = Math.cos(ang), sn = Math.sin(ang);
+      pos.setXYZ(s * 2, c * r0, sn * r0, 0); pos.setXYZ(s * 2 + 1, c * r1, sn * r1, 0);
+    }
+    pos.needsUpdate = true; geo.computeBoundingSphere();
+  }
+  let scPhase = 'hidden', scStep = 0, scLast = 0, scOwner = -1, scTimer = 0;
+  const scribbleTarget = () => ((hovered >= 0 && hovered === W) || keyboardNav) && !flight ? W : -1;
+  const moving = () => dragging || dragVel !== 0 || tweening() || Math.abs(L - Math.round(L)) > .0015;
+  function followScribble(d, hard){
+    const f = hard ? 1 : 1 - Math.exp(-P.scribbleLag * .016);
+    if(hard){ scribble.position.copy(d.group.position); scribble.quaternion.copy(d.group.quaternion); scribble.scale.copy(d.group.scale); return; }
+    scribble.position.lerp(d.group.position, f); scribble.quaternion.slerp(d.group.quaternion, f); scribble.scale.lerp(d.group.scale, f);
+  }
+  function updateScribble(now){
+    const target = scribbleTarget(), frame = 1000 / P.scribbleFps;
+    if(target < 0){
+      if(scPhase === 'hidden') return;
+      if(scPhase !== 'out'){ scPhase = 'out'; scStep = 0; scLast = now; }
+      const d = discs[scOwner]; if(d) followScribble(d, moving());
+      if(now - scLast < frame) return;
+      scLast = now;
+      if(scStep >= P.scribbleOut.length || !d){ scPhase = 'hidden'; scOwner = -1; scribble.visible = false; return; }
+      loops.forEach((_, k) => drawLoop(k, P.scribbleOut[scStep])); scStep++; kick(2); return;
+    }
+    const d = discs[target];
+    if(scPhase === 'hidden' || scOwner !== target){
+      scPhase = 'in'; scStep = 0; scOwner = target; scLast = now; followScribble(d, true);
+      loops.forEach((_, k) => drawLoop(k, P.scribbleIn[0])); scStep = 1; scribble.visible = true; kick(2); return;
+    }
+    followScribble(d, moving());
+    if(reduce || now - scLast < frame) return;
+    scLast = now;
+    if(scPhase === 'in' && scStep < P.scribbleIn.length){ loops.forEach((_, k) => drawLoop(k, P.scribbleIn[scStep])); scStep++; }
+    else{ scPhase = 'on'; loops.forEach((_, k) => drawLoop(k, 1)); }
+    kick(2);
+  }
+
+  /* ── 主循环 ── */
+  function start(){ if(!raf && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+  function frame(now){
+    raf = 0;
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    const r = Math.min(3, dt * 60);
+    if(pickDirty){
+      pickDirty = false;
+      const hit = pick();
+      if(hit !== hovered){
+        if(hit >= 0 && !pointerDown && !flight) wipe(hit);
+        hovered = hit; hero.style.cursor = pointerDown ? '' : (hit >= 0 ? 'pointer' : '');
+        force = Math.max(force, 2);
+      }
+    }
+    updateScribble(now);
+    if(!dragging){
+      if(Math.abs(dragVel) > 1e-5){
+        L += dragVel * r; dragVel *= reduce ? 0 : Math.pow(P.friction, r);
+        if(Math.abs(dragVel) < 4e-4) dragVel = 0;
+      }
+      if(dragVel === 0 && !tweening()){
+        const target = Math.round(L), diff = target - L;
+        if(reduce){ L += diff * Math.min(1, dt * 20); spring = 0; if(Math.abs(target - L) < .001) L = target; }
+        else if(diff !== 0 || Math.abs(spring) > 1e-5){
+          spring += diff * P.snapFreq * P.snapFreq * dt; spring *= Math.exp(-P.snapDamping * dt); L += spring * dt;
+          if(Math.abs(target - L) < 8e-4 && Math.abs(spring) < .004){ L = target; spring = 0; }
+        }
+      }
+    }
+    L = clamp(L, -.05, COUNT - .95);
+    if(reduce || flight){ flowVel = 0; lastL = L; }
+    else{
+      const v = clamp((L - lastL) / Math.max(dt, .001), -40, 40); lastL = L;
+      flowVel += (v - flowVel) * Math.min(1, dt * (Math.abs(v) > Math.abs(flowVel) ? 14 : 6));
+      if(Math.abs(flowVel) < .01) flowVel = 0;
+    }
+    setActive(activeIdx());
+    const residual = layout(dt, false);
+    const busy = dragging || pointerDown || dragVel !== 0 || spring !== 0 || flowVel !== 0 || tweening() || residual > .001 || force > 0 || flight;
+    if(busy || scPhase === 'in' || scPhase === 'out' || scPhase === 'on'){
+      if(force > 0) force--;
+      renderer.render(scene, camera);
+      if(busy) raf = requestAnimationFrame(frame);
+      else{ clearTimeout(scTimer); scTimer = setTimeout(() => kick(1), Math.max(16, 1000 / P.scribbleFps - (performance.now() - scLast))); }
+    }
+  }
+
+  /* ── 跳到某一张（原站 goTo：不同来源不同时长） ── */
+  function timing(source, dist){
+    const n = P.snapDuration;
+    switch(source){
+      case 'wheel': return { duration:n + .05, kick:2.5 };
+      case 'key': return { duration:Math.min(.6, n - .04 + dist * .05), kick:4 };
+      case 'click': return { duration:clamp(.45 + dist * .11, n, 1.05), kick:Math.min(5, dist * 1.4) };
+      case 'flick': return { duration:n + .1, kick:0 };
+      default: return { duration:n, kick:0 };
+    }
+  }
+  function goTo(i, source = 'snap'){
+    if(flight) return;
+    const n = clamp(i, 0, COUNT - 1), seq = ++goSeq, dist = Math.abs(n - L), t = timing(source, dist);
+    targetLock = n; dragVel = 0; spring = 0;
+    gsap.killTweensOf(tweenL);
+    if(!reduce && t.kick){ const s = Math.sign(n - L); if(s) flowVel = clamp(flowVel + s * t.kick, -12, 12); }
+    [n - 1, n, n + 1].forEach((k) => { if(k >= 0 && k < COUNT) loadArt(k); });
+    if(reduce){ L = tweenL.value = lastL = n; targetLock = -1; setActive(n); kick(3); return; }
+    tweenL.value = L;
+    gsap.to(tweenL, { value:n, duration:t.duration, ease: source === 'snap' ? 'power3.out' : glide, overwrite:true,
+      onUpdate: () => { L = tweenL.value; },
+      onComplete: () => { L = n; if(seq === goSeq) targetLock = -1; } });
+    kick(3);
+  }
+  const currentTarget = () => targetLock >= 0 ? targetLock : activeIdx();
+
+  /* ── 拾取 / 悬停 ── */
+  function setPointer(e){
+    const r = renderer.domElement.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    ndc.set((x / r.width) * 2 - 1, -(y / r.height) * 2 + 1);
+    return { x, y, rect:r };
+  }
+  function pick(){
+    ray.setFromCamera(ndc, camera);
+    const hit = ray.intersectObjects(picks, false)[0];
+    if(!hit) return -1;
+    if(hit.uv){ hitUV.x = hit.uv.x * 2 - 1; hitUV.y = hit.uv.y * 2 - 1; } else hitUV.x = hitUV.y = 0;
+    return hit.object.userData.index;
+  }
+  function wipe(i){
+    if(reduce) return;
+    const d = discs[i]; if(!d || Math.hypot(mvx, mvy) < P.wipeMinSpeed) return;
+    d.pushVX += clamp(mvx * P.wipePush, -P.wipePushMax, P.wipePushMax);
+    d.pushVY -= clamp(mvy * P.wipePush, -P.wipePushMax, P.wipePushMax);
+    d.pushRotVY += clamp(mvx * P.wipeSpin, -P.wipeSpinMax, P.wipeSpinMax);
+    d.pushRotVX += clamp(mvy * P.wipeSpin, -P.wipeSpinMax, P.wipeSpinMax);
+  }
+  function press(i){
+    if(reduce) return;
+    const d = discs[i]; if(!d) return;
+    d.pushVZ -= P.pressDepth; d.pushRotVY += hitUV.x * P.pressTilt; d.pushRotVX -= hitUV.y * P.pressTilt; kick();
+  }
+  /* 转盘手感：越过最大角度后越拖越沉 */
+  function softSpin(v, dv){
+    const max = THREE.MathUtils.degToRad(P.maxSpinAngle), over = Math.max(0, Math.abs(v) - max * .8) / max, k = 1 / (1 + over * over * 14);
+    return v + dv * (Math.sign(dv) === Math.sign(v) || v === 0 ? k : 1);
+  }
+  function resetSpin(i){
+    const d = discs[i]; if(!d || (Math.abs(d.spinX) < .001 && Math.abs(d.spinY) < .001)) return;
+    d.resetTween?.kill();
+    d.resetTween = gsap.to(d, { spinX:0, spinY:0, duration: reduce ? .15 : P.resetDuration, ease:'power3.out', overwrite:true, onUpdate: () => kick(1), onComplete: () => { d.resetTween = null; } });
+    kick();
+  }
+  function flip(i){
+    const d = discs[i]; if(!d) return;
+    d.resetTween?.kill();
+    const showingBack = Math.abs(d.spinY) > Math.PI / 2;
+    d.resetTween = gsap.to(d, { spinY: showingBack ? 0 : Math.PI, spinX:0, duration: reduce ? .15 : .75, ease:'power3.inOut', overwrite:true, onUpdate: () => kick(1), onComplete: () => { d.resetTween = null; } });
+    kick();
+  }
+
+  const NO_DRAG = 'a, button, input, textarea, select, label, [contenteditable="true"], [data-no-drag]';
+  function onDown(e){
+    if(flight || e.button !== 0 || !e.isPrimary || e.target.closest(NO_DRAG)) return;
+    const p = setPointer(e);
+    pointerDown = true; pointerId = e.pointerId; dragging = false; keyboardNav = false;
+    touchPtr = e.pointerType !== 'mouse';
+    downX = prevX = p.x; downY = prevY = p.y; prevT = performance.now();
+    pressCandidate = -1;
+    const hit = pick();
+    if(hit >= 0 && Math.abs(hit - L) < .6) pressCandidate = hit;
+    hovered = hit; ptrNX = ndc.x; ptrNY = ndc.y;
+    window.addEventListener('pointermove', onDragMove, { passive:false });
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onCancel);
+    kick();
+  }
+  function beginDrag(e){
+    dragging = true;
+    gsap.killTweensOf(tweenL); goSeq++; targetLock = -1; tweenL.value = L;
+    dragVel = 0; spring = 0;
+    grabbed = pressCandidate;
+    hero.setAttribute('data-dragging', ''); window.getSelection()?.removeAllRanges();
+    if(grabbed >= 0){ discs[grabbed].resetTween?.kill(); discs[grabbed].resetTween = null; }
+    try{ hero.setPointerCapture(e.pointerId); }catch(err){}
+  }
+  function onDragMove(e){
+    if(!pointerDown || e.pointerId !== pointerId) return;
+    const p = setPointer(e); ptrNX = ndc.x; ptrNY = ndc.y;
+    if(!dragging){
+      const dx = p.x - downX, dy = p.y - downY;
+      if(Math.hypot(dx, dy) < P.dragStartDistance) return;
+      if(touchPtr && Math.abs(dx) >= Math.abs(dy)) pressCandidate = -1;
+      beginDrag(e);
+    }
+    if(e.cancelable) e.preventDefault();
+    const now = performance.now(), dx = p.x - prevX, dy = p.y - prevY, dtm = Math.max(8, now - prevT);
+    prevX = p.x; prevY = p.y; prevT = now;
+    kick();
+    if(grabbed >= 0){
+      const d = discs[grabbed], k = P.dragSensitivity * .0045;
+      d.spinY = softSpin(d.spinY, dx * k); d.spinX = softSpin(d.spinX, dy * k); return;
+    }
+    const span = touchPtr ? (dragSpan || 1.8) : 6 * P.dragSensitivity;
+    const step = -(dx / p.rect.width) * span;
+    L = clamp(L + step, 0, COUNT - 1);
+    const vel = clamp((16.667 / dtm) * step, -P.dragMaxVelocity, P.dragMaxVelocity);
+    dragVel += (vel - dragVel) * P.dragVelocitySmoothing;
+  }
+  function endPointer(cancel){
+    if(!pointerDown) return;
+    const wasDragging = dragging, g = grabbed;
+    pointerDown = false; dragging = false; grabbed = -1; pressCandidate = -1;
+    window.removeEventListener('pointermove', onDragMove, { passive:false });
+    window.removeEventListener('pointerup', onUp);
+    window.removeEventListener('pointercancel', onCancel);
+    hero.removeAttribute('data-dragging');
+    try{ if(hero.hasPointerCapture(pointerId)) hero.releasePointerCapture(pointerId); }catch(err){}
+    kick();
+    if(!wasDragging) return;
+    suppressClickUntil = performance.now() + 140;
+    if(g >= 0){ resetSpin(g); dragVel = 0; return; }
+    if(cancel){ dragVel = 0; goTo(Math.round(L)); return; }
+    if(touchPtr){
+      const dir = Math.abs(dragVel) >= P.touchFlickVelocity ? Math.sign(dragVel) : 0;
+      const t = dir > 0 ? Math.floor(L) + 1 : dir < 0 ? Math.ceil(L) - 1 : Math.round(L);
+      dragVel = 0; goTo(clamp(t, 0, COUNT - 1), 'flick'); return;
+    }
+    if(reduce) goTo(Math.round(L));
+  }
+  const onUp = () => endPointer(false);
+  const onCancel = () => endPointer(true);
+  function onHoverMove(e){
+    if(pointerDown || !finePointer) return;
+    setPointer(e);
+    const now = performance.now(), gap = now - lastMoveT; lastMoveT = now;
+    if(gap < 120){ const k = 16.7 / Math.max(8, gap); mvx = (e.clientX - lastMX) * k; mvy = (e.clientY - lastMY) * k; } else mvx = mvy = 0;
+    lastMX = e.clientX; lastMY = e.clientY; ptrNX = ndc.x; ptrNY = ndc.y;
+    keyboardNav = false; pickDirty = true; kick();
+  }
+  function onClick(e){
+    if(flight || performance.now() < suppressClickUntil){ e.preventDefault(); e.stopPropagation(); return; }
+    if(e.target.closest('a, button')) return;
+    setPointer(e);
+    const hit = pick();
+    if(hit < 0) return;
+    e.preventDefault();
+    if(hit !== W){ resetWheel(); press(hit); goTo(hit, 'click'); return; }
+    press(hit); open(hit, e);
+  }
+
+  /* 滚轮：一次手势只翻一张（原站的包络 + 节拍判定） */
+  let wAccum = 0, wDir = 0, wEnvelope = 0, wLastT = 0, wArmed = true, wHasLast = false, wCount = 0, wPeak = 0, wStepT = 0, wRising = false, wIdle = 0;
+  function resetWheel(){ clearTimeout(wIdle); wIdle = 0; wArmed = true; wRising = false; wAccum = 0; wDir = 0; wEnvelope = 0; wPeak = 0; wCount = 0; wStepT = 0; wLastT = 0; wHasLast = false; }
+  function onWheel(e){
+    if(e.ctrlKey) return;
+    e.preventDefault();
+    if(flight) return;
+    let dx = e.deltaX, dy = e.deltaY;
+    if(e.deltaMode === 1){ dx *= 16; dy *= 16; } else if(e.deltaMode === 2){ dx *= innerWidth; dy *= innerHeight; }
+    const delta = Math.abs(dx) > Math.abs(dy) * 1.25 ? dx : dy, mag = Math.abs(delta);
+    const now = performance.now(), gap = wHasLast ? now - wLastT : Infinity;
+    wLastT = now; wHasLast = true;
+    clearTimeout(wIdle); wIdle = setTimeout(resetWheel, P.wheelIdleReset);
+    const decayed = wEnvelope * (gap === Infinity ? 0 : Math.exp(-gap / P.wheelEnvelopeTau));
+    if(mag < P.wheelNoiseFloor){ wEnvelope = decayed; return; }
+    const rising = mag > decayed * P.wheelRiseFactor;
+    wEnvelope = Math.max(mag, decayed);
+    if(!wArmed){
+      wCount++; wPeak = Math.max(wPeak, mag);
+      const since = now - wStepT;
+      const paused = gap >= P.wheelPauseGap;
+      const tick = gap >= P.wheelTickGap && wCount <= 2 && since >= P.wheelMinStepTick && mag >= wPeak * P.wheelTickRatio;
+      const flick = rising && since >= P.wheelMinStepFlick;
+      const sustain = since >= P.wheelSustainDelay && wEnvelope >= wPeak * P.wheelSustainRatio;
+      if(!(paused || tick || flick || sustain)) return;
+      wArmed = true; wAccum = 0; wDir = 0; wRising = !(paused || tick || sustain);
+    }
+    const dir = delta > 0 ? 1 : -1;
+    if(dir !== wDir){ wAccum = 0; wDir = dir; }
+    wAccum += Math.min(wRising ? Math.max(0, mag - decayed) : mag, P.wheelEventCap);
+    if(wAccum < P.wheelStepThreshold) return;
+    wArmed = false; wAccum = 0; wStepT = now; wCount = 0; wPeak = mag;
+    keyboardNav = false;
+    const from = currentTarget(), to = clamp(from + dir, 0, COUNT - 1);
+    if(to !== from) goTo(to, 'wheel');
+  }
+
+  function onKey(e){
+    if(flight || e.defaultPrevented || e.altKey || nav.dataset.dropdown === 'open' || lbOpen) return;
+    const a = document.activeElement;
+    if(['INPUT', 'TEXTAREA', 'SELECT'].includes(a?.tagName) || a?.isContentEditable) return;
+    const inside = hero.contains(a) || a === document.body || !a;
+    if(!inside) return;
+    if((e.metaKey || e.ctrlKey) && e.key !== 'Enter') return;
+    if(e.key === 'Enter'){ e.preventDefault(); open(W, e); return; }
+    if(e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); flip(W); return; }
+    let to = -1;
+    if(e.key === 'ArrowRight') to = currentTarget() + 1;
+    else if(e.key === 'ArrowLeft') to = currentTarget() - 1;
+    else if(e.key === 'Home') to = 0;
+    else if(e.key === 'End') to = COUNT - 1;
+    else return;
+    e.preventDefault(); resetWheel(); keyboardNav = true; goTo(to, 'key');
+  }
+
+  /* ── 转场：正前方的盘按下—回弹—侧转缩走（原站 detail out），回来时再飞入（detail in） ── */
+  function flightOut(onHandOver){
+    flight = true; dragVel = spring = flowVel = 0; gsap.killTweensOf(tweenL); gsap.killTweensOf(Gf); goSeq++;
+    hovered = -1; keyboardNav = false; Gf.inbound = false;
+    flow.forceOut();
+    const f = activeIdx(), from = clamp(L, -.05, COUNT - .95), dist = Math.abs(from - f);
+    const settle = reduce || dist < .002 ? 0 : clamp(.12 + dist * .25, .12, .4);
+    const d = discs[f]; d?.resetTween?.kill(); if(d) d.resetTween = null;
+    if(reduce){ Gf.others = 0; Gf.active = .001; L = f; kick(3); onHandOver?.(); return Promise.resolve(); }
+    return new Promise((resolve) => {
+      let handed = false; const hand = () => { if(!handed){ handed = true; try{ onHandOver?.(); }catch(err){} } };
+      const outD = .55, pressS = .94, pressT = .12, springS = 1.015, springT = .16;
+      const tl = gsap.timeline({ onUpdate: () => kick(1), onComplete: () => { hand(); resolve(); } });
+      if(settle > 0){ tweenL.value = from; tl.to(tweenL, { value:f, duration:settle, ease:'power2.out', onUpdate: () => { L = tweenL.value; } }, 0); }
+      const t0 = settle * .6;
+      tl.to(Gf, { active:pressS, duration:pressT, ease:'power2.out' }, t0);
+      tl.to(Gf, { active:springS, duration:springT, ease:'power2.out' }, t0 + pressT);
+      tl.to(Gf, { others:0, duration:outD, ease:'none' }, t0 + pressT);
+      const t1 = t0 + pressT + springT;
+      tl.to(Gf, { active:.001, duration:outD, ease:'power2.in' }, t1);
+      if(d){ const k = Math.ceil((d.spinY + Math.PI / 2 - Math.PI / 2) / Math.PI - 1e-6); tl.to(d, { spinY:Math.PI / 2 + k * Math.PI, spinX:0, duration:outD, ease:'power2.in' }, t1); }
+      tl.call(hand, null, t1 + outD * .55);
+      kick(3);
+    });
+  }
+  function flightIn(duration = 1){
+    flight = true; gsap.killTweensOf(Gf);
+    const d = discs[activeIdx()];
+    Gf.inbound = true; Gf.others = 0; Gf.active = .001;
+    if(d){ d.spinY = 0; d.spinX = 0; }
+    discs.forEach((x) => { x.fresh = true; });
+    layout(1, true); renderer.render(scene, camera);
+    const done = () => { Gf.others = 1; Gf.active = 1; Gf.inbound = false; flight = false; flow.release(activeIdx()); kick(3); };
+    if(reduce){ done(); return Promise.resolve(); }
+    return new Promise((resolve) => {
+      const tl = gsap.timeline({ onUpdate: () => kick(1), onComplete: () => { done(); resolve(); } });
+      tl.to(Gf, { active:1, duration, ease:glide }, 0);
+      tl.to(Gf, { others:1, duration:duration * .85, ease:'none' }, duration * .1);
+      tl.call(() => { flight = false; flow.release(activeIdx()); }, null, duration * .9);
+      kick(3);
+    });
+  }
+
+  /* 盘在屏幕上的位置（给灯箱从盘面展开用） */
+  const wp = new THREE.Vector3(), wx = new THREE.Vector3(), ws = new THREE.Vector3(), cx = new THREE.Vector3();
+  function discScreen(i){
+    const d = discs[i], r = renderer.domElement.getBoundingClientRect();
+    d.group.updateWorldMatrix(true, false); camera.updateMatrixWorld();
+    d.group.getWorldPosition(wp); d.group.getWorldScale(ws);
+    cx.setFromMatrixColumn(camera.matrixWorld, 0).normalize();
+    wx.copy(wp).addScaledVector(cx, ws.x);
+    const a = wp.clone().project(camera), b = wx.clone().project(camera);
+    const px = (v) => ({ x:(v.x * .5 + .5) * r.width + r.left, y:(-v.y * .5 + .5) * r.height + r.top });
+    const pa = px(a), pb = px(b);
+    return { x:pa.x, y:pa.y, r:Math.abs(pb.x - pa.x) };
+  }
+
+  function open(i, e){
+    const it = ITEMS[i]; if(!it) return;
+    if(e && (e.metaKey || e.ctrlKey)){ window.open(it.href, '_blank', 'noopener'); return; }
+    if(it.vimeo){ openTrailer(i); return; }
+    flightOut(() => { window.location.href = it.href; });
+  }
+
+  /* ── 事件 ── */
+  hero.addEventListener('pointerdown', onDown, { capture:true });
+  hero.addEventListener('pointermove', onHoverMove, { passive:true });
+  hero.addEventListener('pointerleave', () => { if(!pointerDown){ hovered = -1; kick(); } });
+  hero.addEventListener('click', onClick, { capture:true });
+  hero.addEventListener('wheel', onWheel, { passive:false, capture:true });
+  window.addEventListener('keydown', onKey);
+  window.addEventListener('blur', () => { resetWheel(); endPointer(true); keyboardNav = false; kick(); });
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) kick(3); });
+  new ResizeObserver(() => resize()).observe(wrap);
+  touchLayoutMQ.addEventListener('change', () => { fitTouch(); kick(2); });
+  renderer.domElement.addEventListener('webglcontextlost', (e) => e.preventDefault());
+
+  resize();
+  layout(1, true);
+  setActive(0);
+  await Promise.race([Promise.all([0, 1, 2].map(loadArt)), new Promise((r) => setTimeout(r, 2500))]);
+  if(typeof renderer.compileAsync === 'function'){
+    await Promise.race([renderer.compileAsync(scene, camera).catch(() => {}), new Promise((r) => setTimeout(r, 1500))]);
+  }
+  ready = true;
+  return {
+    index: () => W,
+    goTo,
+    canReveal: () => ready && !flight,
+    flightOut, flightIn, discScreen,
+    intro(){ return flightIn(1.05); },
+    renderNow(){ layout(1, true); renderer.render(scene, camera); },
+  };
+}
+
+/* ─────────────── 预告片灯箱 ─────────────── */
+const lb = $('lb'), plate = $('lbPlate'), stage = $('lbStage');
+let lbOpen = false, player = null, lbItem = -1, duration = 0, muted = true, paused = false, volume = 1;
+const lbUI = () => lb.querySelectorAll('.lb-ui');
+const fmt = (s) => { s = Math.max(0, Math.floor(s || 0)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+let vimeoReady = null;
+function loadVimeoAPI(){
+  if(window.Vimeo) return Promise.resolve();
+  if(vimeoReady) return vimeoReady;
+  vimeoReady = new Promise((res) => { const s = document.createElement('script'); s.src = 'https://player.vimeo.com/api/player.js'; s.async = true; s.onload = res; s.onerror = res; document.head.appendChild(s); });
+  return vimeoReady;
+}
+function setMuted(m){
+  muted = m; lb.dataset.muted = String(m);
+  $('lbSoundWave').style.opacity = m ? '.2' : '1';
+  $('lbSound').querySelector('.txt').textContent = m ? 'Sound' : 'Mute';
+  if(player){ player.setMuted(m).catch(() => {}); if(!m) player.setVolume(volume).catch(() => {}); }
+}
+function setPaused(p){
+  paused = p;
+  $('lbPlay').querySelector('.txt').textContent = p ? 'Play' : 'Pause';
+  $('lbPlay').setAttribute('aria-label', p ? 'Play' : 'Pause');
+  $('lbPlayIco').setAttribute('d', p ? 'M7 4.5v15l12-7.5z' : 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z');
+  $('lbCenter').innerHTML = p ? '<path d="M7 4.5v15l12-7.5z" fill="#fff"/>' : '<rect x="6" y="4" width="4" height="16" rx="1" fill="#fff"/><rect x="14" y="4" width="4" height="16" rx="1" fill="#fff"/>';
+  if(player) (p ? player.pause() : player.play()).catch(() => {});
+}
+async function openTrailer(i){
+  if(lbOpen) return;
+  const it = ITEMS[i]; lbOpen = true; lbItem = i;
+  loadVimeoAPI();
+  const meta = $('lbMeta'); meta.innerHTML = '';
+  [['Type 类型', it.type], ['Date 日期', it.date], ['Venue 地点', it.venue.join(', ')]].forEach(([l, v]) => {
+    const a = document.createElement('span'); a.className = 'subheading-xs'; a.textContent = l;
+    const b = document.createElement('span'); b.className = 'paragraph-m'; b.textContent = v;
+    meta.append(a, b);
+  });
+  $('lbProject').href = it.href;
+  $('lbTime').textContent = '00:00 / 00:00'; $('lbProg').style.width = '0'; $('lbBuf').style.width = '0';
+  setPaused(false); setMuted(true);
+  const ds = gallery ? gallery.discScreen(i) : { x:innerWidth / 2, y:innerHeight / 2, r:Math.min(innerWidth, innerHeight) * .3 };
+  const W0 = innerWidth, H0 = innerHeight;
+  const from = `inset(${Math.max(0, ds.y - ds.r)}px ${Math.max(0, W0 - ds.x - ds.r)}px ${Math.max(0, H0 - ds.y - ds.r)}px ${Math.max(0, ds.x - ds.r)}px)`;
+  lb.classList.add('is-open'); lb.setAttribute('aria-hidden', 'false');
+  nav.classList.add('on-dark'); nav.classList.add('is-hidden');
+  gsap.set(plate, { clipPath:from }); gsap.set(stage, { opacity:0 }); gsap.set(lbUI(), { opacity:0 });
+  const flightP = gallery ? gallery.flightOut() : Promise.resolve();
+  const frame = $('lbFrame');
+  frame.innerHTML = `<iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(it.title)} trailer"
+    src="https://player.vimeo.com/video/${it.vimeo}?autoplay=1&muted=1&controls=0&playsinline=1&title=0&byline=0&portrait=0&dnt=1"></iframe>`;
+  loadVimeoAPI().then(() => {
+    if(!window.Vimeo || !lbOpen) return;
+    player = new window.Vimeo.Player(frame.querySelector('iframe'));
+    player.on('timeupdate', (d) => { duration = d.duration; $('lbTime').textContent = fmt(d.seconds) + ' / ' + fmt(d.duration); $('lbProg').style.width = (d.percent * 100) + '%'; $('lbTimeline').setAttribute('aria-valuenow', Math.round(d.percent * 100)); });
+    player.on('progress', (d) => { $('lbBuf').style.width = (d.percent * 100) + '%'; });
+    player.on('play', () => { if(paused) setPaused(false); });
+    player.on('ended', () => setPaused(true));
+    player.getDuration().then((d) => { duration = d; $('lbTime').textContent = '00:00 / ' + fmt(d); }).catch(() => {});
+  });
+  const dur = reduce ? 0 : .9;
+  gsap.to(plate, { clipPath:'inset(0px 0px 0px 0px)', duration:dur, ease:glide, delay: reduce ? 0 : .12 });
+  gsap.to(stage, { opacity:1, duration: reduce ? 0 : .5, delay: reduce ? 0 : .7 });
+  gsap.to(lbUI(), { opacity:1, duration: reduce ? 0 : .5, delay: reduce ? 0 : .9, stagger: reduce ? 0 : .05 });
+  await flightP;
+  $('lbClose').focus({ preventScroll:true });
+}
+async function closeTrailer(){
+  if(!lbOpen) return;
+  lbOpen = false;
+  if(document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  const ds = gallery ? gallery.discScreen(lbItem) : { x:innerWidth / 2, y:innerHeight / 2, r:40 };
+  gsap.to(lbUI(), { opacity:0, duration: reduce ? 0 : .25 });
+  gsap.to(stage, { opacity:0, duration: reduce ? 0 : .3 });
+  const W0 = innerWidth, H0 = innerHeight, r = Math.max(24, ds.r);
+  const to = `inset(${Math.max(0, ds.y - r)}px ${Math.max(0, W0 - ds.x - r)}px ${Math.max(0, H0 - ds.y - r)}px ${Math.max(0, ds.x - r)}px)`;
+  const back = gallery ? gallery.flightIn(1) : Promise.resolve();
+  await gsap.to(plate, { clipPath:to, opacity:0, duration: reduce ? 0 : .8, ease:glide, delay: reduce ? 0 : .15 });
+  lb.classList.remove('is-open'); lb.setAttribute('aria-hidden', 'true'); gsap.set(plate, { opacity:1 });
+  nav.classList.remove('on-dark', 'is-hidden');
+  try{ player?.destroy(); }catch(e){}
+  player = null; $('lbFrame').innerHTML = '';
+  await back;
+  hero.focus({ preventScroll:true });
+}
+$('lbClose').addEventListener('click', closeTrailer);
+$('lbShield').addEventListener('click', () => setPaused(!paused));
+$('lbPlay').addEventListener('click', () => setPaused(!paused));
+$('lbUnmute').addEventListener('click', () => setMuted(false));
+$('lbSound').addEventListener('click', () => setMuted(!muted));
+$('lbMax').addEventListener('click', () => {
+  if(document.fullscreenElement){ document.exitFullscreen().catch(() => {}); return; }
+  if(lb.requestFullscreen) lb.requestFullscreen().catch(() => player?.requestFullscreen?.());
+  else player?.requestFullscreen?.();
+});
+function seekFrom(e){
+  const r = $('lbTimeline').getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1);
+  if(player && duration) player.setCurrentTime(p * duration).catch(() => {});
+}
+$('lbTimeline').addEventListener('click', seekFrom);
+$('lbVolume').addEventListener('click', (e) => {
+  const r = $('lbVolume').getBoundingClientRect(); volume = clamp((e.clientX - r.left) / r.width, 0, 1);
+  $('lbVolLvl').style.width = (volume * 100) + '%'; $('lbVolume').setAttribute('aria-valuenow', Math.round(volume * 100));
+  setMuted(volume === 0);
+});
+document.addEventListener('keydown', (e) => {
+  if(!lbOpen) return;
+  if(e.key === 'Escape'){ e.preventDefault(); closeTrailer(); }
+  else if(e.key === ' ' && !e.target.closest('button, a')){ e.preventDefault(); setPaused(!paused); }
+});
+
+/* ─────────────── 启动 ─────────────── */
+function reveal(){
+  html.classList.remove('is-loading');
+  $('navList').querySelectorAll('li:not(.li-logo):not(.nav-loading-item)').forEach((li, k) => {
+    if(reduce) return; li.classList.add('enter'); li.style.animationDelay = (k * .05) + 's';
+  });
+  sizeIndexLabel(); sizeDock();
+}
+(async function boot(){
+  if(!gsap){ console.error('GSAP failed to load'); }
+  measureTestimonials();
+  addEventListener('resize', () => { clearTimeout(boot.t); boot.t = setTimeout(() => { measureTestimonials(); sizeDock(); sizeIndexLabel(); }, 150); });
+  document.fonts?.ready?.then(() => { measureTestimonials(); sizeDock(); sizeIndexLabel(); });
+  try{ gallery = await initGallery(); }catch(err){ console.error('Disc gallery failed to initialize:', err); gallery = null; }
+  if(!gallery){
+    html.classList.add('no-webgl');
+    let i = 0;
+    const show = () => { $('fallbackImg').src = ITEMS[i].img; };
+    gallery = { index: () => i, canReveal: () => true, goTo: (n) => { i = clamp(n, 0, COUNT - 1); show(); flow.change(i); ddList.querySelectorAll('.dd-link').forEach((a, k) => a.setAttribute('aria-current', String(k === i))); },
+                discScreen: () => ({ x:innerWidth / 2, y:innerHeight / 2, r:Math.min(innerWidth, innerHeight) * .3 }), flightOut: () => Promise.resolve(), flightIn: () => Promise.resolve() };
+    show(); flow.init(0); reveal();
+    hero.addEventListener('click', () => { const it = ITEMS[i]; if(it.vimeo) openTrailer(i); else location.href = it.href; });
+    addEventListener('keydown', (e) => { if(e.key === 'ArrowRight') gallery.goTo(i + 1); if(e.key === 'ArrowLeft') gallery.goTo(i - 1); });
+    return;
+  }
+  flow.init(0);
+  reveal();
+  if(!location.hash) hero.focus({ preventScroll:true });
+  gallery.intro();
+})();
+/* 从作品页返回（浏览器前进后退缓存）时，光盘重新飞入 */
+addEventListener('pageshow', (e) => { if(e.persisted && gallery?.flightIn) gallery.flightIn(1); });
+</script>
+</body>
+</html>
