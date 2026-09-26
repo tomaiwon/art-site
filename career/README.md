@@ -14,15 +14,20 @@
   底部固定菜单栏：≡ 作品（子菜单：数字媒介本体系列 / 艺术史系列 / 过往实践 / 叙事影像 / 全部作品）、≡ 阅读（文章 / 每日简报）、关于、联系图标。
   新增条目：复制一个 `<li>`（时间戳 + 卡片）放到最上面，图放 `assets/news/`（长边 1600px webp）。
 
-- `news-disc.html`：news 的 A24 光盘版（与 `news.html` 列表版并存）。按作者存下的 a24.raviklaassens.com 首页 HTML 结构复刻
-  （Ravi Klaassens 的 A24 概念站；原站样式表与脚本未随页面保存，动效为按结构推断）：
-  顶部居中胶囊导航（Yi Huang / News / Works / Index 11 下拉片单，悬停文字上翻、当前页小圆点）；
-  Three.js 光盘轮换：11 张 3D 光盘排成一圈，正前方的盘前推、放大、快转并随鼠标微倾，两侧退后压暗；
-  盘面为作品图 + 印刷弧形文字，透明盘心，背面银色彩虹数据面，环境光反射；拖动 / 滚轮 / 方向键 / Index 切换；
-  左下为标题 + TYPE / DATE / VENUE 信息面板（对应原站 DIRECTED BY / YEAR / STARRING），右下为中英两行说明（对应原站影评），文字切换走遮罩滑动；
-  有 Vimeo 视频的条目点光盘弹出预告片灯箱（上下黑幕合拢、TAP FOR SOUND、CLOSE、VIEW PROJECT），其余直接进入作品页；全屏颗粒。
-  依赖：Three.js 0.178（jsDelivr）、Google Fonts（Instrument Serif、Inter，替代原站的 PP Eiko、PP Neue Montreal）、Vimeo 播放器接口。
-  数据在页面里的 `window.ITEMS` 数组，新增一条就在最前面加一项。
+- `news-disc.html`：news 的 A24 光盘版（与 `news.html` 列表版并存），纯复刻 <https://a24.raviklaassens.com/>（Ravi Klaassens 的 A24 概念站）首页。
+  2026-09 按原站脚本与样式重做：参数照抄原站（相机 FOV 40、距离 4.4；光盘组整体绕 X、Y 各转 -30°、缩放 1.08；
+  盘沿弧线排开：第 m 张 x = sin(0.35m)·2.3·2.4，z = (1−cos(0.35m))·2.4，侧盘缩到 0.8；手机/平板改为横排下沉、正前方放大 1.5 倍，
+  相邻盘刚好露出屏幕边缘；材质、灯光、环境反射、雾、拖动惯性与回弹弹簧、滚轮一次一张、悬停倾斜、划过推盘、按下下压、
+  悬停或键盘选中时的手绘黑圈、进场飞入与点开时侧转缩走，全部按原站数值），代码为自写，未拷贝原站脚本。
+  版式照原站：浅灰 #f2f2f2 底 + 颗粒；左上标题 + TYPE / DATE / VENUE 面板（对应 DIRECTED BY / YEAR / STARRING）；
+  底部两条说明（对应影评，不加星级与引号）；桌面导航顶部居中、手机为底部白色停靠栏；Index 片单为白色下拉面板，当前条黑底；
+  文字切换走原站的逐行遮罩（出 0.4s、进 0.7s，缓动 cubic-bezier(.32,.72,0,1)）；流式字号同原站（1920 宽 = 16px 基准）。
+  盘面贴图由作品图自动生成：沿上缘一圈等宽小字（类型 · 地点 · 日期 · YI HUANG），底部为标题 + 斜体 "Yi Huang" 字标，
+  亮底用橙红 #e4553b、暗底用白。点正前方的盘：有 Vimeo 视频的弹出预告片灯箱（黑幕从盘的位置展开；左上信息，右上 VIEW PROJECT / CLOSE，
+  中间 TAP FOR SOUND，底部 PAUSE、时间、进度条、SOUND、音量、MAXIMIZE；Esc 关闭，空格暂停），没有视频的直接进作品页。
+  操作：拖动 / 滚轮 / ← → / Home End / Enter 打开 / 空格翻面 / Index 跳转；`prefers-reduced-motion` 下不转、不飞、文字直接切换。
+  依赖：Three.js 0.178、GSAP 3.13（均 jsDelivr）、Google Fonts（Instrument Serif、Inter、IBM Plex Mono，替代原站付费字体 PP Eiko、
+  PP Neue Montreal、PP Museum）、Vimeo 播放器接口。数据在页面里的 `window.ITEMS` 数组，新增一条就在最前面加一项。
 
 字体只用系统衬线（Times 系）与无衬线，不再加载子集字体。
 
