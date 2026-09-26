@@ -1,359 +1,700 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>news — Yi Huang</title>
+<title>Yi Huang — News</title>
 <meta name="description" content="Exhibitions, screenings and new work by Yi Huang. 黄熠的展览、放映与新作。">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.178.0/examples/jsm/"
+} }
+</script>
 
 <style>
-  /* 光盘轮换版 news：参考 Ravi Klaassens 的 A24 概念站（3D 光盘浏览片单）
-     每条动态是一张会转的光盘；滚轮 / 滑动 / 方向键 / 点击两侧光盘切换；点正中的光盘进入作品页 */
+  /* 复刻 a24.raviklaassens.com（Ravi Klaassens 的 A24 概念站）首页结构：
+     居中胶囊导航 + Index 下拉片单 / Three.js 光盘轮换 / 左侧信息面板 / 评语区 / 预告片灯箱 / 颗粒 */
   :root{
+    --bg:#0c0c0c;
+    --fg:#f2f0ea;
+    --dim:rgba(242,240,234,.55);
+    --line:rgba(242,240,234,.22);
     --accent:#e4553b;
-    --ink:#f4f1ec;
-    --mute:rgba(244,241,236,.55);
-    --disc:min(62vw, 58vh, 560px);
-    --serif:"Times New Roman",Times,"Liberation Serif","Nimbus Roman",serif;
-    --sans:"Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif;
+    --serif:"Instrument Serif","PP Eiko","Times New Roman","Songti SC","STSong",serif;
+    --sans:"Inter","PP Neue Montreal","Helvetica Neue",Arial,"PingFang SC","Noto Sans SC",sans-serif;
+    --ease:cubic-bezier(.65,.05,0,1);
+    --pad:clamp(16px, 2.2vw, 32px);
   }
-  html,body{height:100%;margin:0;overflow:hidden;}
-  body{
-    background:#0b0a0a;
-    color:var(--ink);
-    font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;
-    touch-action:none;
-    user-select:none;
-    -webkit-user-select:none;
-  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--fg);}
+  body{font-family:var(--sans);font-weight:500;-webkit-font-smoothing:antialiased;overscroll-behavior:none;touch-action:none;}
   a{color:inherit;text-decoration:none;}
+  button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;}
+  .sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 
-  /* ── 背景：当前光盘的图，大幅模糊压暗 ── */
-  .bg{position:fixed;inset:-60px;z-index:0;}
-  .bg div{
-    position:absolute;inset:0;
-    background-size:cover;background-position:center;
-    filter:blur(48px) saturate(1.2) brightness(.32);
-    opacity:0;
-    transition:opacity 1s ease;
-  }
-  .bg div.on{opacity:1;}
+  /* ── 颗粒（原站 .grain，逐帧抖动） ── */
   .grain{
-    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.08;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    position:fixed;inset:-100%;z-index:60;pointer-events:none;opacity:.07;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation:grain 1s steps(6) infinite;
+  }
+  @keyframes grain{
+    0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}
+    60%{transform:translate(-2%,6%)}80%{transform:translate(5%,2%)}100%{transform:translate(0,0)}
   }
 
-  /* ── 页眉 ── */
-  .head{
-    position:fixed;top:0;left:0;right:0;z-index:5;
-    display:flex;justify-content:space-between;align-items:flex-start;
-    padding:18px 22px;
+  /* ── 导航：顶部居中胶囊 ── */
+  .nav{position:fixed;top:var(--pad);left:50%;z-index:40;transform:translateX(-50%);}
+  .nav-list{
+    position:relative;
+    display:flex;align-items:center;gap:4px;
+    margin:0;padding:5px;list-style:none;
+    border-radius:999px;
+    background:rgba(20,20,20,.55);
+    -webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
   }
-  .logo{font-family:var(--serif);font-style:italic;font-size:30px;line-height:.9;color:var(--accent);}
-  .logo span{display:block;}
-  .nav{display:flex;gap:18px;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding-top:6px;}
-  .nav a{opacity:.75;}
-  .nav a:hover,.nav a[aria-current]{opacity:1;}
-  .nav .list{padding:3px 8px;border:1px solid rgba(244,241,236,.4);border-radius:20px;margin-top:-4px;}
+  .nav-logo{
+    white-space:nowrap;
+    display:flex;align-items:center;height:34px;padding:0 12px 0 10px;
+    font-family:var(--serif);font-style:italic;font-size:22px;color:var(--accent);letter-spacing:-.01em;
+  }
+  .nav-link{
+    position:relative;display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;
+    border-radius:999px;font-size:13px;letter-spacing:.01em;
+  }
+  .nav-link[aria-current="page"]{color:var(--fg);}
+  .nav-link:not([aria-current="page"]){color:var(--dim);}
+  .nav-link:hover{color:var(--fg);}
+  /* 悬停时文字上翻（原站 data-hover） */
+  .hov{display:inline-block;overflow:hidden;height:1.2em;line-height:1.2em;}
+  .hov span{display:block;transition:transform .5s var(--ease);}
+  .hov span::after{content:attr(data-text);display:block;}
+  .nav-link:hover .hov span,.lb-btn:hover .hov span{transform:translateY(-100%);}
+  .nav-dot{
+    position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--fg);
+    transition:transform .6s var(--ease);pointer-events:none;
+  }
+  /* Index：文字与数量上下切换 */
+  .idx-label{display:inline-block;overflow:hidden;height:1.2em;line-height:1.2em;}
+  .idx-track{display:flex;flex-direction:column;transition:transform .5s var(--ease);}
+  .idx-btn:hover .idx-track,.idx-btn[aria-expanded="true"] .idx-track{transform:translateY(-50%);}
+  .idx-btn svg{width:9px;height:9px;transition:transform .5s var(--ease);}
+  .idx-btn[aria-expanded="true"] svg{transform:rotate(180deg);}
 
-  /* ── 舞台：光盘横向轮换（coverflow） ── */
-  .stage{
-    position:fixed;inset:0;z-index:2;
-    perspective:1400px;
-    perspective-origin:50% 45%;
-  }
-  .rail{position:absolute;left:50%;top:45%;width:0;height:0;transform-style:preserve-3d;}
-  .disc{
-    position:absolute;
-    width:var(--disc);height:var(--disc);
-    left:calc(var(--disc) / -2);top:calc(var(--disc) / -2);
-    transform-style:preserve-3d;
-    transition:transform .9s cubic-bezier(.2,.7,.15,1), opacity .9s ease, filter .9s ease;
-    cursor:pointer;
-    will-change:transform;
-  }
-  .disc[aria-hidden="true"]{pointer-events:none;}
-  .disc .shadow{
-    position:absolute;inset:6%;border-radius:50%;
-    box-shadow:0 40px 90px rgba(0,0,0,.65);
-    transform:translateZ(-2px);
-  }
-  /* 转动层：图 + 盘面文字 */
-  .spin{
-    position:absolute;inset:0;border-radius:50%;overflow:hidden;
-    animation:spin 14s linear infinite;
-    animation-play-state:paused;
-  }
-  .disc.active .spin{animation-play-state:running;animation-duration:9s;}
-  .disc.near .spin{animation-play-state:running;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  .spin img{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
-    -webkit-mask:radial-gradient(circle, transparent 0 5.6%, #000 5.9%);
-            mask:radial-gradient(circle, transparent 0 5.6%, #000 5.9%);
-  }
-  .spin svg{position:absolute;inset:0;width:100%;height:100%;}
-  .spin text{font-family:var(--sans);font-size:3.1px;font-weight:700;letter-spacing:.55px;fill:#fff;}
-  /* 不转的层：透明盘心 + 彩虹反光 + 边缘高光（反光不跟着转才像真的光盘） */
-  .hub{
-    position:absolute;inset:0;border-radius:50%;pointer-events:none;
-    background:radial-gradient(circle,
-      transparent 0 5.9%,
-      rgba(210,214,222,.55) 6.1% 14.6%,
-      rgba(255,255,255,.35) 14.8% 15.3%,
-      rgba(20,20,24,.35) 15.5% 17.2%,
-      transparent 17.5%);
-  }
-  .sheen{
-    position:absolute;inset:0;border-radius:50%;pointer-events:none;
-    background:
-      conic-gradient(from 200deg,
-        rgba(255,60,160,.0), rgba(255,60,160,.32), rgba(80,220,255,.30), rgba(255,240,90,.26),
-        rgba(255,60,160,.0) 40%, rgba(120,255,200,.22) 62%, rgba(140,120,255,.28) 80%, rgba(255,60,160,.0));
-    mix-blend-mode:screen;
-    -webkit-mask:radial-gradient(circle, transparent 0 17%, #000 22%, #000 97%, transparent 99%);
-            mask:radial-gradient(circle, transparent 0 17%, #000 22%, #000 97%, transparent 99%);
-    opacity:.75;
-  }
-  .rim{
-    position:absolute;inset:0;border-radius:50%;pointer-events:none;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.35), inset 0 0 0 3px rgba(0,0,0,.25);
-    background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,.08));
-  }
-
-  /* ── 文字：左下标题，右下计数 ── */
-  .info{
-    position:fixed;left:22px;right:22px;bottom:calc(22px + env(safe-area-inset-bottom));z-index:4;
-    display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  .dropdown{
+    position:absolute;top:calc(100% + 8px);left:50%;
+    width:min(380px, calc(100vw - 2 * var(--pad)));
+    transform:translateX(-50%);
+    border-radius:18px;
+    background:rgba(20,20,20,.72);
+    -webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+    padding:6px;
+    clip-path:inset(0 0 100% 0 round 18px);
+    transition:clip-path .7s var(--ease);
     pointer-events:none;
   }
-  .meta{display:flex;gap:12px;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--mute);margin-bottom:10px;}
-  .meta .kind{color:var(--accent);}
-  .title{
-    margin:0;
-    font-size:clamp(30px, 6.4vw, 84px);
-    line-height:1;
-    font-weight:700;
-    letter-spacing:-.01em;
-    max-width:16em;
+  .dropdown.open{clip-path:inset(0 0 0 0 round 18px);pointer-events:auto;}
+  .dd-scroll{max-height:min(420px, 60vh);overflow:auto;scrollbar-width:none;}
+  .dd-scroll::-webkit-scrollbar{display:none;}
+  .dd-row{
+    position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+    padding:10px 12px;border-radius:12px;overflow:hidden;font-size:13px;color:var(--dim);
   }
-  .sub{margin-top:10px;font-size:14px;line-height:1.5;color:var(--mute);max-width:40em;}
-  .swap{transition:opacity .45s ease, transform .45s ease;}
-  .swap.out{opacity:0;transform:translateY(12px);}
-  .count{
-    flex:none;text-align:right;
-    font-family:var(--serif);font-style:italic;
-    font-size:clamp(28px, 5vw, 60px);line-height:1;
-  }
-  .count small{display:block;margin-top:10px;font-family:var(--sans);font-style:normal;font-size:10px;font-weight:700;letter-spacing:1.8px;color:var(--mute);}
+  .dd-row .bg{position:absolute;inset:0;background:rgba(255,255,255,.08);transform:scaleY(0);transform-origin:50% 100%;transition:transform .5s var(--ease);}
+  .dd-row:hover .bg,.dd-row[aria-current="true"] .bg{transform:scaleY(1);}
+  .dd-row:hover,.dd-row[aria-current="true"]{color:var(--fg);}
+  .dd-row h2{position:relative;margin:0;font:inherit;}
+  .dd-row .yr{position:relative;overflow:hidden;height:1.2em;line-height:1.2em;}
+  .dd-row .yr span{display:block;transform:translateY(125%);transition:transform .5s var(--ease);}
+  .dd-row:hover .yr span,.dd-row[aria-current="true"] .yr span{transform:none;}
+  .dd-foot{display:flex;justify-content:space-between;padding:10px 12px 6px;margin-top:4px;border-top:1px solid var(--line);font-size:11px;color:var(--dim);letter-spacing:.04em;}
+  .dd-foot a:hover{color:var(--fg);}
 
-  /* 两侧箭头（桌面） */
-  .arrow{
-    position:fixed;top:45%;z-index:4;transform:translateY(-50%);
-    width:44px;height:44px;border-radius:50%;
-    border:1px solid rgba(244,241,236,.35);background:rgba(0,0,0,.2);color:var(--ink);
-    font-size:18px;cursor:pointer;
+  /* ── 3D 画布 ── */
+  .canvas{position:fixed;inset:0;z-index:1;}
+  .canvas canvas{display:block;width:100%;height:100%;}
+  .stage-glow{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(60% 55% at 50% 48%, rgba(255,255,255,.07), rgba(255,255,255,0) 70%);
   }
-  .arrow.prev{left:22px;} .arrow.next{right:22px;}
-  .arrow:hover{border-color:var(--ink);}
+  .fallback{position:fixed;left:50%;top:48%;z-index:1;width:min(70vw,60vh);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;display:none;}
+  .fallback img{width:100%;height:100%;object-fit:cover;}
+  .no-webgl .fallback{display:block;}
+
+  /* ── 文字遮罩切换（原站 data-disc-mask） ── */
+  .mask{overflow:hidden;}
+  .mask > *{display:block;transition:transform .8s var(--ease), opacity .8s var(--ease);}
+  .mask.out > *{transform:translateY(-105%);}
+  .mask.in > *{transform:translateY(105%);transition:none;}
+
+  /* ── 左侧信息 ── */
+  .info{
+    position:fixed;left:var(--pad);bottom:var(--pad);z-index:10;
+    width:min(340px, calc(100vw - 2 * var(--pad)));
+    pointer-events:none;
+  }
+  .title{display:block;margin:0 0 6px;font-family:var(--serif);font-weight:400;font-size:clamp(40px, 4.4vw, 68px);line-height:.95;letter-spacing:-.01em;}
+  .title-alt{margin:0 0 20px;font-size:13px;line-height:1.4;color:var(--dim);}
+  .panel{position:relative;display:flex;justify-content:space-between;gap:20px;padding:10px 0 12px;}
+  .panel::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line);
+    transform-origin:0 50%;transition:transform 1s var(--ease);
+  }
+  .panel .label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-top:2px;white-space:nowrap;}
+  .panel .value{font-size:14px;line-height:1.35;text-align:right;}
+
+  /* ── 评语区：右下，居中两行 ── */
+  .reviews{
+    position:fixed;right:var(--pad);bottom:var(--pad);z-index:10;
+    width:min(360px, 40vw);
+    text-align:center;pointer-events:none;
+  }
+  .review{padding:14px 0;}
+  .review + .review{border-top:1px solid var(--line);}
+  .review .pub{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+  .review .quote{font-family:var(--serif);font-size:clamp(20px, 1.9vw, 28px);line-height:1.08;}
+
+  /* ── 右上：计数 + 列表版入口 ── */
+  .corner{
+    position:fixed;top:calc(var(--pad) + 8px);right:var(--pad);z-index:30;
+    display:flex;gap:18px;align-items:center;font-size:12px;color:var(--dim);
+  }
+  .corner a:hover{color:var(--fg);}
+  .count{font-variant-numeric:tabular-nums;}
+  .hint{position:fixed;left:50%;bottom:var(--pad);z-index:10;transform:translateX(-50%);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);pointer-events:none;white-space:nowrap;}
+  .play-cue{display:inline-flex;align-items:center;gap:6px;color:var(--fg);}
+  .play-cue::before{content:"";width:0;height:0;border-left:6px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;}
+
+  /* ── 预告片灯箱 ── */
+  .lb{position:fixed;inset:0;z-index:50;pointer-events:none;visibility:hidden;}
+  .lb.open{pointer-events:auto;visibility:visible;}
+  .lb-strip{position:absolute;left:0;right:0;height:50%;background:#000;transition:transform .9s var(--ease);}
+  .lb-strip.top{top:0;transform:translateY(-100%);}
+  .lb-strip.bottom{bottom:0;transform:translateY(100%);}
+  .lb.open .lb-strip{transform:none;}
+  .lb-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:70px var(--pad);opacity:0;transition:opacity .6s ease .35s;}
+  .lb.open .lb-stage{opacity:1;}
+  .lb-frame{position:relative;width:min(100%, calc((100vh - 160px) * 16 / 9));aspect-ratio:16/9;background:#000;}
+  .lb-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .lb-top,.lb-bottom{position:absolute;left:var(--pad);right:var(--pad);display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:0;transition:opacity .5s ease .5s;}
+  .lb.open .lb-top,.lb.open .lb-bottom{opacity:1;}
+  .lb-top{top:var(--pad);} .lb-bottom{bottom:var(--pad);}
+  .lb-meta{display:flex;gap:1.25rem;color:var(--dim);}
+  .lb-meta b{font-weight:500;color:var(--fg);}
+  .lb-btn{text-transform:uppercase;letter-spacing:.06em;font-size:12px;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);}
+  .lb-btn:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);}
+
+  /* ── 加载：导航里的 Projecting ── */
+  .loading{display:none;align-items:center;gap:8px;height:34px;padding:0 12px;font-size:13px;color:var(--dim);}
+  .loading i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--dim);border-top-color:transparent;animation:spin .8s linear infinite;}
+  html.is-loading .loading{display:flex;}
+  html.is-loading .nav-list > li:not(.li-loading):not(.li-logo){display:none;}
+  html.is-loading .info,html.is-loading .reviews{opacity:0;}
+  .info,.reviews{transition:opacity .8s ease;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
   @media (max-width:760px){
-    :root{--disc:min(78vw, 46vh);}
-    .rail{top:42%;}
-    .logo{font-size:26px;}
-    .nav{gap:12px;font-size:10px;letter-spacing:1.2px;}
-    .nav .hide-m{display:none;}
-    .arrow{display:none;}
-    .title{font-size:clamp(26px, 8vw, 40px);}
-    .sub{font-size:13px;}
-    .count{font-size:30px;}
+    .nav-logo{font-size:19px;padding:0 8px;}
+    .nav-link{padding:0 9px;font-size:12px;}
+    .nav-link.hide-m{display:none;}
+    .corner{top:auto;bottom:calc(var(--pad) + 2px);right:var(--pad);}
+    .corner .list-link{display:none;}
+    .info{bottom:calc(var(--pad) + 22px);width:calc(100vw - 2 * var(--pad));}
+    .title{font-size:clamp(38px, 11vw, 52px);margin-bottom:12px;}
+    .title-alt{margin:0 0 12px;}
+    .panel{padding:7px 0 8px;}
+    .panel .value{font-size:13px;}
+    .reviews{left:var(--pad);right:var(--pad);bottom:auto;top:calc(var(--pad) + 58px);width:auto;}
+    .review{padding:8px 0;}
+    .review + .review{display:none;}
+    .review .quote{font-size:22px;}
+    .hint{display:none;}
   }
   @media (prefers-reduced-motion:reduce){
-    .spin{animation:none;}
-    .disc{transition:none;}
+    .grain{animation:none;}
+    .mask > *,.lb-strip,.dropdown{transition:none;}
   }
 </style>
 </head>
 
 <body>
+<script>document.documentElement.classList.add('is-loading');</script>
 
-<div class="bg" id="bg"></div>
-<div class="grain"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="stage-glow" aria-hidden="true"></div>
 
-<header class="head">
-  <a class="logo" href="./" aria-label="Yi Huang — home"><span>Yi</span><span>Huang</span></a>
-  <nav class="nav" aria-label="Primary">
-    <a class="hide-m" href="../work.html">Works</a>
-    <a class="hide-m" href="../index.html">About</a>
-    <a class="hide-m" href="../contact.html">Contact</a>
-    <a class="list" href="news.html">List 列表</a>
-  </nav>
-</header>
+<!-- 导航 -->
+<nav class="nav" aria-label="Main">
+  <ul class="nav-list" id="navList">
+    <li class="li-logo"><a class="nav-logo" href="./" aria-label="Yi Huang home">Yi Huang</a></li>
+    <li class="li-loading"><span class="loading" aria-live="polite"><span>Projecting</span><i></i></span></li>
+    <li><a class="nav-link" href="news-disc.html" aria-current="page" data-dot><span class="hov"><span data-text="News">News</span></span></a></li>
+    <li><a class="nav-link hide-m" href="../work.html"><span class="hov"><span data-text="Works">Works</span></span></a></li>
+    <li>
+      <button class="nav-link idx-btn" id="idxBtn" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="dropdown">
+        <span class="idx-label"><span class="idx-track"><span>Index</span><span id="idxCount"></span></span></span>
+        <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3.5 5 7l4-3.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+      </button>
+      <div class="dropdown" id="dropdown" aria-hidden="true">
+        <div class="dd-scroll" id="ddList" role="list"></div>
+        <div class="dd-foot"><a href="news.html">List view 列表版</a><a href="../index.html">About 关于</a></div>
+      </div>
+    </li>
+    <span class="nav-dot" id="navDot" aria-hidden="true"></span>
+  </ul>
+</nav>
 
-<main class="stage" id="stage" aria-roledescription="carousel" aria-label="News 动态">
-  <div class="rail" id="rail"></div>
+<div class="corner">
+  <span class="count" id="count"></span>
+  <a class="list-link" href="news.html">List 列表</a>
+</div>
+
+<main>
+  <h1 class="sr-only">Yi Huang — News 动态</h1>
+
+  <div class="canvas" id="canvasWrap" aria-hidden="true"></div>
+  <div class="fallback" aria-hidden="true"><img id="fallbackImg" alt=""></div>
+
+  <section class="info" aria-live="polite">
+    <div class="mask" data-m><a class="title" id="fTitle" href="#"></a></div>
+    <div class="mask" data-m><p class="title-alt" id="fAlt"></p></div>
+    <div class="panel"><div class="mask" data-m><span class="label">Type 类型</span></div><div class="mask" data-m><span class="value" id="fType"></span></div></div>
+    <div class="panel"><div class="mask" data-m><span class="label">Date 日期</span></div><div class="mask" data-m><span class="value" id="fDate"></span></div></div>
+    <div class="panel"><div class="mask" data-m><span class="label">Venue 地点</span></div><div class="mask" data-m><span class="value" id="fVenue"></span></div></div>
+  </section>
+
+  <section class="reviews" id="reviews" aria-hidden="true">
+    <div class="review"><div class="mask" data-m><div class="pub" id="r0p"></div></div><div class="mask" data-m><div class="quote" id="r0q"></div></div></div>
+    <div class="review"><div class="mask" data-m><div class="pub" id="r1p"></div></div><div class="mask" data-m><div class="quote" id="r1q"></div></div></div>
+  </section>
+
+  <div class="hint" id="hint">Drag · Scroll · ← → to browse</div>
+  <p class="sr-only" id="live" aria-live="polite"></p>
 </main>
 
-<button class="arrow prev" type="button" aria-label="Previous 上一张">←</button>
-<button class="arrow next" type="button" aria-label="Next 下一张">→</button>
-
-<div class="info" aria-live="polite">
-  <div class="swap" id="text">
-    <div class="meta"><span class="kind" id="kind"></span><span id="date"></span></div>
-    <h1 class="title" id="title"></h1>
-    <div class="sub" id="sub"></div>
+<!-- 预告片灯箱 -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Trailer">
+  <div class="lb-strip top"></div><div class="lb-strip bottom"></div>
+  <div class="lb-stage"><div class="lb-frame" id="lbFrame"></div></div>
+  <div class="lb-top">
+    <div class="lb-meta" id="lbMeta"></div>
+    <button class="lb-btn" id="lbClose" type="button"><span class="hov"><span data-text="Close">Close</span></span></button>
   </div>
-  <div class="count"><span id="idx"></span><small>SCROLL · SWIPE · CLICK</small></div>
+  <div class="lb-bottom">
+    <button class="lb-btn" id="lbSound" type="button"><span class="hov"><span data-text="Tap for sound">Tap for sound</span></span></button>
+    <a class="lb-btn" id="lbProject" href="#"><span class="hov"><span data-text="View project">View project</span></span></a>
+  </div>
 </div>
 
 <script>
-(function(){
-  /* 动态数据：新增一条就在最前面加一行。图放 career/assets/news/（长边 1600px webp） */
-  var ITEMS = [
-    { date:'2026.09', kind:'New Work 新作',    title:'东亚制造',            sub:'Confucian Silence — 数字媒介本体系列新章，进行中',            img:'assets/entry/00.webp',           href:'../east-asia/' },
-    { date:'2026.08', kind:'Photography 摄影', title:'双年展',              sub:'Venice — 胶片摄影 34 张',                                     img:'assets/news/venice-2026.webp',    href:'../projects/venice-2026.html' },
-    { date:'2026.07', kind:'Photography 摄影', title:'摄影术二百年',        sub:'Arles — 胶片摄影 74 张',                                      img:'assets/news/arles-2026.webp',     href:'../projects/arles-2026.html' },
-    { date:'2026.07', kind:'Photography 摄影', title:'晒后假日下',          sub:'Marseille — 胶片摄影 32 张',                                  img:'assets/news/marseille-2026.webp', href:'../projects/marseille-2026.html' },
-    { date:'2026.06', kind:'Exhibition 展览',  title:'RCA Degree Show',     sub:'《洋务运动》影像、陶瓷与装置 — Royal College of Art, London', img:'assets/news/rca-degree-show.webp',href:'../projects/asfablesgoby.html' },
-    { date:'2026.05', kind:'Photography 摄影', title:'洋务时刻',            sub:'Cambridge — 胶片摄影 14 张',                                  img:'assets/news/cambridge-2026.webp', href:'../projects/cambridge-2026.html' },
-    { date:'2026.04', kind:'Screening 放映',   title:'The Experience',      sub:'《关中往事》放映 — 莫名堂 Moming Tang',                       img:'assets/news/moming-tang.webp',    href:'../projects/theexperience.html' },
-    { date:'2026.03', kind:'Selection 入选',   title:'The Experience',      sub:'《关中往事》入选第三十三届北京大学生电影节',                  img:'assets/news/bjiff.webp',          href:'../projects/theexperience.html' },
-    { date:'2026.03', kind:'Screening 放映',   title:'As Fables Go By',     sub:'《洋务运动》预告片放映 — Genius Cinema',                      img:'assets/news/genius-cinema.webp',  href:'../projects/asfablesgoby.html' },
-    { date:'2026.02', kind:'Exhibition 展览',  title:'Passing By',          sub:'RCA 当代艺术实践中期展 — Royal College of Art, London',       img:'assets/news/rca-wip.webp',        href:'../projects/passingby.html' },
-    { date:'2026.01', kind:'Workshop 工作坊',  title:'The Urgency of the Arts', sub:'《Barbican》艺术的紧迫性工作坊 — London',                  img:'assets/news/barbican.webp',       href:'../projects/barbican.html' }
-  ];
+/* ── 动态数据：新增一条就在最前面加一项。图放 career/assets/news/（长边 1600px webp）；有 Vimeo 视频就填 vimeo，点光盘会弹出播放器 ── */
+window.ITEMS = [
+  { title:'Confucian Silence', alt:'东亚制造', type:'New Work 新作', date:'2026.09', venue:['Digital Media Ontology Series','数字媒介本体系列'],
+    notes:[['Digital Media Ontology Series','A New Chapter, In Progress'],['数字媒介本体系列','新章，正在进行中']],
+    img:'assets/entry/00.webp', href:'../east-asia/' },
+  { title:'双年展', alt:'Venice — film photography', type:'Photography 摄影', date:'2026.08', venue:['Venice 威尼斯','34 frames 张'],
+    notes:[['Film Photography','Thirty-Four Frames, Venice'],['胶片摄影','威尼斯，三十四张']],
+    img:'assets/news/venice-2026.webp', href:'../projects/venice-2026.html' },
+  { title:'摄影术二百年', alt:'Arles — film photography', type:'Photography 摄影', date:'2026.07', venue:['Arles 阿尔勒','74 frames 张'],
+    notes:[['Film Photography','Seventy-Four Frames, Arles'],['胶片摄影','阿尔勒，七十四张']],
+    img:'assets/news/arles-2026.webp', href:'../projects/arles-2026.html' },
+  { title:'晒后假日下', alt:'Marseille — film photography', type:'Photography 摄影', date:'2026.07', venue:['Marseille 马赛','32 frames 张'],
+    notes:[['Film Photography','Thirty-Two Frames, Marseille'],['胶片摄影','马赛，三十二张']],
+    img:'assets/news/marseille-2026.webp', href:'../projects/marseille-2026.html' },
+  { title:'RCA Degree Show', alt:'皇家艺术学院毕业展', type:'Exhibition 展览', date:'2026.06', venue:['Royal College of Art','London 伦敦'],
+    notes:[['As Fables Go By','Moving Image, Ceramics, Installation'],['《洋务运动》','影像、陶瓷与装置']],
+    img:'assets/news/rca-degree-show.webp', href:'../projects/asfablesgoby.html', vimeo:'1170432048' },
+  { title:'洋务时刻', alt:'Cambridge — film photography', type:'Photography 摄影', date:'2026.05', venue:['Cambridge 剑桥','14 frames 张'],
+    notes:[['Film Photography','Fourteen Frames, Cambridge'],['胶片摄影','剑桥，十四张']],
+    img:'assets/news/cambridge-2026.webp', href:'../projects/cambridge-2026.html' },
+  { title:'The Experience', alt:'《关中往事》放映', type:'Screening 放映', date:'2026.04', venue:['Moming Tang 莫名堂'],
+    notes:[['Digital Media Ontology Series','The Media-History Chapter'],['数字媒介本体系列','媒介历史分章']],
+    img:'assets/news/moming-tang.webp', href:'../projects/theexperience.html', vimeo:'1156675386' },
+  { title:'The Experience', alt:'入选第三十三届北京大学生电影节', type:'Selection 入选', date:'2026.03', venue:['33rd Beijing College Student Film Festival','北京国际电影节'],
+    notes:[['Beijing International Film Festival','International College Student Original Film'],['北京国际电影节','国际大学生原创影片单元']],
+    img:'assets/news/bjiff.webp', href:'../projects/theexperience.html', vimeo:'1156675386' },
+  { title:'As Fables Go By', alt:'《洋务运动》预告片放映', type:'Screening 放映', date:'2026.03', venue:['Genius Cinema'],
+    notes:[['Trailer Screening','Followed By A Public Discussion'],['预告片放映','映后公共讨论']],
+    img:'assets/news/genius-cinema.webp', href:'../projects/asfablesgoby.html', vimeo:'1170432048' },
+  { title:'Passing By', alt:'RCA 当代艺术实践中期展', type:'Exhibition 展览', date:'2026.02', venue:['Royal College of Art','London 伦敦'],
+    notes:[['Contemporary Art Practice','Work-in-Progress Show'],['当代艺术实践','中期展']],
+    img:'assets/news/rca-wip.webp', href:'../projects/passingby.html' },
+  { title:'The Urgency of the Arts', alt:'艺术的紧迫性工作坊', type:'Workshop 工作坊', date:'2026.01', venue:['Barbican','London 伦敦'],
+    notes:[['Barbican — Software Layer','With David Stothard & David Leung'],['《Barbican》软件层','与 David Stothard、David Leung 共同制作']],
+    img:'assets/news/barbican.webp', href:'../projects/barbican.html', vimeo:'1156540641' }
+];
+</script>
 
-  var rail = document.getElementById('rail');
-  var bg = document.getElementById('bg');
-  var N = ITEMS.length;
-  var cur = 0;
-  var discs = [], bgs = [];
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-  function pad(n){ return (n < 10 ? '0' : '') + n; }
+const ITEMS = window.ITEMS;
+const N = ITEMS.length;
+const $ = (id) => document.getElementById(id);
+const pad = (n) => String(n).padStart(2, '0');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let cur = 0;
 
-  /* 生成光盘 */
-  ITEMS.forEach(function(it, i){
-    var d = document.createElement('a');
-    d.className = 'disc';
-    d.href = it.href;
-    d.setAttribute('aria-label', it.title + ' — ' + it.sub);
-    var en = it.kind.replace(/[^A-Za-z ]/g, '').trim().toUpperCase();
-    var ring = 'YI HUANG · ' + it.date + ' · ' + en + ' · N° ' + pad(i + 1) + ' · ';
-    d.innerHTML =
-      '<div class="shadow"></div>' +
-      '<div class="spin">' +
-        '<img src="' + it.img + '" alt="" decoding="async"' + (i > 2 ? ' loading="lazy"' : '') + '>' +
-        '<svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="r' + i + '" d="M50,50 m-20,0 a20,20 0 1,1 40,0 a20,20 0 1,1 -40,0"/></defs>' +
-        '<text><textPath href="#r' + i + '" textLength="125" lengthAdjust="spacing">' + ring + '</textPath></text></svg>' +
-      '</div>' +
-      '<div class="hub"></div><div class="sheen"></div><div class="rim"></div>';
-    /* 让每张盘起始角度不同，转起来不齐 */
-    d.querySelector('.spin').style.animationDelay = (-i * 1.7) + 's';
-    d.addEventListener('click', function(e){
-      if(i !== cur){ e.preventDefault(); go(i); }
-    });
-    rail.appendChild(d);
-    discs.push(d);
+/* ─────────────── 界面文字 ─────────────── */
+$('idxCount').textContent = N;
+const ddList = $('ddList');
+ITEMS.forEach((it, i) => {
+  const a = document.createElement('a');
+  a.className = 'dd-row'; a.href = it.href; a.setAttribute('role', 'listitem');
+  a.innerHTML = '<span class="bg"></span><h2></h2><span class="yr"><span></span></span>';
+  a.querySelector('h2').textContent = it.title + (/[一-鿿]/.test(it.title) ? '' : '');
+  a.querySelector('.yr span').textContent = it.date;
+  a.addEventListener('click', (e) => { e.preventDefault(); toggleDropdown(false); go(i); });
+  ddList.appendChild(a);
+});
 
-    var b = document.createElement('div');
-    b.style.backgroundImage = 'url("' + it.img + '")';
-    bg.appendChild(b);
-    bgs.push(b);
+const idxBtn = $('idxBtn'), dropdown = $('dropdown');
+function toggleDropdown(open){
+  const o = open ?? idxBtn.getAttribute('aria-expanded') !== 'true';
+  idxBtn.setAttribute('aria-expanded', String(o));
+  dropdown.classList.toggle('open', o);
+  dropdown.setAttribute('aria-hidden', String(!o));
+}
+idxBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleDropdown(); });
+dropdown.addEventListener('click', (e) => e.stopPropagation());
+document.addEventListener('click', () => toggleDropdown(false));
+
+function placeDot(){
+  const link = document.querySelector('[data-dot]');
+  const list = $('navList');
+  const r = link.getBoundingClientRect(), p = list.getBoundingClientRect();
+  $('navDot').style.transform = `translate(${r.left - p.left + r.width / 2 - 2}px, 0)`;
+}
+
+/* 文字遮罩切换：旧的上滑出去，新的从下面滑进来 */
+const masks = [...document.querySelectorAll('[data-m]')];
+let swapTimer;
+function fill(i){
+  const it = ITEMS[i];
+  const t = $('fTitle'); t.textContent = it.title; t.href = it.href;
+  $('fAlt').textContent = it.alt;
+  $('fType').textContent = it.type;
+  $('fDate').textContent = it.date;
+  $('fVenue').innerHTML = it.venue.map(v => v.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))).join('<br>');
+  $('r0p').textContent = it.notes[0][0]; $('r0q').textContent = it.notes[0][1];
+  $('r1p').textContent = it.notes[1][0]; $('r1q').textContent = it.notes[1][1];
+  $('count').textContent = pad(i + 1) + ' / ' + pad(N);
+  $('live').textContent = it.title + ', ' + (i + 1) + ' of ' + N;
+  $('hint').innerHTML = it.vimeo ? '<span class="play-cue">Click disc to play</span>' : 'Drag · Scroll · ← → to browse';
+  [...ddList.children].forEach((r, k) => r.setAttribute('aria-current', String(k === i)));
+  $('fallbackImg').src = it.img;
+}
+function swapText(i, first){
+  if(first || reduce){ fill(i); return; }
+  masks.forEach(m => { m.classList.remove('in'); m.classList.add('out'); });
+  clearTimeout(swapTimer);
+  swapTimer = setTimeout(() => {
+    fill(i);
+    masks.forEach(m => { m.classList.remove('out'); m.classList.add('in'); });
+    requestAnimationFrame(() => requestAnimationFrame(() => masks.forEach(m => m.classList.remove('in'))));
+  }, 420);
+}
+
+/* ─────────────── 预告片灯箱 ─────────────── */
+const lb = $('lb'); let vimeoPlayer = null;
+function openTrailer(it){
+  $('lbMeta').innerHTML = '';
+  [it.title, it.date, it.type].forEach((t, k) => { const s = document.createElement(k ? 'span' : 'b'); s.textContent = t; $('lbMeta').appendChild(s); });
+  $('lbProject').href = it.href;
+  $('lbFrame').innerHTML = '<iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen src="https://player.vimeo.com/video/' + it.vimeo + '?autoplay=1&muted=1&title=0&byline=0&portrait=0&dnt=1"></iframe>';
+  $('lbSound').style.display = '';
+  lb.classList.add('open');
+  vimeoPlayer = null;
+  if(window.Vimeo){ vimeoPlayer = new window.Vimeo.Player($('lbFrame').querySelector('iframe')); }
+}
+function closeTrailer(){
+  lb.classList.remove('open');
+  setTimeout(() => { $('lbFrame').innerHTML = ''; }, 600);
+}
+$('lbClose').addEventListener('click', closeTrailer);
+$('lbSound').addEventListener('click', () => {
+  if(vimeoPlayer){ vimeoPlayer.setMuted(false); vimeoPlayer.setVolume(1); $('lbSound').style.display = 'none'; }
+  else{
+    const f = $('lbFrame').querySelector('iframe');
+    if(f){ f.src = f.src.replace('muted=1', 'muted=0'); $('lbSound').style.display = 'none'; }
+  }
+});
+/* Vimeo 播放器接口：加载成功就能在原地开声音，失败就重新载入带声音的版本 */
+const vs = document.createElement('script'); vs.src = 'https://player.vimeo.com/api/player.js'; vs.async = true; document.head.appendChild(vs);
+
+function activate(i){
+  const it = ITEMS[i];
+  if(it.vimeo) openTrailer(it); else window.location.href = it.href;
+}
+
+/* ─────────────── Three.js 光盘轮换 ─────────────── */
+const wrap = $('canvasWrap');
+let renderer;
+try{
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+}catch(e){ renderer = null; }
+
+const RING_R = 4.2;                      /* 光盘排成一圈的半径 */
+const STEP = (Math.PI * 2) / N;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+const ring = new THREE.Group(); scene.add(ring);
+const holders = [], discs = [], fronts = [];
+
+/* 盘面贴图：图片裁成圆 + 盘面印字（像专门设计的光盘印刷） */
+function drawArcText(ctx, text, cx, cy, r, center, size, font, color, inward){
+  ctx.save();
+  ctx.font = `${size}px ${font}`; ctx.fillStyle = color; ctx.textBaseline = 'middle';
+  const chars = [...text]; const widths = chars.map(c => ctx.measureText(c).width);
+  const total = widths.reduce((a, b) => a + b, 0);
+  let ang = center - (inward ? -1 : 1) * total / r / 2;
+  chars.forEach((c, k) => {
+    const w = widths[k]; const a = ang + (inward ? -1 : 1) * w / r / 2;
+    ctx.save();
+    ctx.translate(cx + r * Math.cos(a), cy + r * Math.sin(a));
+    ctx.rotate(a + (inward ? -Math.PI / 2 : Math.PI / 2));
+    ctx.fillText(c, -w / 2, 0);
+    ctx.restore();
+    ang += (inward ? -1 : 1) * w / r;
+  });
+  ctx.restore();
+}
+function discTexture(img, it, i){
+  const S = 1024, c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d');
+  const s = Math.max(S / img.width, S / img.height);
+  const w = img.width * s, h = img.height * s;
+  ctx.drawImage(img, (S - w) / 2, (S - h) / 2, w, h);
+  /* 暗角，让印字清楚 */
+  const g = ctx.createRadialGradient(S/2, S/2, S*.1, S/2, S/2, S*.5);
+  g.addColorStop(0, 'rgba(0,0,0,.25)'); g.addColorStop(.55, 'rgba(0,0,0,0)'); g.addColorStop(.92, 'rgba(0,0,0,.35)'); g.addColorStop(1, 'rgba(0,0,0,.6)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+  const serif = '"Instrument Serif", "Times New Roman", serif';
+  const sans = 'Inter, "Helvetica Neue", Arial, sans-serif';
+  drawArcText(ctx, it.title, S/2, S/2, S*.405, -Math.PI/2, 64, serif, '#fff', false);
+  drawArcText(ctx, 'YI HUANG  ·  ' + it.date + '  ·  N° ' + pad(i + 1), S/2, S/2, S*.43, Math.PI/2, 22, sans, 'rgba(255,255,255,.9)', true);
+  drawArcText(ctx, it.type.replace(/[^A-Za-z ]/g, '').trim().toUpperCase(), S/2, S/2, S*.205, Math.PI/2, 20, sans, 'rgba(255,255,255,.85)', true);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = renderer ? renderer.capabilities.getMaxAnisotropy() : 1;
+  return t;
+}
+
+function makeDisc(){
+  const g = new THREE.Group();
+  /* 正面印刷层 */
+  const front = new THREE.Mesh(
+    new THREE.RingGeometry(0.155, 1, 180, 1),
+    new THREE.MeshPhysicalMaterial({ color:0x111111, roughness:.34, metalness:.1, clearcoat:1, clearcoatRoughness:.12, iridescence:.28, iridescenceIOR:1.35, iridescenceThicknessRange:[180, 520] })
+  );
+  front.position.z = 0.004;
+  /* 透明盘心 */
+  const hub = new THREE.Mesh(
+    new THREE.RingGeometry(0.075, 0.155, 96, 1),
+    new THREE.MeshPhysicalMaterial({ color:0xdfe4ec, roughness:.12, metalness:0, transparent:true, opacity:.5, clearcoat:1 })
+  );
+  hub.position.z = 0.004;
+  const stack = new THREE.Mesh(
+    new THREE.RingGeometry(0.118, 0.13, 96, 1),
+    new THREE.MeshPhysicalMaterial({ color:0xffffff, roughness:.2, metalness:.3, transparent:true, opacity:.55 })
+  );
+  stack.position.z = 0.005;
+  /* 背面：银色数据面，彩虹反光 */
+  const back = new THREE.Mesh(
+    new THREE.RingGeometry(0.075, 1, 180, 1),
+    new THREE.MeshPhysicalMaterial({ color:0xd9dce2, roughness:.14, metalness:1, iridescence:1, iridescenceIOR:1.9, iridescenceThicknessRange:[120, 820] })
+  );
+  back.rotation.y = Math.PI; back.position.z = -0.004;
+  /* 边缘 */
+  const edge = new THREE.Mesh(
+    new THREE.CylinderGeometry(1, 1, 0.008, 180, 1, true),
+    new THREE.MeshStandardMaterial({ color:0xcfd3da, metalness:1, roughness:.25 })
+  );
+  edge.rotation.x = Math.PI / 2;
+  g.add(front, hub, stack, back, edge);
+  return { g, front };
+}
+
+if(renderer){
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  wrap.appendChild(renderer.domElement);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(3, 4, 6); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffd9c2, .8); rim.position.set(-5, -2, 2); scene.add(rim);
+
+  ITEMS.forEach((it, i) => {
+    const holder = new THREE.Group();
+    const a = i * STEP;
+    holder.position.set(RING_R * Math.sin(a), 0, RING_R * Math.cos(a));
+    holder.rotation.y = a;
+    const { g, front } = makeDisc();
+    g.rotation.z = -i * 0.9;
+    holder.add(g);
+    ring.add(holder);
+    holders.push(holder); discs.push(g); fronts.push(front);
+    g.userData.index = i; front.userData.index = i;
+  });
+}else{
+  document.documentElement.classList.add('no-webgl');
+}
+
+/* 贴图：先保证字体加载好再印字 */
+async function loadTextures(){
+  if(!renderer) return;
+  try{ await document.fonts.load('64px "Instrument Serif"'); await document.fonts.load('22px Inter'); }catch(e){}
+  await Promise.all(ITEMS.map((it, i) => new Promise((res) => {
+    const img = new Image(); img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const m = fronts[i].material; m.map = discTexture(img, it, i); m.color.set(0xffffff); m.needsUpdate = true; res();
+    };
+    img.onerror = res; img.src = it.img;
+  })));
+}
+
+function resize(){
+  const w = window.innerWidth, h = window.innerHeight;
+  if(renderer){ renderer.setSize(w, h, false); }
+  camera.aspect = w / h;
+  /* 光盘占画面：桌面约 62% 高度，手机约 84% 宽度 */
+  const mobile = w <= 760;
+  const visH = Math.max(2 / 0.62, (2 / (mobile ? 0.84 : 0.55)) / camera.aspect);
+  const dist = visH / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
+  camera.position.set(0, mobile ? -0.12 : 0.05, RING_R + dist);
+  camera.lookAt(0, mobile ? -0.12 : 0.05, RING_R);
+  camera.updateProjectionMatrix();
+  placeDot();
+}
+window.addEventListener('resize', resize);
+
+/* ─────────────── 交互 ─────────────── */
+let ringAngle = 0, ringTarget = 0, dragging = false, dragStartX = 0, dragStartAngle = 0, dragMoved = 0;
+const pointer = new THREE.Vector2(), tilt = new THREE.Vector2();
+
+function go(i){
+  const n = ((i % N) + N) % N;
+  /* 走最近的方向 */
+  let d = n - cur;
+  if(d > N / 2) d -= N; if(d < -N / 2) d += N;
+  cur = n;
+  ringTarget -= d * STEP;
+  swapText(cur);
+}
+function snap(){
+  const k = Math.round(-ringTarget / STEP);
+  const n = ((k % N) + N) % N;
+  ringTarget = -k * STEP;
+  if(n !== cur){ cur = n; swapText(cur); }
+}
+
+let acc = 0, lock = 0;
+window.addEventListener('wheel', (e) => {
+  if(lb.classList.contains('open') || dropdown.classList.contains('open')) return;
+  e.preventDefault();
+  const now = performance.now(); if(now < lock) return;
+  acc += Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+  if(Math.abs(acc) > 40){ go(cur + (acc > 0 ? 1 : -1)); acc = 0; lock = now + 700; }
+}, { passive:false });
+
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape'){ if(lb.classList.contains('open')) closeTrailer(); toggleDropdown(false); return; }
+  if(lb.classList.contains('open')) return;
+  if(e.key === 'ArrowRight' || e.key === 'ArrowDown') go(cur + 1);
+  if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(cur - 1);
+  if(e.key === 'Enter' && document.activeElement === document.body) activate(cur);
+});
+
+const ray = new THREE.Raycaster();
+function pick(x, y){
+  if(!renderer) return -1;
+  pointer.set((x / window.innerWidth) * 2 - 1, -(y / window.innerHeight) * 2 + 1);
+  ray.setFromCamera(pointer, camera);
+  const hit = ray.intersectObjects(fronts, false)[0];
+  return hit ? hit.object.userData.index : -1;
+}
+const canvasEl = renderer ? renderer.domElement : null;
+function onDown(x){ dragging = true; dragStartX = x; dragStartAngle = ringTarget; dragMoved = 0; }
+function onMove(x, y){
+  tilt.set((x / window.innerWidth) * 2 - 1, (y / window.innerHeight) * 2 - 1);
+  if(!dragging) return;
+  const dx = x - dragStartX; dragMoved = Math.max(dragMoved, Math.abs(dx));
+  ringTarget = dragStartAngle + dx / window.innerWidth * STEP * 2.6;
+}
+function onUp(x, y){
+  if(!dragging) return; dragging = false;
+  if(dragMoved < 6){
+    const i = pick(x, y);
+    if(i === cur) activate(cur); else if(i >= 0) go(i);
+    return;
+  }
+  snap();
+}
+document.addEventListener('pointerdown', (e) => {
+  if(e.target.closest('.nav,.lb,.corner,.info a')) return;
+  onDown(e.clientX);
+});
+window.addEventListener('pointermove', (e) => {
+  onMove(e.clientX, e.clientY);
+  if(canvasEl && !dragging){ document.body.style.cursor = pick(e.clientX, e.clientY) >= 0 ? 'pointer' : 'grab'; }
+});
+window.addEventListener('pointerup', (e) => onUp(e.clientX, e.clientY));
+window.addEventListener('pointercancel', () => { dragging = false; snap(); });
+
+/* ─────────────── 渲染循环 ─────────────── */
+const clock = new THREE.Clock();
+const tmpColor = new THREE.Color();
+function tick(){
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const k = 1 - Math.pow(0.0025, dt);          /* 阻尼 */
+  ringAngle += (ringTarget - ringAngle) * (dragging ? Math.min(1, k * 2.2) : k);
+  ring.rotation.y = ringAngle;
+
+  discs.forEach((g, i) => {
+    /* 与正前方的距离（弧度） */
+    let rel = i * STEP + ringAngle; rel = Math.atan2(Math.sin(rel), Math.cos(rel));
+    const front = Math.max(0, 1 - Math.abs(rel) / (STEP * 1.2));
+    const h = holders[i];
+    /* 正前方的盘向前推、放大、朝鼠标微倾；两侧的盘退后、转开 */
+    const tz = front * 0.55 - (1 - front) * 1.4;
+    h.children[0].position.z += (tz - h.children[0].position.z) * k;
+    const sc = 0.56 + front * 0.44;
+    h.children[0].scale.setScalar(h.children[0].scale.x + (sc - h.children[0].scale.x) * k);
+    const tx = front * (tilt.y * 0.18), ty = front * (tilt.x * 0.28) - rel * 0.9;
+    g.rotation.x += (tx - g.rotation.x) * k;
+    g.rotation.y += (ty - g.rotation.y) * k;
+    /* 自转：当前盘快，其余慢 */
+    if(!reduce) g.rotation.z -= dt * (0.12 + front * 0.55);
+    /* 远处的盘压暗 */
+    const lum = 0.35 + front * 0.65;
+    const m = fronts[i].material;
+    if(m.map){ tmpColor.setScalar(lum); m.color.lerp(tmpColor, k); }
   });
 
-  /* 按与当前的距离摆位：正中朝前，两侧向后退并转开 */
-  function layout(){
-    var w = window.innerWidth;
-    var gap = Math.min(w * 0.36, 420);
-    discs.forEach(function(d, i){
-      var off = i - cur;
-      var a = Math.abs(off);
-      var x = off * gap * (a > 1 ? 0.92 : 1);
-      var z = -a * 260;
-      var ry = -Math.sign(off) * Math.min(a * 38, 62);
-      d.style.transform = 'translate3d(' + x + 'px,0,' + z + 'px) rotateY(' + ry + 'deg)';
-      d.style.opacity = a > 3 ? 0 : (a === 0 ? 1 : 0.85 - a * 0.18);
-      d.style.filter = a === 0 ? 'none' : 'brightness(' + (0.75 - a * 0.1) + ')';
-      d.style.zIndex = 100 - a;
-      d.classList.toggle('active', a === 0);
-      d.classList.toggle('near', a === 1);
-      d.setAttribute('aria-hidden', a > 3 ? 'true' : 'false');
-      d.tabIndex = a === 0 ? 0 : -1;
-    });
-    bgs.forEach(function(b, i){ b.classList.toggle('on', i === cur); });
-  }
+  if(renderer) renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
 
-  /* 文字：先淡出，换内容，再淡入 */
-  var text = document.getElementById('text');
-  var tTimer;
-  function setText(){
-    var it = ITEMS[cur];
-    text.classList.add('out');
-    clearTimeout(tTimer);
-    tTimer = setTimeout(function(){
-      document.getElementById('kind').textContent = it.kind;
-      document.getElementById('date').textContent = it.date;
-      document.getElementById('title').textContent = it.title;
-      document.getElementById('sub').textContent = it.sub;
-      document.getElementById('idx').textContent = pad(cur + 1) + ' / ' + pad(N);
-      text.classList.remove('out');
-    }, 220);
-  }
-
-  function go(i){
-    var n = Math.max(0, Math.min(N - 1, i));
-    if(n === cur) return;
-    cur = n;
-    layout();
-    setText();
-  }
-
-  /* 滚轮：累计到阈值才翻一张，翻完短暂锁定 */
-  var acc = 0, lock = false;
-  window.addEventListener('wheel', function(e){
-    e.preventDefault();
-    if(lock) return;
-    acc += Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if(Math.abs(acc) > 50){
-      go(cur + (acc > 0 ? 1 : -1));
-      acc = 0; lock = true;
-      setTimeout(function(){ lock = false; }, 650);
-    }
-  }, { passive:false });
-
-  /* 触摸 / 鼠标拖动 */
-  var sx = null, sy = null, moved = false;
-  function start(x, y){ sx = x; sy = y; moved = false; }
-  function end(x, y){
-    if(sx === null) return;
-    var dx = x - sx, dy = y - sy;
-    var d = Math.abs(dx) > Math.abs(dy) ? dx : dy;
-    if(Math.abs(d) > 40){ moved = true; go(cur + (d < 0 ? 1 : -1)); }
-    sx = sy = null;
-  }
-  window.addEventListener('touchstart', function(e){ start(e.touches[0].clientX, e.touches[0].clientY); }, { passive:true });
-  window.addEventListener('touchend', function(e){ end(e.changedTouches[0].clientX, e.changedTouches[0].clientY); });
-  window.addEventListener('mousedown', function(e){ start(e.clientX, e.clientY); });
-  window.addEventListener('mouseup', function(e){ end(e.clientX, e.clientY); });
-  /* 拖动后松手不算点击 */
-  rail.addEventListener('click', function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
-
-  window.addEventListener('keydown', function(e){
-    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') go(cur + 1);
-    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(cur - 1);
-    if(e.key === 'Enter') window.location.href = ITEMS[cur].href;
-  });
-  document.querySelector('.arrow.prev').addEventListener('click', function(){ go(cur - 1); });
-  document.querySelector('.arrow.next').addEventListener('click', function(){ go(cur + 1); });
-  window.addEventListener('resize', layout);
-
-  layout();
-  setText();
-})();
+/* ─────────────── 启动 ─────────────── */
+resize();
+fill(0);
+loadTextures().finally(() => {
+  document.documentElement.classList.remove('is-loading');
+  requestAnimationFrame(placeDot);
+});
+tick();
 </script>
 </body>
 </html>

@@ -14,10 +14,15 @@
   底部固定菜单栏：≡ 作品（子菜单：数字媒介本体系列 / 艺术史系列 / 过往实践 / 叙事影像 / 全部作品）、≡ 阅读（文章 / 每日简报）、关于、联系图标。
   新增条目：复制一个 `<li>`（时间戳 + 卡片）放到最上面，图放 `assets/news/`（长边 1600px webp）。
 
-- `news-disc.html`：news 的「光盘轮换」版（与 `news.html` 并存，右上角 List 列表可切回）。参考 Ravi Klaassens 的 A24 概念站：
-  黑底、背景为当前图片的模糊放大；每条动态是一张会转的光盘（图片为盘面，透明盘心、彩虹反光和边缘高光不随盘转动，盘心外一圈环形小字）；
-  光盘横向排开，正中朝前、两侧后退转开；滚轮 / 滑动 / 方向键 / 两侧箭头 / 点击侧边光盘切换，点正中光盘进入作品页；
-  左下为类别、日期、大标题与副标题，右下为 01 / 11 计数。数据在页面底部脚本的 `ITEMS` 数组里，新增一条就在最前面加一行。
+- `news-disc.html`：news 的 A24 光盘版（与 `news.html` 列表版并存）。按作者存下的 a24.raviklaassens.com 首页 HTML 结构复刻
+  （Ravi Klaassens 的 A24 概念站；原站样式表与脚本未随页面保存，动效为按结构推断）：
+  顶部居中胶囊导航（Yi Huang / News / Works / Index 11 下拉片单，悬停文字上翻、当前页小圆点）；
+  Three.js 光盘轮换：11 张 3D 光盘排成一圈，正前方的盘前推、放大、快转并随鼠标微倾，两侧退后压暗；
+  盘面为作品图 + 印刷弧形文字，透明盘心，背面银色彩虹数据面，环境光反射；拖动 / 滚轮 / 方向键 / Index 切换；
+  左下为标题 + TYPE / DATE / VENUE 信息面板（对应原站 DIRECTED BY / YEAR / STARRING），右下为中英两行说明（对应原站影评），文字切换走遮罩滑动；
+  有 Vimeo 视频的条目点光盘弹出预告片灯箱（上下黑幕合拢、TAP FOR SOUND、CLOSE、VIEW PROJECT），其余直接进入作品页；全屏颗粒。
+  依赖：Three.js 0.178（jsDelivr）、Google Fonts（Instrument Serif、Inter，替代原站的 PP Eiko、PP Neue Montreal）、Vimeo 播放器接口。
+  数据在页面里的 `window.ITEMS` 数组，新增一条就在最前面加一项。
 
 字体只用系统衬线（Times 系）与无衬线，不再加载子集字体。
 
