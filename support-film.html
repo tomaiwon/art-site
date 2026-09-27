@@ -60,7 +60,7 @@
 
   /* 桌面版 */
   @media(min-width:681px){
-    .page{padding:72px 70px;}
+    .page{padding:72px 240px 72px 70px;}
     .mob-section-header{display:none;}
   }
 
@@ -147,21 +147,28 @@
 
   /* 桌面端商品布局 */
   @media(min-width:681px){
-    .product-mob-info{padding:0;}
-    .product-mob img{aspect-ratio:auto;width:220px;height:auto;object-fit:cover;border:2px solid #111;}
+    .product-list{display:grid;gap:40px;max-width:800px;}
     .product-mob{
-      display:flex;gap:36px;align-items:stretch;max-width:860px;
+      display:grid;grid-template-columns:220px minmax(0,360px);gap:36px;
+      align-items:stretch;
     }
+    .product-mob img{aspect-ratio:auto;width:100%;height:auto;object-fit:contain;border:2px solid #111;align-self:start;}
     .product-mob-info{
-      display:flex;flex-direction:column;justify-content:space-between;
-      padding-top:4px;padding-bottom:2px;
+      display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;
+      padding:4px 0 2px;gap:20px;min-width:0;
     }
     .product-name{font-size:18px;margin-bottom:0;}
-    .product-desc{font-size:12px;max-width:360px;}
+    .product-desc{font-size:14px;max-width:360px;flex:none;}
+    .price-row{margin-right:0;flex-wrap:wrap;}
     .product-price{font-size:18px;margin-bottom:0;}
     .buy-btn{width:auto;display:inline-block;padding:8px 20px;}
     .product-item{border-bottom:none;}
   }
+  @media(min-width:681px) and (max-width:1100px){
+    .page{padding:72px 210px 72px 32px;}
+    .product-mob{grid-template-columns:minmax(160px,40%) minmax(0,1fr);gap:24px;}
+  }
+
 </style>
 </head>
 <body>
@@ -200,7 +207,7 @@
           <p class="product-desc">《关中往事》光盘纪念版<br>Commemorative Edition DVD</p>
           <div class="price-row">
             <span class="product-price">£20</span>
-            <a class="buy-btn" href="https://buy.stripe.com/00wcN53aw6WsaRn7vy6g800" target="_blank">BUY</a>
+            <a class="buy-btn" href="https://buy.stripe.com/00wcN53aw6WsaRn7vy6g800" target="_blank" rel="noopener">BUY</a>
           </div>
         </div>
 
@@ -213,7 +220,7 @@
           <p class="product-desc">《洋务运动》光盘纪念版<br>Commemorative Edition DVD</p>
           <div class="price-row">
             <span class="product-price">£25</span>
-            <a class="buy-btn" href="https://buy.stripe.com/3cIbJ1bH294A3oV4jm6g801" target="_blank">BUY</a>
+            <a class="buy-btn" href="https://buy.stripe.com/3cIbJ1bH294A3oV4jm6g801" target="_blank" rel="noopener">BUY</a>
           </div>
         </div>
       </div>
