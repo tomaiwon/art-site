@@ -12,6 +12,23 @@
 <link rel="preload" as="font" href="fonts/Z-work.woff2?v=3" type="font/woff2" crossorigin>
 
 <style>
+  @font-face{
+    font-family:"AutomaticLabel";
+    src:url("fonts/Z-automatic-label.woff2") format("woff2");
+    font-weight:400;
+    font-style:normal;
+    font-display:block;
+    unicode-range:U+751F,U+957F,U+534A,U+5BFC,U+4F53;
+  }
+  @font-face{
+    font-family:"AutomaticLabel";
+    src:url("fonts/Z-automatic-label.woff2") format("woff2");
+    font-weight:700;
+    font-style:normal;
+    font-display:block;
+    unicode-range:U+751F,U+957F,U+534A,U+5BFC,U+4F53;
+  }
+  .automatic-title{font-family:"EFont","AutomaticLabel",sans-serif;}
   /* 字体：英 E / 中 Z / 数字 N（与 ABOUT 页一致） */
   @font-face{
     font-family:"EFont";
@@ -629,6 +646,7 @@
       </h2>
 
       <ul class="list">
+        <li class="item"><span class="year">2026.09</span><span class="name"><a class="automatic-title" href="projects/automatic/">AUTOMATIC 生长半导体</a></span></li>
         <li class="item"><span class="year">2026.09</span><span class="name"><a href="east-asia/">Confucian Silence 东亚制造</a></span></li>
         <li class="item"><span class="year">2026.07</span><span class="name"><a href="projects/nine-layer-stack/">Stack 九层堆栈图谱</a></span></li>
         <li class="item"><span class="year">2026.05</span><span class="name"><a href="projects/asfablesgoby.html">As Fables Go By 洋务运动</a></span></li>

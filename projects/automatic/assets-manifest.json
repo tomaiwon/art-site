@@ -1,0 +1,60 @@
+{
+  "type": "selected-artwork-images",
+  "export": "1080 x 1350 WebP display derivatives; image metadata omitted",
+  "images": [
+    {
+      "file": "assets/cover-013.webp",
+      "issue": 13,
+      "page": 1,
+      "width": 1080,
+      "height": 1350,
+      "bytes": 410198,
+      "sha256": "755a4933d06a7e57573a049cda4a45ac43a1bc7dadb16422a10eddeda1444a39"
+    },
+    {
+      "file": "assets/cover-007.webp",
+      "issue": 7,
+      "page": 1,
+      "width": 1080,
+      "height": 1350,
+      "bytes": 308086,
+      "sha256": "eb8d357bd5f1529e63ce984f14328c811bdf3ca863f6afcd43ce2a62781d84d7"
+    },
+    {
+      "file": "assets/cover-064.webp",
+      "issue": 64,
+      "page": 1,
+      "width": 1080,
+      "height": 1350,
+      "bytes": 325936,
+      "sha256": "738c16bb2cc1027390c9abbfe4d9a8ac94594f56cf15417d31968438d83da94f"
+    },
+    {
+      "file": "assets/007-02.webp",
+      "issue": 7,
+      "page": 2,
+      "width": 1080,
+      "height": 1350,
+      "bytes": 184110,
+      "sha256": "b1ef900debc9ee4af739ccfdcd5b9be1c113afd7973bfbdb1d473c60c3d06c76"
+    },
+    {
+      "file": "assets/007-03.webp",
+      "issue": 7,
+      "page": 3,
+      "width": 1080,
+      "height": 1350,
+      "bytes": 178634,
+      "sha256": "ae1ad94b73a292ab08bd273bf0757def3074848393f0bda60bcf0042c1905d59"
+    },
+    {
+      "file": "assets/007-04.webp",
+      "issue": 7,
+      "page": 4,
+      "width": 1080,
+      "height": 1350,
+      "bytes": 67414,
+      "sha256": "73c060898cc2aed858afa0faadda5545aeb48ab2b202d8fcae0108f7802b5f33"
+    }
+  ]
+}
