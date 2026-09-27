@@ -324,6 +324,9 @@ let last=performance.now(), fpsT=0;
 function frame(nowMs){
   const now=nowMs/1000, time=now, age=now-born;
   const br = 0.5-0.5*Math.cos(time*2*Math.PI/6.5);   // 6.5 秒一次呼吸
+  /* 有些预览框架加载时尺寸还是 0，之后也不发 resize —— 每帧对一下 */
+  if(Math.round(innerWidth*Math.min(devicePixelRatio||1,2))!==W ||
+     Math.round(innerHeight*Math.min(devicePixelRatio||1,2))!==H) resize();
   updatePull();
   buildSpine(time, br);
 
