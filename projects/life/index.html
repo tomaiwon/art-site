@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>奇怪的生物</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#fff;color:#111;
+    font:12px/1.4 "SF Mono",Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
+  #cv{position:fixed;inset:0;display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+  #cv.drag{cursor:grabbing}
+  .hud{position:fixed;pointer-events:none;color:#9a9a96;
+    letter-spacing:.16em;text-transform:uppercase;font-size:10px}
+  .tl{top:18px;left:20px;display:flex;align-items:center;gap:10px;letter-spacing:.04em;font-size:11px}
+  .tl b{color:#111;font-weight:700;font-size:13px;letter-spacing:.06em}
+  .tl i{display:inline-block;width:4px;height:14px;background:#c8f51c}
+  .tr{top:16px;right:20px;text-align:right;letter-spacing:.04em;font-size:12px;color:#3a3a38}
+  .tr nav{margin-top:8px;display:flex;gap:4px;justify-content:flex-end;pointer-events:auto}
+  .tr button{font:inherit;font-size:10px;letter-spacing:.08em;color:#9a9a96;background:none;
+    border:1px solid transparent;padding:2px 5px;border-radius:2px;cursor:pointer}
+  .tr button:hover{color:#111}
+  .tr button[aria-current="true"]{color:#111;border-color:rgba(154,154,150,.5)}
+  .tr button:focus-visible{outline:2px solid #c8f51c;outline-offset:1px}
+  .bl{bottom:18px;left:20px;line-height:1.9}
+  .br{bottom:18px;right:20px;text-align:right;opacity:.7}
+  .sub{left:0;right:0;bottom:0;padding:44px 0 22px;text-align:center;color:#3a3a38;font-size:13px;
+    letter-spacing:.08em;text-transform:none;
+    background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.82) 55%)}
+  .sub span{transition:opacity .6s}
+  .err{top:50%;left:0;right:0;text-align:center;color:#3a3a38;text-transform:none;letter-spacing:.06em}
+  kbd{font:inherit;border:1px solid rgba(154,154,150,.5);padding:1px 5px;border-radius:2px}
+  /* 窄屏：右下收掉，字幕抬到操作说明上面 */
+  @media (max-width:760px){ .br{display:none} .sub{padding:40px 20px 62px;font-size:12px} }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="hud tl"><i></i><b>奇怪的生物</b><span>/ 复刻《未命名的生命》</span></div>
+<div class="hud tr">
+  <div id="chap">00 / 作品介绍</div>
+  <nav id="nav" aria-label="章节"></nav>
+</div>
+<div class="hud sub"><span id="sub"></span></div>
+<div class="hud bl">
+  <div>拖动 转着看　滚轮 / 双指 推近　轻点 换一个生命</div>
+  <div><kbd>0</kbd>–<kbd>5</kbd> 跳章节　<kbd>空格</kbd> 重生　<kbd>S</kbd> 存图</div>
+</div>
+<div class="hud br">After JHBOOM · TouchDesigner → WebGL</div>
+
+<script type="module">
+/* =====================================================================
+ * 奇怪的生物 —— 复刻 JHBOOM 在 TouchDesigner 里做的《未命名的生命》
+ *
+ * 照作者在视频里讲的逻辑来搭，而不只是照画面：
+ *
+ * 01 形态 · 身份要模糊
+ *   三种单看都认识的东西 —— 圆润的颗粒（像细胞）、向外伸的细长结构（像触须）、
+ *   花瓣一样展开的薄膜（像组织）—— 放在一起，对不上任何一种具体生物。
+ *   「刚看出一朵花，下一秒它已经变成另一种形态。」
+ *   → 形体在几个可辨认的「格式塔」之间连续滑动：花、浮游生物群、伸展的身体、
+ *     一团细胞。权重由平滑噪声驱动，偶尔某一个占上风（一瞬间认出来），
+ *     大部分时间是混合态（好像认识，又说不清是什么）。
+ *
+ * 02 材质 · 轻和重放在一起
+ *   薄膜：浅金、淡青，半透明；边缘薄，折叠的地方显得更厚。
+ *   颗粒：不透明、轮廓明确；聚在一起时局部更密、更有重量。
+ *   → 薄膜着色器里，边缘透、掠射角（折叠处）反而更实、更暖；
+ *     颗粒纯黑不受光，并且会往几个中心聚拢成团块。
+ *
+ * 03 色彩
+ *   大面积白底让形体第一眼就被抓住，也把细长弯曲的结构勾出来；
+ *   荧光绿让人想到植物，但亮得很人工；浅金做柔和过渡，黑色做强对比。
+ *
+ * 04 运动 · 不是物体换了角度，而是身体本身在变
+ *   触须舒展、弯曲；颗粒时而聚拢、时而分散；薄膜不断改变朝向和重叠关系。
+ *   → 所有变化都挂在「身体」上，由不重复的噪声驱动；镜头只慢慢走，
+ *     第 04 章干脆停住镜头，只剩身体在变。
+ *
+ * 05 · 生命感来自持续变化和不确定性。
+ *
+ * 实现：Three.js 实例化。薄膜 / 触须的弯曲在顶点着色器里做（圆弧弯折），
+ * CPU 每帧只算每个实例挂在身体哪里、朝哪边。
+ * ===================================================================== */
+import * as THREE from 'three';
+
+const cv = document.getElementById('cv');
+let renderer;
+try{
+  renderer = new THREE.WebGLRenderer({ canvas:cv, antialias:true });
+}catch(e){
+  const d=document.createElement('div'); d.className='hud err';
+  d.textContent='这个浏览器没法开启 WebGL，看不到它。'; document.body.appendChild(d);
+  throw e;
+}
+renderer.setClearColor(0xffffff, 1);
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 200);
+
+const LIME = '#c8f51c';
+
+/* ---------- 随机与噪声 ---------- */
+function rng(seed){
+  return function(){
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+let R = rng(1);
+const rr = (a,b)=>a+(b-a)*R();
+/* 一维值噪声：不重复，所以「要继续看才知道下一刻是什么」 */
+const hash1 = (i,s)=>{ const x=Math.sin(i*127.1+s*311.7)*43758.5453; return (x-Math.floor(x))*2-1; };
+function vnoise(x,s){ const i=Math.floor(x), f=x-i, u=f*f*(3-2*f); return hash1(i,s)*(1-u)+hash1(i+1,s)*u; }
+const fbm = (x,s)=>vnoise(x,s)*0.7 + vnoise(x*2.13+5.1,s+7)*0.3;
+
+/* ---------- 几何：一片可以弯的叶片 ----------
+   局部坐标里沿 +Y 从 0 长到 1，横向 u∈[-1,1]。
+   花瓣：圆肚尖头；尖角：根部最宽一路收尖。截面带一点兜和褶。 */
+function bladeGeo(shape){
+  const g = new THREE.PlaneGeometry(2, 1, shape==='petal'?16:8, 36);
+  const pos = g.attributes.position, uv = g.attributes.uv;
+  for(let i=0;i<pos.count;i++){
+    const u = pos.getX(i), v = pos.getY(i)+0.5;
+    let w;
+    if(shape==='petal') w = Math.pow(Math.sin(Math.PI*v),0.75)*(1-0.3*v);
+    else                w = Math.sqrt(Math.min(1,v/0.07))*Math.pow(1-v,1.15);
+    const x = u*w*0.5;
+    const z = 0.16*(1-u*u)*w + 0.035*Math.sin(u*Math.PI*2.5)*w;
+    pos.setXYZ(i, x, v, z);
+    uv.setXY(i, u, v);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
+const filmVS = /* glsl */`
+  attribute vec4 aP;   // seed, bend, wobble, -
+  attribute vec4 aC;   // gold, teal, lime edge, -
+  uniform float uTime;
+  varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec4 vC; varying float vSeed;
+  void main(){
+    /* 圆弧弯折：绕局部 X 轴，弯曲角沿长度线性增加 */
+    float b = aP.y + aP.z*sin(uTime*1.1 + aP.x*6.2831);
+    b = abs(b)<1e-3 ? 1e-3 : b;
+    float Rr = 1.0/b, th = position.y*b, s = sin(th), c = cos(th);
+    vec3 q = vec3(position.x, (Rr-position.z)*s, Rr-(Rr-position.z)*c);
+    vec3 m = vec3(normal.x, normal.y*c-normal.z*s, normal.y*s+normal.z*c);
+    vec4 mv = viewMatrix * modelMatrix * instanceMatrix * vec4(q,1.0);
+    vN = normalize(normalMatrix * mat3(instanceMatrix) * m);
+    vView = -mv.xyz; vUv = uv; vC = aC; vSeed = aP.x;
+    gl_Position = projectionMatrix * mv;
+  }`;
+const filmFS = /* glsl */`
+  uniform vec3 uLight;
+  varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec4 vC; varying float vSeed;
+  float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+  float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+    return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y); }
+  void main(){
+    vec3 n = normalize(vN); if(!gl_FrontFacing) n = -n;
+    vec3 V = normalize(vView), L = normalize(uLight);
+    float u = vUv.x, v = vUv.y;
+    /* 受光：包裹式漫反射，暗部是偏冷的灰，不是黑 */
+    float dif = dot(n,L)*0.5+0.5;
+    vec3 col = mix(vec3(0.78,0.785,0.775), vec3(0.985,0.978,0.962), smoothstep(0.1,0.8,dif));
+    col += 0.10*pow(max(dot(reflect(-L,n),V),0.0), 16.0);
+    /* 浅金从根部渗上来，里面夹着顺长度方向的橙色晕染 */
+    float nz = noise(vec2(u*2.6+vSeed*17.0, v*5.0+vSeed*9.0));
+    float g = smoothstep(0.92,0.02,v) * vC.x * (0.35+0.65*nz);
+    float streak = noise(vec2(u*5.0+vSeed*31.0, v*1.3+vSeed*5.0));
+    float vein = smoothstep(0.55,0.95, streak*0.75 + noise(vec2(u*11.0+vSeed*7.0, v*2.6))*0.35);
+    col = mix(col, vec3(0.93,0.77,0.57), clamp(g,0.0,1.0)*0.8);
+    col = mix(col, vec3(0.85,0.44,0.16), clamp(g*vein*1.4,0.0,1.0)*0.75);
+    /* 淡青 */
+    col = mix(col, vec3(0.64,0.84,0.79), vC.y*smoothstep(0.95,0.15,v)*(0.4+0.6*nz)*0.75);
+    /* 「边缘很薄，折叠的地方又显得更厚」：
+       边缘（|u|→1）透；掠射角处（面折过去、视线穿过的膜更多）反而更实、更暖 */
+    float edge = smoothstep(0.5,1.0,abs(u));
+    float fold = pow(1.0-abs(dot(n,V)), 2.0);
+    col = mix(col, col*vec3(0.95,0.9,0.82), fold*0.55);
+    float a = mix(0.8, 0.28, edge);
+    a = mix(a, 1.0, fold*0.65);
+    /* 一侧镶荧光绿 */
+    float e = vC.z * smoothstep(0.3,0.78,u) * smoothstep(0.98,0.8,v);
+    col = mix(col, vec3(0.784,0.961,0.110), e);
+    gl_FragColor = vec4(col, max(a, e));
+  }`;
+const filmMat = new THREE.ShaderMaterial({
+  vertexShader:filmVS, fragmentShader:filmFS,
+  uniforms:{ uTime:{value:0}, uLight:{value:new THREE.Vector3(0.4,0.8,0.6)} },
+  side:THREE.DoubleSide, transparent:true, depthWrite:true
+});
+/* 颗粒：不透明、轮廓明确 —— 纯黑，不受光 */
+const inkMat  = new THREE.MeshBasicMaterial({ color:0x000000 });
+/* 绿：亮得很人工，所以也不受光 */
+const limeMat = new THREE.MeshBasicMaterial({ color:LIME });
+
+const sphere = new THREE.SphereGeometry(1, 28, 18);
+/* 绿团：边缘不规则的一坨，不是光滑的椭球 */
+const lump = (()=>{
+  const g = new THREE.IcosahedronGeometry(1, 4), p = g.attributes.position, v = new THREE.Vector3();
+  for(let i=0;i<p.count;i++){
+    v.fromBufferAttribute(p,i);
+    const k = 1 + 0.16*Math.sin(v.x*3.1+1.3)*Math.sin(v.y*2.7+0.4) + 0.09*Math.sin(v.z*5.3+v.x*2.1)
+                + 0.05*Math.sin(v.y*9.0+v.z*4.0);
+    p.setXYZ(i, v.x*k, v.y*k, v.z*k);
+  }
+  return g;
+})();
+const GEO = { petal:bladeGeo('petal'), horn:bladeGeo('horn') };
+
+/* ---------- 实例 ---------- */
+const MAX = { grains:260, petal:70, horn:60, feelers:110, blobs:70 };
+const meshes = {
+  grains : new THREE.InstancedMesh(sphere, inkMat,  MAX.grains),
+  tips   : new THREE.InstancedMesh(sphere, inkMat,  MAX.feelers),
+  blobs  : new THREE.InstancedMesh(lump,   limeMat, MAX.blobs),
+  petal  : new THREE.InstancedMesh(GEO.petal.clone(), filmMat, MAX.petal),
+  horn   : new THREE.InstancedMesh(GEO.horn.clone(),  filmMat, MAX.horn),
+  feelers: new THREE.InstancedMesh(GEO.horn.clone(),  filmMat, MAX.feelers),
+};
+/* 每组叶片有自己的实例属性：种子、弯曲、配色 */
+for(const k of ['petal','horn','feelers']){
+  const n = MAX[k];
+  meshes[k].geometry.setAttribute('aP', new THREE.InstancedBufferAttribute(new Float32Array(n*4),4));
+  meshes[k].geometry.setAttribute('aC', new THREE.InstancedBufferAttribute(new Float32Array(n*4),4));
+}
+for(const m of Object.values(meshes)){
+  m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  m.frustumCulled = false;
+  scene.add(m);
+}
+
+/* ---------- 形态：几个「好像认识」的样子 ----------
+   每一个都只是同一套元素的一组参数。身体长短、弯多大，颗粒散多开、往中心聚多少，
+   薄膜往外张还是顺着身体往上，触须被水流梳得多齐。 */
+const FORMS = [
+  { name:'一朵正在打开的花',   len:2.6, amp:0.35, open:1.15, up:1.6, flow:0.25, spread:0.8, gather:0.25, radK:0.8,  filmK:1.14, feelK:0.8 },
+  { name:'一群水里的浮游生物', len:9.0, amp:1.9,  open:0.5,  up:0.2, flow:1.6,  spread:2.4, gather:0.0,  radK:0.7,  filmK:0.7, feelK:1.1 },
+  { name:'一只在伸展的动物',   len:8.4, amp:1.1,  open:0.9,  up:0.5, flow:1.0,  spread:1.0, gather:0.1,  radK:1.0,  filmK:0.88, feelK:1.35 },
+  { name:'一团聚在一起的细胞', len:4.2, amp:0.8,  open:0.6,  up:0.4, flow:0.6,  spread:0.35,gather:0.85, radK:1.35, filmK:0.79, feelK:0.7 },
+];
+const KEYS = Object.keys(FORMS[0]).filter(k=>k!=='name');
+const F = Object.fromEntries(KEYS.map(k=>[k, FORMS[2][k]]));   // 当前（平滑后的）形态参数
+const W = new Float32Array(FORMS.length);                       // 各形态权重
+let formSeed = 1, sharp = 5;
+function updateForm(time){
+  /* softmax(噪声)：大多时候是混合态，偶尔某一个冒头 */
+  let sum=0;
+  for(let i=0;i<FORMS.length;i++){ W[i]=Math.exp(sharp*fbm(time/9 + i*13.7, formSeed+i)); sum+=W[i]; }
+  for(let i=0;i<FORMS.length;i++) W[i]/=sum;
+  for(const k of KEYS){
+    let v=0; for(let i=0;i<FORMS.length;i++) v+=W[i]*FORMS[i][k];
+    F[k] += (v-F[k])*0.04;
+  }
+}
+
+/* ---------- 一只生命 ---------- */
+let body, grains, blobs, films, feelers, clusters, born=0;
+
+function build(seed){
+  R = rng(seed); formSeed = (seed%9973)+1;
+  body = {
+    ax:[rr(1.0,1.6), rr(0.2,0.5)], fx:[rr(1.8,3.2), rr(4,7)], px:[rr(0,6.3), rr(0,6.3)],
+    az:[rr(0.7,1.2), rr(0.2,0.45)], fz:[rr(1.5,3), rr(4,7)], pz:[rr(0,6.3), rr(0,6.3)],
+    tilt: rr(-0.9,0.9), spin: rr(0,6.3), flow: rr(0,6.3)
+  };
+  grains=[]; blobs=[]; films=[]; feelers=[];
+  const dir = ()=>R()*Math.PI*2;
+  /* 颗粒聚拢时往这几个中心靠 */
+  clusters = Array.from({length:4}, ()=>({ s:rr(0.1,0.9), phi:dir() }));
+  const cl = ()=>clusters[(R()*clusters.length)|0];
+  /* 颗粒：一条贴着身体的链（大），外加散开的小颗粒 */
+  for(let i=0;i<160;i++) grains.push({ s:R(), phi:dir(), r0:Math.pow(R(),1.4)*0.34,
+    rad:0.13+0.34*Math.pow(R(),1.6), ph:R()*6.3, c:cl() });
+  for(let i=0;i<100;i++) grains.push({ s:R(), phi:dir(), r0:0.35+1.4*Math.pow(R(),1.3),
+    rad:0.025+0.1*Math.pow(R(),2), ph:R()*6.3, c:cl() });
+  /* 荧光绿团 */
+  for(let i=0;i<MAX.blobs;i++) blobs.push({ s:R(), phi:dir(), r0:0.15+1.1*R(),
+    sc:[rr(0.14,0.42), rr(0.06,0.16), rr(0.14,0.36)], rot:[dir(),dir(),dir()], ph:R()*6.3 });
+  /* 薄膜：花瓣和尖角 */
+  const film = (shape)=>({ shape, s:R(), phi:dir(), r0:0.05+0.5*R(),
+    L: shape==='petal'? rr(0.9,2.2) : rr(1.0,2.4),
+    W: shape==='petal'? rr(0.6,1.3) : rr(0.28,0.6),
+    up: rr(0.2,1.2), roll:dir(), ph:R()*6.3, out:1, flow:rr(0.2,0.8),
+    P:[R(), (R()<0.5?-1:1)*rr(0.2,1.3), rr(0.15,0.4), 0],
+    C:[R()<0.8?rr(0.55,1):0, R()<0.25?rr(0.5,1):0, R()<0.35?1:0, 0] });
+  for(let i=0;i<MAX.petal;i++) films.push(film('petal'));
+  for(let i=0;i<MAX.horn;i++)  films.push(film('horn'));
+  /* 触须 */
+  for(let i=0;i<MAX.feelers;i++) feelers.push({ s:R(), phi:dir(), r0:0.1+0.5*R(),
+    L:rr(1.3,3.4), W:rr(0.05,0.11), up:rr(0,0.6), roll:dir(), ph:R()*6.3, out:0.45, flow:rr(0.8,1.5),
+    tip: 0.018+0.018*R(),
+    P:[R(), (R()<0.5?-1:1)*rr(0.15,0.9), rr(0.1,0.3), 0],
+    C:[R()<0.25?rr(0.3,0.7):0, 0, R()<0.75?1:0, 0] });
+
+  for(const [k,list] of [['petal',films.filter(f=>f.shape==='petal')],
+                         ['horn', films.filter(f=>f.shape==='horn')],
+                         ['feelers',feelers]]){
+    const aP=meshes[k].geometry.attributes.aP, aC=meshes[k].geometry.attributes.aC;
+    list.forEach((f,i)=>{ f.idx=i; aP.setXYZW(i,...f.P); aC.setXYZW(i,...f.C); });
+    aP.needsUpdate=aC.needsUpdate=true;
+  }
+  /* 只画用到的实例 —— 多预留的那些是单位矩阵，会在原点叠出一个大球 */
+  meshes.grains.count = grains.length; meshes.tips.count = feelers.length;
+  born = performance.now()/1000;
+}
+
+/* ---------- 身体曲线 ---------- */
+const NS = 128;
+const SP = Array.from({length:NS+1}, ()=>({ p:new THREE.Vector3(), t:new THREE.Vector3(),
+  n:new THREE.Vector3(), b:new THREE.Vector3() }));
+const bodyRot = new THREE.Quaternion(), euler = new THREE.Euler(), REF = new THREE.Vector3();
+/* 水流：触须和薄膜被一股慢慢转向的流梳往同一边 */
+const FLOW = new THREE.Vector3();
+function buildBody(time, br){
+  const B=body, len=F.len*(0.88+0.18*br), A=F.amp;
+  const fa = B.flow + 1.4*fbm(time*0.04, 3), fb = 0.6*fbm(time*0.035, 5);
+  FLOW.set(Math.cos(fa)*Math.cos(fb), Math.sin(fb)+0.35, Math.sin(fa)*Math.cos(fb)).normalize();
+  /* 整体姿态也用噪声转，不是匀速自转 */
+  euler.set(0.5*fbm(time*0.03,11)+0.2, B.spin+1.2*fbm(time*0.02,13), B.tilt+0.6*fbm(time*0.025,17));
+  bodyRot.setFromEuler(euler);
+  for(let i=0;i<=NS;i++){
+    const s=i/NS;
+    SP[i].p.set(
+      A*(B.ax[0]*Math.sin(B.fx[0]*s + time*0.31 + B.px[0]) + B.ax[1]*Math.sin(B.fx[1]*s - time*0.47 + B.px[1])),
+      (s-0.5)*len,
+      A*(B.az[0]*Math.sin(B.fz[0]*s + time*0.23 + B.pz[0]) + B.az[1]*Math.sin(B.fz[1]*s - time*0.39 + B.pz[1]))
+    ).applyQuaternion(bodyRot);
+  }
+  REF.set(0,0,1).applyQuaternion(bodyRot);
+  for(let i=0;i<=NS;i++){
+    const a=SP[Math.max(0,i-1)].p, b=SP[Math.min(NS,i+1)].p, S=SP[i];
+    S.t.subVectors(b,a).normalize();
+    S.n.crossVectors(S.t, REF); if(S.n.lengthSq()<1e-6) S.n.set(1,0,0); S.n.normalize();
+    S.b.crossVectors(S.t, S.n);
+  }
+}
+function frameAt(s){ return SP[Math.max(0,Math.min(NS, Math.round(s*NS)))]; }
+
+/* ---------- 每帧摆放 ---------- */
+const M=new THREE.Matrix4(), Q=new THREE.Quaternion(), V=new THREE.Vector3(), S3=new THREE.Vector3();
+const X=new THREE.Vector3(), Y=new THREE.Vector3(), Z=new THREE.Vector3(), O=new THREE.Vector3();
+const D=new THREE.Vector3(), TIP=new THREE.Vector3();
+const clamp01=v=>v<0?0:v>1?1:v, ease=v=>{ v=clamp01(v); return 1-Math.pow(1-v,3); };
+const grow=(age,s,d)=>ease((age-s*1.3-(d||0))/1.0);
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+/* 从身体截面上 phi 方向伸出去的单位向量 */
+function offsetDir(Fr, phi, out){ return out.copy(Fr.n).multiplyScalar(Math.cos(phi)).addScaledVector(Fr.b, Math.sin(phi)); }
+/* 散开的程度：形态给一个总量，同一段身体上的东西再一起起伏 */
+function spread(time, s, ph){ return F.spread*(0.55 + 0.9*(0.5+0.5*fbm(time*0.12 + s*2.3 + ph*0.05, 21))); }
+/* 以 d 为 +Y、绕 d 转 roll 的朝向 */
+function orient(d, roll, q){
+  Y.copy(d).normalize();
+  X.set(0,1,0); if(Math.abs(X.dot(Y))>0.95) X.set(1,0,0);
+  X.cross(Y).normalize(); Z.crossVectors(X,Y);
+  const c=Math.cos(roll), s=Math.sin(roll);
+  V.copy(X).multiplyScalar(c).addScaledVector(Z,s);
+  Z.multiplyScalar(c).addScaledVector(X,-s); X.copy(V);
+  M.makeBasis(X,Y,Z); q.setFromRotationMatrix(M);
+}
+function placeBlade(mesh, f, time, br, age, tipMesh, sizeK){
+  const Fr=frameAt(f.s), g=grow(age,f.s,0.25);
+  offsetDir(Fr, f.phi + 0.6*fbm(time*0.09+f.ph, 31), O);
+  /* 舒展：伸出方向在「向外张开」和「顺着身体往上」之间来回；
+     薄膜朝向和重叠关系因此一直在换 */
+  const open = F.open*(0.6+0.4*fbm(time*0.15 + f.s*1.7 + f.ph, 41));
+  D.copy(O).multiplyScalar(open*f.out)
+   .addScaledVector(Fr.t, f.up*F.up*(1.25-Math.min(1,open)))
+   .addScaledVector(FLOW, f.flow*F.flow);
+  orient(D, f.roll + 1.1*fbm(time*0.12+f.ph*3, 51), Q);
+  const base = TIP.copy(Fr.p).addScaledVector(O, f.r0*Math.min(1.6,F.spread));
+  const L=f.L*g*(0.88+0.2*br)*sizeK;
+  M.compose(base, Q, S3.set(f.W*g*sizeK, L, L));
+  mesh.setMatrixAt(f.idx, M);
+  if(tipMesh){
+    /* 尖端：按着色器里同一条圆弧算出来 */
+    let b=f.P[1]+f.P[2]*Math.sin(time*1.1+f.P[0]*6.2831); if(Math.abs(b)<1e-3) b=1e-3;
+    TIP.set(0, Math.sin(b)/b, (1-Math.cos(b))/b).applyMatrix4(M);
+    const tr=f.tip*clamp01((g-0.9)*10);
+    M.compose(TIP, Q, S3.set(tr,tr,tr));
+    tipMesh.setMatrixAt(f.idx, M);
+  }
+}
+
+const CP = new THREE.Vector3();
+function place(time, br, age){
+  grains.forEach((d,i)=>{
+    /* 聚拢：沿身体滑向所属的中心、贴近身体，局部于是更密、更重 */
+    const gth = F.gather*(0.7+0.3*fbm(time*0.2+d.ph,61));
+    const s = lerp(d.s, d.c.s + (d.s-0.5)*0.12, gth);
+    const Fr=frameAt(s+0.01*Math.sin(time*0.6+d.ph)), g=grow(age,d.s,0);
+    offsetDir(Fr, lerp(d.phi + time*0.1*(d.ph>3?1:-1), d.c.phi, gth*0.6), O);
+    V.copy(Fr.p).addScaledVector(O, d.r0*spread(time,d.s,d.ph)*(1-0.75*gth));
+    /* 贴到镜头跟前的球会糊掉半屏，靠近时缩掉 */
+    const near = clamp01((V.distanceTo(camera.position)-1.2)/2.5);
+    const r=d.rad*g*near*F.radK; M.makeScale(r,r,r).setPosition(V);
+    meshes.grains.setMatrixAt(i, M);
+  });
+  blobs.forEach((b,i)=>{
+    const Fr=frameAt(b.s), g=grow(age,b.s,0.35);
+    offsetDir(Fr, b.phi+0.4*fbm(time*0.1+b.ph,71), O);
+    V.copy(Fr.p).addScaledVector(O, b.r0*spread(time,b.s,b.ph));
+    euler.set(b.rot[0]+time*0.2, b.rot[1], b.rot[2]+0.3*Math.sin(time*0.3+b.ph)); Q.setFromEuler(euler);
+    M.compose(V, Q, S3.set(b.sc[0]*g, b.sc[1]*g, b.sc[2]*g));
+    meshes.blobs.setMatrixAt(i, M);
+  });
+  for(const f of films) placeBlade(meshes[f.shape], f, time, br, age, null, F.filmK);
+  for(const f of feelers) placeBlade(meshes.feelers, f, time, br, age, meshes.tips, F.feelK);
+  for(const m of Object.values(meshes)) m.instanceMatrix.needsUpdate=true;
+}
+
+/* ---------- 章节：照原片 00–05 的顺序导览 ----------
+   每一章让画面去示范那一条：形态章把形态切得更干脆并说出它像什么，
+   材质章推近，色彩章拉远看剪影，运动章停住镜头。字幕是我对原作逻辑的转述。 */
+const CHAPTERS = [
+  { id:'00', name:'作品介绍', orbit:0.035, zoom:1.0,  sharp:5,
+    sub:'没有明确的身份：只有颗粒、触须和薄膜。可一动起来，它好像是活的。' },
+  { id:'01', name:'形态',     orbit:0.03,  zoom:1.05, sharp:9, sub:null },
+  { id:'02', name:'材质',     orbit:0.02,  zoom:0.55, sharp:5,
+    sub:'薄膜轻、透，边缘薄、折叠处厚；颗粒不透明，聚在一起就有了重量。' },
+  { id:'03', name:'色彩',     orbit:0.035, zoom:1.2,  sharp:5,
+    sub:'白底让轮廓一眼可见。绿亮得很人工，浅金做过渡，黑色压住画面。' },
+  { id:'04', name:'运动',     orbit:0,     zoom:0.95, sharp:6,
+    sub:'镜头停住了。还在变的是它的身体：舒展、弯曲、聚拢、散开。' },
+  { id:'05', name:'创作感受', orbit:0.035, zoom:1.0,  sharp:5,
+    sub:'也许只是某一瞬间，它看起来像是在舒展自己的身体。' },
+];
+const CH_LEN = 20;              // 每章秒数
+let chap = 0, chapT0 = 0;
+const chapEl=document.getElementById('chap'), subEl=document.getElementById('sub'), nav=document.getElementById('nav');
+CHAPTERS.forEach((c,i)=>{
+  const b=document.createElement('button'); b.type='button'; b.textContent=c.id; b.title=c.name;
+  b.addEventListener('click', ()=>goChapter(i)); nav.appendChild(b);
+});
+let subText='';
+function setSub(t){ if(t===subText) return; subText=t; subEl.style.opacity=0;
+  setTimeout(()=>{ subEl.textContent=subText; subEl.style.opacity=1; }, 300); }
+function goChapter(i){
+  chap=(i+CHAPTERS.length)%CHAPTERS.length; chapT0=performance.now()/1000;
+  const c=CHAPTERS[chap];
+  chapEl.textContent=c.id+' / '+c.name;
+  [...nav.children].forEach((b,j)=>b.setAttribute('aria-current', j===chap?'true':'false'));
+}
+/* 形态章：权重冒头时说出像什么；混在一起时说不清 */
+function formCaption(){
+  let best=0; for(let i=1;i<W.length;i++) if(W[i]>W[best]) best=i;
+  return W[best]>0.6 ? '这一刻，它像'+FORMS[best].name+'。' : '好像认识，又说不清是什么。';
+}
+
+/* ---------- 镜头：慢慢走；第 04 章停住 ---------- */
+const view = { yaw:0, pitch:0, zoom:1, vyaw:0, vpitch:0, az:0, cz:1 };
+const target = new THREE.Vector3(), aim = new THREE.Vector3();
+function placeCamera(time, dt){
+  const c = CHAPTERS[chap];
+  view.az += c.orbit*dt;
+  view.cz += (c.zoom-view.cz)*0.02;
+  const aspect = camera.aspect;
+  let dist = 11 * (aspect<1 ? 0.85/Math.max(0.5,aspect) : 1) * view.cz * view.zoom;
+  const az = view.az + view.yaw, el = 0.22*fbm(time*0.03,81) + view.pitch;
+  /* 推近时对准一个颗粒团；平时看身体中段 */
+  const Fr = chap===2 ? frameAt(clusters[((time/7)|0)%clusters.length].s) : frameAt(0.5+0.25*fbm(time*0.04,91));
+  target.lerp(aim.copy(Fr.p).multiplyScalar(chap===2?0.9:0.4), 0.03);
+  camera.position.set(Math.sin(az)*Math.cos(el), Math.sin(el), Math.cos(az)*Math.cos(el))
+    .multiplyScalar(dist).add(target);
+  camera.lookAt(target);
+}
+
+/* ---------- 指针 ---------- */
+const ptrs = new Map(); let t0=0, moved=0, pinch0=0, zoom0=1;
+cv.addEventListener('pointerdown', e=>{
+  cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===1){ t0=performance.now(); moved=0; }
+  if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a.x-b.x,a.y-b.y); zoom0=view.zoom; moved=99; }
+  cv.classList.add('drag');
+});
+cv.addEventListener('pointermove', e=>{
+  const p=ptrs.get(e.pointerId); if(!p) return;
+  const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
+  moved+=Math.abs(dx)+Math.abs(dy);
+  if(ptrs.size===1){ view.vyaw=-dx*0.006; view.vpitch=dy*0.004; view.yaw+=view.vyaw; view.pitch+=view.vpitch; }
+  else if(ptrs.size===2){ const [a,b]=[...ptrs.values()];
+    view.zoom=Math.max(0.35,Math.min(2.2, zoom0*pinch0/Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)))); }
+});
+function up(e){
+  if(ptrs.size===1 && performance.now()-t0<260 && moved<8) build((Math.random()*1e9)|0);
+  ptrs.delete(e.pointerId); if(!ptrs.size) cv.classList.remove('drag');
+}
+cv.addEventListener('pointerup', up);
+cv.addEventListener('pointercancel', up);
+cv.addEventListener('wheel', e=>{ e.preventDefault();
+  view.zoom=Math.max(0.35,Math.min(2.2, view.zoom*Math.exp(e.deltaY*0.001))); }, {passive:false});
+
+addEventListener('keydown', e=>{
+  if(e.code==='Space'){ e.preventDefault(); build((Math.random()*1e9)|0); }
+  else if(e.key>='0' && e.key<='5') goChapter(+e.key);
+  else if(e.key==='ArrowRight') goChapter(chap+1);
+  else if(e.key==='ArrowLeft')  goChapter(chap-1);
+  else if(e.key==='s'||e.key==='S'){
+    renderer.render(scene,camera);   // 同一帧里读，不用开 preserveDrawingBuffer
+    const a=document.createElement('a');
+    a.download='untitled-life-'+Date.now()+'.png';
+    a.href=cv.toDataURL('image/png'); a.click();
+  }
+});
+
+/* ---------- 主循环 ---------- */
+function resize(){
+  const w=innerWidth, h=innerHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1, 2));
+  renderer.setSize(w, h, false);
+  camera.aspect = w/Math.max(1,h); camera.updateProjectionMatrix();
+}
+let lastW=-1, lastH=-1, lastT=0;
+function frame(ms){
+  /* 有些预览框架加载时尺寸是 0，之后也不发 resize —— 每帧对一下 */
+  if(innerWidth!==lastW || innerHeight!==lastH){ lastW=innerWidth; lastH=innerHeight; resize(); }
+  const time=ms/1000, age=time-born, dt=Math.min(0.1, time-(lastT||time)); lastT=time;
+  if(time-chapT0 > CH_LEN) goChapter(chap+1);
+  const c=CHAPTERS[chap];
+  sharp += (c.sharp-sharp)*0.02;
+  const br = 0.5-0.5*Math.cos(time*2*Math.PI/6.5);   // 6.5 秒一次舒展
+  /* 松手后的惯性，俯仰慢慢回正 */
+  if(!ptrs.size){ view.yaw+=view.vyaw; view.pitch+=view.vpitch; view.vyaw*=0.94; view.vpitch*=0.94;
+    view.pitch*=0.995; }
+  view.pitch=Math.max(-1.2,Math.min(1.2,view.pitch));
+  filmMat.uniforms.uTime.value=time;
+  updateForm(time);
+  buildBody(time, br);
+  place(time, br, age);
+  placeCamera(time, dt);
+  setSub(c.sub ?? formCaption());
+  /* 光跟着镜头走：亮面总朝着人，暗面落在一侧 */
+  filmMat.uniforms.uLight.value.set(0.5,0.9,0.4).applyQuaternion(camera.quaternion);
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+build(20260927);
+goChapter(0);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
