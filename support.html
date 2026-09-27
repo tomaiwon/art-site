@@ -21,6 +21,12 @@
   @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9,U+6D0B,U+52A1,U+8FD0,U+52A8;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9,U+6D0B,U+52A1,U+8FD0,U+52A8;}
 
+  /* Desktop Chinese subset from Z-news; keep Latin text out of CJK fallback. */
+  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-desktop.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+3400-9FFF;}
+  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-desktop.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+3400-9FFF;}
+  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-punc.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+300A,U+300B;}
+  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-punc.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+300A,U+300B;}
+
   html,body{height:100%;}
   body{
     margin:0;
@@ -62,8 +68,15 @@
     min-height:100vh;
     box-sizing:border-box;
     padding:72px 240px 72px 70px;
+    font-synthesis:none;
   }
   .desk-page section + section{margin-top:48px;}
+  .desk-page .section-label{font-family:"SupportChinese",serif;}
+  .desk-page .product-name{font-family:"EFont","SupportChinese",serif;line-height:1.4;}
+  .desk-page .product-desc,
+  .desk-page .product-price,
+  .desk-page .product-status{font-family:Georgia,"SupportChinese","Times New Roman",serif;}
+
   .section-label{
     display:block;
     font-family:"ZFont","EFont",sans-serif;
@@ -79,6 +92,7 @@
   }
   .product + .product{margin-top:36px;}
   .product-image{width:100%;aspect-ratio:1;border:2px solid #111;align-self:start;overflow:hidden;}
+  .product-image--unframed{border:0;}
   .product-image img{width:100%;height:100%;object-fit:cover;display:block;}
   .product-info{
     display:flex;flex-direction:column;justify-content:space-between;
@@ -91,7 +105,7 @@
   .product-desc{
     font-family:"ZFont","EFont",sans-serif;
     font-size:12px;font-weight:400;color:#444;
-    margin:0;line-height:1.6;max-width:360px;text-align:justify;
+    margin:0;line-height:1.6;max-width:360px;text-align:left;
   }
   .product-price{
     font-family:"ZFont","EFont",sans-serif;
@@ -148,7 +162,7 @@
   <a href="contact.html">CONTACT</a>
 </nav>
 
-<!-- 桌面端：四件商品直接陈列，沿用黑框图片与右侧介绍 -->
+<!-- 桌面端：四件商品直接陈列，仅光盘保留黑框 -->
 <main class="desk-page">
   <section>
     <span class="section-label">影像</span>
@@ -181,7 +195,7 @@
     <span class="section-label">艺术品</span>
     <span class="section-label-en">Artwork</span>
     <div class="product">
-      <div class="product-image">
+      <div class="product-image product-image--unframed">
         <img src="images/artwork1.png" alt="深红色器形艺术品">
       </div>
       <div class="product-info">
@@ -196,7 +210,7 @@
     <span class="section-label">周边</span>
     <span class="section-label-en">Merchandise</span>
     <div class="product">
-      <div class="product-image">
+      <div class="product-image product-image--unframed">
         <img src="images/merch1.png" alt="洋务运动文字印刷周边">
       </div>
       <div class="product-info">
