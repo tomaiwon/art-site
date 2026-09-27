@@ -6,15 +6,15 @@
 <title>未命名的生命</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;overflow:hidden;background:#fff;
+  html,body{height:100%;overflow:hidden;background:#fff;color:#111;
     font:12px/1.4 "SF Mono",Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
-  #cv{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+  #cv{position:fixed;inset:0;display:block;width:100%;height:100%;cursor:grab;touch-action:none}
   #cv.drag{cursor:grabbing}
   .hud{position:fixed;pointer-events:none;color:#9a9a96;
     letter-spacing:.16em;text-transform:uppercase;font-size:10px}
   .tl{top:18px;left:20px;display:flex;align-items:center;gap:10px;letter-spacing:.04em;font-size:11px}
   .tl b{color:#111;font-weight:700;font-size:13px;letter-spacing:.06em}
-  .tl i{display:inline-block;width:4px;height:14px;background:#c4f11a}
+  .tl i{display:inline-block;width:4px;height:14px;background:#c8f51c}
   .tr{top:18px;right:20px;text-align:right;line-height:1.9}
   .tr em{font-style:normal;color:#111}
   .bl{bottom:18px;left:20px;line-height:1.9}
@@ -22,69 +22,64 @@
   .sub{left:0;right:0;bottom:0;padding:44px 0 22px;text-align:center;color:#3a3a38;font-size:13px;
     letter-spacing:.08em;text-transform:none;
     background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.82) 55%)}
+  .err{top:50%;left:0;right:0;text-align:center;color:#3a3a38;text-transform:none;letter-spacing:.06em}
   kbd{font:inherit;border:1px solid rgba(154,154,150,.5);padding:1px 5px;border-radius:2px}
   /* 窄屏：右上右下收掉，字幕抬到操作说明上面 */
   @media (max-width:760px){ .br,.tr{display:none} .sub{padding:40px 20px 62px;font-size:12px} }
 </style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js" } }
+</script>
 </head>
 <body>
 <canvas id="cv"></canvas>
 <div class="hud tl"><i></i><b>未命名的生命</b><span>/ 复刻</span></div>
 <div class="hud tr">
-  <div>DOTS <em id="nd">0</em></div>
-  <div>FINS <em id="nf">0</em></div>
-  <div>BREATH <em id="nb">0.00</em></div>
+  <div>GRAINS <em id="nd">0</em></div>
+  <div>FILMS <em id="nm">0</em></div>
+  <div>FEELERS <em id="nf">0</em></div>
 </div>
-<div class="hud sub" id="sub">也许只是某一瞬间，它看起来像是在舒展自己的身体。</div>
+<div class="hud sub">也许只是某一瞬间，它看起来像是在舒展自己的身体。</div>
 <div class="hud bl">
-  <div>按住拖动 拉它舒展　轻点 换一个生命</div>
+  <div>拖动 转着看　滚轮 / 双指 推近　轻点 换一个生命</div>
   <div><kbd>空格</kbd> 重生　<kbd>S</kbd> 存图</div>
 </div>
-<div class="hud br">After JHBOOM · 05 / 创作感受</div>
+<div class="hud br">After JHBOOM · TouchDesigner → WebGL</div>
 
-<script>
+<script type="module">
 /* =====================================================================
- * 未命名的生命 —— 一个在白纸上舒展身体的东西
+ * 未命名的生命 —— 复刻 JHBOOM 在 TouchDesigner 里做的那只生物
  *
- * 参照图拆开看只有四种笔触：
- *   黑色实心圆  —— 沿一根斜向上的脊柱堆起来，越往上越大越密，互相吞并成一团身体
- *   荧光绿斑块  —— 长在鳍上，边缘带一圈发散的光
- *   长鳍 / 长须 —— 从身体往左甩出去，根部粗、尾巴拉成一根灰色的细丝
- *   淡色花瓣    —— 近白、偏暖，只靠下面一圈灰影才看得出来
+ * 原作是三维的，拆开只有三种东西，全部挂在一根会扭动的「身体」上：
+ *   颗粒  —— 纯黑、不受光的球。沿身体串成链，时而聚拢、时而散开
+ *   薄膜  —— 花瓣 / 尖角形的曲面。米白受光，根部渗浅金和橙色的纹，
+ *            有的泛淡青；边缘薄、半透明，常有一侧镶荧光绿
+ *   触须  —— 又细又长的弯刺，一侧绿，尖上顶一颗小黑点
+ * 另有一些荧光绿的扁团，不受光，像颜料直接涂上去的。
  *
- * 所有元素都不存绝对坐标，只存「挂在脊柱第几段、往法线方向偏多少」。
- * 于是脊柱一动（呼吸、被拉），整只生物跟着变形，而不是一堆点各跑各的。
+ * 身体是一条由几组正弦叠出来的空间曲线，随时间变形、伸缩、整体翻转。
+ * 每个元素只记「挂在身体第几段、从哪个方向伸出去、伸多远」，
+ * 于是身体一动，全部跟着动 —— 这是「一个生命」而不是「一堆粒子」的关键。
  *
- * 糊的部分（花瓣的影子、鳍的灰色残影、绿光）画在 1/4 分辨率的离屏画布上，
- * 再整张放大贴回来 —— 双线性放大本身就是模糊，比 ctx.filter 便宜，Safari 也能跑。
+ * 薄膜和触须的弯曲在顶点着色器里做（圆弧弯折），CPU 只算每个实例的位置和朝向。
+ * 镜头一直绕着转，隔一阵推近一次 —— 原片里满屏黑球的那些镜头就是这么来的。
  * ===================================================================== */
+import * as THREE from 'three';
 
-const cv  = document.getElementById('cv');
-const ctx = cv.getContext('2d', { alpha:false });
-const soft = document.createElement('canvas');
-const sctx = soft.getContext('2d');
-const SOFT = 4;                       // 糊层缩小倍数
-
-let W=0, H=0, DPR=1, U=1, OX=0, OY=0;
-
-const LIME  = [196,241,26];
-const INK   = '#0b0b0b';
-const GREY  = [150,152,146];
-const PALE  = [250,247,241];
-const PEACH = [247,196,160];
-
-function resize(){
-  DPR = Math.min(devicePixelRatio||1, 2);
-  W = Math.round(innerWidth*DPR); H = Math.round(innerHeight*DPR);
-  cv.width=W; cv.height=H;
-  cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px';
-  soft.width=Math.ceil(W/SOFT); soft.height=Math.ceil(H/SOFT);
-  /* 构图单位：横屏按高度；竖屏放大一点、身体往右挪，把左边留给鳍 */
-  if(W>=H){ U=Math.min(H, W*0.95); OX=W/2; }
-  else    { U=Math.min(H*0.78, W*1.22); OX=W*0.52; }
-  OY = (H-U)/2;
-  ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+const cv = document.getElementById('cv');
+let renderer;
+try{
+  renderer = new THREE.WebGLRenderer({ canvas:cv, antialias:true });
+}catch(e){
+  const d=document.createElement('div'); d.className='hud err';
+  d.textContent='这个浏览器没法开启 WebGL，看不到它。'; document.body.appendChild(d);
+  throw e;
 }
+renderer.setClearColor(0xffffff, 1);
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 200);
+
+const LIME = '#c8f51c';
 
 /* ---------- 种子随机 ---------- */
 function rng(seed){
@@ -96,372 +91,347 @@ function rng(seed){
   };
 }
 let R = rng(1);
-function gauss(){ let u=0,v=0; while(!u)u=R(); while(!v)v=R();
-  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+const rr = (a,b)=>a+(b-a)*R();
 
-/* ---------- 脊柱 ----------
-   五个控制点，单位是 U，x 相对画面中线。取自参照：
-   从底边中间偏右起，缓 S 形往右上角出画。 */
-const SPINE = [[0.10,1.06],[0.07,0.74],[0.16,0.44],[0.26,0.19],[0.31,-0.05]];
-let spineVar = [];                    // 每只生命脊柱的个体差异
-const pull = SPINE.map(()=>[0,0]);    // 指针拉扯造成的位移（平滑过的）
-const N = 96;
-const sx=new Float32Array(N+1), sy=new Float32Array(N+1);
-const tx=new Float32Array(N+1), ty=new Float32Array(N+1);
-
-function catmull(p0,p1,p2,p3,t){
-  const t2=t*t, t3=t2*t;
-  return 0.5*((2*p1) + (-p0+p2)*t + (2*p0-5*p1+4*p2-p3)*t2 + (-p0+3*p1-3*p2+p3)*t3);
-}
-function buildSpine(time, br){
-  const P = SPINE.map((p,i)=>{
-    const v=spineVar[i];
-    /* 呼吸：以根部为锚整根伸长，再带一点左右摆 */
-    const sway = 0.035*Math.sin(time*0.45+i*0.9) + 0.012*Math.sin(time*1.3+i*2.1);
-    let x = p[0]+v[0], y = p[1]+v[1];
-    const ax=SPINE[0][0], ay=SPINE[0][1];
-    const k = 0.93 + 0.09*br;
-    x = ax + (x-ax)*k + sway*(i/4);
-    y = ay + (y-ay)*k;
-    return [OX + x*U + pull[i][0], OY + y*U + pull[i][1]];
-  });
-  const ext = (a,b)=>[2*a[0]-b[0], 2*a[1]-b[1]];
-  const Q = [ext(P[0],P[1]), ...P, ext(P[4],P[3])];
-  for(let i=0;i<=N;i++){
-    const t=i/N*4, seg=Math.min(3,Math.floor(t)), l=t-seg;
-    sx[i]=catmull(Q[seg][0],Q[seg+1][0],Q[seg+2][0],Q[seg+3][0],l);
-    sy[i]=catmull(Q[seg][1],Q[seg+1][1],Q[seg+2][1],Q[seg+3][1],l);
+/* ---------- 几何：一片可以弯的叶片 ----------
+   局部坐标里沿 +Y 从 0 长到 1，横向 u∈[-1,1]。
+   花瓣：圆肚尖头；尖角：根部最宽一路收尖。截面带一点兜和褶 ——
+   「边缘很薄，折叠的地方又显得更厚」 */
+function bladeGeo(shape){
+  const g = new THREE.PlaneGeometry(2, 1, shape==='petal'?16:8, 36);
+  const pos = g.attributes.position, uv = g.attributes.uv;
+  for(let i=0;i<pos.count;i++){
+    const u = pos.getX(i), v = pos.getY(i)+0.5;
+    let w;
+    if(shape==='petal') w = Math.pow(Math.sin(Math.PI*v),0.75)*(1-0.3*v);
+    else                w = Math.sqrt(Math.min(1,v/0.07))*Math.pow(1-v,1.15);
+    const x = u*w*0.5;
+    const z = 0.16*(1-u*u)*w + 0.035*Math.sin(u*Math.PI*2.5)*w;
+    pos.setXYZ(i, x, v, z);
+    uv.setXY(i, u, v);
   }
-  for(let i=0;i<=N;i++){
-    const a=Math.max(0,i-1), b=Math.min(N,i+1);
-    const dx=sx[b]-sx[a], dy=sy[b]-sy[a], l=Math.hypot(dx,dy)||1;
-    /* 脊柱从下往上走，t 增大方向朝上 */
-    tx[i]=-dx/l; ty[i]=-dy/l;
-  }
-}
-/* 脊柱上第 t 处的位置、切线、左法线 */
-function at(t){
-  const f=Math.max(0,Math.min(1,t))*N, i=Math.min(N-1,Math.floor(f)), l=f-i;
-  const x=sx[i]+(sx[i+1]-sx[i])*l, y=sy[i]+(sy[i+1]-sy[i])*l;
-  const ux=tx[i]+(tx[i+1]-tx[i])*l, uy=ty[i]+(ty[i+1]-ty[i])*l;
-  /* 往上的切线 (-dx,-dy) 转 90° 得到画面左侧 */
-  return { x, y, ux:-ux, uy:-uy, nx:-uy, ny:ux };
+  g.computeVertexNormals();
+  return g;
 }
 
-/* ---------- 生成一只 ---------- */
-let dots=[], fins=[], blobs=[], petals=[];
-let born = 0;
+const filmVS = /* glsl */`
+  attribute vec4 aP;   // seed, bend, wobble, -
+  attribute vec4 aC;   // gold, teal, lime edge, -
+  uniform float uTime;
+  varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec4 vC; varying float vSeed;
+  void main(){
+    /* 圆弧弯折：绕局部 X 轴，弯曲角沿长度线性增加 */
+    float b = aP.y + aP.z*sin(uTime*1.1 + aP.x*6.2831);
+    b = abs(b)<1e-3 ? 1e-3 : b;
+    float Rr = 1.0/b, th = position.y*b, s = sin(th), c = cos(th);
+    vec3 q = vec3(position.x, (Rr-position.z)*s, Rr-(Rr-position.z)*c);
+    vec3 m = vec3(normal.x, normal.y*c-normal.z*s, normal.y*s+normal.z*c);
+    vec4 mv = viewMatrix * modelMatrix * instanceMatrix * vec4(q,1.0);
+    vN = normalize(normalMatrix * mat3(instanceMatrix) * m);
+    vView = -mv.xyz; vUv = uv; vC = aC; vSeed = aP.x;
+    gl_Position = projectionMatrix * mv;
+  }`;
+const filmFS = /* glsl */`
+  uniform vec3 uLight;
+  varying vec2 vUv; varying vec3 vN; varying vec3 vView; varying vec4 vC; varying float vSeed;
+  float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+  float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
+    return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y); }
+  void main(){
+    vec3 n = normalize(vN); if(!gl_FrontFacing) n = -n;
+    vec3 V = normalize(vView), L = normalize(uLight);
+    float u = vUv.x, v = vUv.y;
+    /* 受光：包裹式漫反射，暗部是偏冷的灰，不是黑 */
+    float dif = dot(n,L)*0.5+0.5;
+    vec3 col = mix(vec3(0.78,0.785,0.775), vec3(0.985,0.978,0.962), smoothstep(0.1,0.8,dif));
+    col += 0.10*pow(max(dot(reflect(-L,n),V),0.0), 16.0);
+    /* 浅金从根部渗上来，里面夹着橙色的纹 */
+    float nz = noise(vec2(u*2.6+vSeed*17.0, v*5.0+vSeed*9.0));
+    float g = smoothstep(0.92,0.02,v) * vC.x * (0.35+0.65*nz);
+    /* 橙色是顺着长度方向的一缕缕晕染，不是横纹 */
+    float streak = noise(vec2(u*5.0+vSeed*31.0, v*1.3+vSeed*5.0));
+    float vein = smoothstep(0.55,0.95, streak*0.75 + noise(vec2(u*11.0+vSeed*7.0, v*2.6))*0.35);
+    col = mix(col, vec3(0.93,0.77,0.57), clamp(g,0.0,1.0)*0.8);
+    col = mix(col, vec3(0.85,0.44,0.16), clamp(g*vein*1.4,0.0,1.0)*0.75);
+    /* 淡青 */
+    col = mix(col, vec3(0.64,0.84,0.79), vC.y*smoothstep(0.95,0.15,v)*(0.4+0.6*nz)*0.75);
+    /* 一侧镶荧光绿 */
+    float e = vC.z * smoothstep(0.3,0.78,u) * smoothstep(0.98,0.8,v);
+    col = mix(col, vec3(0.784,0.961,0.110), e);
+    /* 边缘薄，所以透 */
+    float edge = smoothstep(0.55,1.0,abs(u));
+    float fres = pow(1.0-abs(dot(n,V)), 2.0);
+    float a = mix(0.97, 0.42, max(edge*0.85, fres*0.55));
+    gl_FragColor = vec4(col, max(a, e));
+  }`;
+const filmMat = new THREE.ShaderMaterial({
+  vertexShader:filmVS, fragmentShader:filmFS,
+  uniforms:{ uTime:{value:0}, uLight:{value:new THREE.Vector3(0.4,0.8,0.6)} },
+  side:THREE.DoubleSide, transparent:true, depthWrite:true
+});
+const inkMat  = new THREE.MeshBasicMaterial({ color:0x000000 });
+const limeMat = new THREE.MeshBasicMaterial({ color:LIME });
+
+const sphere = new THREE.SphereGeometry(1, 28, 18);
+/* 绿团：边缘不规则的一坨，不是光滑的椭球 */
+const lump = (()=>{
+  const g = new THREE.IcosahedronGeometry(1, 4), p = g.attributes.position, v = new THREE.Vector3();
+  for(let i=0;i<p.count;i++){
+    v.fromBufferAttribute(p,i);
+    const k = 1 + 0.16*Math.sin(v.x*3.1+1.3)*Math.sin(v.y*2.7+0.4) + 0.09*Math.sin(v.z*5.3+v.x*2.1)
+                + 0.05*Math.sin(v.y*9.0+v.z*4.0);
+    p.setXYZ(i, v.x*k, v.y*k, v.z*k);
+  }
+  return g;
+})();
+const GEO = { petal:bladeGeo('petal'), horn:bladeGeo('horn') };
+
+/* ---------- 一只生命 ---------- */
+const MAX = { petal:70, horn:60, feelers:110, blobs:70 };
+const meshes = {
+  grains : new THREE.InstancedMesh(sphere, inkMat,  300),
+  tips   : new THREE.InstancedMesh(sphere, inkMat,  MAX.feelers),
+  blobs  : new THREE.InstancedMesh(lump, limeMat, MAX.blobs),
+  petal  : new THREE.InstancedMesh(GEO.petal.clone(), filmMat, MAX.petal),
+  horn   : new THREE.InstancedMesh(GEO.horn.clone(),  filmMat, MAX.horn),
+  feelers: new THREE.InstancedMesh(GEO.horn.clone(),  filmMat, MAX.feelers),
+};
+/* 每组叶片有自己的实例属性：种子、弯曲、配色 */
+for(const k of ['petal','horn','feelers']){
+  const n = MAX[k];
+  meshes[k].geometry.setAttribute('aP', new THREE.InstancedBufferAttribute(new Float32Array(n*4),4));
+  meshes[k].geometry.setAttribute('aC', new THREE.InstancedBufferAttribute(new Float32Array(n*4),4));
+}
+for(const m of Object.values(meshes)){
+  m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  m.frustumCulled = false;
+  scene.add(m);
+}
+
+let body, grains, blobs, films, feelers, born=0;
 
 function build(seed){
   R = rng(seed);
-  spineVar = SPINE.map((_,i)=> i===0 ? [0,0] : [gauss()*0.03, gauss()*0.02]);
-  dots=[]; fins=[]; blobs=[]; petals=[];
+  /* 身体的形：几组正弦的频率、相位、幅度 */
+  body = {
+    ax:[rr(1.0,2.0), rr(0.2,0.6)], fx:[rr(1.8,3.2), rr(4,7)], px:[rr(0,6.3), rr(0,6.3)],
+    az:[rr(0.7,1.4), rr(0.2,0.5)], fz:[rr(1.5,3), rr(4,7)], pz:[rr(0,6.3), rr(0,6.3)],
+    tilt: rr(-0.9,0.9), spin: rr(0,6.3), flow: rr(0,6.3)
+  };
+  grains=[]; blobs=[]; films=[]; feelers=[];
+  const dir = ()=>R()*Math.PI*2;
+  /* 颗粒：一条贴着身体的链（大），外加散开的小颗粒 */
+  for(let i=0;i<150;i++) grains.push({ s:R(), phi:dir(), r0:Math.pow(R(),1.4)*0.34,
+    rad:0.13+0.34*Math.pow(R(),1.6), ph:R()*6.3 });
+  for(let i=0;i<90;i++) grains.push({ s:R(), phi:dir(), r0:0.35+1.4*Math.pow(R(),1.3),
+    rad:0.025+0.1*Math.pow(R(),2), ph:R()*6.3 });
+  /* 荧光绿扁团 */
+  for(let i=0;i<MAX.blobs;i++) blobs.push({ s:R(), phi:dir(), r0:0.15+1.1*R(),
+    sc:[rr(0.14,0.42), rr(0.06,0.16), rr(0.14,0.36)], rot:[dir(),dir(),dir()], ph:R()*6.3 });
+  /* 薄膜：花瓣和尖角 */
+  const film = (shape)=>({ shape, s:R(), phi:dir(), r0:0.05+0.5*R(),
+    L: shape==='petal'? rr(0.9,2.2) : rr(1.0,2.4),
+    W: shape==='petal'? rr(0.6,1.3) : rr(0.28,0.6),
+    up: rr(0.2,1.2), roll:dir(), ph:R()*6.3, out:1, flow:rr(0.2,0.8),
+    P:[R(), (R()<0.5?-1:1)*rr(0.2,1.3), rr(0.15,0.4), 0],
+    C:[R()<0.8?rr(0.55,1):0, R()<0.25?rr(0.5,1):0, R()<0.35?1:0, 0] });
+  for(let i=0;i<MAX.petal;i++) films.push(film('petal'));
+  for(let i=0;i<MAX.horn;i++)  films.push(film('horn'));
+  /* 触须 */
+  for(let i=0;i<MAX.feelers;i++) feelers.push({ s:R(), phi:dir(), r0:0.1+0.5*R(),
+    L:rr(1.3,3.4), W:rr(0.05,0.11), up:rr(0,0.6), roll:dir(), ph:R()*6.3, out:0.45, flow:rr(0.8,1.5),
+    tip: 0.018+0.018*R(),
+    P:[R(), (R()<0.5?-1:1)*rr(0.15,0.9), rr(0.1,0.3), 0],
+    C:[R()<0.25?rr(0.3,0.7):0, 0, R()<0.75?1:0, 0] });
 
-  /* 身体：上半截的大黑团，互相压在一起 */
-  for(let i=0;i<40;i++){
-    const t=0.48+0.52*Math.pow(R(),0.75);
-    dots.push({ t, off:gauss()*0.028*(0.6+t*0.6), r:0.016+0.034*Math.pow(R(),1.4) });
+  for(const [k,list] of [['petal',films.filter(f=>f.shape==='petal')],
+                         ['horn', films.filter(f=>f.shape==='horn')],
+                         ['feelers',feelers]]){
+    const aP=meshes[k].geometry.attributes.aP, aC=meshes[k].geometry.attributes.aC;
+    list.forEach((f,i)=>{ f.idx=i; aP.setXYZW(i,...f.P); aC.setXYZW(i,...f.C); });
+    aP.needsUpdate=aC.needsUpdate=true;
   }
-  /* 中段：中等的黑点，沿脊柱散开 */
-  for(let i=0;i<70;i++){
-    const t=0.1+0.8*R();
-    dots.push({ t, off:gauss()*0.065, r:0.005+0.02*Math.pow(R(),2) });
-  }
-  /* 飞散的小点 —— 偏左，跟着鳍甩出去 */
-  for(let i=0;i<85;i++){
-    const t=0.04+0.96*R();
-    dots.push({ t, off:gauss()*0.13+0.06, r:0.0022+0.011*Math.pow(R(),3) });
-  }
-  for(const d of dots){ d.ph=R()*6.28; d.w=0.004+R()*0.008; }
-
-  /* 鳍 / 须：八成往左，两成往右且短。
-     方向不跟法线走 —— 参照里左边的鳍几乎是水平甩出去的，只微微上扬 */
-  for(let i=0;i<96;i++){
-    const left = R()<0.8;
-    const t = R()<0.5 ? 0.04+0.86*R() : 0.04+0.86*(R()+R())/2;
-    const k = R();
-    fins.push({
-      t, side: left?1:-1,
-      rootOff: 0.008+0.035*R(),
-      a: left ? Math.PI+0.16+gauss()*0.2 : -0.22+gauss()*0.3,
-      bend: gauss()*0.35,
-      L: (0.09+0.46*Math.pow(R(),1.2)) * (left?1:0.5),
-      w: 0.004+0.016*Math.pow(R(),1.5),
-      kind: k<0.52 ? 'lime' : k<0.82 ? 'grey' : 'pale',
-      shadow: R()<0.55,
-      dot: R()<0.4 ? { s:0.5+0.48*R(), r:0.0025+0.006*R() } : null,
-      ph: R()*6.28, amp: 0.06+0.1*R(),
-      turn: 0, pts: null
-    });
-  }
-  /* 绿斑：六成长在绿鳍上，其余贴着脊柱左侧 */
-  const limeFins = fins.filter(f=>f.kind==='lime');
-  for(let i=0;i<72;i++){
-    const onFin = R()<0.6;
-    blobs.push({
-      fin: onFin ? limeFins[(R()*limeFins.length)|0] : null,
-      s: 0.06+0.4*R(),
-      t: 0.06+0.82*R(), off: Math.abs(gauss())*0.1+0.01,
-      rx: 0.007+0.028*Math.pow(R(),1.4), q: 0.35+0.45*R(),
-      rot: gauss()*0.3, halo: R()<0.6, ph:R()*6.28
-    });
-  }
-  /* 花瓣：近白偏暖，少数带桃色 */
-  for(let i=0;i<34;i++){
-    petals.push({
-      fin: R()<0.55 ? fins[(R()*fins.length)|0] : null,
-      s: 0.15+0.55*R(),
-      t: 0.05+0.9*R(), off: gauss()*0.14+0.04,
-      rx: 0.022+0.055*R(), q: 0.13+0.2*R(),
-      rot: gauss()*0.35, peach: R()<0.18, ph:R()*6.28
-    });
-  }
+  /* 只画用到的实例 —— 多预留的那些是单位矩阵，会在原点叠出一个大球 */
+  meshes.grains.count = grains.length; meshes.tips.count = feelers.length;
   born = performance.now()/1000;
-  document.getElementById('nd').textContent = dots.length;
-  document.getElementById('nf').textContent = fins.length;
+  document.getElementById('nd').textContent = grains.length;
+  document.getElementById('nm').textContent = films.length;
+  document.getElementById('nf').textContent = feelers.length;
 }
 
-/* ---------- 指针：悬停时身体朝你偏，按住就被拉着伸展 ---------- */
-const ptr = { x:0, y:0, in:false, down:false, t0:0, x0:0, y0:0, moved:0 };
-function setPtr(e){ ptr.x=e.clientX*DPR; ptr.y=e.clientY*DPR; }
+/* ---------- 身体曲线 ---------- */
+const NS = 128;
+const SP = Array.from({length:NS+1}, ()=>({ p:new THREE.Vector3(), t:new THREE.Vector3(),
+  n:new THREE.Vector3(), b:new THREE.Vector3() }));
+const bodyRot = new THREE.Quaternion(), euler = new THREE.Euler(), REF = new THREE.Vector3();
+/* 水流：触须和薄膜不是四面八方均匀炸开，而是被一股慢慢转向的流梳往同一边 */
+const FLOW = new THREE.Vector3();
+function buildBody(time, br){
+  const B=body, len=7.2*(0.84+0.22*br);
+  const fa = B.flow + 0.9*Math.sin(time*0.041), fb = 0.5*Math.sin(time*0.033+B.flow);
+  FLOW.set(Math.cos(fa)*Math.cos(fb), Math.sin(fb)+0.35, Math.sin(fa)*Math.cos(fb)).normalize();
+  euler.set(0.45*Math.sin(time*0.05+B.spin), time*0.03+B.spin, B.tilt+0.5*Math.sin(time*0.037+1));
+  bodyRot.setFromEuler(euler);
+  for(let i=0;i<=NS;i++){
+    const s=i/NS;
+    SP[i].p.set(
+      B.ax[0]*Math.sin(B.fx[0]*s + time*0.31 + B.px[0]) + B.ax[1]*Math.sin(B.fx[1]*s - time*0.47 + B.px[1]),
+      (s-0.5)*len,
+      B.az[0]*Math.sin(B.fz[0]*s + time*0.23 + B.pz[0]) + B.az[1]*Math.sin(B.fz[1]*s - time*0.39 + B.pz[1])
+    ).applyQuaternion(bodyRot);
+  }
+  REF.set(0,0,1).applyQuaternion(bodyRot);
+  for(let i=0;i<=NS;i++){
+    const a=SP[Math.max(0,i-1)].p, b=SP[Math.min(NS,i+1)].p, S=SP[i];
+    S.t.subVectors(b,a).normalize();
+    S.n.crossVectors(S.t, REF); if(S.n.lengthSq()<1e-6) S.n.set(1,0,0); S.n.normalize();
+    S.b.crossVectors(S.t, S.n);
+  }
+}
+function frameAt(s){ return SP[Math.max(0,Math.min(NS, Math.round(s*NS)))]; }
+
+/* ---------- 每帧摆放 ---------- */
+const M=new THREE.Matrix4(), Q=new THREE.Quaternion(), V=new THREE.Vector3(), S3=new THREE.Vector3();
+const X=new THREE.Vector3(), Y=new THREE.Vector3(), Z=new THREE.Vector3(), O=new THREE.Vector3();
+const D=new THREE.Vector3(), TIP=new THREE.Vector3();
+const clamp01=v=>v<0?0:v>1?1:v, ease=v=>{ v=clamp01(v); return 1-Math.pow(1-v,3); };
+const grow=(age,s,d)=>ease((age-s*1.3-(d||0))/1.0);
+
+/* 从身体截面上 phi 方向伸出去的单位向量 */
+function offsetDir(F, phi, out){ return out.copy(F.n).multiplyScalar(Math.cos(phi)).addScaledVector(F.b, Math.sin(phi)); }
+/* 聚拢 / 散开：同一段身体上的东西一起呼吸 */
+function spread(time, s, ph){ return 0.45 + (0.5+0.5*Math.sin(time*0.23 + s*3.1 + ph*0.15)); }
+/* 以 d 为 +Y、绕 d 转 roll 的朝向 */
+function orient(d, roll, q){
+  Y.copy(d).normalize();
+  X.set(0,1,0); if(Math.abs(X.dot(Y))>0.95) X.set(1,0,0);
+  X.cross(Y).normalize(); Z.crossVectors(X,Y);
+  const c=Math.cos(roll), s=Math.sin(roll);
+  V.copy(X).multiplyScalar(c).addScaledVector(Z,s);
+  Z.multiplyScalar(c).addScaledVector(X,-s); X.copy(V);
+  M.makeBasis(X,Y,Z); q.setFromRotationMatrix(M);
+}
+function placeBlade(mesh, f, time, br, age, tipMesh){
+  const F=frameAt(f.s), g=grow(age,f.s,0.25);
+  offsetDir(F, f.phi + 0.5*Math.sin(time*0.17+f.ph), O);
+  /* 舒展：伸出方向在「向外」和「顺着身体往上」之间来回 */
+  const open = 0.65+0.35*Math.sin(time*0.5 + f.s*3 + f.ph);
+  D.copy(O).multiplyScalar(open*f.out).addScaledVector(F.t, f.up*(1.2-open)).addScaledVector(FLOW, f.flow);
+  orient(D, f.roll + 0.7*Math.sin(time*0.4+f.ph), Q);
+  const base = TIP.copy(F.p).addScaledVector(O, f.r0*spread(time,f.s,f.ph));
+  const L=f.L*g*(0.88+0.2*br);
+  M.compose(base, Q, S3.set(f.W*g, L, L));
+  mesh.setMatrixAt(f.idx, M);
+  if(tipMesh){
+    /* 尖端：按着色器里同一条圆弧算出来 */
+    let b=f.P[1]+f.P[2]*Math.sin(time*1.1+f.P[0]*6.2831); if(Math.abs(b)<1e-3) b=1e-3;
+    TIP.set(0, Math.sin(b)/b, (1-Math.cos(b))/b).applyMatrix4(M);
+    const tr=f.tip*clamp01((g-0.9)*10);
+    M.compose(TIP, Q, S3.set(tr,tr,tr));
+    tipMesh.setMatrixAt(f.idx, M);
+  }
+}
+
+function place(time, br, age){
+  grains.forEach((d,i)=>{
+    const F=frameAt(d.s+0.01*Math.sin(time*0.6+d.ph)), g=grow(age,d.s,0);
+    offsetDir(F, d.phi + time*0.1*(d.ph>3?1:-1), O);
+    V.copy(F.p).addScaledVector(O, d.r0*spread(time,d.s,d.ph));
+    /* 贴到镜头跟前的球会糊掉半屏，靠近时缩掉 */
+    const near = clamp01((V.distanceTo(camera.position)-1.2)/2.5);
+    const r=d.rad*g*near; M.makeScale(r,r,r).setPosition(V);
+    meshes.grains.setMatrixAt(i, M);
+  });
+  blobs.forEach((b,i)=>{
+    const F=frameAt(b.s), g=grow(age,b.s,0.35);
+    offsetDir(F, b.phi+0.3*Math.sin(time*0.2+b.ph), O);
+    V.copy(F.p).addScaledVector(O, b.r0*spread(time,b.s,b.ph));
+    euler.set(b.rot[0]+time*0.2, b.rot[1], b.rot[2]+0.3*Math.sin(time*0.3+b.ph)); Q.setFromEuler(euler);
+    M.compose(V, Q, S3.set(b.sc[0]*g, b.sc[1]*g, b.sc[2]*g));
+    meshes.blobs.setMatrixAt(i, M);
+  });
+  for(const f of films) placeBlade(meshes[f.shape], f, time, br, age, null);
+  for(const f of feelers) placeBlade(meshes.feelers, f, time, br, age, meshes.tips);
+  for(const m of Object.values(meshes)) m.instanceMatrix.needsUpdate=true;
+}
+
+/* ---------- 镜头：一直绕着转，隔一阵推近 ---------- */
+const view = { yaw:0, pitch:0, zoom:1, vyaw:0, vpitch:0 };
+const target = new THREE.Vector3(), aim = new THREE.Vector3();
+function placeCamera(time){
+  const aspect = camera.aspect;
+  let dist = 11 * (aspect<1 ? 0.85/Math.max(0.5,aspect) : 1);
+  const close = Math.pow(Math.max(0, Math.sin(time*0.061+1.3)), 5);   // 偶尔的特写
+  dist *= (1-0.45*close) * view.zoom;
+  const az = time*0.07 + view.yaw, el = 0.28*Math.sin(time*0.043) + view.pitch;
+  const F = frameAt(0.5+0.28*Math.sin(time*0.05));
+  target.lerp(aim.copy(F.p).multiplyScalar(0.35+0.5*close), 0.05);
+  camera.position.set(Math.sin(az)*Math.cos(el), Math.sin(el), Math.cos(az)*Math.cos(el))
+    .multiplyScalar(dist).add(target);
+  camera.lookAt(target);
+}
+
+/* ---------- 指针 ---------- */
+const ptrs = new Map(); let t0=0, moved=0, pinch0=0, zoom0=1;
 cv.addEventListener('pointerdown', e=>{
-  cv.setPointerCapture(e.pointerId); setPtr(e);
-  ptr.in=ptr.down=true; ptr.t0=performance.now(); ptr.x0=ptr.x; ptr.y0=ptr.y; ptr.moved=0;
+  cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===1){ t0=performance.now(); moved=0; }
+  if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a.x-b.x,a.y-b.y); zoom0=view.zoom; moved=99; }
   cv.classList.add('drag');
 });
 cv.addEventListener('pointermove', e=>{
-  setPtr(e); ptr.in=true;
-  if(ptr.down) ptr.moved=Math.max(ptr.moved, Math.hypot(ptr.x-ptr.x0, ptr.y-ptr.y0)/DPR);
+  const p=ptrs.get(e.pointerId); if(!p) return;
+  const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
+  moved+=Math.abs(dx)+Math.abs(dy);
+  if(ptrs.size===1){ view.vyaw=-dx*0.006; view.vpitch=dy*0.004; view.yaw+=view.vyaw; view.pitch+=view.vpitch; }
+  else if(ptrs.size===2){ const [a,b]=[...ptrs.values()];
+    view.zoom=Math.max(0.35,Math.min(2.2, zoom0*pinch0/Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)))); }
 });
-function up(){
-  if(ptr.down && performance.now()-ptr.t0<260 && ptr.moved<6) build((Math.random()*1e9)|0);
-  ptr.down=false; cv.classList.remove('drag');
+function up(e){
+  if(ptrs.size===1 && performance.now()-t0<260 && moved<8) build((Math.random()*1e9)|0);
+  ptrs.delete(e.pointerId); if(!ptrs.size) cv.classList.remove('drag');
 }
 cv.addEventListener('pointerup', up);
 cv.addEventListener('pointercancel', up);
-cv.addEventListener('pointerleave', ()=>{ if(!ptr.down) ptr.in=false; });
+cv.addEventListener('wheel', e=>{ e.preventDefault();
+  view.zoom=Math.max(0.35,Math.min(2.2, view.zoom*Math.exp(e.deltaY*0.001))); }, {passive:false});
 
-function updatePull(){
-  for(let i=1;i<SPINE.length;i++){
-    let gx=0, gy=0;
-    if(ptr.in){
-      const px=OX+SPINE[i][0]*U, py=OY+SPINE[i][1]*U;
-      const dx=ptr.x-px, dy=ptr.y-py, d=Math.hypot(dx,dy);
-      const fall=Math.exp(-(d*d)/(2*(0.55*U)*(0.55*U)));
-      const k=(ptr.down?0.42:0.07)*(i/4)*fall;
-      gx=dx*k; gy=dy*k;
-    }
-    /* 拉的时候跟得紧，松手后慢慢弹回去 */
-    const e = ptr.down ? 0.12 : 0.04;
-    pull[i][0]+=(gx-pull[i][0])*e; pull[i][1]+=(gy-pull[i][1])*e;
-  }
-}
-
-/* ---------- 画 ---------- */
-const clamp01 = v=>v<0?0:v>1?1:v;
-const ease = v=>{ v=clamp01(v); return 1-Math.pow(1-v,3); };
-function grow(age, t, d){ return ease((age - t*1.5 - (d||0))/1.1); }
-
-/* 鳍的中心线：从根部出发，方向随时间摆，整体一点弯 */
-function finPath(f, time, br, g){
-  const p=at(f.t);
-  const bx=p.nx*f.side, by=p.ny*f.side;
-  const rx=p.x+bx*f.rootOff*U, ry=p.y+by*f.rootOff*U;
-  /* 呼吸时鳍张开：离水平越远的越往外扇 */
-  const base=f.side>0?Math.PI+0.1:-0.1;
-  let a0=base + (f.a-base)*(0.85+0.3*br)
-       + f.amp*Math.sin(time*0.9 - f.t*7 + f.ph)
-       + f.turn;
-  /* 被指针靠近的鳍会躲开 */
-  if(ptr.in){
-    const dx=ptr.x-rx, dy=ptr.y-ry, d=Math.hypot(dx,dy), reach=0.3*U;
-    let tgt=0;
-    if(d<reach){
-      const cross=Math.cos(a0)*dy-Math.sin(a0)*dx;
-      tgt = -Math.sign(cross)*0.55*(1-d/reach);
-    }
-    f.turn += (tgt-f.turn)*0.08;
-  } else f.turn*=0.94;
-  const L=f.L*U*(0.86+0.18*br)*g, M=16, step=L/M;
-  const pts=f.pts||(f.pts=new Float32Array((M+1)*3));
-  let x=rx, y=ry, a=a0;
-  for(let i=0;i<=M;i++){
-    pts[i*3]=x; pts[i*3+1]=y; pts[i*3+2]=a;
-    a += f.bend/M + 0.04*Math.sin(time*1.4+i*0.5+f.ph)/M*4;
-    x += Math.cos(a)*step; y += Math.sin(a)*step;
-  }
-  return pts;
-}
-/* 鳍上第 s 处（0 根 1 尖） */
-function finAt(f, s){
-  const M=16, fi=Math.min(M-1e-4,Math.max(0,s*M)), i=Math.floor(fi), l=fi-i, p=f.pts;
-  return [ p[i*3]+(p[i*3+3]-p[i*3])*l, p[i*3+1]+(p[i*3+4]-p[i*3+1])*l, p[i*3+2] ];
-}
-/* 宽度曲线：根部起得快，四分之一处最粗，之后拉成细丝 */
-function finW(s){ return s<0.24 ? Math.sin(s/0.24*Math.PI/2) : Math.pow(1-(s-0.24)/0.76, 1.7); }
-
-function finShape(c, f, w, scale, dx, dy){
-  const p=f.pts, M=16;
-  c.beginPath();
-  for(let i=0;i<=M;i++){
-    const hw=w*finW(i/M)+0.4*scale, a=p[i*3+2];
-    const x=(p[i*3]+dx)*scale+Math.cos(a+Math.PI/2)*hw*scale, y=(p[i*3+1]+dy)*scale+Math.sin(a+Math.PI/2)*hw*scale;
-    i?c.lineTo(x,y):c.moveTo(x,y);
-  }
-  for(let i=M;i>=0;i--){
-    const hw=w*finW(i/M)+0.4*scale, a=p[i*3+2];
-    c.lineTo((p[i*3]+dx)*scale+Math.cos(a-Math.PI/2)*hw*scale, (p[i*3+1]+dy)*scale+Math.sin(a-Math.PI/2)*hw*scale);
-  }
-  c.closePath();
-}
-const rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
-
-function ellipse(c, x, y, rx, ry, rot){
-  c.beginPath(); c.ellipse(x, y, Math.max(0.1,rx), Math.max(0.1,ry), rot, 0, Math.PI*2);
-}
-
-let last=performance.now(), fpsT=0;
-function frame(nowMs){
-  const now=nowMs/1000, time=now, age=now-born;
-  const br = 0.5-0.5*Math.cos(time*2*Math.PI/6.5);   // 6.5 秒一次呼吸
-  /* 有些预览框架加载时尺寸还是 0，之后也不发 resize —— 每帧对一下 */
-  if(Math.round(innerWidth*Math.min(devicePixelRatio||1,2))!==W ||
-     Math.round(innerHeight*Math.min(devicePixelRatio||1,2))!==H) resize();
-  updatePull();
-  buildSpine(time, br);
-
-  /* 不整屏擦掉，留一点上一帧 —— 动起来有残影，像参照里被拖糊的质感 */
-  ctx.globalAlpha=1;
-  ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.fillRect(0,0,W,H);
-
-  for(const f of fins){ f.g=grow(age,f.t,0.15); finPath(f,time,br,Math.max(0.001,f.g)); }
-
-  /* ---- 糊层 ---- */
-  const s=1/SOFT;
-  sctx.setTransform(1,0,0,1,0,0);
-  sctx.clearRect(0,0,soft.width,soft.height);
-  for(const pe of petals){
-    const g=grow(age,pe.fin?pe.fin.t:pe.t,0.4); if(g<=0) continue;
-    const [x,y,a]=petalPos(pe,time);
-    sctx.fillStyle=rgba(pe.peach?[235,160,120]:[120,120,116], pe.peach?0.35*g:0.28*g);
-    ellipse(sctx,(x)*s,(y+pe.rx*U*0.18)*s,pe.rx*U*g*s*1.05,pe.rx*pe.q*U*g*s*1.6,a);
-    sctx.fill();
-  }
-  for(const f of fins){
-    if(!f.shadow||f.g<=0) continue;
-    sctx.fillStyle=rgba(GREY, 0.32*f.g);
-    finShape(sctx,f,f.w*U*1.9,s,0,f.w*U*1.4);
-    sctx.fill();
-  }
-  for(const b of blobs){
-    if(!b.halo) continue;
-    const [x,y,a,g]=blobPos(b,time,age); if(g<=0) continue;
-    sctx.fillStyle=rgba(LIME,0.55*g);
-    ellipse(sctx,x*s,y*s,b.rx*U*1.9*g*s,b.rx*b.q*U*2.2*g*s,a); sctx.fill();
-  }
-  ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
-  ctx.drawImage(soft,0,0,soft.width,soft.height,0,0,soft.width*SOFT,soft.height*SOFT);
-
-  /* ---- 花瓣 ---- */
-  for(const pe of petals){
-    const g=grow(age,pe.fin?pe.fin.t:pe.t,0.4); if(g<=0) continue;
-    const [x,y,a]=petalPos(pe,time), rx=pe.rx*U*g, ry=rx*pe.q;
-    const col=pe.peach?PEACH:PALE;
-    const gr=ctx.createRadialGradient(x,y-ry*0.3,0,x,y,rx);
-    gr.addColorStop(0,rgba(col,0.95)); gr.addColorStop(0.7,rgba(col,0.85));
-    gr.addColorStop(1,rgba(pe.peach?[240,215,200]:[232,230,226],0.9));
-    ctx.fillStyle=gr; ellipse(ctx,x,y,rx,ry,a); ctx.fill();
-  }
-
-  /* ---- 鳍 ---- */
-  for(const f of fins){
-    if(f.g<=0) continue;
-    const p=f.pts, M=16;
-    const lg=ctx.createLinearGradient(p[0],p[1],p[M*3],p[M*3+1]);
-    const o=f.g;
-    if(f.kind==='lime'){
-      lg.addColorStop(0,rgba([218,222,210],0.5*o));
-      lg.addColorStop(0.1,rgba(LIME,0.95*o));
-      lg.addColorStop(0.42,rgba(LIME,0.8*o));
-      lg.addColorStop(0.7,rgba(GREY,0.45*o));
-      lg.addColorStop(1,rgba(GREY,0));
-    } else if(f.kind==='grey'){
-      lg.addColorStop(0,rgba(GREY,0.2*o));
-      lg.addColorStop(0.3,rgba(GREY,0.55*o));
-      lg.addColorStop(1,rgba(GREY,0));
-    } else {
-      lg.addColorStop(0,rgba([236,232,224],0.9*o));
-      lg.addColorStop(0.5,rgba([210,208,200],0.6*o));
-      lg.addColorStop(1,rgba([210,208,200],0));
-    }
-    ctx.fillStyle=lg; finShape(ctx,f,f.w*U,1,0,0); ctx.fill();
-  }
-
-  /* ---- 绿斑 ---- */
-  for(const b of blobs){
-    const [x,y,a,g]=blobPos(b,time,age); if(g<=0) continue;
-    const rx=b.rx*U*g, ry=rx*b.q;
-    const gr=ctx.createRadialGradient(x,y,0,x,y,rx);
-    gr.addColorStop(0,rgba(LIME,1)); gr.addColorStop(0.72,rgba(LIME,0.95)); gr.addColorStop(1,rgba(LIME,0));
-    ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.scale(1,b.q);
-    ctx.translate(-x,-y); ctx.fillStyle=gr;
-    ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,rx),0,Math.PI*2); ctx.fill();
-    ctx.restore();
-  }
-
-  /* ---- 黑点：最后画，压在一切上面 ---- */
-  ctx.fillStyle=INK;
-  ctx.beginPath();
-  for(const d of dots){
-    const g=grow(age,d.t,0); if(g<=0) continue;
-    const p=at(d.t + d.w*0.4*Math.sin(time*0.7+d.ph));
-    const off=(d.off + d.w*Math.sin(time*0.9+d.ph))*U;
-    const x=p.x+p.nx*off, y=p.y+p.ny*off, r=d.r*U*g*(0.96+0.06*br);
-    ctx.moveTo(x+r,y); ctx.arc(x,y,r,0,Math.PI*2);
-  }
-  for(const f of fins){
-    if(!f.dot||f.g<0.6) continue;
-    const [x,y]=finAt(f,f.dot.s), r=f.dot.r*U*(f.g-0.6)/0.4;
-    ctx.moveTo(x+r,y); ctx.arc(x,y,r,0,Math.PI*2);
-  }
-  ctx.fill();
-
-  if(nowMs-fpsT>250){ document.getElementById('nb').textContent=br.toFixed(2); fpsT=nowMs; }
-  last=nowMs;
-  requestAnimationFrame(frame);
-}
-
-function petalPos(pe,time){
-  const wob=0.012*Math.sin(time*0.8+pe.ph);
-  if(pe.fin && pe.fin.pts){
-    const [x,y,a]=finAt(pe.fin,pe.s);
-    return [x,y,a+pe.rot+wob];
-  }
-  const p=at(pe.t), off=pe.off*U;
-  return [p.x+p.nx*off, p.y+p.ny*off, Math.atan2(p.ny,p.nx)+pe.rot+wob];
-}
-function blobPos(b,time,age){
-  const wob=0.05*Math.sin(time*1.1+b.ph);
-  if(b.fin && b.fin.pts){
-    const [x,y,a]=finAt(b.fin,b.s);
-    return [x,y,a+b.rot*0.5+wob, grow(age,b.fin.t,0.5)];
-  }
-  const p=at(b.t), off=b.off*U;
-  return [p.x+p.nx*off, p.y+p.ny*off, Math.atan2(p.ny,p.nx)+b.rot+wob, grow(age,b.t,0.35)];
-}
-
-/* ---------- 键盘 ---------- */
 addEventListener('keydown', e=>{
   if(e.code==='Space'){ e.preventDefault(); build((Math.random()*1e9)|0); }
   else if(e.key==='s'||e.key==='S'){
+    renderer.render(scene,camera);   // 同一帧里读，不用开 preserveDrawingBuffer
     const a=document.createElement('a');
     a.download='untitled-life-'+Date.now()+'.png';
     a.href=cv.toDataURL('image/png'); a.click();
   }
 });
 
-addEventListener('resize', resize);
-resize();
+/* ---------- 主循环 ---------- */
+function resize(){
+  const w=innerWidth, h=innerHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1, 2));
+  renderer.setSize(w, h, false);
+  camera.aspect = w/Math.max(1,h); camera.updateProjectionMatrix();
+}
+let lastW=-1, lastH=-1;
+function frame(ms){
+  /* 有些预览框架加载时尺寸是 0，之后也不发 resize —— 每帧对一下 */
+  if(innerWidth!==lastW || innerHeight!==lastH){ lastW=innerWidth; lastH=innerHeight; resize(); }
+  const time=ms/1000, age=time-born;
+  const br = 0.5-0.5*Math.cos(time*2*Math.PI/6.5);   // 6.5 秒一次舒展
+  /* 松手后的惯性，俯仰慢慢回正 */
+  if(!ptrs.size){ view.yaw+=view.vyaw; view.pitch+=view.vpitch; view.vyaw*=0.94; view.vpitch*=0.94;
+    view.pitch*=0.995; }
+  view.pitch=Math.max(-1.2,Math.min(1.2,view.pitch));
+  filmMat.uniforms.uTime.value=time;
+  buildBody(time, br);
+  place(time, br, age);
+  placeCamera(time);
+  /* 光跟着镜头走：亮面总朝着人，暗面落在一侧 */
+  filmMat.uniforms.uLight.value.set(0.5,0.9,0.4).applyQuaternion(camera.quaternion);
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
 build(20260927);
 requestAnimationFrame(frame);
 </script>
