@@ -21,9 +21,9 @@
   @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9,U+6D0B,U+52A1,U+8FD0,U+52A8;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-support-cats.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+5B9E,U+4F53,U+827A,U+672F,U+54C1,U+5468,U+8FB9,U+6D0B,U+52A1,U+8FD0,U+52A8;}
 
-  /* Desktop Chinese subset from Z-news; keep Latin text out of CJK fallback. */
-  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-desktop.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+3400-9FFF;}
-  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-desktop.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+3400-9FFF;}
+  /* Support Chinese subset from Z-news; keep Latin text out of CJK fallback. */
+  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-desktop.woff2?v=20260928-products") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+3400-9FFF;}
+  @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-desktop.woff2?v=20260928-products") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+3400-9FFF;}
   @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-punc.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block;unicode-range:U+300A,U+300B;}
   @font-face{font-family:"SupportChinese";src:url("fonts/Z-support-punc.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;unicode-range:U+300A,U+300B;}
 
@@ -102,6 +102,7 @@
     font-family:"ZFont","EFont",sans-serif;
     font-size:18px;font-weight:700;color:#111;margin:0;
   }
+  .product-name span{display:inline-block;}
   .product-desc{
     font-family:"ZFont","EFont",sans-serif;
     font-size:12px;font-weight:400;color:#444;
@@ -142,7 +143,7 @@
     .cat-link img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;}
     .cat-img-placeholder{width:100%;aspect-ratio:16/9;background:#f0f0f0;display:block;}
     .cat-info{padding:14px 20px 18px;}
-    .cat-name-zh{font-family:"ZFont","EFont",sans-serif;font-size:18px;font-weight:700;display:block;}
+    .cat-name-zh{font-family:"SupportChinese","EFont",serif;font-size:18px;font-weight:700;display:block;}
     .cat-name-en{font-family:"EFont","ZFont",sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;color:#888;display:block;margin-top:4px;}
   }
 </style>
@@ -192,14 +193,14 @@
   </section>
 
   <section>
-    <span class="section-label">艺术品</span>
-    <span class="section-label-en">Artwork</span>
+    <span class="section-label">艺术家手作陶瓷</span>
+    <span class="section-label-en">Artist-made Ceramics</span>
     <div class="product">
       <div class="product-image product-image--unframed">
-        <img src="images/artwork1.png" alt="深红色器形艺术品">
+        <img src="images/artwork1.png" alt="艺术家手作陶瓷">
       </div>
       <div class="product-info">
-        <p class="product-name">Artwork 艺术品</p>
+        <p class="product-name"><span lang="en">Artist-made Ceramics</span> <span lang="zh-Hans">艺术家手作陶瓷</span></p>
         <p class="product-desc">A vessel-shaped work with an uneven rim and a textured, dark-red surface. Further details coming soon.</p>
         <p class="product-status">即将上线 / Coming soon</p>
       </div>
@@ -207,14 +208,14 @@
   </section>
 
   <section>
-    <span class="section-label">周边</span>
-    <span class="section-label-en">Merchandise</span>
+    <span class="section-label">手作书籍</span>
+    <span class="section-label-en">Handmade Books</span>
     <div class="product">
       <div class="product-image product-image--unframed">
-        <img src="images/merch1.png" alt="洋务运动文字印刷周边">
+        <img src="images/merch1.png" alt="《洋务运动》手作书籍">
       </div>
       <div class="product-info">
-        <p class="product-name">Merchandise 周边</p>
+        <p class="product-name"><span lang="en">Handmade Books</span> <span lang="zh-Hans">手作书籍</span></p>
         <p class="product-desc">A printed design bringing together the Chinese and English titles of As Fables Go By. Further details coming soon.</p>
         <p class="product-status">即将上线 / Coming soon</p>
       </div>
@@ -236,19 +237,19 @@
     </li>
     <li class="cat-item">
       <a class="cat-link" href="support-artwork.html">
-        <img src="images/artwork1.png" alt="艺术品">
+        <img src="images/artwork1.png" alt="艺术家手作陶瓷">
         <div class="cat-info">
-          <span class="cat-name-zh">艺术品</span>
-          <span class="cat-name-en">Artwork</span>
+          <span class="cat-name-zh">艺术家手作陶瓷</span>
+          <span class="cat-name-en">Artist-made Ceramics</span>
         </div>
       </a>
     </li>
     <li class="cat-item">
       <a class="cat-link" href="support-merch.html">
-        <img src="images/merch1.png" alt="周边">
+        <img src="images/merch1.png" alt="手作书籍">
         <div class="cat-info">
-          <span class="cat-name-zh">周边</span>
-          <span class="cat-name-en">Merchandise</span>
+          <span class="cat-name-zh">手作书籍</span>
+          <span class="cat-name-en">Handmade Books</span>
         </div>
       </a>
     </li>
