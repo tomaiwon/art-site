@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>素码脸</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#6e4a47;color:#f6e9e5;
+    font:12px/1.4 "SF Mono",Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
+  canvas{position:fixed;inset:0;display:block;width:100%;height:100%}
+  #fx{pointer-events:none}
+  #gl{touch-action:none;cursor:pointer}
+  .hud{position:fixed;pointer-events:none;letter-spacing:.14em;font-size:10px;
+    text-shadow:0 0 6px rgba(40,18,16,.85),0 0 2px rgba(40,18,16,.9)}
+  .tl{top:18px;left:20px;line-height:1.8}
+  .tl b{display:block;font-size:14px;letter-spacing:.3em}
+  .tr{top:18px;right:20px;text-align:right;line-height:1.9;text-transform:uppercase}
+  .tr i{font-style:normal;opacity:.65}
+  .bl{bottom:18px;left:20px;line-height:1.9}
+  kbd{font:inherit;border:1px solid rgba(246,233,229,.55);padding:0 5px;border-radius:2px}
+  #cam{position:fixed;right:20px;bottom:18px;
+    font:inherit;font-size:12px;letter-spacing:.2em;color:#2b1512;background:#f6e9e5;
+    border:0;padding:9px 16px;border-radius:2px;cursor:pointer;box-shadow:0 2px 14px rgba(40,18,16,.35)}
+  #cam:hover{background:#fff}
+  #cam:focus-visible{outline:2px solid #fff;outline-offset:3px}
+  #cam[hidden]{display:none}
+  #msg{position:fixed;right:20px;bottom:62px;width:min(420px,calc(100% - 40px));
+    text-align:right;white-space:pre-line;font-size:11px;letter-spacing:.06em;line-height:1.7;pointer-events:none;
+    text-shadow:0 0 6px rgba(40,18,16,.9)}
+  video{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none}
+  @media (max-width:760px){ #cam{left:20px;right:auto;bottom:74px} #msg{left:20px;right:auto;bottom:118px;text-align:left} }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<canvas id="fx"></canvas>
+<video id="video" playsinline muted></video>
+<div class="hud tl"><b>素码脸</b><div>A face on a screen, too close</div><div>After a lost bit</div></div>
+<div class="hud tr">
+  <div><i>INPUT</i> <span id="src">DEMO</span></div>
+  <div><i>STATE</i> <span id="st">LIPS</span></div>
+</div>
+<div class="hud bl" id="help">
+  <div>按住画面 = 张嘴　久了嘴会被屏幕吃掉</div>
+  <div><kbd>空格</kbd> 眨眼　<kbd>N</kbd> 皱鼻子</div>
+</div>
+<div id="msg" class="hud"></div>
+<button id="cam" type="button">开启摄像头 · 用你的脸</button>
+
+<script type="module">
+/* =====================================================================
+ * 素码脸 —— 复刻 a lost bit 的摄像头作品
+ *
+ * 整个画面是一块屏幕贴得太近的特写：底子全是 RGB 子像素，
+ * 只有鼻子（和一开始的嘴唇）是「高清」的，边缘糊进像素里。
+ *
+ *   张嘴  → 嘴张开，飞出红绿蓝的像素点；张得久了，嘴唇被屏幕吃掉，
+ *           先碎成马赛克，再退回成子像素，只剩一块暗影
+ *   然后  → 鼻子开始流鼻涕。液体像水滴落在手机屏幕上：把底下的子像素
+ *           放大、扭曲成红绿蓝的波纹，一路往下淌
+ *   流到  → 在嘴的位置积成一张湿的嘴唇，再慢慢长回原来的嘴
+ *   眨眼  → 整块屏幕的像素猛地放大一下
+ *   皱鼻  → 鼻涕流得更快
+ *   挑眉  → 眉毛（透过像素看到的两块暗斑）跟着抬
+ *
+ * 画面全在一个片元着色器里：先算出这块「屏幕」本来要显示的图（皮肤、眉毛、
+ * 鼻子、嘴），再按子像素的方式显示出来；液体的地方按液面法线折射、放大子像素。
+ * 摄像头只在点击后才申请；人脸追踪用 MediaPipe，在本机浏览器里跑，画面不离开设备。
+ * 没有摄像头时，按住画面张嘴；一会儿不动它会自己演示。
+ * 坐标用原片的 720×720 像素做单位，方便照着原片取位置。
+ * ===================================================================== */
+
+const glc = document.getElementById('gl');
+const fxc = document.getElementById('fx');
+const fx  = fxc.getContext('2d');
+const gl  = glc.getContext('webgl', { antialias:false, preserveDrawingBuffer:false });
+const $ = id=>document.getElementById(id);
+
+if(!gl){ $('msg').textContent='这个浏览器没法开启 WebGL，看不到它。'; throw new Error('no webgl'); }
+
+/* ---------- 着色器 ---------- */
+const VS = `attribute vec2 p; void main(){ gl_Position=vec4(p,0.,1.); }`;
+const FS = `
+precision highp float;
+uniform vec2  uRes;
+uniform float uScale, uCell, uT;
+uniform vec2  uOff;
+uniform float uOpen, uLips, uDis, uDrip, uDripW, uSpill, uPool, uGlitch, uBrow;
+
+const vec3 SKIN = vec3(0.74,0.49,0.45);
+
+float gs(vec2 d, vec2 r){ d/=r; return exp(-dot(d,d)); }
+
+/* ---- 鼻子：几团高斯叠出来的高度场 ---- */
+float noseH(vec2 q){
+  float y=q.y;
+  float wb = 38.0 + 0.42*max(0.0,y-50.0);
+  float bridge = exp(-pow((q.x-345.0)/wb,2.0)) * smoothstep(30.0,130.0,y) * (1.0-smoothstep(320.0,372.0,y));
+  float tip = gs(q-vec2(345.0,298.0), vec2(80.0,70.0));
+  float al  = gs(q-vec2(262.0,322.0), vec2(60.0,50.0)) + gs(q-vec2(428.0,322.0), vec2(60.0,50.0));
+  return bridge*0.72 + tip + al*0.82;
+}
+/* 鼻底那条「~」形的轮廓（鼻翼、鼻孔、鼻小柱） */
+float noseBottom(float x){
+  float dx=x-345.0;
+  return 374.0 - 11.0*exp(-pow(dx/26.0,2.0)) + 5.0*exp(-pow((abs(dx)-52.0)/22.0,2.0)) - 7.0*exp(-pow((abs(dx)-118.0)/30.0,2.0));
+}
+float noseMask(vec2 q){
+  float m = smoothstep(0.30,0.5,noseH(q));
+  return m * smoothstep(6.0,-4.0, q.y-noseBottom(q.x));
+}
+vec3 noseShade(vec2 q){
+  float e=3.0;
+  float h=noseH(q);
+  vec2 g=vec2(noseH(q+vec2(e,0.))-noseH(q-vec2(e,0.)), noseH(q+vec2(0.,e))-noseH(q-vec2(0.,e)))/(2.0*e);
+  vec3 n=normalize(vec3(-g*48.0,1.0));
+  vec3 L=normalize(vec3(-0.2,-0.28,0.94));
+  float dif=dot(n,L);
+  vec3 col=mix(vec3(0.63,0.38,0.34), vec3(0.84,0.57,0.51), smoothstep(0.2,0.95,dif));
+  col=mix(col, vec3(0.97,0.80,0.74), pow(max(dif,0.0),9.0)*0.55);
+  col+=vec3(0.06,-0.01,-0.01)*gs(q-vec2(345.,300.),vec2(60.,50.));
+  /* 鼻孔：底边上一道深色的弧 */
+  float d=q.y-noseBottom(q.x);
+  float wide=smoothstep(215.0,245.0,q.x)*smoothstep(475.0,445.0,q.x);
+  col=mix(col, vec3(0.20,0.08,0.07), exp(-pow((d+5.0)/5.5,2.0))*wide*0.9);
+  return col;
+}
+
+/* ---- 嘴 ----
+   返回 (唇的遮罩, 口腔遮罩, 唇上 0..1 的「鼓起」)。wet 时用来算积水的形状 */
+vec3 lips(vec2 q, float open){
+  vec2 p=q-vec2(345.0,600.0);
+  float a=178.0*(1.0-0.2*open);
+  float t=clamp(p.x/a,-1.0,1.0);
+  float env=pow(max(0.0,1.0-t*t),0.55);
+  float yU=-46.0*env + 10.0*exp(-pow(p.x/22.0,2.0)) - 6.0*exp(-pow((abs(p.x)-44.0)/30.0,2.0)) - open*46.0*env;
+  float yL= 60.0*env + open*40.0*env;
+  float g = open*52.0*pow(env,0.8);
+  float inX = smoothstep(a+2.0,a-2.0,abs(p.x));
+  float m = inX * smoothstep(-1.5,1.5,p.y-yU) * smoothstep(1.5,-1.5,p.y-yL);
+  float cav = inX * smoothstep(1.5,-1.5,abs(p.y)-g) * step(0.02,open);
+  float bulge = p.y<0.0 ? sin(3.1416*clamp((p.y-yU)/max(1.0,-g-yU),0.0,1.0))
+                        : sin(3.1416*clamp((p.y-g)/max(1.0,yL-g),0.0,1.0));
+  return vec3(m*(1.0-cav), cav, bulge);
+}
+vec3 lipsShade(vec2 q, vec3 L){
+  vec2 p=q-vec2(345.0,600.0);
+  vec3 col=mix(vec3(0.55,0.24,0.26), vec3(0.86,0.45,0.47), L.z);
+  col=mix(col, vec3(1.0), exp(-pow((p.x+118.0)/42.0,2.0)-pow((p.y+10.0-uOpen*18.0)/3.2,2.0))*0.85);
+  col+=vec3(0.18)*exp(-pow((p.y-34.0-uOpen*22.0)/12.0,2.0))*smoothstep(150.0,40.0,abs(p.x));
+  return col;
+}
+
+/* ---- 这块屏幕「本来要显示」的图 ---- */
+vec3 image(vec2 q, out float hi){
+  vec3 col=SKIN;
+  /* 皮肤上一点点起伏，不然像素底子太死 */
+  col*=0.93+0.07*sin(q.x*0.011+q.y*0.007)*sin(q.y*0.013-q.x*0.004);
+  /* 眉毛：只有透过像素才看得见的两团暗 */
+  float by=92.0-uBrow*26.0;
+  float br=gs((q-vec2(128.0,by+0.12*(q.x-128.0)))*vec2(1.0,1.0),vec2(95.0,20.0))
+          +gs((q-vec2(588.0,by-0.12*(q.x-588.0)))*vec2(1.0,1.0),vec2(95.0,20.0));
+  col=mix(col, vec3(0.24,0.15,0.13), clamp(br,0.0,1.0)*0.85);
+  /* 鼻子下方的阴影 */
+  col*=1.0-0.18*gs(q-vec2(345.0,392.0),vec2(150.0,26.0));
+  hi=0.0;
+  float nm=noseMask(q);
+  if(nm>0.0) col=mix(col, noseShade(q), nm);
+  hi=nm;
+  /* 嘴：被吃掉的过程里先按大方块取样（马赛克），再淡掉，只剩一块暗影 */
+  float B=mix(1.0,30.0,smoothstep(0.0,0.45,uDis));
+  vec2 qb = B>1.5 ? (floor(q/B)+0.5)*B : q;
+  vec3 L=lips(qb,uOpen);
+  float alive=uLips*(1.0-smoothstep(0.55,1.0,uDis));
+  vec3 lc=lipsShade(qb,L);
+  col=mix(col, lc, L.x*alive);
+  col=mix(col, vec3(0.05,0.015,0.02), L.y*alive);
+  col*=1.0-0.22*(1.0-alive)*lips(q,0.0).x;          // 吃掉之后留下的暗影
+  hi=max(hi, (L.x+L.y)*uLips*(1.0-smoothstep(0.0,0.3,uDis)));
+  return col;
+}
+
+/* ---- 子像素：每个像素是 R/G/B 三根竖着的短条 ---- */
+vec3 subpix(vec2 q, float C, vec3 col){
+  vec2 cs=vec2(C, C*0.72);
+  vec2 f=fract(q/cs);
+  float k=floor(f.x*3.0), lx=fract(f.x*3.0);
+  float sx=smoothstep(0.02,0.2,lx)*smoothstep(0.98,0.8,lx);
+  float sy=smoothstep(0.04,0.24,f.y)*smoothstep(0.96,0.76,f.y);
+  vec3 ch = k<0.5 ? vec3(1.,0.,0.) : (k<1.5 ? vec3(0.,1.,0.) : vec3(0.,0.,1.));
+  return ch*col*sx*sy*2.0 + col*0.28;
+}
+
+/* ---- 液体：鼻涕的一道 + 嘴位置的一滩 ---- */
+float dripH(vec2 q){
+  if(uDrip<=0.0) return 0.0;
+  vec2 top=vec2(398.0,368.0);
+  float y=clamp(q.y,top.y,top.y+uDrip);
+  float cx=top.x + 5.0*sin(y*0.035+uT*1.3)*smoothstep(top.y,top.y+80.0,y);
+  float w=(7.0+3.0*sin(y*0.06-uT*4.0))*uDripW;
+  float h=max(0.0,1.0-pow((q.x-cx)/w,2.0)-pow((q.y-y)/w,2.0));
+  /* 顺着往下滑的几颗鼓包，末端一颗大水滴 */
+  for(int i=0;i<3;i++){
+    float s=fract(uT*0.45+float(i)/3.0);
+    vec2 c=vec2(top.x+5.0*sin((top.y+s*uDrip)*0.035+uT*1.3), top.y+s*uDrip);
+    h=max(h, 1.0-dot((q-c)/(13.0*uDripW),(q-c)/(13.0*uDripW)));
+  }
+  vec2 e=vec2(cx, top.y+uDrip);
+  h=max(h, 1.0-dot((q-e)/(15.0*uDripW),(q-e)/(15.0*uDripW)));
+  return clamp(h,0.0,1.0);
+}
+float poolH(vec2 q){
+  if(uPool<=0.0) return 0.0;
+  vec3 L=lips(q,0.0);
+  float wob=0.08*sin(q.x*0.05+uT*2.0)*sin(q.y*0.07-uT*1.5);
+  return clamp(L.x*(0.35+0.65*L.z+wob)*uPool,0.0,1.0);
+}
+float liquid(vec2 q){ return max(dripH(q), poolH(q)); }
+float dripDist(vec2 q){
+  if(uDrip<=0.0) return 1e4;
+  float y=clamp(q.y,368.0,368.0+uDrip);
+  return length(q-vec2(398.0,y));
+}
+
+void main(){
+  vec2 frag=vec2(gl_FragCoord.x, uRes.y-gl_FragCoord.y);
+  vec2 q=(frag-uRes*0.5)/uScale*720.0 + vec2(360.0) - uOff;
+
+  /* 漫开的波纹区：鼻涕周围的屏幕被「泡」得变形、放大、颜色发艳 */
+  float spill = uSpill*exp(-pow(dripDist(q)/88.0,2.0))
+              + uSpill*0.6*uPool*lips(q,0.0).x;
+  spill=clamp(spill,0.0,1.0);
+  vec2 qw=q + vec2(sin(q.y*0.07+uT*2.3)+0.6*sin(q.y*0.021-uT*1.1)+0.5*sin(q.x*0.09+q.y*0.03+uT*3.1),
+                   cos(q.x*0.05-uT*1.7)+0.5*sin(q.x*0.11-uT*2.6))*7.0*spill;
+
+  /* 液面：法线折射 + 放大底下的子像素 */
+  float h=liquid(q);
+  vec2 n2=vec2(0.0);
+  if(h>0.0){
+    float e=2.0;
+    n2=vec2(liquid(q+vec2(e,0.))-liquid(q-vec2(e,0.)), liquid(q+vec2(0.,e))-liquid(q-vec2(0.,e)))/(2.0*e);
+  }
+  float mag = 1.0 + 1.1*spill + 2.6*sqrt(h) + 2.4*uGlitch;
+  vec2 qs = qw - n2*260.0*sqrt(h);
+  float C = uCell*mag;
+
+  /* 取「图」的颜色：每个像素格取格子中心那一点 */
+  vec2 cs=vec2(C, C*0.72);
+  vec2 cc=(floor(qs/cs)+0.5)*cs;
+  float hiS, hiQ;
+  vec3 col=image(cc, hiS);
+  vec3 sharp=image(q, hiQ);
+  /* 泡过的地方颜色被推得很艳 */
+  col=pow(col, vec3(1.0+1.6*spill)) * (1.0+1.2*spill);
+  vec3 scr=subpix(qs, C, col);
+
+  /* 高清区（鼻子、原来的嘴）直接显示，边缘糊进像素里 */
+  float hi=hiQ*(1.0-0.75*uGlitch)*(1.0-smoothstep(0.02,0.5,h));
+  vec3 outc=mix(scr, sharp, hi);
+
+  /* 液面高光：一道白亮的反光 */
+  if(h>0.0){
+    vec3 n=normalize(vec3(-n2*40.0,1.0));
+    float sp=pow(max(dot(n,normalize(vec3(0.35,-0.5,0.8))),0.0),28.0);
+    float streak=exp(-pow((q.x-398.0-5.0*sin(q.y*0.035+uT*1.3))/2.6,2.0))*smoothstep(368.,420.,q.y)*step(q.y,368.0+uDrip)*uDripW;
+    outc+=vec3(1.0,0.98,0.95)*(sp*0.9+streak*0.55)*smoothstep(0.0,0.2,h);
+    outc=mix(outc, outc*vec3(1.05,1.0,1.02), h*0.3);
+  }
+  gl_FragColor=vec4(clamp(outc,0.0,1.0),1.0);
+}`;
+
+function sh(type,src){ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s);
+  if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+const prog=gl.createProgram();
+gl.attachShader(prog, sh(gl.VERTEX_SHADER,VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER,FS));
+gl.linkProgram(prog);
+if(!gl.getProgramParameter(prog,gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+gl.useProgram(prog);
+const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+const loc=gl.getAttribLocation(prog,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+const U={}; for(const n of ['uRes','uScale','uCell','uT','uOff','uOpen','uLips','uDis','uDrip','uDripW','uSpill','uPool','uGlitch','uBrow'])
+  U[n]=gl.getUniformLocation(prog,n);
+
+/* ---------- 尺寸 ---------- */
+let W=0,H=0,DPR=1,SCALE=1;
+function resize(){
+  /* 全屏片元着色器很吃算力，像素比封顶 1.5 */
+  DPR=Math.min(devicePixelRatio||1,1.5);
+  W=Math.round(innerWidth*DPR); H=Math.round(innerHeight*DPR);
+  glc.width=W; glc.height=H; fxc.width=W; fxc.height=H;
+  gl.viewport(0,0,W,H);
+  SCALE=Math.min(W,H)*0.98;
+}
+/* 原片坐标 → 屏幕像素 */
+const toScreen=(x,y)=>[ (x-360+S.off[0])/720*SCALE + W/2, (y-360+S.off[1])/720*SCALE + H/2 ];
+
+/* ---------- 状态 ---------- */
+const S={ phase:'lips', t:0, open:0, lips:1, dis:0, drip:0, dripW:1, spill:0, pool:0,
+          glitch:0, brow:0, hunger:0, off:[0,0] };
+const input={ open:0, brow:0, sneer:0, off:[0,0], blink:false, source:'demo' };
+const smooth=(a,b,k)=>a+(b-a)*k;
+const clamp01=v=>v<0?0:v>1?1:v;
+
+function step(dt){
+  S.t+=dt;
+  S.brow=smooth(S.brow,input.brow,0.15);
+  S.off[0]=smooth(S.off[0],input.off[0],0.08); S.off[1]=smooth(S.off[1],input.off[1],0.08);
+  if(input.blink){ S.glitch=1; input.blink=false; }
+  S.glitch=Math.max(0,S.glitch-dt*5);
+  const target = S.phase==='lips' ? input.open : 0;
+  S.open=smooth(S.open,target,0.25);
+
+  switch(S.phase){
+    case 'lips':
+      /* 张着嘴久了 → 嘴被屏幕吃掉 */
+      if(S.open>0.45) S.hunger+=dt; else S.hunger=Math.max(0,S.hunger-dt*0.6);
+      if(S.hunger>1.1){ S.phase='dissolve'; S.hunger=0; burst(140); }
+      break;
+    case 'dissolve':
+      S.dis=Math.min(1,S.dis+dt/1.4);
+      if(Math.random()<0.6) burst(3);
+      if(S.dis>=1){ S.phase='gone'; S.t=0; S.lips=0; }
+      break;
+    case 'gone':
+      /* 过一会儿，鼻子开始流；皱鼻子流得更快 */
+      if(S.t>0.9) S.drip+=dt*(48+150*input.sneer);
+      S.spill=smooth(S.spill, clamp01(S.drip/170), 0.05);
+      if(368+S.drip>=588){ S.phase='pool'; S.t=0; }
+      break;
+    case 'pool':
+      S.pool=Math.min(1,S.pool+dt/2.4);
+      S.dripW=smooth(S.dripW,0.55,0.02);
+      S.spill=smooth(S.spill,0.45,0.02);
+      if(S.pool>=1 && S.t>3.2){ S.phase='heal'; S.t=0; }
+      break;
+    case 'heal':
+      /* 那滩水慢慢长回一张嘴 */
+      S.lips=Math.min(1,S.lips+dt/1.4); S.dis=Math.max(0,S.dis-dt/1.4);
+      S.pool=Math.max(0,S.pool-dt/1.6); S.spill=smooth(S.spill,0,0.05);
+      S.dripW=Math.max(0,S.dripW-dt/1.2);
+      if(S.dripW<=0){ S.drip=0; }
+      if(S.lips>=1 && S.pool<=0 && S.dripW<=0){ S.phase='lips'; S.dis=0; S.drip=0; S.dripW=1; S.spill=0; }
+      break;
+  }
+}
+
+/* ---------- 飞出来的 RGB 像素点 ---------- */
+const bits=[];
+const BIT_COLORS=['#ff1f2a','#1fff45','#2a3cff','#ff1f2a','#1fff45','#2a3cff','#200808'];
+function burst(n){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2, rx=150*(1-0.2*S.open), ry=20+45*S.open;
+    const x=345+Math.cos(a)*rx*Math.sqrt(Math.random()), y=600+Math.sin(a)*ry*Math.random();
+    const sp=40+160*Math.random();
+    bits.push({ x, y, vx:(x-345)/rx*sp*0.7+(Math.random()-0.5)*60, vy:-sp*(0.4+Math.random()),
+      life:0.6+Math.random()*1.1, age:0, c:BIT_COLORS[(Math.random()*BIT_COLORS.length)|0], s:3+Math.random()*4 });
+  }
+}
+function drawBits(dt){
+  fx.clearRect(0,0,W,H);
+  if(S.phase==='lips' && S.open>0.3 && Math.random()<S.open*0.9) burst(1+((S.open*3)|0));
+  const k=SCALE/720;
+  for(let i=bits.length-1;i>=0;i--){
+    const b=bits[i]; b.age+=dt;
+    if(b.age>b.life){ bits.splice(i,1); continue; }
+    b.vy+=220*dt; b.x+=b.vx*dt; b.y+=b.vy*dt;
+    const [sx,sy]=toScreen(b.x,b.y);
+    fx.globalAlpha=1-b.age/b.life; fx.fillStyle=b.c;
+    const s=b.s*k*1.4; fx.fillRect(Math.round(sx), Math.round(sy), Math.max(1,s*0.45), Math.max(2,s));
+  }
+  fx.globalAlpha=1;
+}
+
+/* ---------- 没有摄像头时：按住 = 张嘴；闲着会自己演示 ---------- */
+let pointerDown=false, lastPointer=-1e9;
+glc.addEventListener('pointerdown',e=>{ pointerDown=true; lastPointer=performance.now(); glc.setPointerCapture(e.pointerId); });
+glc.addEventListener('pointerup',()=>{ pointerDown=false; lastPointer=performance.now(); });
+glc.addEventListener('pointercancel',()=>{ pointerDown=false; });
+glc.addEventListener('pointermove',e=>{
+  if(input.source==='face') return;
+  lastPointer=performance.now();
+  input.off=[ (e.clientX/innerWidth-0.5)*-30, (e.clientY/innerHeight-0.5)*-20 ];
+});
+let sneerKey=0;
+addEventListener('keydown',e=>{
+  if(e.code==='Space'){ e.preventDefault(); input.blink=true; }
+  if(e.key==='n'||e.key==='N') sneerKey=1;
+});
+addEventListener('keyup',e=>{ if(e.key==='n'||e.key==='N') sneerKey=0; });
+
+function demoInput(now){
+  const idle = now-lastPointer > 5000;
+  if(input.source==='face') return;
+  input.source = idle ? 'demo' : 'pointer';
+  if(idle){
+    /* 每 8 秒张一次嘴，张 1.6 秒；中间偶尔眨一下眼、挑一下眉 */
+    const c=(now/1000)%8;
+    input.open = c>1 && c<2.6 ? Math.min(1,(c-1)*3) : 0;
+    input.brow = 0.5+0.5*Math.sin(now/1000*0.9) > 0.92 ? 1 : 0;
+    if(Math.random()<0.002) input.blink=true;
+    input.sneer=0;
+    input.off=[ 10*Math.sin(now/3100), 6*Math.sin(now/2300) ];
+  }else{
+    input.open = pointerDown ? 1 : 0;
+    input.sneer = sneerKey;
+    input.brow = 0;
+  }
+}
+
+/* ---------- 摄像头 + 人脸追踪 ---------- */
+const video=$('video'), camBtn=$('cam'), msg=$('msg');
+const MP='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.0.1';
+const MODEL='https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+let landmarker=null, stream=null, camGen=0, lastVideoTime=-1, blinkLatch=false, noFaceSince=0;
+
+function camError(e){
+  switch(e && e.name){
+    case 'SecureContextError': return '摄像头需要安全连接（HTTPS）才能打开。';
+    case 'UnsupportedError':   return '这个浏览器没法申请摄像头，换 Safari、Chrome 或 Edge 试试。';
+    case 'NotAllowedError': case 'SecurityError':
+      return '摄像头没有获得允许。在浏览器的本站权限和系统设置里允许摄像头，再点一次。\n在 App 里打开的话，换到浏览器。';
+    case 'NotFoundError':      return '没找到摄像头。接上或打开摄像头后再点一次。';
+    case 'NotReadableError':   return '摄像头读不出来，可能被别的应用占着。关掉它再点一次。';
+    case 'ModelError':         return '人脸模型没加载下来，检查一下网络再点一次。\n先按住画面玩也行。';
+    default:                   return '摄像头没能开起来。检查设备和浏览器权限后再点一次。';
+  }
+}
+async function startCamera(){
+  const gen=++camGen;
+  camBtn.disabled=true; camBtn.textContent='正在申请摄像头…';
+  msg.textContent='在浏览器弹出的提示里允许摄像头。';
+  try{
+    if(!window.isSecureContext) throw {name:'SecureContextError'};
+    if(!navigator.mediaDevices?.getUserMedia) throw {name:'UnsupportedError'};
+    const s=await navigator.mediaDevices.getUserMedia({ video:{ width:{ideal:640}, height:{ideal:480}, facingMode:'user' }, audio:false });
+    if(gen!==camGen){ s.getTracks().forEach(t=>t.stop()); return; }
+    stream=s; video.srcObject=s; await video.play();
+    camBtn.textContent='正在加载人脸模型…'; msg.textContent='第一次打开要下载几兆的模型。';
+    if(!landmarker){
+      try{
+        const { FilesetResolver, FaceLandmarker } = await import(MP+'/vision_bundle.mjs');
+        const files=await FilesetResolver.forVisionTasks(MP+'/wasm');
+        landmarker=await FaceLandmarker.createFromOptions(files,{
+          baseOptions:{ modelAssetPath:MODEL, delegate:'GPU' },
+          runningMode:'VIDEO', numFaces:1, outputFaceBlendshapes:true });
+      }catch(err){ console.warn(err); throw {name:'ModelError'}; }
+    }
+    if(gen!==camGen) return;
+    input.source='face'; camBtn.hidden=true; msg.textContent='';
+    $('help').innerHTML='<div>张嘴 —— 张久了嘴会被屏幕吃掉</div><div>眨眼 屏幕闪　挑眉 眉毛抬　皱鼻子 鼻涕流得快</div>';
+  }catch(e){
+    if(gen!==camGen) return;
+    stopCamera();
+    msg.textContent=camError(e);
+    camBtn.disabled=false; camBtn.textContent='重试摄像头';
+  }
+}
+function stopCamera(){
+  camGen++;
+  if(stream) stream.getTracks().forEach(t=>t.stop());
+  stream=null; video.srcObject=null;
+  if(input.source==='face') input.source='demo';
+}
+camBtn.addEventListener('click', startCamera);
+addEventListener('pagehide', stopCamera);
+
+function faceInput(now){
+  if(input.source!=='face' || !landmarker || video.readyState<2) return;
+  if(video.currentTime===lastVideoTime) return;
+  lastVideoTime=video.currentTime;
+  const r=landmarker.detectForVideo(video, now);
+  const bs=r.faceBlendshapes?.[0]?.categories;
+  if(!bs){
+    if(!noFaceSince) noFaceSince=now;
+    if(now-noFaceSince>1500) msg.textContent='没看到脸。把脸放进摄像头画面里。';
+    input.open=0; return;
+  }
+  noFaceSince=0; if(msg.textContent.startsWith('没看到脸')) msg.textContent='';
+  const g=name=>bs.find(c=>c.categoryName===name)?.score ?? 0;
+  input.open  = clamp01((g('jawOpen')-0.08)/0.45);
+  input.brow  = clamp01((g('browInnerUp')+ (g('browOuterUpLeft')+g('browOuterUpRight'))/2 - 0.15)/0.6);
+  input.sneer = clamp01(((g('noseSneerLeft')+g('noseSneerRight'))/2 - 0.1)/0.5);
+  const blink=(g('eyeBlinkLeft')+g('eyeBlinkRight'))/2;
+  if(blink>0.55 && !blinkLatch){ input.blink=true; blinkLatch=true; }
+  if(blink<0.3) blinkLatch=false;
+  /* 脸往哪边，画面里的脸跟着挪（镜像） */
+  const tip=r.faceLandmarks?.[0]?.[1];
+  if(tip) input.off=[ (tip.x-0.5)*-120, (tip.y-0.5)*90 ];
+}
+
+/* ---------- 主循环 ---------- */
+const PHASE_NAME={ lips:'LIPS', dissolve:'EATEN', gone:'RUNNY', pool:'POOL', heal:'HEAL' };
+let lastW=-1,lastH=-1,last=0;
+function frame(ms){
+  if(innerWidth!==lastW||innerHeight!==lastH){ lastW=innerWidth; lastH=innerHeight; resize(); }
+  const dt=Math.min(0.05,(ms-(last||ms))/1000); last=ms;
+  demoInput(ms); faceInput(ms);
+  step(dt);
+  gl.uniform2f(U.uRes,W,H);
+  gl.uniform1f(U.uScale,SCALE);
+  /* 子像素至少 2 个物理像素宽，不然只剩摩尔纹 */
+  gl.uniform1f(U.uCell, Math.max(9, 7*720/SCALE));
+  gl.uniform1f(U.uT, ms/1000);
+  gl.uniform2f(U.uOff, S.off[0], S.off[1]);
+  gl.uniform1f(U.uOpen,S.open); gl.uniform1f(U.uLips,S.lips); gl.uniform1f(U.uDis,S.dis);
+  gl.uniform1f(U.uDrip,S.drip); gl.uniform1f(U.uDripW,S.dripW); gl.uniform1f(U.uSpill,S.spill);
+  gl.uniform1f(U.uPool,S.pool); gl.uniform1f(U.uGlitch,S.glitch); gl.uniform1f(U.uBrow,S.brow);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+  drawBits(dt);
+  $('src').textContent = input.source==='face'?'CAMERA':input.source==='pointer'?'POINTER':'DEMO';
+  $('st').textContent = PHASE_NAME[S.phase];
+  requestAnimationFrame(frame);
+}
+/* 给自动截图用：软件渲染太慢，直接把状态拨到某一步 */
+window.__pixelFace={ S, input, burst };
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
