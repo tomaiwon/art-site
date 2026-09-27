@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>未命名的生命</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#fff;
+    font:12px/1.4 "SF Mono",Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
+  #cv{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+  #cv.drag{cursor:grabbing}
+  .hud{position:fixed;pointer-events:none;color:#9a9a96;
+    letter-spacing:.16em;text-transform:uppercase;font-size:10px}
+  .tl{top:18px;left:20px;display:flex;align-items:center;gap:10px;letter-spacing:.04em;font-size:11px}
+  .tl b{color:#111;font-weight:700;font-size:13px;letter-spacing:.06em}
+  .tl i{display:inline-block;width:4px;height:14px;background:#c4f11a}
+  .tr{top:18px;right:20px;text-align:right;line-height:1.9}
+  .tr em{font-style:normal;color:#111}
+  .bl{bottom:18px;left:20px;line-height:1.9}
+  .br{bottom:18px;right:20px;text-align:right;opacity:.7}
+  .sub{left:0;right:0;bottom:0;padding:44px 0 22px;text-align:center;color:#3a3a38;font-size:13px;
+    letter-spacing:.08em;text-transform:none;
+    background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.82) 55%)}
+  kbd{font:inherit;border:1px solid rgba(154,154,150,.5);padding:1px 5px;border-radius:2px}
+  /* 窄屏：右上右下收掉，字幕抬到操作说明上面 */
+  @media (max-width:760px){ .br,.tr{display:none} .sub{padding:40px 20px 62px;font-size:12px} }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="hud tl"><i></i><b>未命名的生命</b><span>/ 复刻</span></div>
+<div class="hud tr">
+  <div>DOTS <em id="nd">0</em></div>
+  <div>FINS <em id="nf">0</em></div>
+  <div>BREATH <em id="nb">0.00</em></div>
+</div>
+<div class="hud sub" id="sub">也许只是某一瞬间，它看起来像是在舒展自己的身体。</div>
+<div class="hud bl">
+  <div>按住拖动 拉它舒展　轻点 换一个生命</div>
+  <div><kbd>空格</kbd> 重生　<kbd>S</kbd> 存图</div>
+</div>
+<div class="hud br">After JHBOOM · 05 / 创作感受</div>
+
+<script>
+/* =====================================================================
+ * 未命名的生命 —— 一个在白纸上舒展身体的东西
+ *
+ * 参照图拆开看只有四种笔触：
+ *   黑色实心圆  —— 沿一根斜向上的脊柱堆起来，越往上越大越密，互相吞并成一团身体
+ *   荧光绿斑块  —— 长在鳍上，边缘带一圈发散的光
+ *   长鳍 / 长须 —— 从身体往左甩出去，根部粗、尾巴拉成一根灰色的细丝
+ *   淡色花瓣    —— 近白、偏暖，只靠下面一圈灰影才看得出来
+ *
+ * 所有元素都不存绝对坐标，只存「挂在脊柱第几段、往法线方向偏多少」。
+ * 于是脊柱一动（呼吸、被拉），整只生物跟着变形，而不是一堆点各跑各的。
+ *
+ * 糊的部分（花瓣的影子、鳍的灰色残影、绿光）画在 1/4 分辨率的离屏画布上，
+ * 再整张放大贴回来 —— 双线性放大本身就是模糊，比 ctx.filter 便宜，Safari 也能跑。
+ * ===================================================================== */
+
+const cv  = document.getElementById('cv');
+const ctx = cv.getContext('2d', { alpha:false });
+const soft = document.createElement('canvas');
+const sctx = soft.getContext('2d');
+const SOFT = 4;                       // 糊层缩小倍数
+
+let W=0, H=0, DPR=1, U=1, OX=0, OY=0;
+
+const LIME  = [196,241,26];
+const INK   = '#0b0b0b';
+const GREY  = [150,152,146];
+const PALE  = [250,247,241];
+const PEACH = [247,196,160];
+
+function resize(){
+  DPR = Math.min(devicePixelRatio||1, 2);
+  W = Math.round(innerWidth*DPR); H = Math.round(innerHeight*DPR);
+  cv.width=W; cv.height=H;
+  cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px';
+  soft.width=Math.ceil(W/SOFT); soft.height=Math.ceil(H/SOFT);
+  /* 构图单位：横屏按高度；竖屏放大一点、身体往右挪，把左边留给鳍 */
+  if(W>=H){ U=Math.min(H, W*0.95); OX=W/2; }
+  else    { U=Math.min(H*0.78, W*1.22); OX=W*0.52; }
+  OY = (H-U)/2;
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+}
+
+/* ---------- 种子随机 ---------- */
+function rng(seed){
+  return function(){
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+let R = rng(1);
+function gauss(){ let u=0,v=0; while(!u)u=R(); while(!v)v=R();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+
+/* ---------- 脊柱 ----------
+   五个控制点，单位是 U，x 相对画面中线。取自参照：
+   从底边中间偏右起，缓 S 形往右上角出画。 */
+const SPINE = [[0.10,1.06],[0.07,0.74],[0.16,0.44],[0.26,0.19],[0.31,-0.05]];
+let spineVar = [];                    // 每只生命脊柱的个体差异
+const pull = SPINE.map(()=>[0,0]);    // 指针拉扯造成的位移（平滑过的）
+const N = 96;
+const sx=new Float32Array(N+1), sy=new Float32Array(N+1);
+const tx=new Float32Array(N+1), ty=new Float32Array(N+1);
+
+function catmull(p0,p1,p2,p3,t){
+  const t2=t*t, t3=t2*t;
+  return 0.5*((2*p1) + (-p0+p2)*t + (2*p0-5*p1+4*p2-p3)*t2 + (-p0+3*p1-3*p2+p3)*t3);
+}
+function buildSpine(time, br){
+  const P = SPINE.map((p,i)=>{
+    const v=spineVar[i];
+    /* 呼吸：以根部为锚整根伸长，再带一点左右摆 */
+    const sway = 0.035*Math.sin(time*0.45+i*0.9) + 0.012*Math.sin(time*1.3+i*2.1);
+    let x = p[0]+v[0], y = p[1]+v[1];
+    const ax=SPINE[0][0], ay=SPINE[0][1];
+    const k = 0.93 + 0.09*br;
+    x = ax + (x-ax)*k + sway*(i/4);
+    y = ay + (y-ay)*k;
+    return [OX + x*U + pull[i][0], OY + y*U + pull[i][1]];
+  });
+  const ext = (a,b)=>[2*a[0]-b[0], 2*a[1]-b[1]];
+  const Q = [ext(P[0],P[1]), ...P, ext(P[4],P[3])];
+  for(let i=0;i<=N;i++){
+    const t=i/N*4, seg=Math.min(3,Math.floor(t)), l=t-seg;
+    sx[i]=catmull(Q[seg][0],Q[seg+1][0],Q[seg+2][0],Q[seg+3][0],l);
+    sy[i]=catmull(Q[seg][1],Q[seg+1][1],Q[seg+2][1],Q[seg+3][1],l);
+  }
+  for(let i=0;i<=N;i++){
+    const a=Math.max(0,i-1), b=Math.min(N,i+1);
+    const dx=sx[b]-sx[a], dy=sy[b]-sy[a], l=Math.hypot(dx,dy)||1;
+    /* 脊柱从下往上走，t 增大方向朝上 */
+    tx[i]=-dx/l; ty[i]=-dy/l;
+  }
+}
+/* 脊柱上第 t 处的位置、切线、左法线 */
+function at(t){
+  const f=Math.max(0,Math.min(1,t))*N, i=Math.min(N-1,Math.floor(f)), l=f-i;
+  const x=sx[i]+(sx[i+1]-sx[i])*l, y=sy[i]+(sy[i+1]-sy[i])*l;
+  const ux=tx[i]+(tx[i+1]-tx[i])*l, uy=ty[i]+(ty[i+1]-ty[i])*l;
+  /* 往上的切线 (-dx,-dy) 转 90° 得到画面左侧 */
+  return { x, y, ux:-ux, uy:-uy, nx:-uy, ny:ux };
+}
+
+/* ---------- 生成一只 ---------- */
+let dots=[], fins=[], blobs=[], petals=[];
+let born = 0;
+
+function build(seed){
+  R = rng(seed);
+  spineVar = SPINE.map((_,i)=> i===0 ? [0,0] : [gauss()*0.03, gauss()*0.02]);
+  dots=[]; fins=[]; blobs=[]; petals=[];
+
+  /* 身体：上半截的大黑团，互相压在一起 */
+  for(let i=0;i<40;i++){
+    const t=0.48+0.52*Math.pow(R(),0.75);
+    dots.push({ t, off:gauss()*0.028*(0.6+t*0.6), r:0.016+0.034*Math.pow(R(),1.4) });
+  }
+  /* 中段：中等的黑点，沿脊柱散开 */
+  for(let i=0;i<70;i++){
+    const t=0.1+0.8*R();
+    dots.push({ t, off:gauss()*0.065, r:0.005+0.02*Math.pow(R(),2) });
+  }
+  /* 飞散的小点 —— 偏左，跟着鳍甩出去 */
+  for(let i=0;i<85;i++){
+    const t=0.04+0.96*R();
+    dots.push({ t, off:gauss()*0.13+0.06, r:0.0022+0.011*Math.pow(R(),3) });
+  }
+  for(const d of dots){ d.ph=R()*6.28; d.w=0.004+R()*0.008; }
+
+  /* 鳍 / 须：八成往左，两成往右且短。
+     方向不跟法线走 —— 参照里左边的鳍几乎是水平甩出去的，只微微上扬 */
+  for(let i=0;i<96;i++){
+    const left = R()<0.8;
+    const t = R()<0.5 ? 0.04+0.86*R() : 0.04+0.86*(R()+R())/2;
+    const k = R();
+    fins.push({
+      t, side: left?1:-1,
+      rootOff: 0.008+0.035*R(),
+      a: left ? Math.PI+0.16+gauss()*0.2 : -0.22+gauss()*0.3,
+      bend: gauss()*0.35,
+      L: (0.09+0.46*Math.pow(R(),1.2)) * (left?1:0.5),
+      w: 0.004+0.016*Math.pow(R(),1.5),
+      kind: k<0.52 ? 'lime' : k<0.82 ? 'grey' : 'pale',
+      shadow: R()<0.55,
+      dot: R()<0.4 ? { s:0.5+0.48*R(), r:0.0025+0.006*R() } : null,
+      ph: R()*6.28, amp: 0.06+0.1*R(),
+      turn: 0, pts: null
+    });
+  }
+  /* 绿斑：六成长在绿鳍上，其余贴着脊柱左侧 */
+  const limeFins = fins.filter(f=>f.kind==='lime');
+  for(let i=0;i<72;i++){
+    const onFin = R()<0.6;
+    blobs.push({
+      fin: onFin ? limeFins[(R()*limeFins.length)|0] : null,
+      s: 0.06+0.4*R(),
+      t: 0.06+0.82*R(), off: Math.abs(gauss())*0.1+0.01,
+      rx: 0.007+0.028*Math.pow(R(),1.4), q: 0.35+0.45*R(),
+      rot: gauss()*0.3, halo: R()<0.6, ph:R()*6.28
+    });
+  }
+  /* 花瓣：近白偏暖，少数带桃色 */
+  for(let i=0;i<34;i++){
+    petals.push({
+      fin: R()<0.55 ? fins[(R()*fins.length)|0] : null,
+      s: 0.15+0.55*R(),
+      t: 0.05+0.9*R(), off: gauss()*0.14+0.04,
+      rx: 0.022+0.055*R(), q: 0.13+0.2*R(),
+      rot: gauss()*0.35, peach: R()<0.18, ph:R()*6.28
+    });
+  }
+  born = performance.now()/1000;
+  document.getElementById('nd').textContent = dots.length;
+  document.getElementById('nf').textContent = fins.length;
+}
+
+/* ---------- 指针：悬停时身体朝你偏，按住就被拉着伸展 ---------- */
+const ptr = { x:0, y:0, in:false, down:false, t0:0, x0:0, y0:0, moved:0 };
+function setPtr(e){ ptr.x=e.clientX*DPR; ptr.y=e.clientY*DPR; }
+cv.addEventListener('pointerdown', e=>{
+  cv.setPointerCapture(e.pointerId); setPtr(e);
+  ptr.in=ptr.down=true; ptr.t0=performance.now(); ptr.x0=ptr.x; ptr.y0=ptr.y; ptr.moved=0;
+  cv.classList.add('drag');
+});
+cv.addEventListener('pointermove', e=>{
+  setPtr(e); ptr.in=true;
+  if(ptr.down) ptr.moved=Math.max(ptr.moved, Math.hypot(ptr.x-ptr.x0, ptr.y-ptr.y0)/DPR);
+});
+function up(){
+  if(ptr.down && performance.now()-ptr.t0<260 && ptr.moved<6) build((Math.random()*1e9)|0);
+  ptr.down=false; cv.classList.remove('drag');
+}
+cv.addEventListener('pointerup', up);
+cv.addEventListener('pointercancel', up);
+cv.addEventListener('pointerleave', ()=>{ if(!ptr.down) ptr.in=false; });
+
+function updatePull(){
+  for(let i=1;i<SPINE.length;i++){
+    let gx=0, gy=0;
+    if(ptr.in){
+      const px=OX+SPINE[i][0]*U, py=OY+SPINE[i][1]*U;
+      const dx=ptr.x-px, dy=ptr.y-py, d=Math.hypot(dx,dy);
+      const fall=Math.exp(-(d*d)/(2*(0.55*U)*(0.55*U)));
+      const k=(ptr.down?0.42:0.07)*(i/4)*fall;
+      gx=dx*k; gy=dy*k;
+    }
+    /* 拉的时候跟得紧，松手后慢慢弹回去 */
+    const e = ptr.down ? 0.12 : 0.04;
+    pull[i][0]+=(gx-pull[i][0])*e; pull[i][1]+=(gy-pull[i][1])*e;
+  }
+}
+
+/* ---------- 画 ---------- */
+const clamp01 = v=>v<0?0:v>1?1:v;
+const ease = v=>{ v=clamp01(v); return 1-Math.pow(1-v,3); };
+function grow(age, t, d){ return ease((age - t*1.5 - (d||0))/1.1); }
+
+/* 鳍的中心线：从根部出发，方向随时间摆，整体一点弯 */
+function finPath(f, time, br, g){
+  const p=at(f.t);
+  const bx=p.nx*f.side, by=p.ny*f.side;
+  const rx=p.x+bx*f.rootOff*U, ry=p.y+by*f.rootOff*U;
+  /* 呼吸时鳍张开：离水平越远的越往外扇 */
+  const base=f.side>0?Math.PI+0.1:-0.1;
+  let a0=base + (f.a-base)*(0.85+0.3*br)
+       + f.amp*Math.sin(time*0.9 - f.t*7 + f.ph)
+       + f.turn;
+  /* 被指针靠近的鳍会躲开 */
+  if(ptr.in){
+    const dx=ptr.x-rx, dy=ptr.y-ry, d=Math.hypot(dx,dy), reach=0.3*U;
+    let tgt=0;
+    if(d<reach){
+      const cross=Math.cos(a0)*dy-Math.sin(a0)*dx;
+      tgt = -Math.sign(cross)*0.55*(1-d/reach);
+    }
+    f.turn += (tgt-f.turn)*0.08;
+  } else f.turn*=0.94;
+  const L=f.L*U*(0.86+0.18*br)*g, M=16, step=L/M;
+  const pts=f.pts||(f.pts=new Float32Array((M+1)*3));
+  let x=rx, y=ry, a=a0;
+  for(let i=0;i<=M;i++){
+    pts[i*3]=x; pts[i*3+1]=y; pts[i*3+2]=a;
+    a += f.bend/M + 0.04*Math.sin(time*1.4+i*0.5+f.ph)/M*4;
+    x += Math.cos(a)*step; y += Math.sin(a)*step;
+  }
+  return pts;
+}
+/* 鳍上第 s 处（0 根 1 尖） */
+function finAt(f, s){
+  const M=16, fi=Math.min(M-1e-4,Math.max(0,s*M)), i=Math.floor(fi), l=fi-i, p=f.pts;
+  return [ p[i*3]+(p[i*3+3]-p[i*3])*l, p[i*3+1]+(p[i*3+4]-p[i*3+1])*l, p[i*3+2] ];
+}
+/* 宽度曲线：根部起得快，四分之一处最粗，之后拉成细丝 */
+function finW(s){ return s<0.24 ? Math.sin(s/0.24*Math.PI/2) : Math.pow(1-(s-0.24)/0.76, 1.7); }
+
+function finShape(c, f, w, scale, dx, dy){
+  const p=f.pts, M=16;
+  c.beginPath();
+  for(let i=0;i<=M;i++){
+    const hw=w*finW(i/M)+0.4*scale, a=p[i*3+2];
+    const x=(p[i*3]+dx)*scale+Math.cos(a+Math.PI/2)*hw*scale, y=(p[i*3+1]+dy)*scale+Math.sin(a+Math.PI/2)*hw*scale;
+    i?c.lineTo(x,y):c.moveTo(x,y);
+  }
+  for(let i=M;i>=0;i--){
+    const hw=w*finW(i/M)+0.4*scale, a=p[i*3+2];
+    c.lineTo((p[i*3]+dx)*scale+Math.cos(a-Math.PI/2)*hw*scale, (p[i*3+1]+dy)*scale+Math.sin(a-Math.PI/2)*hw*scale);
+  }
+  c.closePath();
+}
+const rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
+
+function ellipse(c, x, y, rx, ry, rot){
+  c.beginPath(); c.ellipse(x, y, Math.max(0.1,rx), Math.max(0.1,ry), rot, 0, Math.PI*2);
+}
+
+let last=performance.now(), fpsT=0;
+function frame(nowMs){
+  const now=nowMs/1000, time=now, age=now-born;
+  const br = 0.5-0.5*Math.cos(time*2*Math.PI/6.5);   // 6.5 秒一次呼吸
+  updatePull();
+  buildSpine(time, br);
+
+  /* 不整屏擦掉，留一点上一帧 —— 动起来有残影，像参照里被拖糊的质感 */
+  ctx.globalAlpha=1;
+  ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.fillRect(0,0,W,H);
+
+  for(const f of fins){ f.g=grow(age,f.t,0.15); finPath(f,time,br,Math.max(0.001,f.g)); }
+
+  /* ---- 糊层 ---- */
+  const s=1/SOFT;
+  sctx.setTransform(1,0,0,1,0,0);
+  sctx.clearRect(0,0,soft.width,soft.height);
+  for(const pe of petals){
+    const g=grow(age,pe.fin?pe.fin.t:pe.t,0.4); if(g<=0) continue;
+    const [x,y,a]=petalPos(pe,time);
+    sctx.fillStyle=rgba(pe.peach?[235,160,120]:[120,120,116], pe.peach?0.35*g:0.28*g);
+    ellipse(sctx,(x)*s,(y+pe.rx*U*0.18)*s,pe.rx*U*g*s*1.05,pe.rx*pe.q*U*g*s*1.6,a);
+    sctx.fill();
+  }
+  for(const f of fins){
+    if(!f.shadow||f.g<=0) continue;
+    sctx.fillStyle=rgba(GREY, 0.32*f.g);
+    finShape(sctx,f,f.w*U*1.9,s,0,f.w*U*1.4);
+    sctx.fill();
+  }
+  for(const b of blobs){
+    if(!b.halo) continue;
+    const [x,y,a,g]=blobPos(b,time,age); if(g<=0) continue;
+    sctx.fillStyle=rgba(LIME,0.55*g);
+    ellipse(sctx,x*s,y*s,b.rx*U*1.9*g*s,b.rx*b.q*U*2.2*g*s,a); sctx.fill();
+  }
+  ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+  ctx.drawImage(soft,0,0,soft.width,soft.height,0,0,soft.width*SOFT,soft.height*SOFT);
+
+  /* ---- 花瓣 ---- */
+  for(const pe of petals){
+    const g=grow(age,pe.fin?pe.fin.t:pe.t,0.4); if(g<=0) continue;
+    const [x,y,a]=petalPos(pe,time), rx=pe.rx*U*g, ry=rx*pe.q;
+    const col=pe.peach?PEACH:PALE;
+    const gr=ctx.createRadialGradient(x,y-ry*0.3,0,x,y,rx);
+    gr.addColorStop(0,rgba(col,0.95)); gr.addColorStop(0.7,rgba(col,0.85));
+    gr.addColorStop(1,rgba(pe.peach?[240,215,200]:[232,230,226],0.9));
+    ctx.fillStyle=gr; ellipse(ctx,x,y,rx,ry,a); ctx.fill();
+  }
+
+  /* ---- 鳍 ---- */
+  for(const f of fins){
+    if(f.g<=0) continue;
+    const p=f.pts, M=16;
+    const lg=ctx.createLinearGradient(p[0],p[1],p[M*3],p[M*3+1]);
+    const o=f.g;
+    if(f.kind==='lime'){
+      lg.addColorStop(0,rgba([218,222,210],0.5*o));
+      lg.addColorStop(0.1,rgba(LIME,0.95*o));
+      lg.addColorStop(0.42,rgba(LIME,0.8*o));
+      lg.addColorStop(0.7,rgba(GREY,0.45*o));
+      lg.addColorStop(1,rgba(GREY,0));
+    } else if(f.kind==='grey'){
+      lg.addColorStop(0,rgba(GREY,0.2*o));
+      lg.addColorStop(0.3,rgba(GREY,0.55*o));
+      lg.addColorStop(1,rgba(GREY,0));
+    } else {
+      lg.addColorStop(0,rgba([236,232,224],0.9*o));
+      lg.addColorStop(0.5,rgba([210,208,200],0.6*o));
+      lg.addColorStop(1,rgba([210,208,200],0));
+    }
+    ctx.fillStyle=lg; finShape(ctx,f,f.w*U,1,0,0); ctx.fill();
+  }
+
+  /* ---- 绿斑 ---- */
+  for(const b of blobs){
+    const [x,y,a,g]=blobPos(b,time,age); if(g<=0) continue;
+    const rx=b.rx*U*g, ry=rx*b.q;
+    const gr=ctx.createRadialGradient(x,y,0,x,y,rx);
+    gr.addColorStop(0,rgba(LIME,1)); gr.addColorStop(0.72,rgba(LIME,0.95)); gr.addColorStop(1,rgba(LIME,0));
+    ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.scale(1,b.q);
+    ctx.translate(-x,-y); ctx.fillStyle=gr;
+    ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,rx),0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+
+  /* ---- 黑点：最后画，压在一切上面 ---- */
+  ctx.fillStyle=INK;
+  ctx.beginPath();
+  for(const d of dots){
+    const g=grow(age,d.t,0); if(g<=0) continue;
+    const p=at(d.t + d.w*0.4*Math.sin(time*0.7+d.ph));
+    const off=(d.off + d.w*Math.sin(time*0.9+d.ph))*U;
+    const x=p.x+p.nx*off, y=p.y+p.ny*off, r=d.r*U*g*(0.96+0.06*br);
+    ctx.moveTo(x+r,y); ctx.arc(x,y,r,0,Math.PI*2);
+  }
+  for(const f of fins){
+    if(!f.dot||f.g<0.6) continue;
+    const [x,y]=finAt(f,f.dot.s), r=f.dot.r*U*(f.g-0.6)/0.4;
+    ctx.moveTo(x+r,y); ctx.arc(x,y,r,0,Math.PI*2);
+  }
+  ctx.fill();
+
+  if(nowMs-fpsT>250){ document.getElementById('nb').textContent=br.toFixed(2); fpsT=nowMs; }
+  last=nowMs;
+  requestAnimationFrame(frame);
+}
+
+function petalPos(pe,time){
+  const wob=0.012*Math.sin(time*0.8+pe.ph);
+  if(pe.fin && pe.fin.pts){
+    const [x,y,a]=finAt(pe.fin,pe.s);
+    return [x,y,a+pe.rot+wob];
+  }
+  const p=at(pe.t), off=pe.off*U;
+  return [p.x+p.nx*off, p.y+p.ny*off, Math.atan2(p.ny,p.nx)+pe.rot+wob];
+}
+function blobPos(b,time,age){
+  const wob=0.05*Math.sin(time*1.1+b.ph);
+  if(b.fin && b.fin.pts){
+    const [x,y,a]=finAt(b.fin,b.s);
+    return [x,y,a+b.rot*0.5+wob, grow(age,b.fin.t,0.5)];
+  }
+  const p=at(b.t), off=b.off*U;
+  return [p.x+p.nx*off, p.y+p.ny*off, Math.atan2(p.ny,p.nx)+b.rot+wob, grow(age,b.t,0.35)];
+}
+
+/* ---------- 键盘 ---------- */
+addEventListener('keydown', e=>{
+  if(e.code==='Space'){ e.preventDefault(); build((Math.random()*1e9)|0); }
+  else if(e.key==='s'||e.key==='S'){
+    const a=document.createElement('a');
+    a.download='untitled-life-'+Date.now()+'.png';
+    a.href=cv.toDataURL('image/png'); a.click();
+  }
+});
+
+addEventListener('resize', resize);
+resize();
+build(20260927);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
