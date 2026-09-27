@@ -1,0 +1,469 @@
+{
+  "basePath": "/projects/nine-layer-stack",
+  "relationships": 82,
+  "excludedRelationships": 4,
+  "evidence": 186,
+  "fontCharacters": 1279,
+  "files": [
+    {
+      "path": "brand/organisations/advantest.svg",
+      "bytes": 7112,
+      "sha256": "f5ffc294d7e28836b94d7f65584fd4a97cf79b4c6777849dfd13c520a2d1f397"
+    },
+    {
+      "path": "brand/organisations/amd.svg",
+      "bytes": 695,
+      "sha256": "4db9db12a0005fed9a6647e6396d016c37317be6c3465572453ef5da8535ec6f"
+    },
+    {
+      "path": "brand/organisations/amec.svg",
+      "bytes": 506,
+      "sha256": "37e93c1c5233d22a69b122b7a5aad2a661c29521f66b77582a88f7fad34e7f8a"
+    },
+    {
+      "path": "brand/organisations/amkor.svg",
+      "bytes": 12281,
+      "sha256": "607701f2b1876690de09e9665482a8c41e5b49f010053c1645328080d34e3f8a"
+    },
+    {
+      "path": "brand/organisations/apple.svg",
+      "bytes": 1566,
+      "sha256": "225c8276f438cea9807929d191090dbb34a374013cdc175deca35434adaf7c21"
+    },
+    {
+      "path": "brand/organisations/applied-materials.svg",
+      "bytes": 6325,
+      "sha256": "7163ff521abed692b6ad6c36c8e2a0d7b50fb511ea262eaff9b03c836a6c04ca"
+    },
+    {
+      "path": "brand/organisations/arm.svg",
+      "bytes": 1051,
+      "sha256": "2ee9a67c5238ccf19770b40118a8429e26e7cc215d5cad7e383824306717a3a8"
+    },
+    {
+      "path": "brand/organisations/ase.svg",
+      "bytes": 4687,
+      "sha256": "205b7c2789f064b425c2a50ef6b1777abeb5e3ce6a16561a451f5c299e049018"
+    },
+    {
+      "path": "brand/organisations/asml.svg",
+      "bytes": 924,
+      "sha256": "28cd5682142d5b1bb02a1054cb13fdb0b1e6702ad39271896f399716718b45a6"
+    },
+    {
+      "path": "brand/organisations/brite-semiconductor.svg",
+      "bytes": 653,
+      "sha256": "f9e77cf64efcf8f66c238b680f2db0f02e582dbcd657858888b5d9596b51c09e"
+    },
+    {
+      "path": "brand/organisations/broadcom.svg",
+      "bytes": 1171,
+      "sha256": "e429118cbf176c9f64079369592db84c9698101b0857c882be30accf414e8ff4"
+    },
+    {
+      "path": "brand/organisations/cadence.svg",
+      "bytes": 3349,
+      "sha256": "87df20c7634d7c76087bd1426906de59db6c252a2c6da249365df13c0e0010f2"
+    },
+    {
+      "path": "brand/organisations/cambricon.svg",
+      "bytes": 523,
+      "sha256": "58874f0eb23efdce1ccfe7694b1004d9331dd93e51885581d856522680cb072b"
+    },
+    {
+      "path": "brand/organisations/canon.svg",
+      "bytes": 3556,
+      "sha256": "b3467376fa7bed45ba22d90e8a81f604ebd5f4bb730bd21416437f11a70ba325"
+    },
+    {
+      "path": "brand/organisations/china-ic-fund.svg",
+      "bytes": 671,
+      "sha256": "8e8f8a5f9e3f27bb31878e617af205d84f8032c93dc01dfaa14c71f3c1dc9574"
+    },
+    {
+      "path": "brand/organisations/cict.svg",
+      "bytes": 478,
+      "sha256": "13b2a3410cd60f057b275f624ac4a0b1dce195fde54803619dc8b91c373c34cc"
+    },
+    {
+      "path": "brand/organisations/cxmt.svg",
+      "bytes": 394,
+      "sha256": "074b7aa5d5fd6aaa4efb05b44cbb27b60efd88e8f6e6bb4acd9d57718fae52a9"
+    },
+    {
+      "path": "brand/organisations/db-hitek.svg",
+      "bytes": 7131,
+      "sha256": "0ae8e46db56b766d8ed76885600aa6ec6ef7efcf68527722dd0cba059f8a5706"
+    },
+    {
+      "path": "brand/organisations/dell-technologies.svg",
+      "bytes": 1465,
+      "sha256": "ae54d23986bac617dbfbae0c78dfc88e1630a2ba3b2ca36c904b95c5b10eaa0b"
+    },
+    {
+      "path": "brand/organisations/disco.svg",
+      "bytes": 510,
+      "sha256": "3013ad08e72b6c18b179cac34b7b7111849b8f73220ce62a345d469b3805ff21"
+    },
+    {
+      "path": "brand/organisations/foxconn.svg",
+      "bytes": 8163,
+      "sha256": "7aef855cb9df590b03ec9e133e90d8a85cb8d322d2a96f0c066cc16b3b083be0"
+    },
+    {
+      "path": "brand/organisations/gigadevice.svg",
+      "bytes": 535,
+      "sha256": "39d1ff199ee1714697f1efa75523ea407f5da43f2685b59401bf13819ea6b72c"
+    },
+    {
+      "path": "brand/organisations/globalfoundries.svg",
+      "bytes": 6776,
+      "sha256": "1c8003eba46e89361f0c584af4328f365a06ce340c3e64f1bb61ee7ca513678b"
+    },
+    {
+      "path": "brand/organisations/globalwafers.svg",
+      "bytes": 40844,
+      "sha256": "555a2e35628fff629ea0fd6f552f984e0d6124179c62abca61b7a77bd7a78cae"
+    },
+    {
+      "path": "brand/organisations/hisilicon.png",
+      "bytes": 28560,
+      "sha256": "31eb05247a4028a44f8bfa249ed4eafd7ae2dc6481335ec924d69f84ca4b2a89"
+    },
+    {
+      "path": "brand/organisations/hpe.svg",
+      "bytes": 8888,
+      "sha256": "9217d5fca40a7def0fb471419a76bd01a9e324f4360444baf1ccc39cc8f8b6c7"
+    },
+    {
+      "path": "brand/organisations/hua-hong-semiconductor.svg",
+      "bytes": 918,
+      "sha256": "9ee89728cae4360f6e066eff7231be0f5eaaaa175f523aa4937ee7ea59db5828"
+    },
+    {
+      "path": "brand/organisations/imec.svg",
+      "bytes": 461,
+      "sha256": "5849694c5933d81f98de4ef156f6293682ea7476f1c830ed7e8ba7ec2c67cfac"
+    },
+    {
+      "path": "brand/organisations/intel-foundry.svg",
+      "bytes": 1833,
+      "sha256": "e7c1f86981b06aaf2943373c2fc026af1114e25983d3957f035f991187e71a34"
+    },
+    {
+      "path": "brand/organisations/jcet.svg",
+      "bytes": 589,
+      "sha256": "f428e7faf17f835fed2aa59f48b3fcc6c22811ec7708396a5940383514ee8abb"
+    },
+    {
+      "path": "brand/organisations/kioxia.svg",
+      "bytes": 1636,
+      "sha256": "1f69f7a4fb250a23ab645f8a5ee0717f24d99898c1b6afe7d891d5c3cdd3cc8e"
+    },
+    {
+      "path": "brand/organisations/kla.svg",
+      "bytes": 1304,
+      "sha256": "6f9393a212d380e21f7f0bdca2102553f855e06696d4f13b54510843a92f5454"
+    },
+    {
+      "path": "brand/organisations/lam-research.svg",
+      "bytes": 12782,
+      "sha256": "cbb0194dbb9751a6fd0993de3ccff82decb37eedcee435da522b94740e0d3ef2"
+    },
+    {
+      "path": "brand/organisations/mediatek.svg",
+      "bytes": 2603,
+      "sha256": "fa12f055ae830282f09748c242ac34d47fa72452d4d8c7c4db00644e2bd115af"
+    },
+    {
+      "path": "brand/organisations/micron.svg",
+      "bytes": 7792,
+      "sha256": "9a67c9dce911cacaff6dd9fa6f190f997a2827ca23c35683b5e9df2fdc5152b5"
+    },
+    {
+      "path": "brand/organisations/nanya-technology.svg",
+      "bytes": 582,
+      "sha256": "a7a6165d22ed3f888e9bdd52416a08f56e15ba911d1bd5467cf8c236d6ffc0b3"
+    },
+    {
+      "path": "brand/organisations/naura.png",
+      "bytes": 3619,
+      "sha256": "5f82b1e0ced1c2043c37aa91fbdee06bbb7c66f4ac66e3363c7ef1b9e671bcc3"
+    },
+    {
+      "path": "brand/organisations/nikon.svg",
+      "bytes": 6796,
+      "sha256": "f38621f91108fc7955138a9f88ed7ec2fd2079eaa447a36b9d430ede3ec10ed4"
+    },
+    {
+      "path": "brand/organisations/nvidia.svg",
+      "bytes": 896,
+      "sha256": "db04aa87719392f22aa280fa0c9086d70d9e805024749747676fea820f7b00b4"
+    },
+    {
+      "path": "brand/organisations/psmc.svg",
+      "bytes": 4268,
+      "sha256": "d1eecabd034c4c2b338b050d6bc12baea0492714fc6a405584a4c78974fda886"
+    },
+    {
+      "path": "brand/organisations/qualcomm.svg",
+      "bytes": 775,
+      "sha256": "0d266a490ef678e446af5eb8b18255b2d0d22c2b541b57456faf9ab395257ed1"
+    },
+    {
+      "path": "brand/organisations/README.md",
+      "bytes": 8575,
+      "sha256": "aa71c2711a80c832f4088876de510df3705bc30b074349f3e0a103dba24790e4"
+    },
+    {
+      "path": "brand/organisations/realtek.svg",
+      "bytes": 5819,
+      "sha256": "6e60ff91b152c33e9b5d4d9e8e54598476525d5330083ac06a0d16a6238fdcbe"
+    },
+    {
+      "path": "brand/organisations/renesas.svg",
+      "bytes": 6359,
+      "sha256": "84c0be7bee3164d453cdbc5a17bdc5a727c5737c6fe7b97af1855da55b405395"
+    },
+    {
+      "path": "brand/organisations/samsung.svg",
+      "bytes": 2335,
+      "sha256": "b2669c099203e918a47e47308e0a9e8539629d28dcd4f3a9a2dd9e547a89f10c"
+    },
+    {
+      "path": "brand/organisations/shin-etsu-chemical.svg",
+      "bytes": 5674,
+      "sha256": "a9ab79368202ad34dd414f378db4187ceabf8dedd6bc4cd58a62e797697fb518"
+    },
+    {
+      "path": "brand/organisations/siemens-eda.svg",
+      "bytes": 3311,
+      "sha256": "9aecdd21358888517612816505e9dd31250d9ee63a4b7c48bdab05164af75bb9"
+    },
+    {
+      "path": "brand/organisations/sk-hynix.svg",
+      "bytes": 9765,
+      "sha256": "f906550fb533bf1d20ba73fdffdab2a210eb679577cde146247abbfdf62a78ee"
+    },
+    {
+      "path": "brand/organisations/smic.png",
+      "bytes": 11380,
+      "sha256": "8ca2f594fe0c1608709676179212abc5ac4baef58eac544cee475183b29961e1"
+    },
+    {
+      "path": "brand/organisations/solidigm.svg",
+      "bytes": 500,
+      "sha256": "41608759faf5294af11b2fbf199cd299c8a815063c0d89468fa8048625dfa6d0"
+    },
+    {
+      "path": "brand/organisations/sony-semiconductor-solutions.svg",
+      "bytes": 5135,
+      "sha256": "f6191bc69f8df259c86a13dc9582ba9ed2e0101d4452ba3f1d33ec8e907ddda0"
+    },
+    {
+      "path": "brand/organisations/sumco.svg",
+      "bytes": 20378,
+      "sha256": "761aafcc90332824da3721bb248da8e7909e5010bfdd88782003572b02832c44"
+    },
+    {
+      "path": "brand/organisations/synopsys.svg",
+      "bytes": 3081,
+      "sha256": "cca5bdbb7dd0c7d36f177b508acc90564877a2ff04b99ce0c23f20dfe82ba3fa"
+    },
+    {
+      "path": "brand/organisations/tenstorrent.svg",
+      "bytes": 483,
+      "sha256": "cd6fd9d1f05c0d8ef618937bfee52758fdb196ee59b8acec9cb5172301e617d2"
+    },
+    {
+      "path": "brand/organisations/tok.svg",
+      "bytes": 11185,
+      "sha256": "f14a566c52f6618f86af96e1197cac5d497951d11d14f33419715f0ad6e27865"
+    },
+    {
+      "path": "brand/organisations/tokyo-electron.svg",
+      "bytes": 3407,
+      "sha256": "235e9c22b76eeeb7c06bf4fe130fc9a583bb1f8266ccebbd9fed06714f479c36"
+    },
+    {
+      "path": "brand/organisations/tower-semiconductor.svg",
+      "bytes": 11409,
+      "sha256": "86b018f284e7551d09b15d7170f9dbecde7ab3fef194a0a4bbc3f3b07881f8fd"
+    },
+    {
+      "path": "brand/organisations/trumpf.svg",
+      "bytes": 271,
+      "sha256": "42fbb7dc493141d2db8c64f748e253575cddfbe119105ad53b17482482c1822c"
+    },
+    {
+      "path": "brand/organisations/tsmc.svg",
+      "bytes": 4774,
+      "sha256": "5e843f0867a47a2f5effa0b73bee3b225651ee89da0e87ee07d6cbb01e1a5887"
+    },
+    {
+      "path": "brand/organisations/umc.svg",
+      "bytes": 4085,
+      "sha256": "4783431c4bb639ba36eab30978fa0b0018acfdd5d1774279b3de55b21bf37c1b"
+    },
+    {
+      "path": "brand/organisations/winbond.svg",
+      "bytes": 106224,
+      "sha256": "4aa005f19ae8eaed1b48e9046af7693c950d168bb55fa49b22649641c8f7b5ec"
+    },
+    {
+      "path": "brand/organisations/ymtc.png",
+      "bytes": 351102,
+      "sha256": "363e4abb8a8968487fc92338d150ab1a6e132f3a2087720b043c2434ca7fcd6d"
+    },
+    {
+      "path": "brand/organisations/zeiss.svg",
+      "bytes": 291,
+      "sha256": "8735facee1f26f7ecca49ab492839a8d002254c26835ef3e3443efcf807cf7e5"
+    },
+    {
+      "path": "geo/terrain/hypso-desktop.webp",
+      "bytes": 1694638,
+      "sha256": "6f1199155b7f322878b795be73ae825943495576f6d8c00eef9e3dfd5fc5d09b"
+    },
+    {
+      "path": "geo/terrain/hypso-mobile.webp",
+      "bytes": 118120,
+      "sha256": "60d0bed8b051d3daca7d934317501fc00920c191d04d014036acfa698a7ad729"
+    },
+    {
+      "path": "geo/terrain/README.md",
+      "bytes": 3604,
+      "sha256": "4fd272d2165f05c6e3fba31115904432291a1d020895e36addf05347313aa84a"
+    },
+    {
+      "path": "geo/terrain/relief-bump.webp",
+      "bytes": 34748,
+      "sha256": "183306e311a70899afed30ddcf6b4140803e9842e60f79b6d8b140d205328213"
+    },
+    {
+      "path": "geo/terrain/relief-desktop.webp",
+      "bytes": 1740262,
+      "sha256": "580953f7b9467302914ad9d8103f8afa7b5972cb32f9465ef0e3c2c9a8785310"
+    },
+    {
+      "path": "geo/terrain/relief-mobile.webp",
+      "bytes": 134120,
+      "sha256": "24eb281e08ee0ff19e7aac38a936af91e411f2dcf62184442896961ac52f8a49"
+    },
+    {
+      "path": "index.html",
+      "bytes": 8243,
+      "sha256": "33e00311810984b5dbc0461c3623a1cbf7a5dbb91c000b3c65b7f31be8d3fe70"
+    },
+    {
+      "path": "index.txt",
+      "bytes": 4605,
+      "sha256": "bd7032b2dff89815302aa8867acbb3af6d5335ba3948eb69390c5169aa10ab48"
+    },
+    {
+      "path": "next-static/static/chunks/12d5458d-6a821906babe3bc0.js",
+      "bytes": 173018,
+      "sha256": "a1da770c653bce16f01ba33958b12e5a813b0ad3e846ce5f76cb038ef20cfa88"
+    },
+    {
+      "path": "next-static/static/chunks/2ae5555b.fb06031dc897b8be.js",
+      "bytes": 348190,
+      "sha256": "090e5656235ed8a330baf5d5c73d6167cca19c413797e6e4bf68eeef7b335740"
+    },
+    {
+      "path": "next-static/static/chunks/3cc41336.115993171a18b8e0.js",
+      "bytes": 327852,
+      "sha256": "4bcad7fd745fc2f268b2eaf0ecbb8bae3c43a96d3a895e3638f9409b62a02f6a"
+    },
+    {
+      "path": "next-static/static/chunks/501-2372e6a098d35f6a.js",
+      "bytes": 18264,
+      "sha256": "171beb623931a8acb3f5ded7a696a0a92192df9e4986d93aeef3f44053d676c5"
+    },
+    {
+      "path": "next-static/static/chunks/571.b71b2cacfe81d158.js",
+      "bytes": 157245,
+      "sha256": "0e273e861101e4a4e8cfb9205a3a700f0363749c3ab096f226c088883adaed27"
+    },
+    {
+      "path": "next-static/static/chunks/5f0ea992.cc8c88f7fdff6310.js",
+      "bytes": 641011,
+      "sha256": "d6f9d9d37b5d031a322cc803a9c86b162cb5bfd117d24874482e3eb7dabc4cdb"
+    },
+    {
+      "path": "next-static/static/chunks/617.c67cbe6767f51994.js",
+      "bytes": 439682,
+      "sha256": "beadc3426d69bfbcf757db5c08ce29e7ab3e3ba23acac3ddba49de5183dae896"
+    },
+    {
+      "path": "next-static/static/chunks/84-f6c54d0710927add.js",
+      "bytes": 173926,
+      "sha256": "db63b3ef0f2bd6a33372716afe8a1fcdd1d3c906249bce6b3b9476989b134c53"
+    },
+    {
+      "path": "next-static/static/chunks/a1a0b973.7b0df52fc336bc6f.js",
+      "bytes": 131413,
+      "sha256": "7ca8bee2c85f778b5bafe806176cc8fd925fdd09f86ea89d6cccf125ce712ad8"
+    },
+    {
+      "path": "next-static/static/chunks/app/layout-f64ef7e083d44454.js",
+      "bytes": 401,
+      "sha256": "5afb1bab829604b4b13b7e9266e8d0692d9c3523833113742a6d8f6c8c185953"
+    },
+    {
+      "path": "next-static/static/chunks/app/page-1c03772471ca4378.js",
+      "bytes": 305567,
+      "sha256": "38a4bac73e78c12fb173473ee897c91d3d5094636a5217a8b352086fb49c4857"
+    },
+    {
+      "path": "next-static/static/chunks/d6994ca9.fe15996a262423d9.js",
+      "bytes": 203436,
+      "sha256": "f1849a9cb0a7077ceeb833576374941e43fc019cd8e8e6d52133ada5c58de29b"
+    },
+    {
+      "path": "next-static/static/chunks/framework-dc37bcbf747d2f8b.js",
+      "bytes": 139834,
+      "sha256": "8366f20e582cb25a9bb5a78dfd359573e479b97ab4ccaa911c88a9e8d6b9bb1f"
+    },
+    {
+      "path": "next-static/static/chunks/main-262b3cddbc585300.js",
+      "bytes": 126564,
+      "sha256": "8cd2b60d06bff5fcf8e711f50568f67fcad9a42d1c03c3fcc38853f37de8b91e"
+    },
+    {
+      "path": "next-static/static/chunks/main-app-b8df8cad5cbf2652.js",
+      "bytes": 554,
+      "sha256": "0bd8cff828a9e93398e8326a7d7b092084574b7839544922e6588d703df398c5"
+    },
+    {
+      "path": "next-static/static/chunks/polyfills-42372ed130431b0a.js",
+      "bytes": 112594,
+      "sha256": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683"
+    },
+    {
+      "path": "next-static/static/chunks/webpack-4196379c566e3b63.js",
+      "bytes": 3740,
+      "sha256": "2413bd4179630dc664be360e8f71c6ebe061b8d40e213e6c5b192e1e847ab081"
+    },
+    {
+      "path": "next-static/static/css/69afb6aa36bf9807.css",
+      "bytes": 24346,
+      "sha256": "984031d6a79308aa52097810f411e59d88da95569f67c57cb53a6589c0852396"
+    },
+    {
+      "path": "next-static/static/css/6fad35f220d8872e.css",
+      "bytes": 908,
+      "sha256": "547bf0b5244c9d1bfc0654761da7f4f6a9fabb9e39014d9e4a1546a8ce6ccfc9"
+    },
+    {
+      "path": "next-static/static/media/94d135cbe1118c75-s.woff2",
+      "bytes": 959128,
+      "sha256": "b096fa1956d86352aa11a49be15671ba1f59e9c9d1a8db804dd9401770fd32fb"
+    },
+    {
+      "path": "README.md",
+      "bytes": 719,
+      "sha256": "c436401e1416e809eb130269ebed5c01d30f29c6226713c97d0d870e4c44cb65"
+    }
+  ]
+}

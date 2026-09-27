@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 112" role="img" aria-labelledby="title">
+  <title id="title">Brite Semiconductor identification mark</title>
+  <rect width="440" height="112" rx="20" fill="#f5f7f8"/>
+  <path d="M34 27h36c19 0 31 10 31 25 0 9-5 16-13 20 10 4 16 11 16 21H79c0-7-5-11-15-11H57v11H34V27Zm23 20v15h10c7 0 11-3 11-8s-4-7-11-7H57Z" fill="#1678b8"/>
+  <text x="120" y="66" fill="#17242b" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">BRITE</text>
+  <text x="122" y="90" fill="#4a5b64" font-family="Arial, Helvetica, sans-serif" font-size="15" letter-spacing="2">SEMICONDUCTOR</text>
+</svg>

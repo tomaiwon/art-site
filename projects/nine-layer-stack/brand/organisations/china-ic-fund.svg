@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 112" role="img" aria-labelledby="title">
+  <title id="title">China Integrated Circuit Industry Investment Fund identification mark</title>
+  <rect width="440" height="112" rx="20" fill="#f5f7f8"/>
+  <path d="M35 24h60v64H35z" fill="#b43a31"/>
+  <path d="M48 37h34v8H48zm0 15h34v8H48zm0 15h22v8H48z" fill="#fff"/>
+  <text x="116" y="55" fill="#17242b" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">国家集成电路产业投资基金</text>
+  <text x="118" y="82" fill="#4a5b64" font-family="Arial, Helvetica, sans-serif" font-size="15" letter-spacing="1">CHINA IC FUND</text>
+</svg>

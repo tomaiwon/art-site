@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 112" role="img" aria-labelledby="title">
+  <title id="title">Hua Hong Semiconductor identification mark</title>
+  <defs>
+    <linearGradient id="swoosh" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#78b82a"/>
+      <stop offset="1" stop-color="#f2c21a"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(8 10)">
+    <circle cx="46" cy="46" r="42" fill="#0871b9"/>
+    <path d="M23 29h46v10H23zm0 17h46v10H23zm0 17h46v10H23z" fill="#fff"/>
+    <path d="M4 73c37-19 76-17 101 2-31-8-65-3-96 13z" fill="url(#swoosh)"/>
+  </g>
+  <text x="122" y="54" fill="#0871b9" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" letter-spacing="1">HUA HONG</text>
+  <text x="124" y="82" fill="#3d5162" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="600" letter-spacing="3">SEMICONDUCTOR</text>
+</svg>

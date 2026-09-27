@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 112" role="img" aria-labelledby="title">
+  <title id="title">imec identification mark</title>
+  <rect width="360" height="112" rx="20" fill="#f5f7f8"/>
+  <circle cx="52" cy="56" r="28" fill="#ef4b3f"/>
+  <circle cx="52" cy="56" r="11" fill="#f5f7f8"/>
+  <text x="94" y="75" fill="#17242b" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="700" letter-spacing="-3">imec</text>
+</svg>

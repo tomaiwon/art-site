@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 96" role="img" aria-labelledby="title">
+  <title id="title">GigaDevice 兆易创新</title>
+  <rect width="320" height="96" rx="12" fill="#fff"/>
+  <path d="M64 31a25 25 0 1 0 0 34V49H46v11h8a12 12 0 1 1 0-24z" fill="#e64a24"/>
+  <text x="83" y="59" fill="#31363b" font-family="Arial,Helvetica,sans-serif" font-size="32" font-weight="700">GigaDevice</text>
+  <text x="244" y="59" fill="#727b84" font-family="Arial,Helvetica,sans-serif" font-size="16">兆易创新</text>
+</svg>
