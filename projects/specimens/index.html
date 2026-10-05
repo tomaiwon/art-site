@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>追踪标本</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#e9e4da;
+    font:12px/1.4 "SF Mono",Menlo,Consolas,monospace;-webkit-font-smoothing:antialiased}
+  #cv{position:fixed;inset:0;display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+  #cv.drag{cursor:grabbing}
+  .hud{position:fixed;pointer-events:none;letter-spacing:.14em;font-size:10px;text-transform:uppercase;
+    color:var(--ink,#1a1412);transition:color .2s}
+  .tl{top:18px;left:20px;line-height:1.8}
+  .tl b{display:block;font-size:13px;letter-spacing:.24em}
+  .tr{top:18px;right:20px;text-align:right;line-height:1.9}
+  .bl{bottom:18px;left:20px;line-height:1.9;text-transform:none;letter-spacing:.08em}
+  .br{bottom:18px;right:20px;text-align:right;opacity:.75}
+  kbd{font:inherit;border:1px solid currentColor;padding:0 5px;border-radius:2px;opacity:.8}
+  @media (max-width:760px){ .br{display:none} }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="hud tl"><b>追踪标本</b><div id="sub">SPECIMEN 01 / FLAMINGO / STIPPLE</div></div>
+<div class="hud tr"><div id="frm">FRAME 0000</div><div id="pts">POINTS 0</div></div>
+<div class="hud bl"><div>轻点 下一个标本　拖动 转动它</div><div><kbd>1</kbd>–<kbd>3</kbd> 跳到某一段</div></div>
+<div class="hud br">After 427 WORK</div>
+
+<script>
+/* =====================================================================
+ * 追踪标本 —— 复刻 427 WORK 的三段动物识别影像
+ *
+ * 三段用的是同一个想法：一只三维动物被机器「看」着，
+ * 外面套一层识别界面，但每一段的「看法」不同：
+ *
+ *   01 火烈鸟 · 点描   米白纸上的黑点云，像 X 光一样半透明；
+ *                      在原地踱步、抖翅膀，然后转过身正对你。
+ *                      凸包连线、#1 标签、飘着的编号、角落里的噪点。
+ *   02 驼鹿 · 红场     满屏同心圆细纹，驼鹿是被圆纹切碎边缘的黑色剪影；
+ *                      四角括号的识别框，置信度一直在跳。
+ *   03 驼鹿 · 线扫     头和鹿角的特写，一排排水平线按深度隆起（隐线消除），
+ *                      深度量化出的台阶，灰色迷彩底，红色标签。
+ *
+ * 动物不是现成模型，是程序生成的点云：每个点只记「挂在哪根骨头上、
+ * 在那根骨头的哪儿」，每帧按步态算骨头，再把点摆上去。
+ * 第 01 段直接把点画成像素；02、03 段先把点投到一张低分辨率的
+ * 密度 / 深度网格上，再分别做圆纹阈值和线扫浮雕。零依赖。
+ * ===================================================================== */
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W=0, H=0, DPR=1, img=null, buf=null;
+
+function resize(){
+  DPR = Math.min(devicePixelRatio||1, 2);
+  W = Math.round(innerWidth*DPR); H = Math.round(innerHeight*DPR);
+  cv.width=W; cv.height=H;
+  img = ctx.createImageData(W,H); buf = new Uint32Array(img.data.buffer);
+  makeCornerDust(); makeCamo();
+}
+
+/* ---------- 随机 ---------- */
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed);
+  t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const R = rng(427);
+const rr=(a,b)=>a+(b-a)*R();
+const gauss=()=>{ let u=0,v=0; while(!u)u=R(); while(!v)v=R(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); };
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const smoothstep=(a,b,x)=>{ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); };
+
+/* =====================================================================
+ * 骨架工具
+ * ===================================================================== */
+/* 一条管子：控制点 → Catmull-Rom 采样表（位置 + 切线 + 两条法线） */
+function chainTable(ctrl, n=24){
+  const P=[], T=[], N=[], B=[];
+  const at=(i)=>ctrl[Math.max(0,Math.min(ctrl.length-1,i))];
+  const segs=ctrl.length-1;
+  for(let k=0;k<=n;k++){
+    const u=k/n*segs, i=Math.min(segs-1,Math.floor(u)), t=u-i;
+    const p0=at(i-1),p1=at(i),p2=at(i+1),p3=at(i+2), t2=t*t,t3=t2*t;
+    const c=j=>0.5*((2*p1[j])+(-p0[j]+p2[j])*t+(2*p0[j]-5*p1[j]+4*p2[j]-p3[j])*t2+(-p0[j]+3*p1[j]-3*p2[j]+p3[j])*t3);
+    P.push([c(0),c(1),c(2)]);
+  }
+  for(let k=0;k<=n;k++){
+    const a=P[Math.max(0,k-1)], b=P[Math.min(n,k+1)];
+    let t=[b[0]-a[0],b[1]-a[1],b[2]-a[2]]; const l=Math.hypot(...t)||1; t=t.map(x=>x/l);
+    /* 法线：和 z 轴叉乘；管子几乎沿 z 时换 x 轴 */
+    let nn=[t[1]*1-t[2]*0, t[2]*0-t[0]*1, 0];                 // t × (0,0,1)
+    if(Math.hypot(...nn)<0.2) nn=[0, t[2], -t[1]];           // t × (1,0,0)
+    const nl=Math.hypot(...nn); nn=nn.map(x=>x/nl);
+    const bb=[t[1]*nn[2]-t[2]*nn[1], t[2]*nn[0]-t[0]*nn[2], t[0]*nn[1]-t[1]*nn[0]];
+    T.push(t); N.push(nn); B.push(bb);
+  }
+  return {P,T,N,B,n};
+}
+/* 两节 IK：髋 H、落脚点 F、两段长，关节朝 +x（身后）弯 */
+function ik(H,F,L1,L2,bend=1){
+  let dx=F[0]-H[0], dy=F[1]-H[1], dz=F[2]-H[2];
+  let d=Math.hypot(dx,dy,dz); const md=L1+L2-1e-3;
+  if(d>md){ dx*=md/d; dy*=md/d; dz*=md/d; d=md; }
+  const a=(L1*L1-L2*L2+d*d)/(2*d), h=Math.sqrt(Math.max(0,L1*L1-a*a));
+  const ux=dx/d, uy=dy/d;
+  const px=-uy*bend, py=ux*bend;
+  return [H[0]+ux*a+px*h, H[1]+uy*a+py*h, H[2]+dz/d*a];
+}
+const rotZ=(p,a)=>{ const c=Math.cos(a),s=Math.sin(a); return [p[0]*c-p[1]*s, p[0]*s+p[1]*c, p[2]]; };
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]];
+
+/* 点云容器：每个点 = (部件, 四个参数)，每帧算出世界坐标 */
+function Cloud(cap){
+  return { n:0, part:new Uint8Array(cap), a:new Float32Array(cap), b:new Float32Array(cap),
+           c:new Float32Array(cap), d:new Float32Array(cap),
+           x:new Float32Array(cap), y:new Float32Array(cap), z:new Float32Array(cap),
+           push(p,a,b,c,d){ const i=this.n++; this.part[i]=p; this.a[i]=a; this.b[i]=b; this.c[i]=c; this.d[i]=d||0; } };
+}
+/* 管子上取点：t 沿长度，(u,v) 是截面里的偏移（单位圆内，靠表面多一些） */
+function tubePoints(cl, part, count, bias=0.45, tPow=1){
+  for(let i=0;i<count;i++){
+    const t=Math.pow(R(),tPow), a=R()*Math.PI*2, r=Math.pow(R(),bias);
+    cl.push(part, t, Math.cos(a)*r, Math.sin(a)*r);
+  }
+}
+function ellPoints(cl, part, count, bias=0.4){
+  for(let i=0;i<count;i++){
+    let x,y,z,l; do{ x=R()*2-1; y=R()*2-1; z=R()*2-1; l=x*x+y*y+z*z; }while(l>1||l<1e-4);
+    const r=Math.pow(R(),bias)/Math.sqrt(l);
+    cl.push(part, x*r, y*r, z*r);
+  }
+}
+/* 管子求点 */
+function onTube(tb, t, u, v, rad){
+  const f=t*tb.n, k=Math.min(tb.n-1,Math.floor(f)), l=f-k;
+  const P0=tb.P[k],P1=tb.P[k+1],N=tb.N[k],B=tb.B[k];
+  return [P0[0]+(P1[0]-P0[0])*l+N[0]*u*rad+B[0]*v*rad,
+          P0[1]+(P1[1]-P0[1])*l+N[1]*u*rad+B[1]*v*rad,
+          P0[2]+(P1[2]-P0[2])*l+N[2]*u*rad+B[2]*v*rad];
+}
+
+/* =====================================================================
+ * 火烈鸟（头朝 -x）
+ * ===================================================================== */
+const FL = (()=>{
+  const cl=Cloud(40000);
+  ellPoints(cl,0,13000,0.55);                // 身子：往里收，才够黑
+  tubePoints(cl,1,4200,0.5);                 // 脖子
+  ellPoints(cl,2,900,0.45);                  // 头
+  tubePoints(cl,3,800,0.6,0.7);              // 喙（尖上密）
+  tubePoints(cl,4,1700,0.6); tubePoints(cl,5,1700,0.6);   // 两条腿
+  for(let i=0;i<300;i++) cl.push(6,R(),gauss()*0.3,0,R()<0.5?0:1); // 脚趾
+  /* 羽毛：每一根是一缕点 */
+  const strands=[];
+  for(let s=0;s<120;s++){
+    strands.push({ rx:rr(-0.2,0.22), side:R()<0.5?-1:1, zs:R(), len:rr(0.2,0.48)*(R()<0.25?1.3:1),
+                   droop:rr(-0.5,-0.15), ph:R()*6.28, dark:R()<0.3 });
+    const n=70+((R()*50)|0);
+    for(let i=0;i<n;i++) cl.push(7, s, Math.pow(R(),0.8), gauss()*0.008, gauss()*0.008);
+  }
+  for(let i=0;i<700;i++) cl.push(8, gauss(), gauss(), gauss(), R());   // 身边的散点
+  return { cl, strands };
+})();
+
+function poseFlamingo(time, wing){
+  const {cl,strands}=FL;
+  const P=1.7, ph=(time/P)%1;
+  const bob=0.012*Math.cos(ph*Math.PI*4);
+  const Bc=[0.04, 0.99+bob, 0], pitch=0.16+0.03*Math.sin(time*0.7);
+  const tb=(p)=>add(Bc, rotZ(p,pitch));
+  /* 脖子：S 形，随步子轻轻点头 */
+  const C0=tb([-0.25,0.05,0]);
+  const nod=Math.sin(ph*Math.PI*2), dip=0.04*Math.max(0,Math.sin(time*0.5))**6;
+  const nc=[[0,0],[-0.10,0.10],[-0.135,0.25],[-0.05,0.40],[0.015,0.55],[-0.02,0.69-dip],[-0.10+0.012*nod,0.75-dip]]
+           .map(p=>[C0[0]+p[0],C0[1]+p[1],0]);
+  const neck=chainTable(nc,28);
+  const Hd=add(nc[nc.length-1],[-0.055,0.005,0]);
+  const beak=chainTable([[0,0],[-0.05,-0.005],[-0.085,-0.04],[-0.085,-0.095]].map(p=>[Hd[0]-0.03+p[0],Hd[1]+p[1],0]),10);
+  /* 腿：原地踱步。站着的那条往后滑，抬起的那条画弧往前 */
+  const legs=[], feet=[];
+  for(let k=0;k<2;k++){
+    const p=(ph+k*0.5)%1, z=k?0.055:-0.055;
+    const Hp=tb([0.04,-0.06,z]);
+    let fx, fy;
+    if(p<0.6){ const s=p/0.6; fx=-0.13+0.26*s; fy=0; }
+    else { const s=(p-0.6)/0.4; fx=0.13-0.26*s; fy=0.2*Math.sin(Math.PI*s); }
+    const F=[0.04+fx, fy, z*1.1];
+    const K=ik(Hp,F,0.45,0.5,1);
+    legs.push(chainTable([Hp,K,F],20)); feet.push(F);
+  }
+  const n=cl.n;
+  for(let i=0;i<n;i++){
+    const pa=cl.part[i], a=cl.a[i], b=cl.b[i], c=cl.c[i];
+    let p;
+    switch(pa){
+      case 0: p=tb([a*0.31,b*0.17+ (a>0.2?0.03*a:0), c*0.15]); break;
+      case 1: p=onTube(neck,a,b,c,0.026+0.016*(1-a)); break;
+      case 2: p=[Hd[0]+a*0.06, Hd[1]+b*0.038, Hd[2]+c*0.035]; break;
+      case 3: p=onTube(beak,a,b,c,0.026*(1-a*0.6)); break;
+      case 4: case 5: p=onTube(legs[pa-4],a,b,c,0.011+0.006*(a>0.48&&a<0.52?1:0)); break;
+      case 6: { const F=feet[cl.d[i]|0]; p=[F[0]-a*0.11, F[1]+0.005, F[2]+b*0.05*a]; break; }
+      case 7: {
+        /* 羽毛：从背上往后下垂；抖翅膀时往上翻、往两边张开 */
+        const s=strands[a|0], t=b;
+        const root=tb([s.rx, 0.09+0.06*s.zs, s.side*0.11*s.zs]);
+        const lift=wing*(0.9+0.3*Math.sin(time*9+s.ph));
+        const ang=s.droop + lift*1.5 + 0.04*Math.sin(time*2+s.ph);
+        const out=s.side*(0.15+lift*0.9);
+        const L=s.len*(1+lift*0.25);
+        p=[root[0]+Math.cos(ang)*L*t+cl.c[i], root[1]+Math.sin(ang)*L*t+cl.d[i], root[2]+out*L*t];
+        break; }
+      default: p=[Bc[0]+a*0.22, Bc[1]+b*0.14, c*0.14];
+    }
+    cl.x[i]=p[0]; cl.y[i]=p[1]; cl.z[i]=p[2];
+  }
+  return { head:Hd };
+}
+
+/* =====================================================================
+ * 驼鹿（头朝 -x）
+ * ===================================================================== */
+const MO = (()=>{
+  const cl=Cloud(40000);
+  ellPoints(cl,0,7000,0.3);  ellPoints(cl,1,2200,0.35); ellPoints(cl,2,2200,0.35);  // 身子 / 肩峰 / 臀
+  tubePoints(cl,3,2600,0.5); tubePoints(cl,4,2800,0.45);                              // 脖子 / 头
+  tubePoints(cl,5,350,0.6);                                                           // 喉下垂肉
+  for(let k=0;k<2;k++) tubePoints(cl,6+k,220,0.6);                                    // 耳朵
+  /* 鹿角：一块掌状的板 + 边上一排尖 */
+  for(let k=0;k<2;k++){
+    for(let i=0;i<1700;i++) cl.push(8+k, Math.pow(R(),0.8), R(), gauss()*0.02, 0);
+    for(let j=0;j<7;j++) for(let i=0;i<70;i++) cl.push(8+k, 0.35+j*0.1, 1+R()*0.45, gauss()*0.01, 1);
+  }
+  for(let k=0;k<4;k++) tubePoints(cl,10+k,1300,0.6);                                  // 四条腿
+  tubePoints(cl,14,120,0.6);                                                          // 尾巴
+  for(let k=0;k<5;k++) ellPoints(cl,15+k,260,0.5);                                     // 眼 ×2、鼻孔 ×2、眉骨
+  return { cl };
+})();
+function poseMoose(time){
+  const {cl}=MO;
+  const P=1.9, ph=(time/P)%1;
+  const bob=0.03*Math.cos(ph*Math.PI*4);
+  const Bc=[0,1.45+bob,0];
+  const sway=0.03*Math.sin(ph*Math.PI*2);
+  const nk=chainTable([[-0.6,1.72],[-0.92,1.86],[-1.16,1.95+sway]].map(p=>[p[0],p[1]+bob,0]),16);
+  const hd=chainTable([[-1.15,1.97+sway],[-1.42,1.86+sway],[-1.72,1.58+sway]].map(p=>[p[0],p[1]+bob,0]),18);
+  const dw=chainTable([[-1.28,1.74+sway],[-1.27,1.55+sway],[-1.24,1.42+sway]].map(p=>[p[0],p[1]+bob,0]),8);
+  const ears=[-1,1].map(s=>chainTable([[-1.14,2.07+sway+bob,s*0.1],[-1.05,2.2+sway+bob,s*0.26]],6));
+  const legs=[], hips=[[-0.58,1.22,-0.21],[-0.58,1.22,0.21],[0.58,1.28,-0.21],[0.58,1.28,0.21]];
+  const phase=[0.25,0.75,0,0.5];
+  for(let k=0;k<4;k++){
+    const p=(ph+phase[k])%1, Hp=[hips[k][0],hips[k][1]+bob,hips[k][2]];
+    let fx,fy; if(p<0.65){ const s=p/0.65; fx=-0.28+0.56*s; fy=0; } else { const s=(p-0.65)/0.35; fx=0.28-0.56*s; fy=0.22*Math.sin(Math.PI*s); }
+    const F=[hips[k][0]+fx, fy, hips[k][2]];
+    const K=ik(Hp,F,0.64,0.66,1);
+    legs.push(chainTable([Hp,K,F],20));
+  }
+  const tail=chainTable([[0.9,1.7+bob],[1.0,1.55+bob]].map(p=>[p[0],p[1],0]),4);
+  const n=cl.n;
+  for(let i=0;i<n;i++){
+    const pa=cl.part[i], a=cl.a[i], b=cl.b[i], c=cl.c[i];
+    let p;
+    switch(pa){
+      case 0: p=[Bc[0]+a*0.82, Bc[1]+b*0.43, c*0.36]; break;
+      case 1: p=[-0.5+a*0.42, Bc[1]+0.32+b*0.3, c*0.3]; break;
+      case 2: p=[0.62+a*0.36, Bc[1]+0.05+b*0.38, c*0.33]; break;
+      case 3: p=onTube(nk,a,b,c,0.27-0.09*a); break;
+      case 4: p=onTube(hd,a,b,c,(0.17-0.05*a+0.03*Math.max(0,a-0.75)/0.25)); break;
+      case 5: p=onTube(dw,a,b,c,0.06-0.04*a); break;
+      case 6: case 7: p=onTube(ears[pa-6],a,b,c,0.05*(1-a*0.6)); break;
+      case 8: case 9: {
+        /* 掌状鹿角：沿 s 往外上方伸，宽度先长后收；d=1 的是边上的尖 */
+        const s=pa===8?-1:1, base=[-1.1,2.1+sway+bob,s*0.1];
+        const A=[0.3,0.28,s*0.9], Bv=[0.7,0.45,s*0.25];
+        const L=0.82, w=0.36*Math.sin(Math.PI*Math.min(1,Math.pow(a,0.75)));
+        const ww=cl.d[i] ? w + (b-1)*0.35 : w*b;
+        p=[base[0]+A[0]*a*L+Bv[0]*ww+c, base[1]+A[1]*a*L+Bv[1]*ww+c, base[2]+A[2]*a*L+Bv[2]*ww];
+        break; }
+      case 10: case 11: case 12: case 13: p=onTube(legs[pa-10],a,b,c,0.085-0.045*a); break;
+      case 14: p=onTube(tail,a,b,c,0.06); break;
+      default: {
+        /* 脸上的小起伏：两只眼睛、两个鼻孔、眉骨 */
+        const k=pa-15, F=[[-1.3,1.98,-0.14,0.06],[-1.3,1.98,0.14,0.06],[-1.72,1.6,-0.07,0.045],[-1.72,1.6,0.07,0.045],[-1.22,2.04,0,0.09]][k];
+        p=[F[0]+a*F[3]*1.3, F[1]+sway+bob+b*F[3]*0.8, F[2]+c*F[3]*(k===4?2.2:1)];
+      }
+    }
+    cl.x[i]=p[0]; cl.y[i]=p[1]; cl.z[i]=p[2];
+  }
+}
+
+/* =====================================================================
+ * 相机 / 投影
+ * ===================================================================== */
+const cam = { yaw:0, pitch:0.04, dist:5, tx:0, ty:1, f:1, cx:0, cy:0 };
+function project(cl, out){ // out: Float32Array(n*3): sx, sy, depth
+  const cy=Math.cos(cam.yaw), sy=Math.sin(cam.yaw), cp=Math.cos(cam.pitch), sp=Math.sin(cam.pitch);
+  for(let i=0;i<cl.n;i++){
+    let x=cl.x[i]-cam.tx, y=cl.y[i]-cam.ty, z=cl.z[i];
+    const x1=x*cy+z*sy, z1=-x*sy+z*cy;
+    const y2=y*cp-z1*sp, z2=y*sp+z1*cp;
+    const dz=cam.dist-z2, k=cam.f/dz;
+    out[i*3]=cam.cx+x1*k; out[i*3+1]=cam.cy-y2*k; out[i*3+2]=dz;
+  }
+}
+const PRJ = new Float32Array(40000*3);
+
+/* 凸包（单调链） */
+function hull(pts){
+  pts.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);
+  const lo=[],up=[];
+  for(const p of pts){ while(lo.length>1&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0) lo.pop(); lo.push(p); }
+  for(let i=pts.length-1;i>=0;i--){ const p=pts[i]; while(up.length>1&&cr(up[up.length-2],up[up.length-1],p)<=0) up.pop(); up.push(p); }
+  up.pop(); lo.pop(); return lo.concat(up);
+}
+
+/* 小标签 */
+function tag(x,y,text,bg,fg,size=11){
+  ctx.font=`700 ${size*DPR}px "SF Mono",Menlo,Consolas,monospace`;
+  const w=ctx.measureText(text).width+8*DPR, h=(size+6)*DPR;
+  ctx.fillStyle=bg; ctx.fillRect(x,y,w,h);
+  ctx.fillStyle=fg; ctx.textBaseline='middle'; ctx.fillText(text,x+4*DPR,y+h/2+0.5*DPR);
+  return w;
+}
+
+/* =====================================================================
+ * 01 · 火烈鸟 / 点描
+ * ===================================================================== */
+const PAPER=0xffdae4e9, INK=0xff12141a;   // ABGR
+let dust=[];
+function makeCornerDust(){
+  /* 左上角那团越往角越密的噪点 */
+  dust=[]; const r=rng(9);
+  for(let i=0;i<1100;i++){
+    const d=Math.pow(r(),1.6), a=r()*Math.PI/2;
+    dust.push([Math.cos(a)*d*W*0.22, Math.sin(a)*d*H*0.22, r()]);
+  }
+}
+let wing=0, wingT=0, tagId=849, tagIdT=0, floatTag=[0,0];
+function sceneStipple(t, dt){
+  /* 抖翅膀：每隔几秒抖一下 */
+  wingT-=dt; if(wingT<=0){ wingT=rr(3.5,6); }
+  const target = wingT<1.1 ? 1 : 0;      // 每段间隔的最后一秒多抖起来
+  wing += (target-wing)*Math.min(1,dt*6);
+  const fr=poseFlamingo(t, wing);
+  /* 时间线：侧面踱步 → 转身正对 → 转回来 */
+  const c=t%14;
+  const turn = smoothstep(6.5,8,c) - smoothstep(11.5,13,c);
+  cam.yaw = turn*Math.PI/2 + view.yaw;
+  cam.pitch=0.03; cam.dist=5.2; cam.tx=0; cam.ty=0.92;
+  const S=Math.min(W,H*0.92);
+  cam.f=S*2.55; cam.cx=W/2; cam.cy=H*0.52;
+  const cl=FL.cl; project(cl,PRJ);
+  buf.fill(PAPER);
+  const ds=Math.max(1,Math.round(1.15*DPR));
+  for(const [x,y,v] of dust){ if(v<0.97 || Math.random()<0.5) dot(x|0,y|0,ds); }
+  let kept=0;
+  for(let i=0;i<cl.n;i++){
+    if(Math.random()<0.07) continue;   // 每帧丢一点点，点云才会「闪」
+    dot(PRJ[i*3]|0, PRJ[i*3+1]|0, ds); kept++;
+  }
+  ctx.putImageData(img,0,0);
+  /* 识别界面：凸包、#1、飘着的编号 */
+  const sample=[]; for(let i=0;i<cl.n;i+=23) sample.push([PRJ[i*3],PRJ[i*3+1]]);
+  const hl=hull(sample);
+  ctx.strokeStyle='rgba(26,20,18,.55)'; ctx.lineWidth=DPR*0.8; ctx.beginPath();
+  hl.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.closePath(); ctx.stroke();
+  const hd=projectPoint(fr.head);
+  tag(hd[0]-60*DPR, hd[1]-40*DPR, '#1', '#16120f', '#efe9df');
+  tagIdT-=dt; if(tagIdT<=0){ tagIdT=rr(0.8,1.6); tagId=800+((R()*90)|0);
+    const i=((R()*cl.n/23)|0)*23; floatTag=[PRJ[i*3],PRJ[i*3+1]]; }
+  ctx.strokeStyle='rgba(26,20,18,.5)'; ctx.beginPath();
+  ctx.moveTo(floatTag[0]+60*DPR, floatTag[1]-10*DPR); ctx.lineTo(floatTag[0]+52*DPR, floatTag[1]+30*DPR); ctx.stroke();
+  tag(floatTag[0]-20*DPR, floatTag[1], '#'+tagId, 'rgba(110,104,98,.85)', '#efe9df', 10);
+  return kept;
+}
+function dot(x,y,s){
+  if(x<0||y<0||x>=W-s||y>=H-s) return;
+  let i=y*W+x; buf[i]=INK; if(s>1){ buf[i+1]=INK; buf[i+W]=INK; buf[i+W+1]=INK; }
+}
+function projectPoint(p){
+  const cl={n:1,x:[p[0]],y:[p[1]],z:[p[2]]}, o=new Float32Array(3); project(cl,o); return [o[0],o[1]];
+}
+
+/* =====================================================================
+ * 密度 / 深度网格（02、03 段用）
+ * ===================================================================== */
+let GW=0, GH=0, dens=null, near=null, tmp=null;
+function grid(cl, cell){
+  GW=Math.ceil(W/cell); GH=Math.ceil(H/cell);
+  if(!dens || dens.length!==GW*GH){ dens=new Float32Array(GW*GH); near=new Float32Array(GW*GH); tmp=new Float32Array(GW*GH); }
+  dens.fill(0); near.fill(0);
+  for(let i=0;i<cl.n;i++){
+    const gx=(PRJ[i*3]/cell)|0, gy=(PRJ[i*3+1]/cell)|0;
+    if(gx<0||gy<0||gx>=GW||gy>=GH) continue;
+    const k=gy*GW+gx; dens[k]+=1;
+    const cl2=1/PRJ[i*3+2]; if(cl2>near[k]) near[k]=cl2;
+  }
+}
+function blur(a, r){
+  for(let pass=0;pass<2;pass++){
+    for(let y=0;y<GH;y++){ let s=0; const o=y*GW;
+      for(let x=-r;x<GW+r;x++){ if(x+r<GW) s+=a[o+x+r]; if(x-r-1>=0) s-=a[o+x-r-1]; if(x>=0&&x<GW) tmp[o+x]=s/(2*r+1); } }
+    for(let x=0;x<GW;x++){ let s=0;
+      for(let y=-r;y<GH+r;y++){ if(y+r<GH) s+=tmp[(y+r)*GW+x]; if(y-r-1>=0) s-=tmp[(y-r-1)*GW+x]; if(y>=0&&y<GH) a[y*GW+x]=s/(2*r+1); } }
+  }
+}
+function sampleG(a, x, y){
+  x=clamp(x,0,GW-1.001); y=clamp(y,0,GH-1.001);
+  const i=x|0, j=y|0, fx=x-i, fy=y-j, k=j*GW+i;
+  return (a[k]*(1-fx)+a[k+1]*fx)*(1-fy)+(a[k+GW]*(1-fx)+a[k+GW+1]*fx)*fy;
+}
+
+/* =====================================================================
+ * 02 · 驼鹿 / 红场
+ * ===================================================================== */
+let half=null, hctx=null, himg=null, rings=null, conf=11.5;
+function sceneRed(t, dt){
+  poseMoose(t);
+  cam.yaw = Math.PI + 0.3 + 0.25*Math.sin(t*0.15) + view.yaw; cam.pitch=0.04; cam.dist=13; cam.tx=-0.3; cam.ty=1.3;
+  const S=Math.min(W*0.9,H*0.95); cam.f=S*4.4; cam.cx=W*0.5; cam.cy=H*0.52;
+  const cl=MO.cl; project(cl,PRJ);
+  const cell=Math.max(4,Math.round(Math.min(W,H)/150));
+  grid(cl,cell); blur(dens,2);
+  /* 按有点的格子的平均密度做饱和映射：不然只有最密的身子中心过阈值，腿和脖子全丢 */
+  let sum=0, cnt=0; for(let i=0;i<dens.length;i++) if(dens[i]>0.05){ sum+=dens[i]; cnt++; }
+  const k=1.6/Math.max(1e-3,sum/Math.max(1,cnt));
+  /* 半分辨率逐像素：圆纹 + 阈值 */
+  /* 逐像素算在一张固定宽度的画布上（最多 1000 像素宽）再放大，高分屏也不会卡；圆纹只在尺寸变时算一次 */
+  const hw=Math.round(Math.min(W,Math.max(innerWidth,700),1000)), hh=Math.round(hw*H/W), sc=W/hw;
+  if(!half||half.width!==hw||half.height!==hh){ half=document.createElement('canvas'); half.width=hw; half.height=hh;
+    hctx=half.getContext('2d'); himg=hctx.createImageData(hw,hh); rings=new Float32Array(hw*hh);
+    const ccx=hw*0.5, ccy=hh*0.55, period=Math.max(3,hw/260);
+    for(let y=0;y<hh;y++) for(let x=0;x<hw;x++) rings[y*hw+x]=0.5+0.5*Math.sin(Math.hypot(x-ccx,y-ccy)/period*Math.PI*2); }
+  const d=himg.data, th=0.42, gk=sc/cell;
+  for(let y=0;y<hh;y++){
+    for(let x=0;x<hw;x++){
+      const ring=rings[y*hw+x];
+      const line=ring>0.8?1:0;
+      const v=1-Math.exp(-sampleG(dens, x*gk, y*gk)*k);
+      /* 圆纹扰动阈值 → 剪影边缘被圆纹切碎；越往下（腿）越淡 */
+      const m=smoothstep(th*0.8, th*1.25, v*(1+(ring-0.5)*0.9));
+      const o=(y*hw+x)*4;
+      const rR=212*(1-0.38*line), rG=10*(1-0.3*line), rB=12;
+      d[o]  = rR*(1-m) + 18*m*(1-0.5*line);
+      d[o+1]= rG*(1-m) + 4*m;
+      d[o+2]= rB*(1-m) + 4*m;
+      d[o+3]=255;
+    }
+  }
+  hctx.putImageData(himg,0,0);
+  ctx.imageSmoothingEnabled=true; ctx.drawImage(half,0,0,W,H);
+  /* 识别框：四角括号 + 置信度 + 中间的小轮廓和十字 */
+  const sample=[]; for(let i=0;i<cl.n;i+=29) sample.push([PRJ[i*3],PRJ[i*3+1]]);
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for(const p of sample){ x0=Math.min(x0,p[0]); y0=Math.min(y0,p[1]); x1=Math.max(x1,p[0]); y1=Math.max(y1,p[1]); }
+  x0+= (x1-x0)*0.12; y0+=(y1-y0)*0.18;
+  ctx.strokeStyle='rgba(255,235,235,.85)'; ctx.lineWidth=DPR;
+  const cw=(x1-x0)*0.3, ch=(y1-y0)*0.25;
+  ctx.beginPath();
+  ctx.moveTo(x0,y0+ch); ctx.lineTo(x0,y0); ctx.lineTo(x0+cw,y0);
+  ctx.moveTo(x1-cw,y0); ctx.lineTo(x1,y0); ctx.lineTo(x1,y0+ch);
+  ctx.moveTo(x0,y1-ch); ctx.lineTo(x0,y1); ctx.lineTo(x0+cw*0.3,y1);
+  ctx.moveTo(x1-cw*0.3,y1); ctx.lineTo(x1,y1); ctx.lineTo(x1,y1-ch);
+  ctx.stroke();
+  conf=clamp(conf+(R()-0.5)*0.9,8.5,16);
+  tag(x0, y0-20*DPR, '#2 '+conf.toFixed(1)+'%', '#fff', '#111');
+  const hl=hull(sample); let gx=0,gy=0; for(const p of hl){ gx+=p[0]; gy+=p[1]; } gx/=hl.length; gy/=hl.length;
+  ctx.strokeStyle='rgba(255,255,255,.9)'; ctx.lineWidth=0.8*DPR; ctx.beginPath();
+  hl.forEach((p,i)=>{ const X=gx+(p[0]-gx)*0.09, Y=gy+(p[1]-gy)*0.09; i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }); ctx.closePath(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(gx+18*DPR,gy-6*DPR); ctx.lineTo(gx+28*DPR,gy-6*DPR); ctx.moveTo(gx+23*DPR,gy-11*DPR); ctx.lineTo(gx+23*DPR,gy-1*DPR); ctx.stroke();
+  return cl.n;
+}
+
+/* =====================================================================
+ * 03 · 驼鹿头 / 线扫
+ * ===================================================================== */
+let camo=null, camoPat=null, conf3=20.9;
+function makeCamo(){
+  /* 灰色迷彩底：低分辨率噪声放大 */
+  const c=document.createElement('canvas'); const cw=48, ch=Math.ceil(48*H/W)+1;
+  c.width=cw; c.height=ch; const x=c.getContext('2d'), id=x.createImageData(cw,ch), r=rng(68);
+  for(let i=0;i<cw*ch;i++){ const v=r()<0.45?205+r()*10:228+r()*10; id.data[i*4]=v; id.data[i*4+1]=v; id.data[i*4+2]=v+1; id.data[i*4+3]=255; }
+  x.putImageData(id,0,0);
+  camo=document.createElement('canvas'); camo.width=W; camo.height=H;
+  const cx2=camo.getContext('2d'); cx2.imageSmoothingEnabled=true; cx2.filter='blur(6px)';
+  cx2.drawImage(c,0,0,W,H);
+  camoPat=ctx.createPattern(camo,'no-repeat');
+}
+function sceneLines(t, dt){
+  poseMoose(t*0.6);
+  cam.yaw = -0.75 + 0.18*Math.sin(t*0.2) + view.yaw; cam.pitch=0.12; cam.dist=2.6; cam.tx=-1.3; cam.ty=1.95;
+  const S=Math.min(W,H); cam.f=S*1.6; cam.cx=W*0.48; cam.cy=H*0.5;
+  const cl=MO.cl; project(cl,PRJ);
+  const cell=Math.max(4,Math.round(Math.min(W,H)/170));
+  grid(cl,cell);
+  /* 离镜头越近越高；空的地方是 0 */
+  let mx=0, mn=1e9; for(let i=0;i<near.length;i++) if(near[i]>0){ if(near[i]>mx) mx=near[i]; if(near[i]<mn) mn=near[i]; }
+  for(let i=0;i<near.length;i++) near[i]= near[i]>0 ? 0.25+0.75*(near[i]-mn)/Math.max(1e-6,mx-mn) : 0;
+  blur(near,3);
+  ctx.drawImage(camo,0,0);
+  const gap=Math.max(3,Math.round(4.2*DPR)), amp=Math.min(W,H)*0.09, step=Math.max(2,Math.round(3*DPR));
+  ctx.lineWidth=Math.max(1,0.9*DPR); ctx.strokeStyle='#121212'; ctx.fillStyle=camoPat;
+  const Q=48;                           // 深度量化级数 → 偶尔的台阶
+  const row=[];
+  for(let y=-amp; y<H+gap; y+=gap){
+    row.length=0;
+    for(let x=0;x<=W+step;x+=step){ const h=Math.round(sampleG(near, x/cell, y/cell)*Q)/Q; row.push(y-h*amp); }
+    /* 隐线：只要把这条线和它自己的基线之间填上底纹 —— 更早画的（更远的）线
+       都在自己的基线以上，不会伸到这里来；不用一路填到屏幕底，快很多 */
+    ctx.beginPath(); ctx.moveTo(0,y);
+    for(let k=0;k<row.length;k++) ctx.lineTo(k*step,row[k]);
+    ctx.lineTo((row.length-1)*step,y+1); ctx.lineTo(0,y+1); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(0,row[0]);
+    for(let k=1;k<row.length;k++) ctx.lineTo(k*step,row[k]);
+    ctx.stroke();
+  }
+  conf3=clamp(conf3+(R()-0.5)*0.6,18,25);
+  tag(W*0.2, H*0.08, '#68 '+conf3.toFixed(1)+'%', '#e0242b', '#fff');
+  return cl.n;
+}
+
+/* =====================================================================
+ * 调度
+ * ===================================================================== */
+const SCENES=[
+  { fn:sceneStipple, len:14, ink:'#1a1412', bg:'#e9e4da', sub:'SPECIMEN 01 / FLAMINGO / STIPPLE' },
+  { fn:sceneRed,     len:7,  ink:'#fff3f1', bg:'#d40a0c', sub:'SPECIMEN 02 / MOOSE / RED FIELD' },
+  { fn:sceneLines,   len:7,  ink:'#121212', bg:'#dcdcdc', sub:'SPECIMEN 03 / MOOSE / LINE SCAN' },
+];
+let scene=0, sceneT0=0;
+const view={ yaw:0, vyaw:0 };
+function go(i){ scene=(i+SCENES.length)%SCENES.length; sceneT0=performance.now()/1000;
+  const s=SCENES[scene]; document.body.style.background=s.bg; document.documentElement.style.setProperty('--ink',s.ink);
+  document.getElementById('sub').textContent=s.sub; }
+
+let dragging=false, moved=0, lastX=0, t0=0;
+cv.addEventListener('pointerdown',e=>{ dragging=true; moved=0; lastX=e.clientX; t0=performance.now(); cv.setPointerCapture(e.pointerId); cv.classList.add('drag'); });
+cv.addEventListener('pointermove',e=>{ if(!dragging) return; const dx=e.clientX-lastX; lastX=e.clientX; moved+=Math.abs(dx); view.vyaw=dx*0.01; view.yaw+=view.vyaw; });
+function up(){ if(dragging && moved<6 && performance.now()-t0<300) go(scene+1); dragging=false; cv.classList.remove('drag'); }
+cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+addEventListener('keydown',e=>{ if(e.key>='1'&&e.key<='3') go(+e.key-1); else if(e.key==='ArrowRight') go(scene+1); else if(e.key==='ArrowLeft') go(scene-1); });
+
+let lastW=-1,lastH=-1,last=0,frameNo=0;
+function frame(ms){
+  if(innerWidth!==lastW||innerHeight!==lastH){ lastW=innerWidth; lastH=innerHeight; resize(); }
+  const t=ms/1000, dt=Math.min(0.05,(ms-(last||ms))/1000); last=ms;
+  if(t-sceneT0>SCENES[scene].len) go(scene+1);
+  if(!dragging){ view.yaw+=view.vyaw; view.vyaw*=0.92; view.yaw*=0.985; }
+  const n=SCENES[scene].fn(t-sceneT0, dt);
+  frameNo++;
+  if(frameNo%6===0){
+    document.getElementById('frm').textContent='FRAME '+String(frameNo).padStart(4,'0');
+    document.getElementById('pts').textContent='POINTS '+n;
+  }
+  requestAnimationFrame(frame);
+}
+go(0);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
