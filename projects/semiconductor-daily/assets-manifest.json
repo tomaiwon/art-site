@@ -1,0 +1,82 @@
+[
+ {
+  "file": "cover-morning.webp",
+  "page": "早报封面",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 97406,
+  "sha256": "da161640eedca77470fe026f2d8f1323aa9a4450b591b4003f57a3c1987ada83"
+ },
+ {
+  "file": "cover-midday.webp",
+  "page": "午报封面",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 96726,
+  "sha256": "81e6b986154f21475ba4e9ca3b48efbb272d32acafc04e82552562c42fac64ca"
+ },
+ {
+  "file": "cover-evening.webp",
+  "page": "晚报封面",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 109274,
+  "sha256": "dc6eb557f0ca09225467c9982c16e59591b5639f9e3df7d908a1a9a9ee093697"
+ },
+ {
+  "file": "morning-02.webp",
+  "page": "①图页",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 83646,
+  "sha256": "4a7708f9103945238cb4d857d7170fa26c4b8c2e83ff3e8965cbec695839ceae"
+ },
+ {
+  "file": "morning-03.webp",
+  "page": "①字页",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 71346,
+  "sha256": "821ef315045e531f0d22e2193d86b5581e5beea60bff17dcf28d89c1406a1c54"
+ },
+ {
+  "file": "morning-04.webp",
+  "page": "②图页",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 129002,
+  "sha256": "b7d4bce1f40fc143068534516386e72c5a3044ac9cdc521fbed2a00c91547bce"
+ },
+ {
+  "file": "morning-05.webp",
+  "page": "②字页",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 64198,
+  "sha256": "46bebbe65738af87ce764ab2a8f58abd64d600d18e649f1234ddf19f19e421c4"
+ },
+ {
+  "file": "morning-06.webp",
+  "page": "③图页",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 82016,
+  "sha256": "2eef895bc1dafbfd1790bab7b8998d7cf3cf72d8bef1f99929127e6192bd2767"
+ },
+ {
+  "file": "morning-07.webp",
+  "page": "③字页",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 67070,
+  "sha256": "ce8d36ae02d1ac6b7fbd85318971ad4ac9921cb5d08ad14bc1d1e3b5f62be690"
+ },
+ {
+  "file": "morning-08.webp",
+  "page": "声明",
+  "width": 1080,
+  "height": 1350,
+  "bytes": 58298,
+  "sha256": "bbc61b8956af13d1632ca49a555b0e58d371f260c6729ed631d5de70dc2053a5"
+ }
+]

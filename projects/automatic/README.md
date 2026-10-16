@@ -1,9 +1,9 @@
 # Automatic 生长半导体
 
-2026-09-28 · 数字媒介本体系列 · 作者：黄熠
+2026-09-28 · 测试(2026-10-17 由数字媒介本体系列移入;该系列由《Semiconductor Daily 半导体早报》接续)· 作者：黄熠
 
-本目录是作品展示页，入口为 `/projects/automatic/`。桌面 `work.html` 与
-手机 `work-digital.html` 的数字媒介本体系列均有入口。现有系列项目保持原样。
+本目录是作品展示页，入口为 `/projects/automatic/`。桌面 `work.html` 的「测试」分组与
+手机 `work-test.html` 均有入口(原在数字媒介本体系列,2026-10-17 移入测试)。
 
 ## 展示范围
 
