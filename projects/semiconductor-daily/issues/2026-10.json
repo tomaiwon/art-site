@@ -2,6 +2,26 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 106,
+   "date": "2026-10-19",
+   "label": "1019晚报",
+   "edition": "晚报",
+   "titles": [
+    "三星拟扩大自研芯片应用",
+    "微软采用台积电两纳米工艺",
+    "Shindo提出三维封装方案"
+   ],
+   "pages": [
+    "issues/106/1.webp",
+    "issues/106/2.webp",
+    "issues/106/3.webp",
+    "issues/106/4.webp",
+    "issues/106/5.webp",
+    "issues/106/6.webp",
+    "issues/106/7.webp"
+   ]
+  },
+  {
    "serial": 105,
    "date": "2026-10-19",
    "label": "1019午报",
