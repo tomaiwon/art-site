@@ -166,61 +166,88 @@
   })();</script>
 
   <!-- 半导体早午晚报(Daily Semiconductor):数据由东亚制造工作台每期自动推到 projects/semiconductor-daily/issues/,
-     这里在页面打开时读进来排成「封面 + 三则中英文标题」的行。只显示两日内(北京时间今天和昨天)、中英文都齐的期数,
-     一期都没有就整栏不显示。news.html 由 fetch_news.py 每天重生成,
+     这里在页面打开时读进来:每期一行标题「1019午报」,下面一排这一期的图(封面和各页,不含免责声明),点开可以翻看。
+     只显示两日内(北京时间今天和昨天),一期都没有就整栏不显示。news.html 由 fetch_news.py 每天重生成,
      这一栏写在 fetch_news.py 的模板里(_DAILY_SEMI),不要只改 news.html。 -->
 <style>
   .daily-semi{display:none;}
   .daily-semi.ready{display:block;}
-  .daily-item{display:flex;gap:18px;align-items:flex-start;margin:14px 0 18px 0;}
-  .daily-cover{flex:0 0 112px;display:block;background:#f4f4f4;}
-  .daily-cover img{display:block;width:112px;height:140px;object-fit:cover;}
-  .daily-text{min-width:0;}
-  .daily-text .daily-head{margin-bottom:4px;}
-  .daily-text .daily-x{font-family:"EFont","ZFont",sans-serif;font-size:13px;color:#888;text-decoration:none;margin-left:8px;}
-  .daily-text .daily-x:hover{text-decoration:underline;text-underline-offset:4px;}
-  .daily-text .name-zh{display:block;font-size:17px;margin-top:5px;}
-  .daily-text .name-en{margin-top:1px;}
+  .daily-item{margin:12px 0 22px 0;}
+  .daily-strip{display:flex;gap:8px;margin-top:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+  .daily-strip button{flex:0 0 auto;padding:0;border:0;background:#f4f4f4;cursor:zoom-in;}
+  .daily-strip img{display:block;width:96px;height:120px;object-fit:cover;}
+  .daily-strip button:hover img,.daily-strip button:focus-visible img{opacity:.82;}
+  .daily-strip button:focus-visible{outline:2px solid #111;outline-offset:2px;}
+  #daily-viewer{position:fixed;inset:0;z-index:100;background:rgba(255,255,255,.97);display:none;flex-direction:column;
+    align-items:center;justify-content:center;user-select:none;}
+  #daily-viewer.on{display:flex;}
+  #daily-viewer .dv-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:baseline;
+    padding:22px 30px;font-family:"ZFont","EFont",sans-serif;font-size:18px;font-weight:700;color:#111;}
+  #daily-viewer .dv-top span{font-family:"EFont","ZFont",sans-serif;font-size:13px;font-weight:400;color:#888;letter-spacing:1.5px;margin-left:12px;}
+  #daily-viewer .dv-close{font-family:"EFont","ZFont",sans-serif;font-size:13px;letter-spacing:1.5px;color:#111;background:none;border:0;cursor:pointer;}
+  #daily-viewer img{max-width:min(92vw,720px);max-height:82vh;object-fit:contain;box-shadow:0 6px 30px rgba(0,0,0,.12);}
+  #daily-viewer .dv-nav{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;font-size:34px;color:#111;
+    cursor:pointer;padding:20px;font-family:"EFont","ZFont",sans-serif;}
+  #daily-viewer .dv-nav:disabled{opacity:.15;cursor:default;}
+  #daily-viewer .dv-prev{left:12px;} #daily-viewer .dv-next{right:12px;}
   @media(max-width:860px){
-    .daily-item{gap:12px;}
-    .daily-cover{flex-basis:76px;}
-    .daily-cover img{width:76px;height:95px;}
-    .daily-text .name-zh{font-size:14px;}
+    .daily-strip{gap:6px;}
+    .daily-strip img{width:72px;height:90px;}
+    #daily-viewer .dv-top{padding:18px 18px;font-size:15px;}
+    #daily-viewer .dv-nav{display:none;}
   }
 </style>
 <section class="group daily-semi" id="daily-semi">
   <h2 class="group-head"><span class="group-zh">半导体早午晚报</span><span class="group-en">DAILY SEMICONDUCTOR</span></h2>
   <ul class="list" id="daily-semi-list"></ul>
 </section>
+<div id="daily-viewer" role="dialog" aria-modal="true" aria-label="看图">
+  <div class="dv-top"><div><b id="dv-title"></b><span id="dv-count"></span></div><button type="button" class="dv-close" id="dv-close">CLOSE ✕</button></div>
+  <button type="button" class="dv-nav dv-prev" id="dv-prev" aria-label="上一张">←</button>
+  <img id="dv-img" alt="">
+  <button type="button" class="dv-nav dv-next" id="dv-next" aria-label="下一张">→</button>
+</div>
 <script>(function(){
-  var BASE='projects/semiconductor-daily/', MARKS='①②③';
+  var BASE='projects/semiconductor-daily/';
   var section=document.getElementById('daily-semi'), list=document.getElementById('daily-semi-list');
+  var viewer=document.getElementById('daily-viewer'), vImg=document.getElementById('dv-img'),
+      vTitle=document.getElementById('dv-title'), vCount=document.getElementById('dv-count'),
+      vPrev=document.getElementById('dv-prev'), vNext=document.getElementById('dv-next');
+  var cur=null, at=0, opener=null, touchX=null;
   function el(tag, props, kids){
     var n=document.createElement(tag); Object.keys(props||{}).forEach(function(k){n[k]=props[k];});
     (kids||[]).forEach(function(c){ if(c!=null) n.append(c); }); return n;
   }
-  function safe(u){ return /^https?:\/\//.test(u||'') ? u : ''; }
-  function beijing(offsetDays){             // 北京时间的日期 YYYY-MM-DD
-    var d=new Date(Date.now()+8*3600e3-offsetDays*86400e3); return d.toISOString().slice(0,10);
+  function beijing(offsetDays){ return new Date(Date.now()+8*3600e3-offsetDays*86400e3).toISOString().slice(0,10); }
+  function show(k){
+    at=Math.max(0, Math.min(cur.pages.length-1, k));
+    vImg.src=BASE+cur.pages[at]; vImg.alt=cur.label+' 第 '+(at+1)+' 页';
+    vTitle.textContent=cur.label; vCount.textContent=(at+1)+' / '+cur.pages.length;
+    vPrev.disabled=at===0; vNext.disabled=at===cur.pages.length-1;
   }
-  function complete(it){                    // 中英文都齐才显示
-    var s=it.stories||[]; return s.length>0 && (it.en||[]).length===s.length && s.every(function(x,i){ return x.title && it.en[i]; });
-  }
+  function open(it, k, btn){ cur=it; opener=btn; show(k); viewer.classList.add('on'); document.body.style.overflow='hidden'; document.getElementById('dv-close').focus(); }
+  function close(){ viewer.classList.remove('on'); document.body.style.overflow=''; if(opener) opener.focus(); }
+  document.getElementById('dv-close').addEventListener('click', close);
+  vPrev.addEventListener('click', function(){ show(at-1); });
+  vNext.addEventListener('click', function(){ show(at+1); });
+  viewer.addEventListener('click', function(e){ if(e.target===viewer) close(); });
+  document.addEventListener('keydown', function(e){
+    if(!viewer.classList.contains('on')) return;
+    if(e.key==='Escape') close(); else if(e.key==='ArrowLeft') show(at-1); else if(e.key==='ArrowRight') show(at+1);
+  });
+  viewer.addEventListener('touchstart', function(e){ touchX=e.touches[0].clientX; }, {passive:true});
+  viewer.addEventListener('touchend', function(e){
+    if(touchX===null) return; var dx=e.changedTouches[0].clientX-touchX; touchX=null;
+    if(Math.abs(dx)>40) show(at+(dx<0?1:-1));
+  });
   function row(it){
-    var cover=el('a',{className:'daily-cover',href:BASE+it.cover,target:'_blank',rel:'noopener'},
-      [el('img',{src:BASE+it.cover,alt:it.date+' '+it.edition+'封面',loading:'lazy',width:112,height:140})]);
-    var x=safe(it.x);
-    var head=el('div',{className:'daily-head'},[
-      el('span',{className:'year',textContent:it.date.replace(/-/g,'')+' '+it.edition}),
-      x ? el('a',{className:'daily-x',href:x,target:'_blank',rel:'noopener noreferrer',textContent:'X ↗'}) : null]);
-    var kids=[head];
-    it.stories.forEach(function(s,i){
-      var link=safe(s.link), text=(MARKS[i]||'')+' '+s.title;
-      kids.push(link ? el('a',{className:'name-zh',href:link,target:'_blank',rel:'noopener noreferrer',textContent:text})
-                     : el('span',{className:'name-zh',textContent:text}));
-      kids.push(el('span',{className:'name-en',textContent:it.en[i]}));
-    });
-    return el('li',{className:'item daily-item'},[cover, el('div',{className:'daily-text'},kids)]);
+    var strip=el('div',{className:'daily-strip'}, it.pages.map(function(p,k){
+      var b=el('button',{type:'button',ariaLabel:it.label+' 第 '+(k+1)+' 页,点开看大图'},
+        [el('img',{src:BASE+p,alt:'',loading:'lazy',width:96,height:120})]);
+      b.addEventListener('click', function(){ open(it, k, b); });
+      return b;
+    }));
+    return el('li',{className:'item daily-item'},[el('span',{className:'year',textContent:it.label}), strip]);
   }
   function fetchJson(p){ return fetch(BASE+p,{cache:'no-cache'}).then(function(r){ if(!r.ok) throw r.status; return r.json(); }); }
   var since=beijing(1);                     // 昨天(北京时间)起
@@ -229,7 +256,7 @@
     return Promise.all(months.map(function(m){ return fetchJson('issues/'+m+'.json').catch(function(){ return {issues:[]}; }); }));
   }).then(function(parts){
     var rows=[].concat.apply([], parts.map(function(p){ return p.issues||[]; }))
-      .filter(function(it){ return it.date>=since && complete(it); })
+      .filter(function(it){ return it.date>=since && (it.pages||[]).length && it.label; })
       .sort(function(a,b){ return a.date===b.date ? b.serial-a.serial : (a.date<b.date ? 1 : -1); });
     rows.forEach(function(it){ list.append(row(it)); });
     if(rows.length) section.classList.add('ready');
