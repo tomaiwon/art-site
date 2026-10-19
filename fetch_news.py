@@ -532,6 +532,81 @@ function animate(){requestAnimationFrame(animate);updateCloth();syncGeometry();r
 })();
 </script>"""
 
+# ── 半导体早午晚报(由东亚制造工作台推送数据,页面打开时读取;插在倒计时下面)──────────
+_DAILY_SEMI = """
+<!-- 半导体早午晚报(Daily Semiconductor):数据由东亚制造工作台每期自动推到 projects/semiconductor-daily/issues/,
+     这里在页面打开时读进来排成「封面 + 三则中英文标题」的行。只显示两日内(北京时间今天和昨天)、中英文都齐的期数,
+     一期都没有就整栏不显示。news.html 由 fetch_news.py 每天重生成,
+     这一栏写在 fetch_news.py 的模板里(_DAILY_SEMI),不要只改 news.html。 -->
+<style>
+  .daily-semi{display:none;}
+  .daily-semi.ready{display:block;}
+  .daily-item{display:flex;gap:18px;align-items:flex-start;margin:14px 0 18px 0;}
+  .daily-cover{flex:0 0 112px;display:block;background:#f4f4f4;}
+  .daily-cover img{display:block;width:112px;height:140px;object-fit:cover;}
+  .daily-text{min-width:0;}
+  .daily-text .daily-head{margin-bottom:4px;}
+  .daily-text .daily-x{font-family:"EFont","ZFont",sans-serif;font-size:13px;color:#888;text-decoration:none;margin-left:8px;}
+  .daily-text .daily-x:hover{text-decoration:underline;text-underline-offset:4px;}
+  .daily-text .name-zh{display:block;font-size:17px;margin-top:5px;}
+  .daily-text .name-en{margin-top:1px;}
+  @media(max-width:860px){
+    .daily-item{gap:12px;}
+    .daily-cover{flex-basis:76px;}
+    .daily-cover img{width:76px;height:95px;}
+    .daily-text .name-zh{font-size:14px;}
+  }
+</style>
+<section class="group daily-semi" id="daily-semi">
+  <h2 class="group-head"><span class="group-zh">半导体早午晚报</span><span class="group-en">DAILY SEMICONDUCTOR</span></h2>
+  <ul class="list" id="daily-semi-list"></ul>
+</section>
+<script>(function(){
+  var BASE='projects/semiconductor-daily/', MARKS='①②③';
+  var section=document.getElementById('daily-semi'), list=document.getElementById('daily-semi-list');
+  function el(tag, props, kids){
+    var n=document.createElement(tag); Object.keys(props||{}).forEach(function(k){n[k]=props[k];});
+    (kids||[]).forEach(function(c){ if(c!=null) n.append(c); }); return n;
+  }
+  function safe(u){ return /^https?:\/\//.test(u||'') ? u : ''; }
+  function beijing(offsetDays){             // 北京时间的日期 YYYY-MM-DD
+    var d=new Date(Date.now()+8*3600e3-offsetDays*86400e3); return d.toISOString().slice(0,10);
+  }
+  function complete(it){                    // 中英文都齐才显示
+    var s=it.stories||[]; return s.length>0 && (it.en||[]).length===s.length && s.every(function(x,i){ return x.title && it.en[i]; });
+  }
+  function row(it){
+    var cover=el('a',{className:'daily-cover',href:BASE+it.cover,target:'_blank',rel:'noopener'},
+      [el('img',{src:BASE+it.cover,alt:it.date+' '+it.edition+'封面',loading:'lazy',width:112,height:140})]);
+    var x=safe(it.x);
+    var head=el('div',{className:'daily-head'},[
+      el('span',{className:'year',textContent:it.date.replace(/-/g,'')+' '+it.edition}),
+      x ? el('a',{className:'daily-x',href:x,target:'_blank',rel:'noopener noreferrer',textContent:'X ↗'}) : null]);
+    var kids=[head];
+    it.stories.forEach(function(s,i){
+      var link=safe(s.link), text=(MARKS[i]||'')+' '+s.title;
+      kids.push(link ? el('a',{className:'name-zh',href:link,target:'_blank',rel:'noopener noreferrer',textContent:text})
+                     : el('span',{className:'name-zh',textContent:text}));
+      kids.push(el('span',{className:'name-en',textContent:it.en[i]}));
+    });
+    return el('li',{className:'item daily-item'},[cover, el('div',{className:'daily-text'},kids)]);
+  }
+  function fetchJson(p){ return fetch(BASE+p,{cache:'no-cache'}).then(function(r){ if(!r.ok) throw r.status; return r.json(); }); }
+  var since=beijing(1);                     // 昨天(北京时间)起
+  fetchJson('issues/index.json').then(function(d){
+    var months=(d.months||[]).filter(function(m){ return m>=since.slice(0,7); });
+    return Promise.all(months.map(function(m){ return fetchJson('issues/'+m+'.json').catch(function(){ return {issues:[]}; }); }));
+  }).then(function(parts){
+    var rows=[].concat.apply([], parts.map(function(p){ return p.issues||[]; }))
+      .filter(function(it){ return it.date>=since && complete(it); })
+      .sort(function(a,b){ return a.date===b.date ? b.serial-a.serial : (a.date<b.date ? 1 : -1); });
+    rows.forEach(function(it){ list.append(row(it)); });
+    if(rows.length) section.classList.add('ready');
+  }).catch(function(){});
+})();</script>
+"""
+
+
 def generate_html(sections_html):
     now     = datetime.datetime.now()
     date_en = now.strftime('%d %b %Y').upper()
@@ -702,6 +777,7 @@ def generate_html(sections_html):
     tick();setInterval(tick,1000);
   }})();</script>
 
+  {_DAILY_SEMI}
   {''.join(sections_html)}
 </main>
 

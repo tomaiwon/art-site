@@ -1,0 +1,250 @@
+{
+ "month": "2026-10",
+ "issues": [
+  {
+   "serial": 105,
+   "date": "2026-10-19",
+   "md": "10.19",
+   "edition": "午报",
+   "editionEn": "Midday",
+   "title": "1019午报，无掩模EUV探索替代电子束",
+   "cover": "issues/105.webp",
+   "stories": [
+    {
+     "title": "无掩模EUV探索替代电子束",
+     "summary": "SemiWiki在10月18日介绍无掩模极紫外（EUV）光刻，主题是电子束光刻的替代方案。传统EUV光刻使用13.5纳米波长的光。光刻将微小电路图案转移到硅晶圆上，是半导体制造所依赖的工艺。",
+     "source": "SemiWiki",
+     "link": "https://semiwiki.com/lithography/373583-maskless-euv-lithography-an-alternative-to-e-beam/"
+    },
+    {
+     "title": "Hanmi展示新一代键合机",
+     "summary": "韩国设备厂商Hanmi Semiconductor在SEDEX 2026展示HBM和AI芯片封装设备。展品包括面向HBM4生产的TC Bonder 4，以及计划于2027年推出的Wide TC Bonder。公司正扩展面向AI芯片的2.5D封装设备产品线。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261019PD215/equipment-packaging-hanmi-ai-chip-hbm.html"
+    },
+    {
+     "title": "伯克利等提出纳米机电增益单元",
+     "summary": "加州大学伯克利分校、三星电子和英特尔研究人员提出纳米机电门控增益单元，用于嵌入式DRAM，论文发表于2026年。存储墙与SRAM缩放放缓，让增益单元eDRAM重新受到关注。这类单元具有高密度和能效优势，但保持时间有限、寄生耦合和写入需升压仍是其面临的问题。",
+     "source": "SemiEngineering",
+     "link": "https://semiengineering.com/nanoelectromechanical-switches-target-more-efficient-embedded-dram-uc-berkeley-samsung-intel/"
+    }
+   ],
+   "en": [
+    "SemiWiki examines maskless EUV lithography",
+    "Hanmi showcases next-generation bonders",
+    "Berkeley, Samsung and Intel propose eDRAM cell"
+   ],
+   "x": "https://x.com/Somethi08961829/status/2112061278336545248"
+  },
+  {
+   "serial": 104,
+   "date": "2026-10-18",
+   "md": "10.18",
+   "edition": "晚报",
+   "editionEn": "Evening",
+   "title": "1018晚报，晶圆厂模拟游戏在台湾走红",
+   "cover": "issues/104.webp",
+   "stories": [
+    {
+     "title": "晶圆厂模拟游戏在台湾走红",
+     "summary": "台湾开发的3D网页游戏Fab24hr在当地走红，提供中文、英文和日文版本，玩家可扮演不同半导体工程师，体验晶圆厂员工的一天。游戏采用方块风格的等距视角工厂，画面虽简单，台湾TVBS称其模拟相当逼真。部分晶圆厂员工产生的共鸣并不轻松，有人将它形容为“恐怖游戏”或“监狱”。",
+     "source": "Tom's Hardware",
+     "link": "https://www.tomshardware.com/video-games/pc-gaming/chip-fab-engineering-game-goes-viral-in-taiwan-realistic-and-stressful-simulation-is-basically-a-horror-game-say-some-players"
+    },
+    {
+     "title": "SEC获首笔检测设备商用订单",
+     "summary": "SEC于10月16日宣布，将向一家全球封测服务商的量产线供应在线X射线检测系统，单价约20亿韩元，首批预计很快交付。设备今年第一季度完成开发，可检测晶圆级封装缺陷及HBM堆叠工艺，这是其首次商用部署。SEC称，将争取更多全球客户，计划以HBM和先进封装检测设备为核心增长动力；公司正为该客户扩产，已完成增供准备。",
+     "source": "The Elec",
+     "link": "https://www.thelec.net/news/articleView.html?idxno=14665"
+    },
+    {
+     "title": "IBM开发芯片设计AI框架",
+     "summary": "IBM Research开发了用于芯片设计优化的AI智能体框架，使用开放权重模型和HLS反馈探索硬件架构。应用于量子纠错解码器时，IBM报告称，按HLS估算实现52倍加速，推理成本约26美元。全专有模型配置则花费299美元，实现204倍加速。",
+     "source": "SemiEngineering",
+     "link": "https://semiengineering.com/chip-industry-week-in-review-160/"
+    }
+   ],
+   "en": [
+    "Fab24hr Fab Simulator Gains Popularity",
+    "SEC Receives First Commercial X-Ray Order",
+    "IBM Builds AI Framework for Chip Design"
+   ],
+   "x": "https://x.com/Somethi08961829/status/2111899218885660863"
+  },
+  {
+   "serial": 103,
+   "date": "2026-10-18",
+   "md": "10.18",
+   "edition": "午报",
+   "editionEn": "Midday",
+   "title": "1018午报，英伟达AI笔电在韩开售",
+   "cover": "issues/103.webp",
+   "stories": [
+    {
+     "title": "英伟达AI笔电在韩开售",
+     "summary": "10月16日，搭载英伟达RTX Spark的笔电在韩国开售，最低价机型为微星Prestige N16，售价579.9万韩元。该芯片最高支持128GB共享内存，可让约700亿参数的开放AI模型与智能体在PC本地运行。英伟达将高售价归因于内存涨价，称开发时128GB配置价格合理，未预料到此后的涨幅。",
+     "source": "The Elec",
+     "link": "https://www.thelec.net/news/articleView.html?idxno=14677"
+    },
+    {
+     "title": "Gaonchips加入Arm计划",
+     "summary": "Gaonchips于10月15日宣布加入Arm物理AI合作计划，成为首家参与的韩国设计解决方案供应商。该计划面向机器人、自动驾驶等系统，联合开发和验证软硬件全栈方案。公司正积累三星电子2纳米工艺大型AI芯片开发经验，将支持从芯片设计到系统实现，并表示希望降低客户开发风险、缩短上市时间。",
+     "source": "The Elec",
+     "link": "https://www.thelec.net/news/articleView.html?idxno=14648"
+    },
+    {
+     "title": "英特尔拟推机器人芯片",
+     "summary": "英特尔计划2028年推出机器人SoC Razor Lake AX，目标性能约700 TOPS，现有开发工具理论性能为180 TOPS。下一代Nova Lake计划明年初推出。英特尔称，韩国客户计划明年量产自主移动机器人，多数将人形机器人量产目标定在2028年，新芯片的推出时间也与这一节奏有关。",
+     "source": "The Elec",
+     "link": "https://www.thelec.net/news/articleView.html?idxno=14667"
+    }
+   ],
+   "en": [
+    "NVIDIA AI laptops launch in South Korea",
+    "Gaonchips joins Arm program",
+    "Intel plans to launch robotics chips"
+   ],
+   "x": ""
+  },
+  {
+   "serial": 102,
+   "date": "2026-10-18",
+   "md": "10.18",
+   "edition": "早报",
+   "editionEn": "Morning",
+   "title": "1018早报，新加坡布局高价值芯片制造",
+   "cover": "issues/102.webp",
+   "stories": [
+    {
+     "title": "新加坡布局高价值芯片制造",
+     "summary": "新加坡瞄准高价值半导体制造、先进封装和硅光子技术。EnterpriseSG正推动当地半导体中小企业在全球芯片供应链中承担更大角色。该机构制造业务助理董事总经理Zeng Yi Wong表示，这些方向依托新加坡在工程、精密制造和可靠性方面的优势。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261012PD215/manufacturing-equipment-packaging-testing-silicon.html"
+    },
+    {
+     "title": "美光开发人形机器人内存",
+     "summary": "美光正为人形机器人等物理AI应用开发边缘推理内存（EIM），把低功耗DRAM堆叠在逻辑芯片上，以降低延迟、提升带宽。机器人重视能效，但模型参数增长正使现有LPDDR带宽逐渐不足。公司正探索将EIM应用于LPDDR6，尚未公布性能目标，并与客户讨论产品开发。行业观察人士预计2028年下半年量产。",
+     "source": "The Elec",
+     "link": "https://www.thelec.net/news/articleView.html?idxno=14669"
+    },
+    {
+     "title": "瑞萨组建物理AI专门团队",
+     "summary": "瑞萨在用户体验（UX）组织内新设物理AI团队，团队超过108人，转向主动参与人形机器人开发。该组织于2024年下半年成立，共403名员工。团队提供工程支持和系统架构实施，瑞萨也在北京设立实验室，与本地人形机器人企业共研方案。其关节电机控制产品和工业网络通信器件收入中，人形机器人应用占8%，占比每年增长逾一倍，中国需求尤其强劲。",
+     "source": "The Elec",
+     "link": "https://www.thelec.net/news/articleView.html?idxno=14672"
+    }
+   ],
+   "en": [
+    "Singapore expands high-value chip manufacturing",
+    "Micron develops memory for humanoid robots",
+    "Renesas forms dedicated physical AI team"
+   ],
+   "x": ""
+  },
+  {
+   "serial": 101,
+   "date": "2026-10-17",
+   "md": "10.17",
+   "edition": "晚报",
+   "editionEn": "Evening",
+   "title": "1017晚报，玩家复刻ASML积木",
+   "cover": "issues/101.webp",
+   "stories": [
+    {
+     "title": "玩家复刻ASML积木",
+     "summary": "X用户在Rebrickable公开了ASML光刻机积木的810块零件复刻版，并加入部分修改。原款于2024年12月推出，以全球首台High-NA EUV设备TWINSCAN EXE:5000为原型。ASML仅向员工销售，曾取消非员工订单；官网售价230美元，eBay当前一口价挂牌为500至700美元。",
+     "source": "Tom's Hardware",
+     "link": "https://www.tomshardware.com/tech-industry/employee-exclusive-asml-lego-set-now-available-on-rebrickable-custom-creation-modifies-original-version-to-add-more-details-now-requires-810-parts"
+    },
+    {
+     "title": "台积电熊本3纳米计划获批",
+     "summary": "日本经济产业省于10月16日批准台积电熊本二厂的修订计划，拟生产3纳米逻辑芯片。该厂位于日本南部九州岛的熊本县，是台积电在当地的第二座工厂。计划获批后，项目具备获得最高41亿美元援助的资格。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261017VL200/fab-tsmc-chips-kumamoto-production.html"
+    },
+    {
+     "title": "英国航天局为清理任务征名",
+     "summary": "英国航天局为碎片清除任务征名，ClearSpace UK将牵头，计划2029年开始清理两颗英国注册卫星，预计到2032年完成。政府支持金额逾6000万英镑，航天器可加注燃料以持续执行任务。名称须为两个词，入选后将刻上航天器。该公司负责人称下一步将设计、建造及测试用于安全捕获卫星的航天器，ClearSpace创始人称获选为“重要里程碑”。",
+     "source": "The Register",
+     "link": "https://www.theregister.com/science/2026/10/17/get-in-the-bin-uk-space-agency-wants-public-to-name-its-debris-removal-mission/5303555"
+    }
+   ],
+   "en": [
+    "Fan recreates ASML building block set",
+    "TSMC's Kumamoto 3nm plan wins approval",
+    "UK Space Agency seeks name for cleanup mission"
+   ],
+   "x": ""
+  },
+  {
+   "serial": 100,
+   "date": "2026-10-17",
+   "md": "10.17",
+   "edition": "午报",
+   "editionEn": "Midday",
+   "title": "1017午报，Semco扩产或遇设备瓶颈",
+   "cover": "issues/100.webp",
+   "stories": [
+    {
+     "title": "Semco扩产或遇设备瓶颈",
+     "summary": "Samsung Electro-Mechanics（Semco）推进半导体基板扩产，项目规模为6.78万亿韩元，约合51亿美元。扩产面向AI服务器，但设备采购可能遭遇瓶颈。机械设备制造商正面临零部件短缺和交付周期延长，给项目所需设备的供应带来潜在限制。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261016VL216/equipment-semco-expansion-production-substrate.html"
+    },
+    {
+     "title": "Taiwan Mask收购TCK",
+     "summary": "Taiwan Mask Corporation（TMC）以475万美元收购半导体设备服务商TCK，扩大在日本的业务布局。公司原有业务为精密光罩制造，此次收购将业务延伸至设备组装与工程支持。这项布局瞄准正在扩张的日本九州半导体产业，拓展光罩制造以外的业务。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261016PD244/taiwan-mask-acquisition-equipment-photomask-revenue.html"
+    },
+    {
+     "title": "Tesla展示新一代跑车",
+     "summary": "Tesla于10月15日展示新一代Roadster。亮相活动在SpaceX位于得克萨斯州McGregor的测试基地举行。这款跑车将SpaceX的火箭技术与Tesla的旗舰技术结合，展示两家公司的工程技术融合。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261016VL217/tesla-spacex-rocket-technology-vehicle.html"
+    }
+   ],
+   "en": [
+    "SEMCO expansion may face equipment bottleneck",
+    "Taiwan Mask acquires TCK",
+    "Tesla unveils next-generation Roadster"
+   ],
+   "x": ""
+  },
+  {
+   "serial": 99,
+   "date": "2026-10-17",
+   "md": "10.17",
+   "edition": "早报",
+   "editionEn": "Morning",
+   "title": "1017早报，台积电营收上看543亿美元",
+   "cover": "issues/099.webp",
+   "stories": [
+    {
+     "title": "台积电营收上看543亿美元",
+     "summary": "台积电预计2026年第四季度营收为523亿至543亿美元，同比增幅最高可达61%。持续的先进半导体制造需求支撑了这一年末业绩预期。2nm量产正在加速，也是支撑营收预期的因素。与此同时，2nm产能爬坡与海外晶圆厂给利润率带来压力。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261015VL221/tsmc-revenue-2nm-demand-2026.html"
+    },
+    {
+     "title": "测试接口与芯片设计营收齐增",
+     "summary": "截至2026年9月，半导体测试接口供应商与芯片设计公司的营收均实现显著同比增长。AI服务器追踪数据中，这两个领域呈现清晰的同步增长态势。增长动力来自人工智能（AI）、高性能计算（HPC）以及定制ASIC开发的快速发展。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261016VL215/ic-testing-interface-ic-design-ai-server-demand-revenue-growth.html"
+    },
+    {
+     "title": "日月光携三校公布18项研究",
+     "summary": "日月光于10月16日联合三所大学公布18项技术研究项目。参与合作的高校包括国立成功大学、国立中山大学和国立中正大学。研究项目聚焦先进封装集成与关键工艺开发。",
+     "source": "DigiTimes",
+     "link": "https://www.digitimes.com/news/a20261016PD240/ase-packaging-technology-materials-development.html"
+    }
+   ],
+   "en": [
+    "TSMC revenue seen reaching US$54.3 billion",
+    "Test interface and chip design revenue both grow",
+    "ASE and three universities unveil 18 research projects"
+   ],
+   "x": ""
+  }
+ ]
+}
