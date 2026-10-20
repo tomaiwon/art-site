@@ -2,6 +2,26 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 107,
+   "date": "2026-10-20",
+   "label": "1020早报",
+   "edition": "早报",
+   "titles": [
+    "UVJC推出气相喷印系统",
+    "SK海力士展示内存池化架构",
+    "台积电向格芯寻求硅中介层"
+   ],
+   "pages": [
+    "issues/107/1.webp",
+    "issues/107/2.webp",
+    "issues/107/3.webp",
+    "issues/107/4.webp",
+    "issues/107/5.webp",
+    "issues/107/6.webp",
+    "issues/107/7.webp"
+   ]
+  },
+  {
    "serial": 106,
    "date": "2026-10-19",
    "label": "1019晚报",
@@ -110,15 +130,7 @@
     "台积电熊本3纳米计划获批",
     "英国航天局为清理任务征名"
    ],
-   "pages": [
-    "issues/101/1.webp",
-    "issues/101/2.webp",
-    "issues/101/3.webp",
-    "issues/101/4.webp",
-    "issues/101/5.webp",
-    "issues/101/6.webp",
-    "issues/101/7.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 100,
@@ -130,15 +142,7 @@
     "Taiwan Mask收购TCK",
     "Tesla展示新一代跑车"
    ],
-   "pages": [
-    "issues/100/1.webp",
-    "issues/100/2.webp",
-    "issues/100/3.webp",
-    "issues/100/4.webp",
-    "issues/100/5.webp",
-    "issues/100/6.webp",
-    "issues/100/7.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 99,
@@ -150,15 +154,7 @@
     "测试接口与芯片设计营收齐增",
     "日月光携三校公布18项研究"
    ],
-   "pages": [
-    "issues/099/1.webp",
-    "issues/099/2.webp",
-    "issues/099/3.webp",
-    "issues/099/4.webp",
-    "issues/099/5.webp",
-    "issues/099/6.webp",
-    "issues/099/7.webp"
-   ]
+   "pages": []
   }
  ]
 }
