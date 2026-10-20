@@ -2,6 +2,26 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 109,
+   "date": "2026-10-20",
+   "label": "1020晚报",
+   "edition": "晚报",
+   "titles": [
+    "中企巨头订购英伟达芯片",
+    "欣兴预计基板尺寸达当前14倍",
+    "Modal采用英伟达Vera"
+   ],
+   "pages": [
+    "issues/109/1.webp",
+    "issues/109/2.webp",
+    "issues/109/3.webp",
+    "issues/109/4.webp",
+    "issues/109/5.webp",
+    "issues/109/6.webp",
+    "issues/109/7.webp"
+   ]
+  },
+  {
    "serial": 108,
    "date": "2026-10-20",
    "label": "1020午报",
@@ -91,15 +111,7 @@
     "SEC获首笔检测设备商用订单",
     "IBM开发芯片设计AI框架"
    ],
-   "pages": [
-    "issues/104/1.webp",
-    "issues/104/2.webp",
-    "issues/104/3.webp",
-    "issues/104/4.webp",
-    "issues/104/5.webp",
-    "issues/104/6.webp",
-    "issues/104/7.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 103,
@@ -111,14 +123,7 @@
     "Gaonchips加入Arm计划",
     "英特尔拟推机器人芯片"
    ],
-   "pages": [
-    "issues/103/1.webp",
-    "issues/103/2.webp",
-    "issues/103/3.webp",
-    "issues/103/4.webp",
-    "issues/103/5.webp",
-    "issues/103/6.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 102,
@@ -130,15 +135,7 @@
     "美光开发人形机器人内存",
     "瑞萨组建物理AI专门团队"
    ],
-   "pages": [
-    "issues/102/1.webp",
-    "issues/102/2.webp",
-    "issues/102/3.webp",
-    "issues/102/4.webp",
-    "issues/102/5.webp",
-    "issues/102/6.webp",
-    "issues/102/7.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 101,
