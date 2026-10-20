@@ -2,6 +2,26 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 108,
+   "date": "2026-10-20",
+   "label": "1020早报",
+   "edition": "早报",
+   "titles": [
+    "存储厂商可再生能源转型受阻",
+    "开发者推出免刷写显卡工具",
+    "西门子携英伟达加速光刻"
+   ],
+   "pages": [
+    "issues/108/1.webp",
+    "issues/108/2.webp",
+    "issues/108/3.webp",
+    "issues/108/4.webp",
+    "issues/108/5.webp",
+    "issues/108/6.webp",
+    "issues/108/7.webp"
+   ]
+  },
+  {
    "serial": 107,
    "date": "2026-10-20",
    "label": "1020早报",
