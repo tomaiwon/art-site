@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f0e8" />
+    <meta name="description" content="作品图集：黄熠的作品高清原图，可在线浏览与下载。" />
+    <meta property="og:title" content="作品图集 Gallery — Yi Huang" />
+    <meta property="og:description" content="作品高清原图，点开即可下载。" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://yihuang.art/projects/gallery/" />
+    <link rel="stylesheet" href="style.css" />
+    <title>作品图集 Gallery — Yi Huang</title>
+  </head>
+  <body>
+    <a class="skip" href="#plates">跳至图集</a>
+    <nav class="topbar" aria-label="页面导航">
+      <a href="../../work-test.html">← <span lang="en">WORK</span></a>
+      <a href="#terms" lang="en">TERMS</a>
+    </nav>
+    <main>
+      <header class="hero">
+        <div class="eyebrow">
+          <span>测试</span><span lang="en">YI HUANG · 2026—</span>
+        </div>
+        <h1>
+          <span class="title-en" lang="en">Gallery</span
+          ><span class="title-zh">作品图集</span>
+        </h1>
+        <div class="hero-bottom">
+          <p>作品的高清原图，点开浏览，按需下载。</p>
+          <span id="plate-total" class="count" lang="en"></span>
+        </div>
+      </header>
+
+      <section id="plates" class="plates" aria-labelledby="plates-title">
+        <div class="section-line">
+          <h2 id="plates-title">图版</h2>
+          <span lang="en">PLATES / ORIGINAL FILES</span>
+        </div>
+        <div id="plate-grid" class="plate-grid" aria-live="polite"></div>
+        <p id="plate-empty" class="empty" hidden>第一批图片整理中，稍后再来。</p>
+      </section>
+
+      <section id="terms" class="terms section" aria-labelledby="terms-title">
+        <div class="section-line">
+          <h2 id="terms-title">使用说明</h2>
+          <span lang="en">TERMS OF USE</span>
+        </div>
+        <div class="terms-grid">
+          <p>
+            「下载原图」提供的是未经压缩的原始文件，体积较大，建议在 Wi-Fi 下下载。网页上显示的只是缩小的预览。
+          </p>
+          <p>
+            欢迎下载用于个人欣赏、学习与非商业分享，转载请注明「黄熠 Yi Huang」。出版、印刷或其他商业用途，请先<a
+              href="../../contact.html"
+              >联系我</a
+            >。
+          </p>
+          <p class="english" lang="en">
+            Full-resolution files are free to download for personal viewing, study and non-commercial sharing with
+            credit to Yi Huang. For publication, print or any commercial use, please get in touch first.
+          </p>
+        </div>
+      </section>
+
+      <footer>
+        <a href="../../work-test.html">← 测试</a><span lang="en">Gallery / YI HUANG</span
+        ><a href="#">回到顶部 ↑</a>
+      </footer>
+    </main>
+
+    <dialog class="viewer" aria-label="作品放大查看">
+      <div class="viewer-bar">
+        <p id="viewer-caption" aria-live="polite"></p>
+        <div class="viewer-actions">
+          <a id="viewer-download" href="#">下载原图 ↓</a>
+          <button type="button" id="viewer-close" aria-label="关闭大图">关闭 ×</button>
+        </div>
+      </div>
+      <div class="viewer-image"><img id="viewer-image" alt="" /></div>
+      <div class="viewer-bottom">
+        <button type="button" id="viewer-prev" aria-label="上一张">← 上一张</button
+        ><span id="viewer-count" aria-live="polite"></span
+        ><button type="button" id="viewer-next" aria-label="下一张">下一张 →</button>
+      </div>
+    </dialog>
+    <script src="gallery.js" defer></script>
+  </body>
+</html>
