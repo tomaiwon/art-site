@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>桃子果冻 Peach Jelly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,600&family=Archivo:wght@500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  /* Layout: full-bleed WebGL specimen table; title top-left, specimen card top-right, handling notes + live readouts bottom-left. */
+  :root {
+    --paper: #dedad4;
+    --paper-hi: #ebe8e3;
+    --ink: #1c1916;
+    --ink-soft: #6d675f;
+    --rule: #c6c0b7;
+    --card: rgba(234, 231, 226, 0.84);
+    --display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+    --body: "Newsreader", "Iowan Old Style", Georgia, serif;
+    --label: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0; overflow: hidden; color: var(--ink);
+    background: radial-gradient(120% 90% at 50% 20%, var(--paper-hi), var(--paper) 70%);
+    font-family: var(--body);
+  }
+  #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+  #stage.dragging { cursor: grabbing; }
+  .ov { position: fixed; pointer-events: none; }
+  .ov * { pointer-events: auto; }
+
+  .eyebrow, .lbl {
+    font-family: var(--label); font-weight: 600; font-size: 9.5px;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .masthead { top: calc(22px + env(safe-area-inset-top, 0px)); left: calc(24px + env(safe-area-inset-left, 0px)); max-width: 230px; }
+  .masthead h1 {
+    font-family: var(--display); font-style: italic; font-weight: 400;
+    font-size: 52px; line-height: 0.86; margin: 14px 0 14px; letter-spacing: -0.01em;
+  }
+  .masthead h1 span { display: block; padding-left: 0.42em; }
+  .masthead p { font-style: italic; font-size: 13px; line-height: 1.35; margin: 0; color: var(--ink-soft); }
+
+  .card {
+    top: calc(56px + env(safe-area-inset-top, 0px)); right: calc(24px + env(safe-area-inset-right, 0px));
+    width: 236px; background: var(--card); border: 1px solid var(--rule);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    padding: 16px 18px 14px; display: grid; gap: 14px;
+  }
+  .card header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+  .card header em { font-family: var(--body); font-size: 13px; color: var(--ink-soft); }
+  .swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+  .sw {
+    appearance: none; background: transparent; border: 1px solid transparent; padding: 7px 4px 5px;
+    display: grid; justify-items: center; gap: 5px; cursor: pointer; font-family: var(--body);
+    font-style: italic; font-size: 12.5px; color: var(--ink-soft);
+  }
+  .sw i { display: block; width: 46px; height: 28px; background: linear-gradient(var(--a) 0 36%, var(--b) 36% 100%); }
+  .sw[aria-pressed="true"] { border-color: var(--ink-soft); color: var(--ink); font-weight: 600; }
+  .sw:focus-visible, .btn:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .ctl { padding-top: 12px; border-top: 1px solid var(--rule); display: grid; gap: 4px; }
+  .ctl:first-of-type { border-top: 0; padding-top: 0; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; }
+  .val { font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .ends { display: flex; justify-content: space-between; font-style: italic; font-size: 11.5px; color: var(--ink-soft); }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; margin: 6px 0 2px; height: 16px; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 1px; background: var(--ink-soft); }
+  input[type="range"]::-moz-range-track { height: 1px; background: var(--ink-soft); }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; border: 1.3px solid var(--ink); background: var(--paper-hi); margin-top: -6px; }
+  input[type="range"]::-moz-range-thumb { width: 11px; height: 11px; border-radius: 50%; border: 1.3px solid var(--ink); background: var(--paper-hi); }
+  .btns { display: grid; grid-template-columns: 1fr auto; gap: 6px; padding-top: 12px; border-top: 1px solid var(--rule); }
+  .btn {
+    appearance: none; background: transparent; border: 1px solid var(--ink-soft); color: var(--ink);
+    font-family: var(--body); font-size: 13px; padding: 7px 10px; cursor: pointer;
+  }
+  .btn:hover { background: var(--paper-hi); }
+  .btn.wide { grid-column: 1 / -1; }
+  .checks { display: flex; gap: 16px; font-size: 12.5px; font-style: italic; }
+  .checks label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .checks input { accent-color: var(--ink); margin: 0; }
+
+  .meta { top: calc(22px + env(safe-area-inset-top, 0px)); right: calc(24px + env(safe-area-inset-right, 0px)); font-family: var(--mono); font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; }
+
+  .notes { left: calc(24px + env(safe-area-inset-left, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: 300px; display: grid; gap: 12px; }
+  .notes .handle { font-style: italic; font-size: 13px; line-height: 1.38; margin: 0; }
+  .notes .handle b { font-family: var(--label); font-style: normal; font-weight: 600; font-size: 9.5px; letter-spacing: 0.18em; color: var(--ink-soft); margin-right: 4px; }
+  .stats { display: grid; grid-template-columns: auto auto auto; justify-content: start; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .stats div { padding: 7px 22px 7px 0; display: grid; gap: 3px; }
+  .stats div + div { padding-left: 14px; border-left: 1px solid var(--rule); }
+  .stats strong { font-family: var(--mono); font-weight: 500; font-size: 15px; font-variant-numeric: tabular-nums; }
+  .stats small { font-family: var(--body); font-style: italic; font-size: 11px; color: var(--ink-soft); }
+  .foot { font-size: 10.5px; line-height: 1.4; color: var(--ink-soft); margin: 0; }
+  .hint { right: calc(24px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
+
+  @media (max-width: 760px) {
+    .masthead h1 { font-size: 38px; }
+    .masthead p, .notes .handle, .foot, .hint, .meta { display: none; }
+    .card { top: auto; right: calc(12px + env(safe-area-inset-right, 0px)); left: calc(12px + env(safe-area-inset-left, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 44%; overflow: auto; gap: 10px; padding: 12px 14px; }
+    .notes { bottom: auto; left: auto; top: calc(22px + env(safe-area-inset-top, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
+    .stats div { padding-right: 10px; }
+    .stats div + div { padding-left: 8px; }
+    .stats strong { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<canvas id="stage" aria-label="Interactive soft-body peach. Drag the flesh or the stone."></canvas>
+
+<div class="ov masthead">
+  <div class="eyebrow">Material studies / No. 034</div>
+  <h1>Peach <span>Jelly.</span></h1>
+  <p>A half peach cast in soft gummy, stone still seated. Handle it the way you would the real thing.</p>
+</div>
+
+<div class="ov meta" id="meta">— fps · — particles</div>
+
+<aside class="ov card" aria-label="Specimen controls">
+  <header><span class="lbl">The specimen</span><em>fig. 34</em></header>
+  <div class="ctl">
+    <span class="lbl">Variety</span>
+    <div class="swatches" role="group" aria-label="Variety">
+      <button class="sw" id="v-yellow" data-v="yellow" aria-pressed="true" style="--a:#c9302a;--b:#f2a42c"><i></i>Yellow</button>
+      <button class="sw" id="v-white" data-v="white" aria-pressed="false" style="--a:#dc4a58;--b:#f1e0bf"><i></i>White</button>
+      <button class="sw" id="v-nect" data-v="nectarine" aria-pressed="false" style="--a:#a8141c;--b:#ee8f2a"><i></i>Nectarine</button>
+    </div>
+  </div>
+  <div class="ctl">
+    <div class="row"><label class="lbl" for="firm">Firmness</label><span class="val" id="firm-v">0.50</span></div>
+    <input type="range" id="firm" min="0" max="1" step="0.01" value="0.5">
+    <div class="ends"><span>trembling</span><span>set</span></div>
+  </div>
+  <div class="ctl">
+    <div class="row"><label class="lbl" for="damp">Internal damping</label><span class="val" id="damp-v">0.45</span></div>
+    <input type="range" id="damp" min="0" max="1" step="0.01" value="0.45">
+    <div class="ends"><span>lively</span><span>syrupy</span></div>
+  </div>
+  <div class="btns">
+    <button class="btn" id="nudge">Give it a nudge</button>
+    <button class="btn" id="reset">Reset</button>
+    <button class="btn wide" id="stone">Put the stone back</button>
+  </div>
+  <div class="checks">
+    <label><input type="checkbox" id="slow"> ¼ speed</label>
+    <label><input type="checkbox" id="wire"> Show mesh</label>
+  </div>
+  <button class="btn" id="pause">Pause</button>
+</aside>
+
+<div class="ov notes">
+  <p class="handle"><b>HANDLE</b>Grab the flesh to stretch it, or grab the stone and pull. The hollow clings, then lets go. Drop it back in and it settles home. Scroll, or add a second finger, while holding to twist.</p>
+  <div class="stats">
+    <div><span class="lbl">Mass</span><strong id="s-mass">≈—</strong></div>
+    <div><span class="lbl">Volume</span><strong id="s-vol">—<small> % of rest</small></strong></div>
+    <div><span class="lbl">Grip</span><strong id="s-grip">—<small> %</small></strong></div>
+  </div>
+  <p class="foot">Illustrative scale: 1 unit = 1 cm, gummy at 1.1 g/cm³. Volume is summed live over every triangle. Grip is the share of the hollow's lining still holding the stone.</p>
+</div>
+
+<div class="ov hint eyebrow">Drag empty space to orbit</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+
+// ---------- noise ----------
+function hash3(i, j, k) {
+  let h = Math.imul(i, 374761393) ^ Math.imul(j, 668265263) ^ Math.imul(k, 1274126177);
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
+}
+function vnoise(x, y, z) {
+  const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z);
+  const xf = x - xi, yf = y - yi, zf = z - zi;
+  const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf), w = zf * zf * (3 - 2 * zf);
+  const l = (a, b, t) => a + (b - a) * t;
+  const c = (a, b, d) => hash3(xi + a, yi + b, zi + d);
+  return l(l(l(c(0,0,0), c(1,0,0), u), l(c(0,1,0), c(1,1,0), u), v),
+           l(l(c(0,0,1), c(1,0,1), u), l(c(0,1,1), c(1,1,1), u), v), w);
+}
+function fbm(x, y, z, oct = 4) {
+  let s = 0, a = 0.5, f = 1, n = 0;
+  for (let o = 0; o < oct; o++) { s += a * vnoise(x * f, y * f, z * f); n += a; a *= 0.5; f *= 2.03; }
+  return s / n;
+}
+const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+// ---------- renderer / scene ----------
+const canvas = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.NoToneMapping;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(26, 1, 0.5, 400);
+const orbit = { az: 0, el: 0.62, dist: 44, target: new THREE.Vector3(0, 1.2, 0) };
+function placeCamera() {
+  const { az, el, dist, target } = orbit;
+  camera.position.set(target.x + dist * Math.cos(el) * Math.sin(az), target.y + dist * Math.sin(el), target.z + dist * Math.cos(el) * Math.cos(az));
+  camera.lookAt(target);
+}
+
+scene.add(new THREE.HemisphereLight(0xfff6ec, 0xb8a99a, 0.35));
+const sun = new THREE.DirectionalLight(0xfff3e6, 1.55);
+sun.position.set(-9, 26, 12);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 22, bottom: -22, near: 1, far: 70 });
+sun.shadow.radius = 14; sun.shadow.blurSamples = 20; sun.shadow.bias = -0.0006;
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0xffe2cc, 0.5);
+fill.position.set(14, 8, -6);
+scene.add(fill);
+
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), new THREE.ShadowMaterial({ opacity: 0.2, color: 0x4a3a2c }));
+floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// ---------- peach geometry (custom lathe, no seam duplicates) ----------
+const RX = 4.0, DEPTH = 3.5, FACE_Y = 0.32, CAV_R = 1.75, CAV_D = 1.45, SX = 1.1, SZ = 0.95, SEG = 72;
+const profile = []; // [radius, y, region] region: 0 skin, 1 flesh, 2 hollow
+const nDome = 24;
+for (let i = 0; i <= nDome; i++) { const t = i / nDome * Math.PI / 2; profile.push([RX * Math.sin(t), -DEPTH * Math.cos(t), 0]); }
+profile.push([RX * 0.99, 0.17, 0], [RX * 0.955, 0.29, 1]);
+for (let k = 0; k < 6; k++) profile.push([THREE.MathUtils.lerp(RX * 0.9, CAV_R + 0.12, k / 5), FACE_Y, 1]);
+for (let i = 0; i <= 12; i++) { const s = i / 12 * Math.PI / 2; profile.push([CAV_R * Math.cos(s), FACE_Y - CAV_D * Math.sin(s), 2]); }
+profile[0][0] = 0; profile[profile.length - 1][0] = 0;
+
+const rest = [], region = [], ringStart = [];
+profile.forEach(([r, y, reg], k) => {
+  ringStart.push(rest.length / 3);
+  if (r === 0) { rest.push(0, y, 0); region.push(reg); return; }
+  for (let j = 0; j < SEG; j++) {
+    const phi = j / SEG * Math.PI * 2;
+    let rr = r;
+    if (reg === 0) { const d = Math.atan2(Math.sin(phi), Math.cos(phi)); rr *= 1 - 0.045 * Math.exp(-((d / 0.13) ** 2)); } // suture crease
+    rest.push(rr * Math.cos(phi) * SX, y, rr * Math.sin(phi) * SZ);
+    region.push(reg);
+  }
+});
+const N = rest.length / 3;
+let index = [];
+for (let k = 0; k < profile.length - 1; k++) {
+  const a0 = ringStart[k], b0 = ringStart[k + 1];
+  const aPole = profile[k][0] === 0, bPole = profile[k + 1][0] === 0;
+  for (let j = 0; j < SEG; j++) {
+    const j1 = (j + 1) % SEG;
+    if (aPole) index.push(a0, b0 + j1, b0 + j);
+    else if (bPole) index.push(a0 + j, a0 + j1, b0);
+    else index.push(a0 + j, b0 + j1, b0 + j, a0 + j, a0 + j1, b0 + j1);
+  }
+}
+function signedVolume(P) {
+  let v = 0;
+  for (let t = 0; t < index.length; t += 3) {
+    const a = index[t] * 3, b = index[t + 1] * 3, c = index[t + 2] * 3;
+    v += P[a] * (P[b + 1] * P[c + 2] - P[b + 2] * P[c + 1]) - P[a + 1] * (P[b] * P[c + 2] - P[b + 2] * P[c]) + P[a + 2] * (P[b] * P[c + 1] - P[b + 1] * P[c]);
+  }
+  return v / 6;
+}
+if (signedVolume(rest) < 0) for (let t = 0; t < index.length; t += 3) { const s = index[t + 1]; index[t + 1] = index[t + 2]; index[t + 2] = s; }
+const REST_VOL = signedVolume(rest);
+
+// centre of mass (uniform particles) and rest offsets
+let c0 = [0, 0, 0];
+for (let i = 0; i < N; i++) for (let d = 0; d < 3; d++) c0[d] += rest[i * 3 + d] / N;
+const Q = new Float32Array(N * 3);
+for (let i = 0; i < N; i++) for (let d = 0; d < 3; d++) Q[i * 3 + d] = rest[i * 3 + d] - c0[d];
+const SEAT = new THREE.Vector3(-c0[0], FACE_Y - c0[1], -c0[2]);
+let minQy = Infinity; for (let i = 0; i < N; i++) minQy = Math.min(minQy, Q[i * 3 + 1]);
+
+// neighbours (CSR) for velocity smoothing
+const nbSets = Array.from({ length: N }, () => new Set());
+for (let t = 0; t < index.length; t += 3) {
+  const a = index[t], b = index[t + 1], c = index[t + 2];
+  nbSets[a].add(b).add(c); nbSets[b].add(a).add(c); nbSets[c].add(a).add(b);
+}
+const nbOff = new Int32Array(N + 1); let nbTotal = 0;
+nbSets.forEach((s, i) => { nbOff[i] = nbTotal; nbTotal += s.size; }); nbOff[N] = nbTotal;
+const nbIdx = new Int32Array(nbTotal); nbSets.forEach((s, i) => { let o = nbOff[i]; s.forEach(n => nbIdx[o++] = n); });
+
+// hollow lining that grips the stone
+const hollow = [], hollowOff = [], hollowTh = [];
+for (let i = 0; i < N; i++) {
+  const rx = rest[i * 3] / SX, rz = rest[i * 3 + 2] / SZ, rad = Math.hypot(rx, rz);
+  if (region[i] === 2 || (region[i] === 1 && rad < CAV_R + 0.45)) {
+    hollow.push(i);
+    hollowOff.push(Q[i * 3] - SEAT.x, Q[i * 3 + 1] - SEAT.y, Q[i * 3 + 2] - SEAT.z);
+    hollowTh.push(0.9 + 1.8 * vnoise(Q[i * 3] * 0.8 + 11, Q[i * 3 + 1] * 0.8, Q[i * 3 + 2] * 0.8));
+  }
+}
+const H = hollow.length;
+const gripOn = new Uint8Array(H).fill(1);
+
+const geo = new THREE.BufferGeometry();
+const posAttr = new THREE.BufferAttribute(new Float32Array(N * 3), 3);
+posAttr.setUsage(THREE.DynamicDrawUsage);
+geo.setAttribute('position', posAttr);
+geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(N * 3), 3));
+geo.setIndex(index);
+
+const VARIETIES = {
+  yellow:    { blush: 0xc4232a, base: 0xf0a22a, flesh: 0xf39424, fleshEdge: 0xe9672a, hollow: 0xb01a22, stone: 0x7b4024 },
+  white:     { blush: 0xd63a4c, base: 0xf0ddb6, flesh: 0xf4e6c8, fleshEdge: 0xeec3a8, hollow: 0xc8394c, stone: 0x6f3d26 },
+  nectarine: { blush: 0xa8101a, base: 0xe7802a, flesh: 0xf2962a, fleshEdge: 0xe0542a, hollow: 0xa3141c, stone: 0x6a331c },
+};
+const tmpA = new THREE.Color(), tmpB = new THREE.Color(), tmpC = new THREE.Color();
+function paint(name) {
+  const p = VARIETIES[name], col = geo.attributes.color;
+  for (let i = 0; i < N; i++) {
+    const x = rest[i * 3], y = rest[i * 3 + 1], z = rest[i * 3 + 2];
+    const rad = Math.hypot(x / SX, z / SZ);
+    if (region[i] === 0) {
+      const n = fbm(x * 0.42 + 3.1, y * 0.42, z * 0.42 - 1.7);
+      const lift = smooth(-DEPTH, 0.2, y) * 0.12;
+      const b = smooth(0.4, 0.6, n + lift + (name === 'nectarine' ? 0.12 : 0));
+      tmpA.setHex(p.base).lerp(tmpB.setHex(p.blush), b);
+      const speck = vnoise(x * 9, y * 9, z * 9);
+      if (speck > 0.86) tmpA.lerp(tmpC.setHex(p.blush), 0.5);
+    } else if (region[i] === 1) {
+      tmpA.setHex(p.flesh);
+      tmpA.lerp(tmpB.setHex(p.fleshEdge), smooth(CAV_R + 1.1, CAV_R + 0.1, rad) * 0.85);
+      tmpA.lerp(tmpB.setHex(p.blush), smooth(RX * 0.82, RX * 0.97, rad) * 0.55);
+      tmpA.lerp(tmpB.setHex(0xffffff), (vnoise(x * 2.4, 7, z * 2.4) - 0.5) * 0.12);
+    } else {
+      tmpA.setHex(p.hollow).lerp(tmpB.setHex(p.fleshEdge), smooth(FACE_Y - 0.5, FACE_Y, y) * 0.35);
+    }
+    col.setXYZ(i, tmpA.r, tmpA.g, tmpA.b);
+  }
+  col.needsUpdate = true;
+  stoneMat.color.setHex(p.stone);
+}
+
+const peachMat = new THREE.MeshPhysicalMaterial({
+  vertexColors: true, roughness: 0.3, clearcoat: 0.9, clearcoatRoughness: 0.12,
+  sheen: 0.35, sheenRoughness: 0.5, sheenColor: new THREE.Color(0xffd6b8), envMapIntensity: 0.45,
+});
+const peach = new THREE.Mesh(geo, peachMat);
+peach.castShadow = true; peach.receiveShadow = true;
+scene.add(peach);
+const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x2a1c14, wireframe: true, transparent: true, opacity: 0.22 }));
+wire.visible = false;
+scene.add(wire);
+
+// ---------- stone ----------
+const STONE_R = new THREE.Vector3(1.72, 1.3, 1.45);
+let sg = new THREE.IcosahedronGeometry(1, 5);
+sg.deleteAttribute('normal'); sg.deleteAttribute('uv');
+sg = mergeVertices(sg);
+{
+  const p = sg.attributes.position, cols = new Float32Array(p.count * 3);
+  for (let i = 0; i < p.count; i++) {
+    const v = new THREE.Vector3().fromBufferAttribute(p, i).normalize();
+    const n = fbm(v.x * 1.6 + 5, v.y * 3.4, v.z * 3.4, 4);
+    const ridge = 1 - Math.abs(2 * n - 1);
+    const pit = vnoise(v.x * 9, v.y * 9, v.z * 9);
+    const disp = 0.13 * ridge * ridge - 0.07 + (pit > 0.8 ? -0.05 : 0);
+    const tip = 1 + 0.1 * Math.max(0, v.x) ** 4;
+    p.setXYZ(i, v.x * STONE_R.x * tip * (1 + disp), v.y * STONE_R.y * (1 + disp), v.z * STONE_R.z * (1 + disp));
+    const shade = 0.32 + 0.6 * ridge * ridge;
+    cols[i * 3] = cols[i * 3 + 1] = cols[i * 3 + 2] = shade;
+  }
+  sg.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+  sg.computeVertexNormals();
+}
+const stoneMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0.0 });
+const stone = new THREE.Mesh(sg, stoneMat);
+stone.castShadow = true; stone.receiveShadow = true;
+scene.add(stone);
+
+// ---------- simulation state ----------
+const X = new Float32Array(N * 3), V = new Float32Array(N * 3), VS = new Float32Array(N * 3);
+const rotQ = new THREE.Quaternion();
+const R = new Float32Array(9); // row-major
+const com = new THREE.Vector3();
+const G = 340;
+const params = { firm: 0.5, damp: 0.45, slow: false, paused: false };
+
+const st = { // stone
+  state: 'seated', pos: new THREE.Vector3(), quat: new THREE.Quaternion(), vel: new THREE.Vector3(),
+  target: new THREE.Vector3(), home: null,
+};
+
+function quatToR(q) {
+  const { x, y, z, w } = q;
+  R[0] = 1 - 2 * (y * y + z * z); R[1] = 2 * (x * y - z * w); R[2] = 2 * (x * z + y * w);
+  R[3] = 2 * (x * y + z * w); R[4] = 1 - 2 * (x * x + z * z); R[5] = 2 * (y * z - x * w);
+  R[6] = 2 * (x * z - y * w); R[7] = 2 * (y * z + x * w); R[8] = 1 - 2 * (x * x + y * y);
+}
+const _dq = new THREE.Quaternion(), _ax = new THREE.Vector3();
+function extractRotation(A) { // Müller et al. 2016, warm-started from rotQ
+  for (let it = 0; it < 6; it++) {
+    quatToR(rotQ);
+    let ox = 0, oy = 0, oz = 0, den = 0;
+    for (let j = 0; j < 3; j++) {
+      const rx = R[j], ry = R[3 + j], rz = R[6 + j], ax = A[j], ay = A[3 + j], az = A[6 + j];
+      ox += ry * az - rz * ay; oy += rz * ax - rx * az; oz += rx * ay - ry * ax;
+      den += rx * ax + ry * ay + rz * az;
+    }
+    const s = 1 / (Math.abs(den) + 1e-9);
+    ox *= s; oy *= s; oz *= s;
+    const w = Math.hypot(ox, oy, oz);
+    if (w < 1e-9) break;
+    _dq.setFromAxisAngle(_ax.set(ox / w, oy / w, oz / w), w);
+    rotQ.premultiply(_dq).normalize();
+  }
+  quatToR(rotQ);
+}
+
+function seatWorld(out) { // stone home in world space
+  return out.copy(SEAT).applyQuaternion(rotQ).add(com);
+}
+
+function resetAll() {
+  const tilt = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.42, 0.5, -0.18));
+  rotQ.copy(tilt);
+  quatToR(rotQ);
+  com.set(0, -minQy + 1.6, 0);
+  for (let i = 0; i < N; i++) {
+    const qx = Q[i * 3], qy = Q[i * 3 + 1], qz = Q[i * 3 + 2];
+    X[i * 3] = com.x + R[0] * qx + R[1] * qy + R[2] * qz;
+    X[i * 3 + 1] = com.y + R[3] * qx + R[4] * qy + R[5] * qz;
+    X[i * 3 + 2] = com.z + R[6] * qx + R[7] * qy + R[8] * qz;
+  }
+  V.fill(0);
+  gripOn.fill(1);
+  st.state = 'seated'; st.vel.set(0, 0, 0); st.home = null;
+  syncStone();
+  grab = null;
+}
+
+function syncStone() {
+  seatWorld(st.pos);
+  st.quat.copy(rotQ);
+}
+
+const BOUND_X = 17, BOUND_Z = 11;
+const _m = new THREE.Matrix3();
+
+function substep(h) {
+  const alpha = 0.014 * Math.pow(11, params.firm);
+  const smoothK = 0.04 + params.damp * 0.3;
+  const air = 1 - (0.0004 + params.damp * 0.0025);
+
+  for (let i = 0; i < N; i++) V[i * 3 + 1] -= G * h;
+
+  if (grab) {
+    for (let k = 0; k < grab.idx.length; k++) {
+      const i = grab.idx[k], w = grab.w[k] * 0.9;
+      for (let d = 0; d < 3; d++) {
+        const t = grab.target.getComponent(d) + grab.off[k * 3 + d];
+        const vd = (t - X[i * 3 + d]) * 0.14 / h;
+        V[i * 3 + d] += (vd - V[i * 3 + d]) * w;
+      }
+    }
+  }
+
+  if (st.state !== 'seated') {
+    const e = st.quat;
+    _m.setFromMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(e));
+    const m = _m.elements; // column-major
+    for (let k = 0; k < H; k++) {
+      if (!gripOn[k]) continue;
+      const i = hollow[k], ox = hollowOff[k * 3], oy = hollowOff[k * 3 + 1], oz = hollowOff[k * 3 + 2];
+      const tx = st.pos.x + m[0] * ox + m[3] * oy + m[6] * oz;
+      const ty = st.pos.y + m[1] * ox + m[4] * oy + m[7] * oz;
+      const tz = st.pos.z + m[2] * ox + m[5] * oy + m[8] * oz;
+      const dx = tx - X[i * 3], dy = ty - X[i * 3 + 1], dz = tz - X[i * 3 + 2];
+      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      if (dist > hollowTh[k]) { gripOn[k] = 0; continue; }
+      const s = 0.05 / h, w = 0.16 * (1 - 0.6 * dist / hollowTh[k]);
+      V[i * 3] += (dx * s - V[i * 3]) * w; V[i * 3 + 1] += (dy * s - V[i * 3 + 1]) * w; V[i * 3 + 2] += (dz * s - V[i * 3 + 2]) * w;
+    }
+  }
+
+  // shape matching
+  let cx = 0, cy = 0, cz = 0;
+  for (let i = 0; i < N; i++) { cx += X[i * 3]; cy += X[i * 3 + 1]; cz += X[i * 3 + 2]; }
+  cx /= N; cy /= N; cz /= N;
+  com.set(cx, cy, cz);
+  const A = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  for (let i = 0; i < N; i++) {
+    const px = X[i * 3] - cx, py = X[i * 3 + 1] - cy, pz = X[i * 3 + 2] - cz;
+    const qx = Q[i * 3], qy = Q[i * 3 + 1], qz = Q[i * 3 + 2];
+    A[0] += px * qx; A[1] += px * qy; A[2] += px * qz;
+    A[3] += py * qx; A[4] += py * qy; A[5] += py * qz;
+    A[6] += pz * qx; A[7] += pz * qy; A[8] += pz * qz;
+  }
+  extractRotation(A);
+  const ah = alpha / h;
+  for (let i = 0; i < N; i++) {
+    const qx = Q[i * 3], qy = Q[i * 3 + 1], qz = Q[i * 3 + 2];
+    V[i * 3] += (cx + R[0] * qx + R[1] * qy + R[2] * qz - X[i * 3]) * ah;
+    V[i * 3 + 1] += (cy + R[3] * qx + R[4] * qy + R[5] * qz - X[i * 3 + 1]) * ah;
+    V[i * 3 + 2] += (cz + R[6] * qx + R[7] * qy + R[8] * qz - X[i * 3 + 2]) * ah;
+  }
+
+  // internal damping: blend each velocity toward its neighbours' mean
+  for (let i = 0; i < N; i++) {
+    let sx = 0, sy = 0, sz = 0; const a = nbOff[i], b = nbOff[i + 1];
+    for (let o = a; o < b; o++) { const n = nbIdx[o] * 3; sx += V[n]; sy += V[n + 1]; sz += V[n + 2]; }
+    const inv = 1 / (b - a);
+    VS[i * 3] = V[i * 3] + (sx * inv - V[i * 3]) * smoothK;
+    VS[i * 3 + 1] = V[i * 3 + 1] + (sy * inv - V[i * 3 + 1]) * smoothK;
+    VS[i * 3 + 2] = V[i * 3 + 2] + (sz * inv - V[i * 3 + 2]) * smoothK;
+  }
+
+  for (let i = 0; i < N; i++) {
+    const j = i * 3;
+    V[j] = VS[j] * air; V[j + 1] = VS[j + 1] * air; V[j + 2] = VS[j + 2] * air;
+    X[j] += V[j] * h; X[j + 1] += V[j + 1] * h; X[j + 2] += V[j + 2] * h;
+    if (X[j + 1] < 0) {
+      X[j + 1] = 0;
+      if (V[j + 1] < 0) V[j + 1] *= -0.05;
+      V[j] *= 0.93; V[j + 2] *= 0.93;
+    }
+    if (X[j] > BOUND_X || X[j] < -BOUND_X) { X[j] = Math.sign(X[j]) * BOUND_X; V[j] *= -0.3; }
+    if (X[j + 2] > BOUND_Z || X[j + 2] < -BOUND_Z) { X[j + 2] = Math.sign(X[j + 2]) * BOUND_Z; V[j + 2] *= -0.3; }
+  }
+}
+
+const _v1 = new THREE.Vector3(), _v2 = new THREE.Vector3(), _q1 = new THREE.Quaternion();
+function stoneStep(dt) {
+  if (st.state === 'seated') { syncStone(); return; }
+  if (st.state === 'held') {
+    st.vel.copy(st.target).sub(st.pos).multiplyScalar(1 / Math.max(dt, 1e-4)).clampLength(0, 220);
+    st.pos.lerp(st.target, Math.min(1, dt * 18));
+    return;
+  }
+  if (st.state === 'homing') {
+    const hm = st.home;
+    hm.t = Math.min(1, hm.t + dt / hm.dur);
+    const e = hm.t * hm.t * (3 - 2 * hm.t);
+    seatWorld(_v1);
+    st.pos.lerpVectors(hm.from, _v1, e);
+    st.pos.y += Math.sin(Math.PI * e) * hm.arc;
+    st.quat.slerpQuaternions(hm.fromQ, rotQ, e);
+    if (hm.t >= 1) { st.state = 'seated'; gripOn.fill(1); }
+    return;
+  }
+  // free
+  st.vel.y -= G * dt;
+  st.pos.addScaledVector(st.vel, dt);
+  const r = STONE_R.y + 0.05;
+  if (st.pos.y < r) {
+    st.pos.y = r;
+    if (st.vel.y < 0) st.vel.y *= -0.32;
+    st.vel.x *= 0.96; st.vel.z *= 0.96;
+    const sp = Math.hypot(st.vel.x, st.vel.z);
+    if (sp > 0.01) { _q1.setFromAxisAngle(_v2.set(st.vel.z, 0, -st.vel.x).normalize(), sp * dt / 1.45); st.quat.premultiply(_q1); }
+  }
+  if (Math.abs(st.pos.x) > BOUND_X) { st.pos.x = Math.sign(st.pos.x) * BOUND_X; st.vel.x *= -0.4; }
+  if (Math.abs(st.pos.z) > BOUND_Z) { st.pos.z = Math.sign(st.pos.z) * BOUND_Z; st.vel.z *= -0.4; }
+  seatWorld(_v1);
+  if (st.pos.distanceTo(_v1) < 2.0) { goHome(0.3, 0); return; }
+  _v2.copy(st.pos).sub(com); // bounce off the flesh
+  const d = _v2.length(), minD = 5.2;
+  if (d < minD && d > 1e-3) {
+    _v2.multiplyScalar(1 / d);
+    st.pos.addScaledVector(_v2, minD - d);
+    const vn = st.vel.dot(_v2);
+    if (vn < 0) st.vel.addScaledVector(_v2, -1.4 * vn);
+  }
+}
+
+function goHome(dur, arc) {
+  st.home = { t: 0, dur, arc, from: st.pos.clone(), fromQ: st.quat.clone() };
+  st.state = 'homing';
+}
+
+// ---------- interaction ----------
+const ray = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+const plane = new THREE.Plane();
+const hitP = new THREE.Vector3();
+let grab = null, stoneHold = null, orbitDrag = null;
+const pointers = new Map();
+let twistAngle = null;
+
+function setNdc(e) {
+  const r = canvas.getBoundingClientRect();
+  ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+}
+function camDir() { return camera.getWorldDirection(new THREE.Vector3()); }
+
+canvas.addEventListener('pointerdown', (e) => {
+  canvas.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 2) { twistAngle = pairAngle(); return; }
+  if (pointers.size > 2) return;
+  setNdc(e);
+  geo.computeBoundingSphere();
+  const hs = ray.intersectObject(stone)[0];
+  const hp = ray.intersectObject(peach)[0];
+  if (hs && (!hp || hs.distance <= hp.distance + 0.4)) {
+    plane.setFromNormalAndCoplanarPoint(camDir().negate(), hs.point);
+    stoneHold = { off: st.pos.clone().sub(hs.point) };
+    st.target.copy(st.pos);
+    if (st.state !== 'held') { st.state = 'held'; st.home = null; }
+  } else if (hp) {
+    plane.setFromNormalAndCoplanarPoint(camDir().negate(), hp.point);
+    const f = hp.face;
+    let best = f.a, bd = Infinity;
+    for (const vi of [f.a, f.b, f.c]) { const d = hp.point.distanceToSquared(_v1.fromArray(X, vi * 3)); if (d < bd) { bd = d; best = vi; } }
+    const qx = Q[best * 3], qy = Q[best * 3 + 1], qz = Q[best * 3 + 2];
+    const idx = [], w = [], off = [];
+    const sig2 = 2 * 1.5 * 1.5;
+    for (let i = 0; i < N; i++) {
+      const d2 = (Q[i * 3] - qx) ** 2 + (Q[i * 3 + 1] - qy) ** 2 + (Q[i * 3 + 2] - qz) ** 2;
+      const wi = Math.exp(-d2 / sig2);
+      if (wi > 0.02) { idx.push(i); w.push(wi); off.push(X[i * 3] - hp.point.x, X[i * 3 + 1] - hp.point.y, X[i * 3 + 2] - hp.point.z); }
+    }
+    grab = { idx, w, off, target: hp.point.clone() };
+  } else {
+    orbitDrag = { x: e.clientX, y: e.clientY };
+  }
+  canvas.classList.add('dragging');
+});
+
+function pairAngle() {
+  const [a, b] = [...pointers.values()];
+  return Math.atan2(b.y - a.y, b.x - a.x);
+}
+
+canvas.addEventListener('pointermove', (e) => {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 2 && twistAngle !== null) {
+    const a = pairAngle(); let d = a - twistAngle;
+    d = Math.atan2(Math.sin(d), Math.cos(d));
+    twistAngle = a;
+    twist(-d * 2.2);
+    return;
+  }
+  if (orbitDrag) {
+    orbit.az -= (e.clientX - orbitDrag.x) * 0.006;
+    orbit.el = THREE.MathUtils.clamp(orbit.el + (e.clientY - orbitDrag.y) * 0.004, 0.18, 1.3);
+    orbitDrag = { x: e.clientX, y: e.clientY };
+    placeCamera();
+    return;
+  }
+  setNdc(e);
+  if (!ray.ray.intersectPlane(plane, hitP)) return;
+  if (stoneHold) {
+    st.target.copy(hitP).add(stoneHold.off);
+    st.target.y = Math.max(st.target.y, STONE_R.y + 0.1);
+  } else if (grab) {
+    grab.target.copy(hitP);
+    grab.target.y = Math.max(grab.target.y, 0.3);
+  }
+});
+
+function endPointer(e) {
+  pointers.delete(e.pointerId);
+  if (pointers.size < 2) twistAngle = null;
+  if (pointers.size > 0) return;
+  if (stoneHold) {
+    stoneHold = null;
+    seatWorld(_v1);
+    const active = gripOn.reduce((a, b) => a + b, 0);
+    if (st.pos.distanceTo(_v1) < 2.6 || active > H * 0.25) goHome(0.32, 0);
+    else st.state = 'free';
+  }
+  grab = null; orbitDrag = null;
+  canvas.classList.remove('dragging');
+}
+canvas.addEventListener('pointerup', endPointer);
+canvas.addEventListener('pointercancel', endPointer);
+
+function twist(amount) {
+  const axis = camDir();
+  if (stoneHold) { st.quat.premultiply(_q1.setFromAxisAngle(axis, amount * 0.6)); return; }
+  if (!grab) return;
+  const w = amount * 9;
+  for (let i = 0; i < N; i++) {
+    const rx = X[i * 3] - com.x, ry = X[i * 3 + 1] - com.y, rz = X[i * 3 + 2] - com.z;
+    V[i * 3] += w * (axis.y * rz - axis.z * ry);
+    V[i * 3 + 1] += w * (axis.z * rx - axis.x * rz);
+    V[i * 3 + 2] += w * (axis.x * ry - axis.y * rx);
+  }
+}
+
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  if (grab || stoneHold) { twist(Math.sign(e.deltaY) * Math.min(0.35, Math.abs(e.deltaY) * 0.004)); return; }
+  orbit.dist = THREE.MathUtils.clamp(orbit.dist * (1 + e.deltaY * 0.001), 24, 80);
+  placeCamera();
+}, { passive: false });
+
+// ---------- controls ----------
+const $ = (id) => document.getElementById(id);
+let variety = 'yellow';
+document.querySelectorAll('.sw').forEach((b) => b.addEventListener('click', () => {
+  variety = b.dataset.v;
+  document.querySelectorAll('.sw').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+  paint(variety);
+}));
+$('firm').addEventListener('input', (e) => { params.firm = +e.target.value; $('firm-v').textContent = params.firm.toFixed(2); });
+$('damp').addEventListener('input', (e) => { params.damp = +e.target.value; $('damp-v').textContent = params.damp.toFixed(2); });
+$('slow').addEventListener('change', (e) => { params.slow = e.target.checked; });
+$('wire').addEventListener('change', (e) => { wire.visible = e.target.checked; });
+$('pause').addEventListener('click', (e) => { params.paused = !params.paused; e.target.textContent = params.paused ? 'Resume' : 'Pause'; });
+$('reset').addEventListener('click', resetAll);
+$('stone').addEventListener('click', () => { if (st.state !== 'seated') goHome(0.75, 3.5); });
+$('nudge').addEventListener('click', () => {
+  const up = 90 + Math.random() * 50, hx = (Math.random() - 0.5) * 40, hz = (Math.random() - 0.5) * 30;
+  const w = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize().multiplyScalar(5 + Math.random() * 4);
+  for (let i = 0; i < N; i++) {
+    const rx = X[i * 3] - com.x, ry = X[i * 3 + 1] - com.y, rz = X[i * 3 + 2] - com.z;
+    V[i * 3] += hx + w.y * rz - w.z * ry;
+    V[i * 3 + 1] += up + w.z * rx - w.x * rz;
+    V[i * 3 + 2] += hz + w.x * ry - w.y * rx;
+  }
+});
+
+// ---------- loop ----------
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  orbit.dist = w < 760 ? 58 : 44;
+  orbit.target.set(0, w < 760 ? -2.5 : 1.2, 0);
+  camera.updateProjectionMatrix();
+  placeCamera();
+}
+addEventListener('resize', resize);
+
+const H_STEP = 1 / 240;
+let acc = 0, last = performance.now(), fpsT = 0, frames = 0, statT = 0;
+function frame(now) {
+  let dt = Math.min(0.05, (now - last) / 1000); last = now;
+  frames++; fpsT += dt;
+  if (fpsT > 0.5) { $('meta').textContent = `${Math.round(frames / fpsT)} fps · ${N.toLocaleString()} particles`; frames = 0; fpsT = 0; }
+  if (!params.paused) {
+    const sdt = dt * (params.slow ? 0.25 : 1);
+    acc += sdt;
+    let n = 0;
+    while (acc >= H_STEP && n < 10) { substep(H_STEP); acc -= H_STEP; n++; }
+    if (n === 10) acc = 0;
+    stoneStep(sdt);
+  }
+  posAttr.array.set(X);
+  posAttr.needsUpdate = true;
+  geo.computeVertexNormals();
+  stone.position.copy(st.pos);
+  stone.quaternion.copy(st.quat);
+
+  statT += dt;
+  if (statT > 0.12) {
+    statT = 0;
+    $('s-mass').innerHTML = `≈${Math.round(REST_VOL * 1.1)}<small> g</small>`;
+    $('s-vol').innerHTML = `${(signedVolume(X) / REST_VOL * 100).toFixed(1)}<small> % of rest</small>`;
+    const g = st.state === 'seated' || st.state === 'homing' ? 100 : Math.round(gripOn.reduce((a, b) => a + b, 0) / H * 100);
+    $('s-grip').innerHTML = `${g}<small> %</small>`;
+  }
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+paint(variety);
+resetAll();
+resize();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
