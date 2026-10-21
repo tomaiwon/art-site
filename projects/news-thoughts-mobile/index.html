@@ -11,6 +11,7 @@
     <link rel="preload" href="fonts/reading-song-sc.woff2?v=languages-1" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="fonts/reading-serif-roman.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css?v=studio-social-1" />
+    <link rel="stylesheet" href="../project-nav.css" />
     <script src="i18n.js?v=studio-social-1" defer></script>
     <script src="app.js?v=studio-social-1" defer></script>
   </head>
@@ -65,7 +66,7 @@
           <a href="#thoughts" data-nav><span data-i18n="thoughts">沉思录</span></a>
         </nav>
         <nav class="menu-secondary" aria-label="原站存档" data-i18n-aria-label="originalArchive">
-          <a href="../../work-test.html"><span data-i18n="backTests">返回测试</span> <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-left"></use></svg></a>
+          <a class="pn-d" href="../../work.html#tests"><span data-i18n="backTests">返回测试</span> <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-left"></use></svg></a><a class="pn-m" href="../../work-test.html"><span data-i18n="backTests">返回测试</span> <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-left"></use></svg></a>
           <a class="" href="https://yihuang.art/news.html" target="_blank" rel="noopener noreferrer"><span data-i18n="allNews">见闻存档</span> <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-external"></use></svg></a>
           <a class="" href="https://yihuang.art/thoughts.html" target="_blank" rel="noopener noreferrer"><span data-i18n="thoughtsArchive">沉思录存档</span> <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-external"></use></svg></a>
         </nav>
@@ -157,7 +158,7 @@
     </main>
     <footer class="site-footer reading-column">
       <a href="#top" class="footer-title"><span data-i18n="publication">见闻与沉思录</span></a>
-      <a href="../../work-test.html" class="small-link"><svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-left"></use></svg><span data-i18n="backTests">返回测试</span></a>
+      <a class="small-link pn-d" href="../../work.html#tests"><svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-left"></use></svg><span data-i18n="backTests">返回测试</span></a><a class="small-link pn-m" href="../../work-test.html"><svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-left"></use></svg><span data-i18n="backTests">返回测试</span></a>
       <a href="#top" class="small-link"><span data-i18n="backTop">回到顶部</span><svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-up"></use></svg></a>
       <p data-i18n="footerCredit">黄熠 / 试刊 002 / 2026</p>
     </footer>

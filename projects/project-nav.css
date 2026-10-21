@@ -42,8 +42,6 @@
   outline-offset:6px;
 }
 
-.pn-m{ display:none; }
-@media (max-width:860px){
-  .pn-d{ display:none; }
-  .pn-m{ display:inline; }
-}
+/* 只负责藏起另一份，显示的那份保留它自己原本的 display */
+@media (min-width:861px){ .pn-m{ display:none; } }
+@media (max-width:860px){ .pn-d{ display:none; } }
