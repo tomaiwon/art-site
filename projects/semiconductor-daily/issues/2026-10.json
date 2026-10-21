@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 115,
+   "date": "2026-10-22",
+   "label": "1022 美光与台中工会签署劳资协议",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美光与台中工会签署劳资协议"
+   ],
+   "pages": [
+    "issues/115/1.webp",
+    "issues/115/2.webp",
+    "issues/115/3.webp",
+    "issues/115/4.webp",
+    "issues/115/5.webp"
+   ]
+  },
+  {
    "serial": 114,
    "date": "2026-10-22",
    "label": "1022 英伟达携六伙伴扩产载板封装测试",
