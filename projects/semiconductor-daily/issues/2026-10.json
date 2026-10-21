@@ -2,6 +2,40 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 111,
+   "date": "2026-10-21",
+   "label": "1021 字节阿里腾讯向英伟达下单…",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "字节阿里腾讯向英伟达下单350亿美元"
+   ],
+   "pages": [
+    "issues/111/1.webp",
+    "issues/111/2.webp",
+    "issues/111/3.webp",
+    "issues/111/4.webp",
+    "issues/111/5.webp"
+   ]
+  },
+  {
+   "serial": 110,
+   "date": "2026-10-21",
+   "label": "1021 美光桃园工会10月22日…",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美光桃园工会10月22日罢工声援台中"
+   ],
+   "pages": [
+    "issues/110/1.webp",
+    "issues/110/2.webp",
+    "issues/110/3.webp",
+    "issues/110/4.webp",
+    "issues/110/5.webp"
+   ]
+  },
+  {
    "serial": 109,
    "date": "2026-10-20",
    "label": "1020晚报",
