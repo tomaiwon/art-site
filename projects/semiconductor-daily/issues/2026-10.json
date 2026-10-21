@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 119,
+   "date": "2026-10-22",
+   "label": "1022 台湾PCB五雄称今年产值首破兆元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台湾PCB五雄称今年产值首破兆元"
+   ],
+   "pages": [
+    "issues/119/1.webp",
+    "issues/119/2.webp",
+    "issues/119/3.webp",
+    "issues/119/4.webp",
+    "issues/119/5.webp"
+   ]
+  },
+  {
    "serial": 118,
    "date": "2026-10-22",
    "label": "1022 三星电机与英伟达签AI基板战略合作",
