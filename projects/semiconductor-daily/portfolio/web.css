@@ -1,0 +1,77 @@
+/* Web version: the same pages as the PDF, reflowed for a scrolling page.
+   Loaded after the deck styles, so it only overrides layout, never type or colour. */
+html, body { background: #fff; }
+body { overflow-x: hidden; }
+.page {
+  width: auto; height: auto; overflow: visible; margin: 0 auto; max-width: 1440px;
+  padding: 120px 48px 96px; border-top: 1px solid var(--hair); break-after: auto;
+}
+.page:first-of-type { border-top: 0; padding-top: 140px; }
+.run { position: fixed; z-index: 5; top: 0; left: 0; right: 0; padding: 22px 30px 16px; background: rgba(255,255,255,.94); }
+.page:not(:first-of-type) .run { display: none; }
+.folio { position: static; display: block; margin-top: 48px; text-align: right; }
+
+/* absolutely placed blocks become ordinary flow */
+.ch, .top, .cv, .below { position: static; left: auto; right: auto; top: auto !important; }
+.below { margin-top: 48px; }
+.top { align-items: start; }
+.top + .below { margin-top: 56px; }
+
+/* keep the deck's two columns on wide screens, a little tighter */
+.ch, .top { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: 72px; }
+.ch.narrow { grid-template-columns: minmax(0, 3.4fr) minmax(0, 8.6fr); }
+.cv { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 72px; }
+.k-p { text-align: left; }
+
+/* tables and wide figures can scroll on their own instead of the page */
+table { display: block; overflow-x: auto; }
+.below[style*="grid-template-columns: 860px"] { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important; }
+.below[style*="grid-template-columns: 470px 560px"] { grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr) !important; }
+
+@media (max-width: 1100px) {
+  .page { padding: 96px 32px 72px; }
+  .ch, .ch.narrow, .top, .cv { grid-template-columns: minmax(0, 1fr) !important; row-gap: 36px; }
+  .g5 { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 28px; }
+  .g8 { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 20px; }
+  .atlas { grid-template-columns: minmax(0, 1fr); row-gap: 20px; }
+  .arrows { padding: 0; }
+  .below[style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; row-gap: 28px; }
+  .chart { grid-template-columns: minmax(0, 1fr); row-gap: 20px; }
+}
+
+@media (max-width: 700px) {
+  .page { padding: 84px 16px 56px; }
+  .page:first-of-type { padding-top: 100px; }
+  .run { padding: 16px 16px 12px; font-size: 13px; letter-spacing: 2px; }
+  .k-h { font-size: 28px; }
+  .k-he { font-size: 18px; }
+  .k-p { font-size: 16px; }
+  .cv h1 { font-size: 46px; }
+  .cv .zt { flex-wrap: wrap; row-gap: 10px; }
+  .cv .zt .brand { font-size: 28px; }
+  .cv .zt .name { font-size: 24px; }
+  .cv dt { font-size: 32px; }
+  .g2, .g3, .g4, .vs, .principles, .steps { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
+  .g4.bd, .cv .covers { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
+  .g5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .step, .step + .step { padding: 14px 0 0; border-left: 0; border-top: 1px solid var(--hair); }
+  .flow { flex-wrap: wrap; }
+  .flow div { flex: 1 1 45%; border-left: 0 !important; padding-left: 0 !important; border-top: 1px solid var(--hair); }
+  .ledger .row { grid-template-columns: minmax(0, 1fr); row-gap: 8px; }
+  .ledger .row.head { display: none; }
+  .toc li { grid-template-columns: 40px 1fr 32px; }
+  .toc .t i { display: block; margin: 4px 0 0; }
+  .big { font-size: 36px; }
+  .kv { grid-template-columns: 96px 1fr; }
+  .kv .v { font-size: 28px; }
+  figure img[style*="height"] { height: auto !important; }
+}
+
+/* charts keep their drawn proportions on phones and scroll sideways instead of shrinking */
+@media (max-width: 700px) {
+  .page div:has(> svg) { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .page svg[viewBox] { min-width: 720px; }
+}
+
+nav.run a { color: inherit; text-decoration: none; }
+nav.run a:hover { text-decoration: underline; text-underline-offset: 5px; }

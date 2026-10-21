@@ -1,247 +1,1106 @@
 <!doctype html>
 <html lang="zh-Hans">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f3f0e8" />
-    <meta
-      name="description"
-      content="Semiconductor Daily 半导体早报，黄熠的持续性编辑与视觉出版实践。每天早、午、晚三期，每期三则半导体新闻，由程序取材成文、人工审稿选图，排成一套图文。"
-    />
-    <meta property="og:title" content="Semiconductor Daily 半导体早报 — Yi Huang" />
-    <meta property="og:description" content="一天三期，每期三则：把半导体新闻排成一份日报。" />
-    <meta property="og:image" content="https://yihuang.art/projects/semiconductor-daily/assets/cover-morning.webp" />
-    <meta property="og:type" content="website" />
-    <link rel="canonical" href="https://yihuang.art/projects/semiconductor-daily/" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Semiconductor Daily 半导体早报 — Yi Huang</title>
-  </head>
-  <body>
-    <a class="skip" href="#about">跳至作品介绍</a>
-    <nav class="topbar" aria-label="作品导航">
-      <a href="../../work-digital.html">← <span lang="en">WORK</span></a>
-      <a href="#about" lang="en">ABOUT</a>
-    </nav>
-    <main>
-      <header class="hero">
-        <div class="eyebrow">
-          <span>数字媒介本体系列</span><span lang="en">YI HUANG · 2026—</span>
-        </div>
-        <h1>
-          <span class="title-en" lang="en">Semiconductor Daily</span
-          ><span class="title-zh">半导体早报</span>
-        </h1>
-        <div class="hero-bottom">
-          <p>一天三期，每期三则：把半导体新闻排成一份日报。</p>
-          <a href="#editions">展开一期 <span aria-hidden="true">↘</span></a>
-        </div>
-      </header>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="黄熠《半导体早午晚报》作品集：一套东亚半导体新闻系统从手动挑选到零点击出刊的四十天。">
+<meta property="og:title" content="Semiconductor Daily 半导体早午晚报 — Yi Huang">
+<meta property="og:description" content="一套东亚半导体新闻系统，从手动挑选到零点击出刊的四十天。">
+<meta property="og:image" content="https://yihuang.art/projects/semiconductor-daily/portfolio/img/cover-109.jpg">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://yihuang.art/projects/semiconductor-daily/">
+<meta name="theme-color" content="#ffffff">
+<title>Semiconductor Daily 半导体早午晚报 — Yi Huang</title>
+<style>
+/* site font: navigation, running heads and folios only */
+@font-face { font-family: EFont; src: url("portfolio/fonts/E.ttf") format("truetype"); }
+/* formal text faces (OFL): Source Han Serif CN subset, Source Serif 4, IBM Plex Mono */
+@font-face { font-family: Song; src: url("portfolio/fonts/song.woff2") format("woff2"); font-weight: 250 900; }
+@font-face { font-family: SrcSerif; src: url("portfolio/fonts/reading-serif-roman.woff2") format("woff2"); font-weight: 200 900; font-style: normal; }
+@font-face { font-family: SrcSerif; src: url("portfolio/fonts/reading-serif-italic.woff2") format("woff2"); font-weight: 200 900; font-style: italic; }
+@font-face { font-family: Mono; src: url("portfolio/fonts/ibm-plex-mono-regular.woff2") format("woff2"); }
+@font-face { font-family: Brand; src: url("portfolio/fonts/whz-brand.woff2") format("woff2"); } /* 王漢宗粗明體 subset: 東亞製造 wordmark */
+/* Mom's Typewriter has no 0 or 1: digits in the running heads come from IBM Plex Mono */
+@font-face { font-family: ENum; src: url("portfolio/fonts/ibm-plex-mono-regular.woff2") format("woff2"); unicode-range: U+0030-0039; }
+:root {
+  --ink: #111;
+  --grey: #5c5c5c;
+  --soft: #8c8c8c;
+  --hair: #d9d9d9;
+  --cinnabar: #b43b2e;
+  --nav: ENum, EFont, "Courier New", monospace;
+  --text: SrcSerif, Song, "Songti SC", serif;
+  --zh: Song, "Songti SC", serif;
+  --mono: Mono, Song, Menlo, monospace;
+}
+@page { size: 1920px 1080px; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #e9e9e9; }
+body { color: var(--ink); font-family: var(--text); -webkit-font-smoothing: antialiased; font-variant-numeric: lining-nums tabular-nums; }
+.page { width: 1920px; height: 1080px; background: #fff; position: relative; overflow: hidden; margin: 0 auto 40px; break-after: page; }
+@media print { html, body { background: #fff; } .page { margin: 0; } }
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
+p { margin: 0; }
 
-      <section class="covers" aria-labelledby="covers-title">
-        <div class="section-line">
-          <h2 id="covers-title">早报、午报、晚报</h2>
-          <span lang="en">MORNING / MIDDAY / EVENING EDITIONS</span>
-        </div>
-        <div class="cover-grid">
-          <figure>
-            <a class="image-link" href="assets/cover-morning.webp" data-gallery="covers"
-              data-caption="早报 · 白底、石青色带" aria-label="放大早报封面">
-              <img src="assets/cover-morning.webp" alt="半导体早报封面：白底，书法刊名，石青色带上列出三则新闻，下方为黑白图像"
-                width="1080" height="1350" fetchpriority="high" />
-              <span class="enlarge" aria-hidden="true">↗</span>
-            </a>
-            <figcaption><span class="issue">早报</span><span lang="en">MORNING</span><span>08:00</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/cover-midday.webp" data-gallery="covers"
-              data-caption="午报 · 白底、金色带" aria-label="放大午报封面">
-              <img src="assets/cover-midday.webp" alt="半导体午报封面：白底，金色带上列出三则新闻，下方为黑白图像"
-                width="1080" height="1350" />
-              <span class="enlarge" aria-hidden="true">↗</span>
-            </a>
-            <figcaption><span class="issue">午报</span><span lang="en">MIDDAY</span><span>12:00</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/cover-evening.webp" data-gallery="covers"
-              data-caption="晚报 · 玄墨底、彩色图像" aria-label="放大晚报封面">
-              <img src="assets/cover-evening.webp" alt="半导体晚报封面：深色底，浅色刊名与色带，下方为彩色图像"
-                width="1080" height="1350" />
-              <span class="enlarge" aria-hidden="true">↗</span>
-            </a>
-            <figcaption><span class="issue">晚报</span><span lang="en">EVENING</span><span>20:00</span></figcaption>
-          </figure>
-        </div>
-        <p class="small gallery-hint">点击图片放大阅读。三个刊次共用一套版式，只换底色、色带与图像处理：在一排封面里，早晚一眼可辨。</p>
-      </section>
+.run { position: absolute; left: 120px; right: 120px; top: 56px; display: flex; justify-content: space-between;
+  font: 700 15px/1 var(--nav); letter-spacing: 2.5px; }
+.folio { position: absolute; right: 120px; bottom: 52px; font: 700 15px/1 var(--nav); letter-spacing: 2px; }
+.label { font: 12px/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+.red { color: var(--cinnabar); }
+.strike { text-decoration: line-through; text-decoration-color: var(--cinnabar); text-decoration-thickness: 1.5px; }
+.mono { font-family: var(--mono); }
 
-      <section id="about" class="about section" aria-labelledby="about-title">
-        <div class="section-line">
-          <h2 id="about-title">关于作品</h2>
-          <span lang="en">01 / A DAILY EDITION</span>
-        </div>
-        <div class="about-grid">
-          <p class="statement">新闻按钟点抵达。<br />三则一期，<br />一天三次，排成日报。</p>
-          <div class="description">
-            <p>
-              《Semiconductor Daily 半导体早报》延续《Automatic 生长半导体》的编辑实践，把单条新闻的图集改成了按时出版的日报。每天早上八点、中午十二点、晚上八点各出一期，每期从当天的新闻流里选出三则：一则主新闻上封面，另外两则随后展开。
-            </p>
-            <p>
-              程序负责取材与成文：读取公开的报道正文，一次写出三则的标题、正文与发布文案，并把稿件里的每一个数字和原始材料逐一对照。人负责判断：选哪三条、配哪张图、哪句话要改、什么时候不出这一期。审稿与选图可以在电脑上完成，也可以在手机上点选完成。
-            </p>
-            <p>
-              版式刻意保持稳定。刊头是「洋務文工團」匾额，刊名用书法字写出「半導體早報」，日期取代期号；每则新闻占两页，一页原图，一页文字。走量不等于草率：在固定的形式里，每天的差别只来自新闻本身。
-            </p>
-            <p class="english" lang="en">
-              A daily edition of semiconductor news, published three times a day. Each issue gathers three stories:
-              software reads public reporting, drafts the text in one pass and checks every figure against its
-              sources; the editor chooses the stories and images, revises the copy and decides when not to publish.
-              A fixed layout — plaque masthead, calligraphic title, two pages per story — lets the news itself be the
-              only thing that changes.
-            </p>
-          </div>
-        </div>
-        <dl class="specs">
-          <div><dt>创作者</dt><dd>黄熠 <span lang="en">Yi Huang</span></dd></div>
-          <div><dt>时间</dt><dd>2026.10—</dd></div>
-          <div><dt>媒介</dt><dd>新闻、生成文本、数字图像、编辑程序、即时通讯</dd></div>
-          <div><dt>系列</dt><dd>数字媒介本体系列</dd></div>
-        </dl>
-      </section>
+/* type */
+.k-no { font: 13px/1 var(--mono); letter-spacing: .1em; color: var(--soft); }
+.k-h { margin: 16px 0 0; font: 600 36px/1.35 var(--zh); letter-spacing: .04em; }
+.k-he { display: block; margin-top: 6px; font: italic 400 22px/1.3 SrcSerif, serif; color: var(--grey); }
+.k-p { font: 400 17px/1.9 var(--zh); text-align: justify; }
+.k-p + .k-p { margin-top: 12px; }
+.k-pe { margin-top: 12px; font: 400 15px/1.6 SrcSerif, serif; color: var(--grey); }
+.side .k-p:first-of-type { margin-top: 30px; }
+.src { margin-top: 26px; padding-top: 12px; border-top: 1px solid var(--hair); }
+.cap { margin-top: 10px; font: 14px/1.65 var(--zh); color: var(--grey); }
+.cap b { font-weight: 600; color: var(--ink); }
+.cap .e { display: block; font: italic 13px/1.5 SrcSerif, serif; color: var(--soft); margin-top: 2px; }
+.h4 { font: 600 19px/1.45 var(--zh); }
+.h4e { font: italic 14px/1.4 SrcSerif, serif; color: var(--soft); }
+.small { font: 15px/1.75 var(--zh); color: #333; }
+.big { font: 300 46px/1 var(--mono); letter-spacing: -.02em; }
 
-      <section class="process section" aria-labelledby="process-title">
-        <div class="section-line">
-          <h2 id="process-title">三则新闻，如何成为一期</h2>
-          <span lang="en">02 / THE WORKFLOW</span>
-        </div>
-        <ol class="process-list">
-          <li>
-            <span class="step-no">01</span>
-            <h3>到点</h3>
-            <p>八点、十二点、二十点，抓取一次新闻，把最相关的八条推到手机上。</p>
-          </li>
-          <li>
-            <span class="step-no">02</span>
-            <h3>选题</h3>
-            <p>依次点出三条，第一条为主新闻；不想出，这一期就不出。</p>
-          </li>
-          <li>
-            <span class="step-no">03</span>
-            <h3>取材</h3>
-            <p>只读公开可见的正文与文章配图，付费墙后的段落不取。</p>
-          </li>
-          <li>
-            <span class="step-no">04</span>
-            <h3>成文</h3>
-            <p>一次写出三则的标题、两三段正文与文案，并核对每个数字。</p>
-          </li>
-          <li>
-            <span class="step-no">05</span>
-            <h3>审稿</h3>
-            <p>在编号拼图里选配图和封面，回复一句话即可改字、补图。</p>
-          </li>
-          <li>
-            <span class="step-no">06</span>
-            <h3>出版</h3>
-            <p>排成封面、六页内页与声明，归档；最后由人亲手发布。</p>
-          </li>
-        </ol>
-      </section>
+/* layouts */
+.ch { position: absolute; left: 120px; right: 120px; top: 150px; display: grid; grid-template-columns: 470px minmax(0, 1fr); column-gap: 100px; }
+.ch.narrow { grid-template-columns: 400px minmax(0, 1fr); }
+.top { position: absolute; left: 120px; right: 120px; top: 150px; display: grid; grid-template-columns: 470px minmax(0, 1fr); column-gap: 100px; align-items: end; }
+.below { position: absolute; left: 120px; right: 120px; }
+.rule { border-top: 1px solid var(--ink); }
+.hair { border-top: 1px solid var(--hair); }
 
-      <section id="editions" class="editions section" aria-labelledby="editions-title">
-        <div class="section-line">
-          <h2 id="editions-title">展开一期</h2>
-          <span lang="en">03 / ONE COMPLETE EDITION</span>
-        </div>
-        <div class="edition-heading">
-          <div>
-            <p class="issue">早报 · 示例</p>
-            <h3>一则两页：一页图，一页字。</h3>
-          </div>
-          <p>
-            格芯获选运营纽约两座新厂 · SK海力士回应大连设备安装 · SEMI预计存储产能扩张<br />
-            <a href="#credits-title">报道来源见作品资料 ↓</a>
-          </p>
-        </div>
-        <div class="edition-grid">
-          <figure>
-            <a class="image-link" href="assets/cover-morning.webp" data-gallery="edition" data-caption="早报 · 1 / 8 · 封面" aria-label="放大第1页封面"
-              ><img src="assets/cover-morning.webp" alt="早报封面" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>01 / 封面</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/morning-02.webp" data-gallery="edition" data-caption="早报 · 2 / 8 · ① 图页" aria-label="放大第2页"
-              ><img src="assets/morning-02.webp" alt="第一则新闻的图页：短标题与格芯新厂效果图，页底标注图片来源" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>02 / ① 图页</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/morning-03.webp" data-gallery="edition" data-caption="早报 · 3 / 8 · ① 字页" aria-label="放大第3页"
-              ><img src="assets/morning-03.webp" alt="第一则新闻的字页：上方留白，三段正文沉在页底" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>03 / ① 字页</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/morning-04.webp" data-gallery="edition" data-caption="早报 · 4 / 8 · ② 图页" aria-label="放大第4页"
-              ><img src="assets/morning-04.webp" alt="第二则新闻的图页：SK海力士厂房照片" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>04 / ② 图页</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/morning-05.webp" data-gallery="edition" data-caption="早报 · 5 / 8 · ② 字页" aria-label="放大第5页"
-              ><img src="assets/morning-05.webp" alt="第二则新闻的字页，包含当事方的回应" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>05 / ② 字页</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/morning-06.webp" data-gallery="edition" data-caption="早报 · 6 / 8 · ③ 图页" aria-label="放大第6页"
-              ><img src="assets/morning-06.webp" alt="第三则新闻的图页：SEMI 市场研讨会现场" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>06 / ③ 图页</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/morning-07.webp" data-gallery="edition" data-caption="早报 · 7 / 8 · ③ 字页" aria-label="放大第7页"
-              ><img src="assets/morning-07.webp" alt="第三则新闻的字页：存储产能预测" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>07 / ③ 字页</span></figcaption>
-          </figure>
-          <figure>
-            <a class="image-link" href="assets/morning-08.webp" data-gallery="edition" data-caption="早报 · 8 / 8 · 声明" aria-label="放大第8页声明"
-              ><img src="assets/morning-08.webp" alt="免责声明页：文字、图片来源与使用说明" width="1080" height="1350" loading="lazy" /><span class="enlarge" aria-hidden="true">↗</span></a>
-            <figcaption><span>08 / 声明</span></figcaption>
-          </figure>
-        </div>
-      </section>
+/* ---------- cover ---------- */
+.cv { position: absolute; left: 120px; right: 120px; top: 150px; display: grid; grid-template-columns: 600px 1fr; column-gap: 110px; }
+.cv .eyebrow { font: 12px/1 var(--mono); letter-spacing: .14em; color: var(--soft); }
+.cv h1 { margin: 30px 0 0; font: 400 64px/1.02 SrcSerif, serif; letter-spacing: -.01em; }
+.cv .zt { margin-top: 20px; display: flex; align-items: baseline; gap: 18px; }
+.cv .zt .brand { font: 34px/1 Brand, var(--zh); letter-spacing: .12em; }
+.cv .zt .name { font: 500 30px/1 var(--zh); letter-spacing: .1em; }
+.cv .lede { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--ink); }
+.cv dl { margin: 40px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--hair); }
+.cv dl div { padding-top: 14px; }
+.cv dt { font: 300 40px/1 var(--mono); letter-spacing: -.02em; }
+.cv dd { margin: 10px 0 0; font: 14px/1.5 var(--zh); color: var(--grey); }
+.cv dd span { display: block; font: italic 13px/1.4 SrcSerif, serif; color: var(--soft); }
+.cv .covers { margin-top: 4px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 24px; }
+.cv img { width: 100%; border: 1px solid var(--hair); }
+.cv figcaption, .fc { margin-top: 7px; display: flex; justify-content: space-between; font: 12px/1.3 var(--mono); color: var(--soft); }
 
-      <section class="colophon section" aria-labelledby="credits-title">
-        <div class="section-line">
-          <h2 id="credits-title">作品资料</h2>
-          <span lang="en">COLOPHON</span>
-        </div>
-        <div class="credits-grid">
-          <p>
-            创作、编辑与视觉编排：黄熠<br />文字由 AI 辅助生成，经人工审阅。<br />刊头匾额「洋務文工團」：Oradano 明朝（公有领域）。<br />网页展示的是一期示例，图片保留图内署名。
-          </p>
-          <div>
-            <p>示例一期的报道来源</p>
-            <ul>
-              <li>① · <a href="https://gf.com/news-and-events/news/globalfoundries-selected-to-operate-two-new-semiconductor-fabs-in-new-york-under-landmark-us-japan-initiative/" target="_blank" rel="noopener noreferrer">GlobalFoundries 新闻稿 ↗</a></li>
-              <li>② · <a href="https://www.tomshardware.com/pc-components/ssds/sk-hynix-reportedly-playing-hardball-with-trump-admin-over-3d-nand-fab-company-demands-increased-chipmaking-equipment-exports-to-china-in-exchange-for-us-fab" target="_blank" rel="noopener noreferrer">Tom's Hardware（援引路透社）↗</a></li>
-              <li>③ · <a href="https://www.thelec.net/news/articleView.html?idxno=14572" target="_blank" rel="noopener noreferrer">The Elec ↗</a></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-      <footer>
-        <a href="../../work-digital.html">← 数字媒介本体系列</a
-        ><span lang="en">Semiconductor Daily / YI HUANG</span><a href="#">回到顶部 ↑</a>
-      </footer>
-    </main>
-    <dialog class="viewer" aria-label="作品图集放大查看">
-      <div class="viewer-bar">
-        <p id="viewer-caption" aria-live="polite"></p>
-        <button type="button" id="viewer-close" aria-label="关闭大图">关闭 ×</button>
+/* contents */
+.toc { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.toc li { display: grid; grid-template-columns: 56px 1fr 46px; column-gap: 16px; align-items: baseline; padding: 11px 0 10px; border-bottom: 1px solid var(--hair); }
+.toc .n { font: 13px/1 var(--mono); color: var(--soft); }
+.toc .t { font: 500 18px/1.3 var(--zh); }
+.toc .t i { font: italic 14px/1 SrcSerif, serif; color: var(--soft); margin-left: 12px; }
+.toc .p { font: 13px/1 var(--mono); text-align: right; color: var(--grey); }
+.principles { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 22px; border-top: 1px solid var(--ink); }
+.principles div { padding-top: 14px; }
+
+/* steps (judgment) */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); }
+.step { padding: 16px 22px 0 0; }
+.step + .step { padding-left: 22px; border-left: 1px solid var(--hair); }
+.step .label { color: var(--ink); }
+.step h4 { margin: 6px 0 0; font: 600 19px/1.4 var(--zh); }
+.step p { margin: 8px 0 0; font: 15px/1.75 var(--zh); color: #333; }
+.chart { margin-top: 34px; display: grid; grid-template-columns: minmax(0, 1fr) 250px; column-gap: 40px; align-items: end; }
+.chart .cap2 { font: 15px/1.75 var(--zh); color: #333; }
+.chart .cap2 .big { display: block; color: var(--cinnabar); margin-bottom: 12px; }
+.chart .cap2 .e { display: block; margin-top: 10px; font: 13.5px/1.55 SrcSerif, serif; color: var(--grey); }
+
+/* generic grids */
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 36px; }
+.g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 30px; }
+.g5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 30px; }
+.g8 { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: 16px; }
+.bd img { border: 1px solid var(--hair); }
+
+/* flow strip */
+.flow { display: flex; align-items: stretch; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.flow div { flex: 1; padding: 14px 16px 14px 0; font: 15px/1.5 var(--zh); }
+.flow div + div { padding-left: 16px; border-left: 1px solid var(--hair); }
+.flow .label { display: block; color: var(--soft); margin-bottom: 4px; }
+.flow .hum { background: var(--ink); color: #fff; }
+.flow .hum .label { color: #bbb; }
+
+/* error ledger */
+.ledger { border-top: 1px solid var(--ink); }
+.ledger .row { display: grid; grid-template-columns: 90px 1fr 1fr; column-gap: 40px; padding: 16px 0 15px; border-bottom: 1px solid var(--hair); }
+.ledger .d { font: 13px/1.7 var(--mono); color: var(--cinnabar); }
+.ledger .what { font: 15.5px/1.75 var(--zh); }
+.ledger .what b { display: block; font-weight: 600; color: var(--cinnabar); margin-bottom: 2px; }
+.ledger .fix { font: 15.5px/1.75 var(--zh); color: #333; }
+.ledger .fix b { display: block; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.ledger .head { padding: 0 0 8px; border-bottom: 1px solid var(--ink); }
+
+/* compare */
+.vs { display: grid; grid-template-columns: 1fr 1fr; column-gap: 56px; }
+.vs .col { border-top: 1px solid var(--ink); padding-top: 16px; }
+.kv { display: grid; grid-template-columns: 150px 1fr; column-gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--hair); align-items: baseline; }
+.kv .v { font: 300 34px/1 var(--mono); letter-spacing: -.02em; }
+.kv .t { font: 15px/1.7 var(--zh); color: #333; }
+
+/* tables */
+table { border-collapse: collapse; width: 100%; }
+th { font: 12px/1.4 var(--mono); letter-spacing: .06em; color: var(--soft); text-align: left; font-weight: 400; padding: 0 10px 8px 0; border-bottom: 1px solid var(--ink); }
+td { font: 14px/1.55 var(--zh); padding: 9px 10px 8px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+td.n { font: 14px/1.55 var(--mono); text-align: center; }
+td.n b { font-weight: 400; }
+th.n { text-align: center; }
+
+/* atlas diagram */
+.atlas { display: grid; grid-template-columns: 1fr 380px 1fr; column-gap: 0; align-items: center; }
+.box { border: 1px solid var(--ink); padding: 26px 28px; }
+.box .h4 { font-size: 22px; }
+.box ul { margin: 16px 0 0; padding: 0; list-style: none; }
+.box li { font: 15px/1.7 var(--zh); padding: 7px 0; border-top: 1px solid var(--hair); }
+.arrows { padding: 0 26px; }
+.arrow { position: relative; padding: 12px 0; font: 14px/1.6 var(--zh); color: #333; }
+.arrow .line { height: 1px; background: var(--ink); position: relative; margin: 6px 0 8px; }
+.arrow .line::after { content: ""; position: absolute; top: -4px; width: 0; height: 0; border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; }
+.arrow.r .line::after { right: 0; border-left: 9px solid var(--ink); }
+.arrow.l .line::after { left: 0; border-right: 9px solid var(--ink); }
+.arrow .label { color: var(--ink); }
+</style>
+<link rel="stylesheet" href="portfolio/web.css">
+</head>
+<body>
+
+<!-- ============================================================ 01 封面 -->
+<section class="page">
+  <nav class="run"><a href="../../work-digital.html">← WORK</a><a href="portfolio/YiHuang_SemiconductorDaily_Portfolio.pdf" download>PDF ↓</a></nav>
+  <div class="cv">
+    <div>
+      <div class="eyebrow">A NEWS SYSTEM · 2026.09 — 2026.10</div>
+      <h1>Semiconductor<br>Daily</h1>
+      <div class="zt"><span class="brand">東亞製造</span><span class="name">半导体早午晚报</span></div>
+      <div class="lede">
+        <p class="k-p">一套自动检索东亚半导体新闻、整理成早午晚报并发布的系统。四十天里，它从我每天手动挑新闻、手动发小红书，走到零点击自动出刊。这份作品集记录其中每一次判断、碰壁与修正。</p>
+        <p class="k-pe">A system that gathers East Asian semiconductor news and publishes it three times a day. In forty days it moved from stories I picked by hand to zero-click publishing. This portfolio follows each judgment, each failure and each correction.</p>
       </div>
-      <div class="viewer-image"><img id="viewer-image" alt="" /></div>
-      <div class="viewer-bottom">
-        <button type="button" id="viewer-prev" aria-label="上一张">← 上一张</button
-        ><span id="viewer-count" aria-live="polite"></span
-        ><button type="button" id="viewer-next" aria-label="下一张">下一张 →</button>
+      <dl>
+        <div><dt>97</dt><dd>期已归档<span>issues archived</span></dd></div>
+        <div><dt>62</dt><dd>个新闻渠道<span>news channels</span></dd></div>
+        <div><dt>¥100</dt><dd>每月模型花费<span>model cost per month</span></dd></div>
+      </dl>
+    </div>
+    <div class="covers">
+      <figure><img src="portfolio/img/cover-001.jpg" loading="lazy" decoding="async" alt="第 001 期封面"><figcaption><span>09.14</span><span>No.001</span></figcaption></figure>
+      <figure><img src="portfolio/img/cover-030.jpg" loading="lazy" decoding="async" alt="第 030 期封面"><figcaption><span>09.18</span><span>No.030</span></figcaption></figure>
+      <figure><img src="portfolio/img/cover-089.jpg" loading="lazy" decoding="async" alt="第 089 期封面"><figcaption><span>10.13</span><span>No.089</span></figcaption></figure>
+      <figure><img src="portfolio/img/cover-094.jpg" loading="lazy" decoding="async" alt="第 094 期封面"><figcaption><span>10.16</span><span>No.094</span></figcaption></figure>
+      <figure><img src="portfolio/img/cover-099.jpg" loading="lazy" decoding="async" alt="第 099 期封面"><figcaption><span>10.17</span><span>No.099</span></figcaption></figure>
+      <figure><img src="portfolio/img/cover-109.jpg" loading="lazy" decoding="async" alt="第 109 期封面"><figcaption><span>10.20</span><span>No.109</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 02 关于 + 目录 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>CONTENTS</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">ABOUT</div>
+      <h2 class="k-h">关于这个项目</h2>
+      <span class="k-he">About this project</span>
+      <p class="k-p">《半导体早午晚报》是我为「东亚制造」做的一套新闻系统。每天北京时间 8、12、20 点，它从 62 个渠道检索东亚半导体新闻，判断哪三件最重要，写成中文短讯，配图、排版，发布到个人网站和 X。</p>
+      <p class="k-p">它不是一开始就设计好的。它先是一张自动生成的新闻海报，后来变成我每天挑新闻、改稿、选图、手动发小红书的工作台，再变成手机上点几下就能出刊的半自动流程，最后从 2026 年 10 月 21 日晚报起零点击出刊。</p>
+      <p class="k-pe">A news system for East Asia Manufacturing. Three times a day it searches 62 channels, decides which three stories matter most, writes, illustrates, lays out and publishes them. It began as one generated poster and became, step by step, a publication that runs without a click.</p>
+      <div class="principles">
+        <div><div class="h4">先保质，再自动</div><div class="h4e">Quality before automation</div></div>
+        <div><div class="h4">不是黑箱</div><div class="h4e">Not a black box</div></div>
+        <div><div class="h4">宁缺毋滥</div><div class="h4e">Skip rather than publish badly</div></div>
       </div>
-    </dialog>
-    <script src="gallery.js" defer></script>
-  </body>
+    </div>
+    <ol class="toc">
+      <li><span class="n">00</span><span class="t">四十天<i>Forty days</i></span><span class="p">03</span></li>
+      <li><span class="n">01</span><span class="t">起点：一张海报<i>One poster</i></span><span class="p">04</span></li>
+      <li><span class="n">02</span><span class="t">换题：为什么是半导体<i>Why semiconductors</i></span><span class="p">05</span></li>
+      <li><span class="n">03</span><span class="t">人在环里<i>A human in the loop</i></span><span class="p">06</span></li>
+      <li><span class="n">04</span><span class="t">出过的错<i>What went wrong</i></span><span class="p">08</span></li>
+      <li><span class="n">05</span><span class="t">把流程画出来<i>Drawing the pipeline</i></span><span class="p">09</span></li>
+      <li><span class="n">06</span><span class="t">早午晚报<i>Three editions a day</i></span><span class="p">10</span></li>
+      <li><span class="n">07</span><span class="t">转向：半自动是重复劳动<i>The turn</i></span><span class="p">13</span></li>
+      <li><span class="n">08</span><span class="t">采集<i>Intake</i></span><span class="p">14</span></li>
+      <li><span class="n">09</span><span class="t">报道变成事件<i>From reports to events</i></span><span class="p">16</span></li>
+      <li><span class="n">10</span><span class="t">什么叫「重要」<i>What counts as important</i></span><span class="p">17</span></li>
+      <li><span class="n">11</span><span class="t">零点击<i>Zero-click</i></span><span class="p">19</span></li>
+      <li><span class="n">12</span><span class="t">与 Atlas 的关系<i>Digital Age Atlas</i></span><span class="p">22</span></li>
+      <li><span class="n">13</span><span class="t">反思与下一步<i>Reflection</i></span><span class="p">23</span></li>
+    </ol>
+  </div>
+  <div class="folio">02</div>
+</section>
+
+<!-- ============================================================ 03 时间线 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>TIMELINE</span></div>
+  <div class="top">
+    <div>
+      <div class="k-no">00 / 13</div>
+      <h2 class="k-h">四十天</h2>
+      <span class="k-he">Forty days</span>
+    </div>
+    <div>
+      <p class="k-p">从 9 月 9 日第一张新闻海报，到 10 月 21 日晚报零点击出刊。上方是五个阶段，下方是转折点；朱砂标的是出错或被推翻的判断。</p>
+      <p class="k-pe">From the first generated poster on 9 September to zero-click publishing on 21 October. Phases above, turning points below; vermilion marks errors and overturned judgments.</p>
+    </div>
+  </div>
+  <div class="below" style="top: 360px;"><svg viewBox="0 0 1680 430" width="100%">
+<path d="M15.0 50 V58 H93.2 V50" fill="none" stroke="#111"/>
+<text x="15.0" y="40" text-anchor="start" style="font-family:Song,serif;font-size:16px;font-weight:600" fill="#111">原型</text>
+<path d="M100.3 106 V114 H605.0 V106" fill="none" stroke="#111"/>
+<text x="100.3" y="96" text-anchor="start" style="font-family:Song,serif;font-size:16px;font-weight:600" fill="#111">单条图集 · 人工把关</text>
+<path d="M751.2 50 V58 H887.5 V50" fill="none" stroke="#111"/>
+<text x="751.2" y="40" text-anchor="start" style="font-family:Song,serif;font-size:16px;font-weight:600" fill="#111">流程透明</text>
+<path d="M1003.8 106 V114 H1392.5 V106" fill="none" stroke="#111"/>
+<text x="1003.8" y="96" text-anchor="start" style="font-family:Song,serif;font-size:16px;font-weight:600" fill="#111">早午晚报 · 半自动</text>
+<path d="M1508.8 50 V58 H1645.0 V50" fill="none" stroke="#111"/>
+<text x="1645.0" y="40" text-anchor="end" style="font-family:Song,serif;font-size:16px;font-weight:600" fill="#111">V2 · 零点击</text>
+<line x1="0" x2="606" y1="170" y2="170" stroke="#111"/>
+<line x1="624" x2="1680" y1="170" y2="170" stroke="#111"/>
+<line x1="605" x2="611" y1="177" y2="163" stroke="#111"/>
+<line x1="613" x2="619" y1="177" y2="163" stroke="#111"/>
+<text x="615" y="154" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:11px" fill="#8c8c8c">×4</text>
+<line x1="20.0" x2="20.0" y1="170" y2="177" stroke="#111"/>
+<text x="20.0" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">09.09</text>
+<line x1="241.8" x2="241.8" y1="170" y2="177" stroke="#111"/>
+<text x="241.8" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">09.22</text>
+<line x1="480.6" x2="480.6" y1="170" y2="177" stroke="#111"/>
+<text x="480.6" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">10.06</text>
+<line x1="630.0" x2="630.0" y1="170" y2="177" stroke="#111"/>
+<text x="630.0" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">10.13</text>
+<line x1="882.5" x2="882.5" y1="170" y2="177" stroke="#111"/>
+<text x="882.5" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">10.15</text>
+<line x1="1135.0" x2="1135.0" y1="170" y2="177" stroke="#111"/>
+<text x="1135.0" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">10.17</text>
+<line x1="1387.5" x2="1387.5" y1="170" y2="177" stroke="#111"/>
+<text x="1387.5" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">10.19</text>
+<line x1="1640.0" x2="1640.0" y1="170" y2="177" stroke="#111"/>
+<text x="1640.0" y="194" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">10.21</text>
+<line x1="20.0" x2="20.0" y1="170" y2="225" stroke="#d9d9d9"/>
+<circle cx="20.0" cy="170" r="4.5" fill="#111"/>
+<text x="24.0" y="240" text-anchor="start" style="font-family:Song,serif;font-size:14px" fill="#111">第一张新闻海报；转向半导体</text>
+<line x1="105.3" x2="105.3" y1="170" y2="265" stroke="#d9d9d9"/>
+<circle cx="105.3" cy="170" r="4.5" fill="#111"/>
+<text x="109.3" y="280" text-anchor="start" style="font-family:Song,serif;font-size:14px" fill="#111">第 001 期</text>
+<line x1="173.5" x2="173.5" y1="170" y2="305" stroke="#d9d9d9"/>
+<circle cx="173.5" cy="170" r="4.5" fill="#b43b2e"/>
+<text x="177.5" y="320" text-anchor="start" style="font-family:Song,serif;font-size:14px" fill="#b43b2e">030 期事实错误 → 正式稿拦截</text>
+<line x1="630.0" x2="630.0" y1="170" y2="225" stroke="#d9d9d9"/>
+<circle cx="630.0" cy="170" r="4.5" fill="#b43b2e"/>
+<text x="634.0" y="240" text-anchor="start" style="font-family:Song,serif;font-size:14px" fill="#b43b2e">日报线撤回；不再追求自动发布</text>
+<line x1="756.2" x2="756.2" y1="170" y2="265" stroke="#d9d9d9"/>
+<circle cx="756.2" cy="170" r="4.5" fill="#111"/>
+<text x="760.2" y="280" text-anchor="start" style="font-family:Song,serif;font-size:14px" fill="#111">流程图上线</text>
+<line x1="1008.8" x2="1008.8" y1="170" y2="305" stroke="#d9d9d9"/>
+<circle cx="1008.8" cy="170" r="4.5" fill="#111"/>
+<text x="1012.8" y="320" text-anchor="start" style="font-family:Song,serif;font-size:14px" fill="#111">第一期晚报（094）</text>
+<line x1="1135.0" x2="1135.0" y1="170" y2="225" stroke="#d9d9d9"/>
+<circle cx="1135.0" cy="170" r="4.5" fill="#111"/>
+<text x="1139.0" y="240" text-anchor="start" style="font-family:Song,serif;font-size:14px" fill="#111">Telegram 操作台</text>
+<line x1="1387.5" x2="1387.5" y1="170" y2="265" stroke="#d9d9d9"/>
+<circle cx="1387.5" cy="170" r="4.5" fill="#111"/>
+<text x="1391.5" y="280" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#111">X 与个人网站自动发</text>
+<line x1="1513.8" x2="1513.8" y1="170" y2="305" stroke="#d9d9d9"/>
+<circle cx="1513.8" cy="170" r="4.5" fill="#111"/>
+<text x="1517.8" y="320" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#111">V2 蓝图；39 个源</text>
+<line x1="1640.0" x2="1640.0" y1="170" y2="225" stroke="#d9d9d9"/>
+<circle cx="1640.0" cy="170" r="4.5" fill="#111"/>
+<text x="1644.0" y="240" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#111">股价假设被推翻；20:00 起零点击</text>
+</svg></div>
+  <div class="below" style="top: 820px; display: grid; grid-template-columns: 470px 560px 1fr; column-gap: 100px; align-items: start; border-top: 1px solid var(--hair); padding-top: 18px;">
+    <div><div class="label" style="color:var(--ink)">TESTS · 测试项</div><p class="small" style="margin-top:6px">每修一个问题，就补一条测试守住它。测试全部离线，用临时目录和假接口，不花钱、不碰真实数据。</p></div>
+    <div><svg viewBox="0 0 560 170" width="100%">
+<line x1="44" x2="560" y1="144.0" y2="144.0" stroke="#111"/>
+<text x="36" y="148.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:11px" fill="#8c8c8c">0</text>
+<line x1="44" x2="560" y1="81.0" y2="81.0" stroke="#d9d9d9"/>
+<text x="36" y="85.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:11px" fill="#8c8c8c">400</text>
+<line x1="44" x2="560" y1="18.0" y2="18.0" stroke="#d9d9d9"/>
+<text x="36" y="22.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:11px" fill="#8c8c8c">800</text>
+<path d="M152.4 101.6 L164.5 80.1 L453.6 71.6 L465.7 65.7 L477.7 62.1 L489.8 55.3 L501.8 53.0 L538.0 39.4 L550.0 30.3" fill="none" stroke="#111" stroke-width="1.5"/>
+<circle cx="152.4" cy="101.6" r="3" fill="#111"/>
+<circle cx="164.5" cy="80.1" r="3" fill="#111"/>
+<circle cx="453.6" cy="71.6" r="3" fill="#111"/>
+<circle cx="465.7" cy="65.7" r="3" fill="#111"/>
+<circle cx="477.7" cy="62.1" r="3" fill="#111"/>
+<circle cx="489.8" cy="55.3" r="3" fill="#111"/>
+<circle cx="501.8" cy="53.0" r="3" fill="#111"/>
+<circle cx="538.0" cy="39.4" r="3" fill="#111"/>
+<circle cx="550.0" cy="30.3" r="3" fill="#111"/>
+<text x="542.0" y="20.3" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:12px" fill="#111">722</text>
+<text x="144.4" y="105.6" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:12px" fill="#111">269</text>
+<text x="44.0" y="164" text-anchor="start" style="font-family:Mono,Song,monospace;font-size:11px" fill="#8c8c8c">09.09</text>
+<text x="550.0" y="164" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:11px" fill="#8c8c8c">10.21</text>
+</svg></div>
+    <div><div class="label" style="color:var(--ink)">SCALE · 比例</div><p class="small" style="margin-top:6px">10.13 之后的八天放大四倍：后半程的事情最密。</p></div>
+  </div>
+  <div class="folio">03</div>
+</section>
+
+<!-- ============================================================ 04 起点 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>ORIGIN</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">01 / 13 · 2026.09.09</div>
+      <h2 class="k-h">起点：一张海报</h2>
+      <span class="k-he">It began with one poster</span>
+      <p class="k-p">起点是另一件作品 Effects Studio：我为个人网站重写的 56 种图像效果。第一个念头，是把它用在新闻上：程序抓新闻、下载配图，用效果把图「印」进东亚制造的颜色，再套上固定版式。</p>
+      <p class="k-p">我没有让模型在 56 种效果里随意挑，而是先收成 6 个「look」，每个都是一组效果、参数、配色和适用题材，写进一份 lookbook。模型只当导演：选哪条新闻、写中文标题、挑哪个 look。像素由程序画。风格因此是稳定的，模型只能在菜单里选。</p>
+      <p class="k-pe">Fifty-six effects were narrowed to six "looks". A model acted only as director, picking the story, the headline and the look; code drew every pixel.</p>
+    </div>
+    <div>
+      <div class="g4 bd">
+        <figure><img src="portfolio/img/early-look-riso-cinnabar.jpg" loading="lazy" decoding="async" alt=""><div class="cap"><b>riso-cinnabar</b> 朱砂双墨</div></figure>
+        <figure><img src="portfolio/img/early-look-riso-indigo.jpg" loading="lazy" decoding="async" alt=""><div class="cap"><b>riso-indigo</b> 靛蓝双墨</div></figure>
+        <figure><img src="portfolio/img/early-look-contour-ink.jpg" loading="lazy" decoding="async" alt=""><div class="cap"><b>contour-ink</b> 等高墨线</div></figure>
+        <figure><img src="portfolio/img/early-seal-zoom.jpg" loading="lazy" decoding="async" alt="" style="aspect-ratio:4/5;object-fit:cover"><div class="cap"><b>白文印</b> 「东亚制造」只出现在这枚印上<span class="e">The seal is the only signature.</span></div></figure>
+      </div>
+      <div class="flow" style="margin-top: 36px;">
+        <div><span class="label">01 · DATA</span>6 个新闻源<br>带图的新闻</div>
+        <div><span class="label">02 · MODEL</span>选题、中文标题、<br>导语、挑 look</div>
+        <div><span class="label">03 · CODE</span>效果引擎把图<br>印进品牌色</div>
+        <div><span class="label">04 · CODE</span>动态裁字、套版式<br>无头浏览器出图</div>
+        <div><span class="label">05 · OUT</span>2160 × 2700 PNG<br>一条命令出成品</div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">04</div>
+</section>
+
+<!-- ============================================================ 05 换题 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>SUBJECT</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">02 / 13 · 2026.09.09</div>
+      <h2 class="k-h">换题：为什么是半导体</h2>
+      <span class="k-he">Why semiconductors</span>
+      <p class="k-p">第一批新闻来自艺术与设计媒体。同一天我把题目换成半导体：「东亚制造」对芯片来说是字面意思，世界大部分芯片产能就在东亚。新闻源换成 IEEE Spectrum、EE Times，模型的身份换成半导体产业主编。</p>
+      <p class="k-p">问题马上出现：半导体新闻常常没有好图。办法是「艺术史二创」：取大都会博物馆公版的东亚古画做底，叠一层程序画的芯片电路，底部注明出处。</p>
+      <p class="k-p">第一版被评价「像论坛帖、像论文报告」。于是标题改成一句说清事件的通讯社式句子，移到图的上方；论文式的来源表格删掉，只留一行出处。</p>
+      <p class="k-pe">Chip news rarely comes with good pictures, so public-domain East Asian paintings were overlaid with drawn circuits. Called "like a paper", the layout made the headline its subject.</p>
+    </div>
+    <div class="g3 bd">
+      <figure><img src="portfolio/img/early-A_photo.jpg" loading="lazy" decoding="async" alt=""><div class="cap"><b>照片版</b> 新闻图经双墨处理，标题在下<span class="e">Photo, headline below</span></div></figure>
+      <figure><img src="portfolio/img/early-B_hybrid.jpg" loading="lazy" decoding="async" alt=""><div class="cap"><b>二创版</b> 公版古画 + 程序画的芯片电路<span class="e">Public-domain painting with drawn circuitry</span></div></figure>
+      <figure><img src="portfolio/img/early-E_fix.jpg" loading="lazy" decoding="async" alt=""><div class="cap"><b>改版</b> 标题当主角，一句话说清事件<span class="e">The headline becomes the subject</span></div></figure>
+    </div>
+  </div>
+  <div class="folio">05</div>
+</section>
+
+<!-- ============================================================ 06 人在环里 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>WORKBENCH</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">03 / 13 · 2026.09.13 — 10.16</div>
+      <h2 class="k-h">人在环里</h2>
+      <span class="k-he">A human in the loop</span>
+      <p class="k-p">原型一条命令就能出成品，但我决定先不自动化：先把每一步的质量做扎实。于是做了本地工作台，把「抓新闻、研判、写稿、选图、排版、归档、取图」拆开，每一步都看得到、改得了。</p>
+      <p class="k-p">人在三处把关：选哪条、决定开不开写、挑图改稿。发布由我在小红书 App 里亲手完成。这一阶段每期只讲一条新闻，从第 001 期做到第 093 期。</p>
+      <p class="k-pe">Before automating anything, every step was made inspectable. A person chose the story, decided whether to write, and picked images and edited copy; publishing was done by hand.</p>
+    </div>
+    <div>
+      <figure class="bd"><img src="portfolio/img/shot-workbench.jpg" loading="lazy" decoding="async" alt="工作台新闻流截图" style="width:100%;height:560px;object-fit:cover;object-position:top"><div class="cap"><b>工作台 · 新闻流</b> 近三天的新闻，标出关注的公司和来源；点一条进入研判。<span class="e">The workbench inbox, localhost:8799</span></div></figure>
+      <div class="flow" style="margin-top: 26px;">
+        <div><span class="label">CODE</span>抓新闻</div>
+        <div class="hum"><span class="label">HUMAN</span>选题</div>
+        <div><span class="label">MODEL</span>研判卡片</div>
+        <div class="hum"><span class="label">HUMAN</span>决定开写</div>
+        <div><span class="label">MODEL</span>写稿</div>
+        <div class="hum"><span class="label">HUMAN</span>挑图改稿</div>
+        <div><span class="label">CODE</span>排版归档</div>
+        <div class="hum"><span class="label">HUMAN</span>手动发布</div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">06</div>
+</section>
+
+<!-- ============================================================ 07 八十一期 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>ARCHIVE</span></div>
+  <div class="top" style="grid-template-columns: 470px 1fr;">
+    <div>
+      <div class="k-no">03 / 13</div>
+      <h2 class="k-h">八十一张封面</h2>
+      <span class="k-he">Eighty-one covers</span>
+    </div>
+    <div>
+      <p class="k-p">单条图集时期留在归档里的全部封面，第 001 至 093 期（050–061 号因出图失败重试被跳过）。每期 4 到 8 页：封面、图页、文字页、声明。</p>
+      <p class="k-pe">Every cover from the single-story period, issues 001 to 093, as kept in the archive.</p>
+    </div>
+  </div>
+  <div class="below" style="top: 352px;"><img src="portfolio/img/mosaic-001-093.jpg" loading="lazy" decoding="async" alt="第 001 至 093 期封面拼图" style="width:100%"></div>
+  <div class="folio">07</div>
+</section>
+
+<!-- ============================================================ 08 出过的错 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>ERRORS</span></div>
+  <div class="ch narrow">
+    <div class="side">
+      <div class="k-no">04 / 13</div>
+      <h2 class="k-h">出过的错</h2>
+      <span class="k-he">What went wrong</span>
+      <p class="k-p">每一个错都写进工作日志：哪天、为什么、怎么改、怎么验证。改法尽量变成规则或测试，让同样的错不会再出现第二次。</p>
+      <p class="k-pe">Each failure is logged with its date, cause, fix and check, and the fix becomes a rule or a test.</p>
+      <div class="src label">WORKLOG.md</div>
+    </div>
+    <div class="ledger">
+      <div class="row head"><span class="label">DATE</span><span class="label">WHAT HAPPENED · 发生了什么</span><span class="label">WHAT CHANGED · 改了什么</span></div>
+      <div class="row"><span class="d">09.18</span>
+        <div class="what"><b>第 030 期写错了事实</b>把「材料不够」写成了「原文没有披露」，还把排除无关报道的内部过程写进了正文。原报道其实提到可能租赁或合资，海力士官方说没有最终决定。</div>
+        <div class="fix"><b>对外文字出口加检查</b>写稿、出图、定稿、文案四个出口拦下内部过程话术；研判只读主报道正文，材料太薄就不让开写。更正稿另存，原期不改。</div></div>
+      <div class="row"><span class="d">10.13</span>
+        <div class="what"><b>日报线全部撤回</b>想把每日简报排成对外日报，封面改了六七版都不满意，当晚把当天的改动全部撤回。</div>
+        <div class="fix"><b>两条规则</b>封面只能有一个主角；识别物不能丢。以后改封面先拿参考、按骨架出一两版。</div></div>
+      <div class="row"><span class="d">10.16</span>
+        <div class="what"><b>测试删掉了我的候选图</b>三项新测试没有换到临时目录，每跑一次全套测试，就清空一次真实的候选图。</div>
+        <div class="fix"><b>测试一律隔离</b>测试在临时目录里跑，用放在真实目录的诱饵图验证没被删；一张图都没拿到时，不再清理上一轮。</div></div>
+      <div class="row"><span class="d">10.20</span>
+        <div class="what"><b>午报被标成早报</b>第 108 期：中午的推送因代理超时错过了窗口，网页加载旧草稿时又把刊次改回早报。</div>
+        <div class="fix"><b>刊次跟着时段走</b>补推放宽到 90 分钟；已出过图的草稿不再决定新一期的刊次。第 108 期按原期号重出。</div></div>
+      <div class="row"><span class="d">10.21</span>
+        <div class="what"><b>模型余额用完</b>两天的验收重跑花光了 OpenAI 余额，午报卡在写稿之前。</div>
+        <div class="fix"><b>换模型、设上限</b>全部换成 DeepSeek，V2 每天花费上限 $0.50；大量重跑之前先说预计花费。</div></div>
+    </div>
+  </div>
+  <div class="folio">08</div>
+</section>
+
+<!-- ============================================================ 09 流程图 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>PIPELINE</span></div>
+  <div class="ch narrow">
+    <div class="side">
+      <div class="k-no">05 / 13 · 2026.10.14</div>
+      <h2 class="k-h">把流程画出来</h2>
+      <span class="k-he">Drawing the pipeline</span>
+      <p class="k-p">朋友建议把流程搬到扣子那类拖线平台。我的判断是：那只是平移，还会丢掉最难替代的出图部分。所以不迁，而是把现有流程画出来，做成 TouchDesigner 那样的节点网络。</p>
+      <p class="k-p">原则是「图即代码」：图上每个节点对应一个真实函数，测试会扫描全部模型调用点，与图逐一比对；耗时、失败和用量来自真实运行记录。点开模型节点能看提示词全文，改写后用上一次的真实输入试跑，前后并排对比。</p>
+      <p class="k-pe">Every node maps to a real function, enforced by a test that scans every model call. Prompts can be read, edited and replayed against the last real input.</p>
+    </div>
+    <figure><img src="portfolio/img/shot-pipeline.jpg" loading="lazy" decoding="async" alt="流程图节点网络截图" style="width:100%;height:690px;object-fit:cover;object-position:0 32%"><div class="cap"><b>/pipeline · 节点网络</b>　黄：模型　蓝：外部数据　白：程序　红：人工把关　绿：排版　赭：存档。下方一排虚框是 V2 的新节点。<span class="e">Live node graph with run logs; the dashed row is the V2 track.</span></div></figure>
+  </div>
+  <div class="folio">09</div>
+</section>
+
+<!-- ============================================================ 10 封面演变 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>FORM</span></div>
+  <div class="top">
+    <div>
+      <div class="k-no">06 / 13</div>
+      <h2 class="k-h">一张封面的五次改变</h2>
+      <span class="k-he">Five versions of one cover</span>
+    </div>
+    <div>
+      <p class="k-p">从单条新闻的图集，到一天三期的早午晚报。每一次改动都来自一句具体的反馈：「像论文」「颗粒太多」「太下沉」。到第五版，版式固定下来，每天的差别只来自新闻本身。</p>
+      <p class="k-pe">Each change answered one concrete note, until the layout held still and only the news changed.</p>
+    </div>
+  </div>
+  <div class="below g5" style="top: 400px; border-top: 1px solid var(--ink); padding-top: 18px;">
+    <figure class="bd"><div class="fc" style="margin:0 0 10px">09.09<span>PROTOTYPE</span></div><img src="portfolio/img/early-E_fix.jpg" loading="lazy" decoding="async" alt=""><div class="cap">宣纸底，双墨把新闻图「印」进品牌色，右下篆刻印是唯一落款。</div></figure>
+    <figure class="bd"><div class="fc" style="margin:0 0 10px">09.14<span>No.001</span></div><img src="portfolio/img/cover-001.jpg" loading="lazy" decoding="async" alt=""><div class="cap">第一期：玄墨底，标题是一句说清事件的完整句子。</div></figure>
+    <figure class="bd"><div class="fc" style="margin:0 0 10px">09.18<span>No.030</span></div><img src="portfolio/img/cover-030.jpg" loading="lazy" decoding="async" alt=""><div class="cap">改白底、留白更多；图仍做网点，一期只讲一条新闻。</div></figure>
+    <figure class="bd"><div class="fc" style="margin:0 0 10px">10.16<span>No.094</span></div><img src="portfolio/img/cover-094.jpg" loading="lazy" decoding="async" alt=""><div class="cap">早午晚报：刊名与日期最大，一条色带列出三则；不再显示期号。</div></figure>
+    <figure class="bd"><div class="fc" style="margin:0 0 10px">10.20<span>No.109</span></div><img src="portfolio/img/cover-109.jpg" loading="lazy" decoding="async" alt=""><div class="cap">换上「洋務文工團」匾额。早报石青、午报金、晚报玄墨底。</div></figure>
+  </div>
+  <div class="folio">10</div>
+</section>
+
+<!-- ============================================================ 11 一期八页 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>ONE ISSUE</span></div>
+  <div class="top">
+    <div>
+      <div class="k-no">06 / 13 · 2026.10.16</div>
+      <h2 class="k-h">一期八页</h2>
+      <span class="k-he">One issue, eight pages</span>
+    </div>
+    <div class="g2">
+      <p class="k-p">骨架参考了小红书上的「半导体早报」：刊名和日期最大，一条色带列三则，下面是图。我嫌它太下沉，换成东亚制造的语言：书法刊名、匾额标志、干支纪日。</p>
+      <p class="k-p">内页参照宽和八点半：每则两页，一页原图不加效果，一页正文两三段沉到页底。走量不等于草率，形式固定，每天的差别只来自新闻。</p>
+    </div>
+  </div>
+  <div class="below g8" style="top: 420px;">
+    <figure class="bd"><img src="portfolio/img/ed109-1.jpg" loading="lazy" decoding="async" alt=""><div class="fc">01<span>封面</span></div></figure>
+    <figure class="bd"><img src="portfolio/img/ed109-2.jpg" loading="lazy" decoding="async" alt=""><div class="fc">02<span>① 图</span></div></figure>
+    <figure class="bd"><img src="portfolio/img/ed109-3.jpg" loading="lazy" decoding="async" alt=""><div class="fc">03<span>① 文</span></div></figure>
+    <figure class="bd"><img src="portfolio/img/ed109-4.jpg" loading="lazy" decoding="async" alt=""><div class="fc">04<span>② 图</span></div></figure>
+    <figure class="bd"><img src="portfolio/img/ed109-5.jpg" loading="lazy" decoding="async" alt=""><div class="fc">05<span>② 文</span></div></figure>
+    <figure class="bd"><img src="portfolio/img/ed109-6.jpg" loading="lazy" decoding="async" alt=""><div class="fc">06<span>③ 图</span></div></figure>
+    <figure class="bd"><img src="portfolio/img/ed109-7.jpg" loading="lazy" decoding="async" alt=""><div class="fc">07<span>③ 文</span></div></figure>
+    <figure class="bd"><img src="portfolio/img/ed109-8.jpg" loading="lazy" decoding="async" alt=""><div class="fc">08<span>声明</span></div></figure>
+  </div>
+  <div class="below g3" style="top: 760px; border-top: 1px solid var(--ink); padding-top: 16px;">
+    <div><div class="label" style="color:var(--ink)">EDITIONS · 三个刊次</div><p class="small" style="margin-top:6px">早报 08:00 白底石青色带，午报 12:00 白底金色带，晚报 20:00 反转为玄墨底、彩色原图。一排封面里，早晚一眼可辨。</p></div>
+    <div><div class="label" style="color:var(--ink)">WRITING · 写法</div><p class="small" style="margin-top:6px">每则一个 10–16 字的短标题，正文按「发生了什么 → 背景 → 回应与影响」写，当事方的回应必须写进去；写完逐个核对数字。</p></div>
+    <div><div class="label" style="color:var(--ink)">SOURCES · 取材</div><p class="small" style="margin-top:6px">只读公开可见的正文：付费墙后、标了隐藏的段落一律不取。每张图标注来源。</p></div>
+  </div>
+  <div class="folio">11</div>
+</section>
+
+<!-- ============================================================ 12 发出去 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>DISTRIBUTION</span></div>
+  <div class="ch narrow">
+    <div class="side">
+      <div class="k-no">06 / 13 · 2026.10.17 — 10.19</div>
+      <h2 class="k-h">发出去</h2>
+      <span class="k-he">Getting it out</span>
+      <p class="k-p">为了在手机上就能出刊，我做了 Telegram 操作台：到点推 8 条新闻，点三条、选图、出图，成品发回手机。</p>
+      <p class="k-p">X 只走官方接口，每期另出一套英文版图。整串不放链接：X 按条计费，带链接一条 $0.20，不带 $0.015。发之前程序核对：每条不超过 280 字、没有链接、英文里的每个数字都能在中文稿里找到，过不了就不发。</p>
+      <p class="k-p">个人网站的新闻页每期一行标题、一排页图，只留两天。</p>
+      <p class="k-pe">An English set goes to X through the official API, with no links (a link costs $0.20 a post, none costs $0.015), and every figure is checked against the Chinese copy first.</p>
+    </div>
+    <div class="g2" style="grid-template-columns: 1fr 1.25fr;">
+      <div>
+        <div class="g2" style="column-gap: 16px;">
+          <figure class="bd"><img src="portfolio/img/x109-1.jpg" loading="lazy" decoding="async" alt=""></figure>
+          <figure class="bd"><img src="portfolio/img/x109-2.jpg" loading="lazy" decoding="async" alt=""></figure>
+        </div>
+        <div class="cap"><b>X · 英文版</b> 主帖是英文封面加三行标题，每则一条回复：这则的图页加两三句，注明来源。<span class="e">Lead post and first reply, issue 109</span></div>
+      </div>
+      <figure><img src="portfolio/img/site-daily.jpg" loading="lazy" decoding="async" alt="个人网站新闻页的半导体早午晚报栏" style="border:1px solid var(--hair)"><div class="cap"><b>yihuang.art/news</b> 每期一行标题、一排页图，两日内。<span class="e">The daily column on the personal website</span></div></figure>
+    </div>
+  </div>
+  <div class="folio">12</div>
+</section>
+
+<!-- ============================================================ 13 转向 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>THE TURN</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">07 / 13 · 2026.10.20</div>
+      <h2 class="k-h">转向：半自动是重复劳动</h2>
+      <span class="k-he">Semi-automatic was still busywork</span>
+      <p class="k-p">每天点 Telegram 挑新闻、选图，再手动发小红书，是重复的无用功；内容也只是二手转述。我停了下来，重新问：这套系统真正的价值在哪？</p>
+      <p class="k-p">答案不在海报，在检索与整合：把每天的报道归并成一件件事，挂上公司，理清公司之间的关系。海报只是它的一个出口。</p>
+      <p class="k-pe">The value was never the poster. It is in gathering and merging reports into events, linked to companies and the relations between them.</p>
+      <div class="src label">docs/V2-PLAN.md</div>
+    </div>
+    <div>
+      <div class="g5" style="border-top:1px solid var(--ink); padding-top: 16px; column-gap: 24px;">
+        <div><div class="h4">零点击</div><div class="h4e">Zero-click</div><p class="small" style="margin-top:8px">日更全自动，Telegram 只发通知。</p></div>
+        <div><div class="h4">只走官方接口</div><div class="h4e">Official APIs only</div><p class="small" style="margin-top:8px">个人网站和 X；没有接口的平台不日更。</p></div>
+        <div><div class="h4">宁缺毋滥</div><div class="h4e">Skip, don't fake</div><p class="small" style="margin-top:8px">质量闸门不过，整期跳过。</p></div>
+        <div><div class="h4">透明</div><div class="h4e">Visible</div><p class="small" style="margin-top:8px">每一步都是图上的节点，看得到代码和数据。</p></div>
+        <div><div class="h4">影子模式</div><div class="h4e">Shadow mode</div><p class="small" style="margin-top:8px">新系统先并行跑、只写库不发布，对照过关再切换。</p></div>
+      </div>
+      <div class="label" style="margin-top: 50px; color: var(--ink);">V2 · SEVEN STAGES · 七段</div>
+      <div class="flow" style="margin-top: 10px;">
+        <div><span class="label">01</span><b>采集</b><br><span class="small">一手、东亚本地、行业媒体</span></div>
+        <div><span class="label">02</span><b>理解</b><br><span class="small">抽公司、并成事件</span></div>
+        <div><span class="label">03</span><b>判断</b><br><span class="small">重要性与质量闸门</span></div>
+        <div><span class="label">04</span><b>入库</b><br><span class="small">事件库、候选关系</span></div>
+        <div><span class="label">05</span><b>成文</b><br><span class="small">写稿、数字核对</span></div>
+        <div><span class="label">06</span><b>出图</b><br><span class="small">选图、渲染中英版</span></div>
+        <div><span class="label">07</span><b>发布</b><br><span class="small">网站、X</span></div>
+      </div>
+      <div class="label" style="margin-top: 50px; color: var(--ink);">FROM PLAN TO ZERO-CLICK · 从蓝图到零点击，约 26 小时（提交时间）</div>
+      <div class="flow" style="margin-top: 10px;">
+        <div><span class="label">10.20 18:25</span>V2 蓝图</div>
+        <div><span class="label">22:02</span>采集进报道表</div>
+        <div><span class="label">10.21 02:20</span>报道并成事件</div>
+        <div><span class="label">03:21</span>第一版排名</div>
+        <div><span class="label">13:29</span><span class="red">编辑标准取代股价</span></div>
+        <div><span class="label">14:28</span>影子出刊</div>
+        <div><span class="label">15:31</span>自动出刊上线</div>
+        <div class="hum"><span class="label">20:00</span>第一期零点击晚报</div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">13</div>
+</section>
+
+<!-- ============================================================ 14 新闻源体检 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>SOURCES</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">08 / 13 · 2026.10.20</div>
+      <h2 class="k-h">新闻源体检</h2>
+      <span class="k-he">A health check of the sources</span>
+      <p class="k-p">内容质量的瓶颈在原料。实测约 90 个候选源后发现：原有的 16 个英文源里约 6 个实际已经失效；关键词表里没有韩文「반도체」和日文「半導体」，日韩文的报道一条都过不了筛。</p>
+      <p class="k-p">新的采集读三类来源：39 个新闻网站（按一手、东亚本地、行业分级），台湾证交所每日重大讯息，以及每天四轮、23 条查询的 DeepSeek 搜索（官网、政府、日韩中英）。正文读不到时，用 Jina Reader 读同一个公开页面；付费墙一律不碰。</p>
+      <p class="k-pe">Of 16 English feeds, about 6 had silently died, and Korean or Japanese reports could never pass the keyword filter.</p>
+    </div>
+    <div class="vs">
+      <div class="col">
+        <div class="label">BEFORE · 10.20 体检时</div>
+        <div class="kv"><span class="v">16</span><span class="t">个英文 RSS，每个只看前 3 条</span></div>
+        <div class="kv"><span class="v red">≈6</span><span class="t">个实际失效：连不上、7 天 0 条、报错、停更、取不到正文</span></div>
+        <div class="kv"><span class="v">0</span><span class="t">条日文、韩文报道能过筛</span></div>
+        <div class="kv"><span class="v">158</span><span class="t">条过筛（当天能抓到约 975 条）</span></div>
+        <div class="kv"><span class="v">—</span><span class="t">关键词打分，标题前 48 字去重，没有数据库</span></div>
+      </div>
+      <div class="col">
+        <div class="label">AFTER · V2 第一轮</div>
+        <div class="kv"><span class="v">39</span><span class="t">个新闻网站，8 路并发，一轮约 22 秒</span></div>
+        <div class="kv"><span class="v">38</span><span class="t">个抓到（1 个超时）</span></div>
+        <div class="kv"><span class="v">+2</span><span class="t">台湾证交所公告（官方原文当正文）· DeepSeek 23 条查询</span></div>
+        <div class="kv"><span class="v">≈250</span><span class="t">条够分（24 小时入库约 1,100 条，含日文、韩文）</span></div>
+        <div class="kv"><span class="v">1</span><span class="t">张报道表：同一网址只存一次，记来路、语言、正文取得方式</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">14</div>
+</section>
+
+<!-- ============================================================ 15 漏斗 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>INTAKE</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">08 / 13</div>
+      <h2 class="k-h">从两千篇到三件事</h2>
+      <span class="k-he">From two thousand reports to three stories</span>
+      <p class="k-p">抓回来的报道先由模型判断是不是半导体新闻，再把同一件事的多篇报道并成一件，过质量闸门后按编辑标准排序，前三件上封面。每一层都在采集全景页上看得见，点开就是真实的报道。</p>
+      <p class="k-p">透明有用：漏斗页上线当天就暴露出关键词的漏判，「美光桃园厂工会罢工」只得 1 分没被留下。于是改成由模型判断。</p>
+      <p class="k-pe">The funnel page exposed a miss on its first day: a strike at Micron's Taoyuan fab scored 1 and was dropped by keywords. Triage moved to a model.</p>
+      <div class="src label">snapshot 2026.10.21 16:20 · last 24 h<br>/pipeline/intake</div>
+    </div>
+    <div><svg viewBox="0 0 1110 718" width="100%">
+<line x1="0" x2="1110" y1="0" y2="0" stroke="#111"/>
+<text x="0" y="58" style="font-family:Mono,monospace;font-weight:300;font-size:48px;letter-spacing:-1px" fill="#111">2,356</text>
+<text x="300" y="34" style="font-family:Song,serif;font-size:19px;font-weight:600" fill="#111">抓回来的报道</text>
+<text x="300" y="56" style="font-family:SrcSerif,serif;font-style:italic;font-size:14px" fill="#8c8c8c">reports fetched in 24 hours</text>
+<rect x="300" y="70" width="790.0" height="10" fill="#111"/>
+<text x="1090" y="34" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#8c8c8c">62 个渠道 · 同一网址只存一次</text>
+<line x1="0" x2="1110" y1="118" y2="118" stroke="#d9d9d9"/>
+<text x="0" y="176" style="font-family:Mono,monospace;font-weight:300;font-size:48px;letter-spacing:-1px" fill="#111">1,382</text>
+<text x="300" y="152" style="font-family:Song,serif;font-size:19px;font-weight:600" fill="#111">模型读过标题</text>
+<text x="300" y="174" style="font-family:SrcSerif,serif;font-style:italic;font-size:14px" fill="#8c8c8c">titles read by a model</text>
+<rect x="300" y="188" width="463.4" height="10" fill="#111"/>
+<text x="1090" y="152" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#8c8c8c">当天花费到上限，974 条排队</text>
+<line x1="0" x2="1110" y1="236" y2="236" stroke="#d9d9d9"/>
+<text x="0" y="294" style="font-family:Mono,monospace;font-weight:300;font-size:48px;letter-spacing:-1px" fill="#111">166</text>
+<text x="300" y="270" style="font-family:Song,serif;font-size:19px;font-weight:600" fill="#111">是半导体新闻</text>
+<text x="300" y="292" style="font-family:SrcSerif,serif;font-style:italic;font-size:14px" fill="#8c8c8c">judged to be semiconductor news</text>
+<rect x="300" y="306" width="55.7" height="10" fill="#111"/>
+<text x="1090" y="270" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#8c8c8c">两道关：先看标题，再读正文开头复核</text>
+<line x1="0" x2="1110" y1="354" y2="354" stroke="#d9d9d9"/>
+<text x="0" y="412" style="font-family:Mono,monospace;font-weight:300;font-size:48px;letter-spacing:-1px" fill="#111">122</text>
+<text x="300" y="388" style="font-family:Song,serif;font-size:19px;font-weight:600" fill="#111">并成一件件事</text>
+<text x="300" y="410" style="font-family:SrcSerif,serif;font-style:italic;font-size:14px" fill="#8c8c8c">merged into events</text>
+<rect x="300" y="424" width="40.9" height="10" fill="#111"/>
+<text x="1090" y="388" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#8c8c8c">17 件不止一家在报</text>
+<line x1="0" x2="1110" y1="472" y2="472" stroke="#d9d9d9"/>
+<text x="0" y="530" style="font-family:Mono,monospace;font-weight:300;font-size:48px;letter-spacing:-1px" fill="#111">20</text>
+<text x="300" y="506" style="font-family:Song,serif;font-size:19px;font-weight:600" fill="#111">过了质量闸门</text>
+<text x="300" y="528" style="font-family:SrcSerif,serif;font-style:italic;font-size:14px" fill="#8c8c8c">passed the quality gates</text>
+<rect x="300" y="542" width="6.7" height="10" fill="#111"/>
+<text x="1090" y="506" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#8c8c8c">两家在报或一手来源 · 数字对得上 · 有公开正文</text>
+<line x1="0" x2="1110" y1="590" y2="590" stroke="#d9d9d9"/>
+<text x="0" y="648" style="font-family:Mono,monospace;font-weight:300;font-size:48px;letter-spacing:-1px" fill="#111">3</text>
+<text x="300" y="624" style="font-family:Song,serif;font-size:19px;font-weight:600" fill="#111">上封面</text>
+<text x="300" y="646" style="font-family:SrcSerif,serif;font-style:italic;font-size:14px" fill="#8c8c8c">make the cover</text>
+<rect x="300" y="660" width="2.0" height="10" fill="#111"/>
+<text x="1090" y="624" text-anchor="end" style="font-family:Song,serif;font-size:14px" fill="#8c8c8c">按编辑标准排序取前 3</text>
+<line x1="0" x2="1110" y1="708" y2="708" stroke="#111"/>
+</svg></div>
+  </div>
+  <div class="folio">15</div>
+</section>
+
+<!-- ============================================================ 16 报道变成事件 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>EVENTS</span></div>
+  <div class="top">
+    <div>
+      <div class="k-no">09 / 13 · 2026.10.21</div>
+      <h2 class="k-h">报道变成事件</h2>
+      <span class="k-he">From reports to events</span>
+    </div>
+    <div>
+      <p class="k-p">进入排名之前，我要求先确认质量稳定。方法是人工标注 49 条最难判的报道做标准答案，每改一次就从头重跑当天的 1,290 条，再抽查随机样本、数字和多篇组成的事件。三个问题，三次修正：</p>
+      <p class="k-pe">Before ranking, quality had to be stable: 49 hand-labelled hard cases as an answer key, and a full rerun of the day's 1,290 reports after every change.</p>
+    </div>
+  </div>
+  <div class="below g3" style="top: 430px; column-gap: 50px;">
+    <div class="rule" style="padding-top:16px">
+      <div class="label" style="color:var(--ink)">01 · 判断</div>
+      <div class="big" style="margin-top:16px"><span class="red">25%</span> → 5%</div>
+      <div class="cap" style="margin-top:8px">随机抽查中不该留下的比例</div>
+      <p class="small" style="margin-top:20px"><b>问题</b>　只看标题判不稳：放宽会放进来，收紧会漏掉。</p>
+      <p class="small" style="margin-top:8px"><b>修正</b>　两道关：第一道只看标题，拿不准就放；第二道单独问「主角是不是半导体」，读标题和正文开头。个股行情页之类用规则在采集时直接丢。</p>
+    </div>
+    <div class="rule" style="padding-top:16px">
+      <div class="label" style="color:var(--ink)">02 · 数字</div>
+      <div class="big" style="margin-top:16px"><span class="red">6</span> → 0 <span style="font-size:20px;color:var(--soft)">/ 217</span></div>
+      <div class="cap" style="margin-top:8px">摘要里对不上原文的数字</div>
+      <p class="small" style="margin-top:20px"><b>问题</b>　小模型把「X billion」系统性地写成「X 亿」，少乘了 10，重抽也改不对。</p>
+      <p class="small" style="margin-top:8px"><b>修正</b>　送进模型之前，先把英文量级换成中文写法（2 billion → 20亿），模型照抄即可。之后 217 篇的数字全部对上。</p>
+    </div>
+    <div class="rule" style="padding-top:16px">
+      <div class="label" style="color:var(--ink)">03 · 归并</div>
+      <div class="big" style="margin-top:16px"><span class="red">0.57</span></div>
+      <div class="cap" style="margin-top:8px">同一件事，中英文标题直接比的相似度</div>
+      <p class="small" style="margin-top:20px"><b>问题</b>　同一件事的中英文报道，直接比标题像是两件事。</p>
+      <p class="small" style="margin-top:8px"><b>修正</b>　先统一写成一句中文摘要再比。用已归并的数据校准门槛：不同的事 4,000 对里只有 0.07% 超过 0.25，「同一件」的门槛定在 0.30。</p>
+    </div>
+  </div>
+  <div class="below" style="top: 900px; border-top: 1px solid var(--ink); padding-top: 14px; display:flex; gap: 40px; align-items: baseline;">
+    <span class="label" style="color:var(--ink)">RESULT · 当天</span>
+    <span class="small"><span class="mono">1,290</span> 条 → 第一道放进约 <span class="mono">250</span> → 复核留下 <span class="mono">220</span> → 并成 <span class="mono">174</span> 件事</span>
+  </div>
+  <div class="folio">16</div>
+</section>
+
+<!-- ============================================================ 17 什么叫重要 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>JUDGMENT</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">10 / 13 · 2026.10.21</div>
+      <h2 class="k-h">什么叫「重要」</h2>
+      <span class="k-he">What counts as important</span>
+      <p class="k-p">每期只放三件事。系统一天读两千多篇报道，要先回答：哪一件最值得讲？我的第一个答案是「会让股价动的」。拿真实收盘价一对，排名和股价几乎无关：相关系数只有 0.15。</p>
+      <p class="k-pe">The first answer was "whatever moves the stock". Checked against real closing prices, rank and price barely related: a correlation of 0.15.</p>
+      <div class="src label">rank.py · market.py<br>docs/IMPORTANCE-RUBRIC.md</div>
+    </div>
+    <div>
+      <div class="steps">
+        <div class="step"><div class="label">V1 · 假设</div><h4><span class="strike">重要 = 股价会动</span></h4><p>模型以分析师口吻打四项：意外、冲击、公司分量、波及面。</p></div>
+        <div class="step"><div class="label red">TEST · 推翻</div><h4>r = 0.15</h4><p>排第一的台积电高雄厂意外，台积电 ADR 当天只涨 1.16%；排名不高的臻鼎盘中涨 6%。</p></div>
+        <div class="step"><div class="label">V2 · 修正</div><h4>产业分量 50 · 关注度 30 · 意外 20</h4><p>对照卡脖子清单打分；关注度由程序直接数。股价只当事后镜子。</p></div>
+        <div class="step"><div class="label">V1.1 · 补规则</div><h4>意向不算落地</h4><p>没有厂址和订单的 Terafab 计划排到第一后补上：意向不按「假如实现」打分。</p></div>
+      </div>
+      <div class="chart">
+        <svg viewBox="0 0 900 470" width="100%">
+<line x1="58" x2="690" y1="418.0" y2="418.0" stroke="#d9d9d9"/>
+<text x="46" y="422.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">0σ</text>
+<line x1="58" x2="690" y1="292.0" y2="292.0" stroke="#d9d9d9"/>
+<text x="46" y="296.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">1σ</text>
+<line x1="58" x2="690" y1="166.0" y2="166.0" stroke="#d9d9d9"/>
+<text x="46" y="170.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">2σ</text>
+<line x1="58" x2="690" y1="40.0" y2="40.0" stroke="#d9d9d9"/>
+<text x="46" y="44.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">3σ</text>
+<text x="58.0" y="440" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">0</text>
+<text x="238.57142857142856" y="440" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">20</text>
+<text x="419.1428571428571" y="440" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">40</text>
+<text x="599.7142857142857" y="440" text-anchor="middle" style="font-family:Mono,Song,monospace;font-size:12px" fill="#8c8c8c">60</text>
+<line x1="58" x2="690" y1="418.0" y2="418.0" stroke="#111"/>
+<text x="690" y="464" text-anchor="end" style="font-family:Song,serif;font-size:13px" fill="#8c8c8c">排名分（现行编辑标准）→</text>
+<text x="58" y="14" style="font-family:Song,serif;font-size:13px" fill="#8c8c8c">事件后第一个交易日，相关股票的异常涨跌 |σ|</text>
+<line x1="58" x2="702" y1="95.43999999999997" y2="95.43999999999997" stroke="#b43b2e" stroke-dasharray="2 4"/>
+<line x1="58" x2="702" y1="145.83999999999997" y2="145.83999999999997" stroke="#b43b2e" stroke-dasharray="2 4"/>
+<line x1="58" x2="702" y1="298.3" y2="298.3" stroke="#b43b2e" stroke-dasharray="2 4"/>
+<circle cx="676.5" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="516.7" cy="323.5" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="494.1" cy="307.1" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="471.5" cy="229.0" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="461.6" cy="307.1" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="455.3" cy="307.1" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="447.1" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="441.7" cy="95.4" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="441.7" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="419.1" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="419.1" cy="358.8" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="419.1" cy="298.3" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="406.5" cy="197.5" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="403.8" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="381.2" cy="295.8" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="381.2" cy="250.4" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="381.2" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="381.2" cy="298.3" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="366.8" cy="95.4" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="366.8" cy="409.2" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="344.2" cy="95.4" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="344.2" cy="327.3" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="318.0" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="306.3" cy="231.5" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="306.3" cy="95.4" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="290.9" cy="334.8" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="283.7" cy="305.9" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="268.4" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="268.4" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="268.4" cy="298.3" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="268.4" cy="396.6" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="268.4" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="245.8" cy="229.0" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="245.8" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="231.3" cy="324.8" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="231.3" cy="298.3" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="208.8" cy="328.5" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="197.9" cy="347.4" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="187.1" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="170.9" cy="298.3" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="170.9" cy="298.3" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="170.9" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="160.0" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="155.5" cy="145.8" r="5" fill="#b43b2e" stroke="#b43b2e" stroke-width="1.2"/>
+<circle cx="155.5" cy="373.9" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="132.9" cy="370.1" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<circle cx="132.9" cy="337.4" r="5" fill="#fff" stroke="#111" stroke-width="1.2"/>
+<text x="710" y="92.43999999999997" style="font-family:Song,serif;font-size:13px" fill="#b43b2e">SK海力士 10.20 -8.74%</text>
+<text x="710" y="110.43999999999997" style="font-family:Song,serif;font-size:13px" fill="#111">4 件事共用这一次下跌</text>
+<text x="710" y="142.83999999999997" style="font-family:Song,serif;font-size:13px" fill="#b43b2e">SK海力士 10.21 +6.81%</text>
+<text x="710" y="160.83999999999997" style="font-family:Song,serif;font-size:13px" fill="#111">15 件事共用这一次上涨</text>
+<text x="710" y="295.3" style="font-family:Song,serif;font-size:13px" fill="#b43b2e">三星电子 10.21 +4.07%</text>
+<text x="710" y="313.3" style="font-family:Song,serif;font-size:13px" fill="#111">6 件事共用这一次上涨</text>
+<text x="690" y="406.0" text-anchor="end" style="font-family:Mono,Song,monospace;font-size:13px" fill="#111">r = 0.16 · n = 47</text>
+</svg>
+        <div class="cap2"><span class="big">25 / 47</span>为什么股价当不了尺子：图里 47 件事，有 25 件背后只是 2 只股票的 3 次涨跌。同一次波动同时算在十几件事头上，分不清是哪件事推的。
+          <span class="e">25 of 47 events share just 3 daily moves of 2 stocks, so no single story can be credited with any of them.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">17</div>
+</section>
+
+<!-- ============================================================ 18 编辑标准 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>RUBRIC</span></div>
+  <div class="top" style="grid-template-columns: 470px 1fr;">
+    <div>
+      <div class="k-no">10 / 13</div>
+      <h2 class="k-h">编辑标准</h2>
+      <span class="k-he">An editorial rubric</span>
+    </div>
+    <div>
+      <p class="k-p">「重要」混着四层意思：产业分量、关注度、意外性、市场冲击。前三项进分数，市场冲击只在事后对照。产业分量看这件事有没有改变产业链，由模型按下表打分，再对照「卡脖子清单」；关注度不靠模型，由程序直接数。</p>
+      <p class="k-pe">Industrial weight is scored by a model against this table and a chokepoint list; attention is counted by code; price only looks back.</p>
+    </div>
+  </div>
+  <div class="below" style="top: 400px; display: grid; grid-template-columns: 860px 1fr; column-gap: 70px;">
+    <table>
+      <tr><th style="width:150px">产业分量 · 各 0–3</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+      <tr><td><b>环节稀缺度</b></td><td>和清单无关</td><td>有多家替代</td><td>清单里的寡头环节</td><td>独家或一家领先</td></tr>
+      <tr><td><b>供需变化</b></td><td>只是表态、研发、人事</td><td>小幅调整、未落地的计划</td><td>明确的扩产、减产、涨价、订单</td><td>停产、断供、禁令生效</td></tr>
+      <tr><td><b>传导范围</b></td><td>只影响这一家</td><td>一两家客户或供应商</td><td>多个关键客户或一国产业</td><td>整个下游或多国市场</td></tr>
+      <tr><td><b>持久性</b></td><td>几天内恢复</td><td>几个月</td><td>一两年</td><td>改变长期规则与版图</td></tr>
+    </table>
+    <table>
+      <tr><th>校准例 · 10.20–10.21</th><th class="n">产业分量</th><th class="n">意外</th></tr>
+      <tr><td>字节、阿里、腾讯向英伟达下单逾 350 亿美元</td><td class="n">8</td><td class="n">2</td></tr>
+      <tr><td>美光桃园厂工会宣布罢工</td><td class="n">7</td><td class="n">3</td></tr>
+      <tr><td>经产省拟追加出资 Rapidus 4000 亿日元</td><td class="n">7</td><td class="n">1</td></tr>
+      <tr><td>台积电高雄厂工安意外，相关工程停工</td><td class="n">5</td><td class="n">3</td></tr>
+      <tr><td>格芯受托运营纽约两座新晶圆厂</td><td class="n">6</td><td class="n">0</td></tr>
+      <tr><td><span class="red">马斯克称 Terafab 计划 2028 年量产</span></td><td class="n red">4</td><td class="n">1</td></tr>
+    </table>
+  </div>
+  <div class="below g3" style="top: 790px; border-top: 1px solid var(--ink); padding-top: 16px;">
+    <div><div class="label" style="color:var(--ink)">CHOKEPOINTS · 卡脖子清单</div><p class="small" style="margin-top:6px">18 个环节，从 EUV 光刻机到镓锗原料。标「已核实」的引用 Atlas 里的证据，其余标「待核」，只用于打分，不写进 Atlas。</p></div>
+    <div><div class="label" style="color:var(--ink)">STABILITY · 稳定性</div><p class="small" style="margin-top:6px">100 件事独立打三次，各项最多差 1 分的占 98–100%，三次的前三完全相同；校准例平均偏离 0.6 分（满分 12）。</p></div>
+    <div><div class="label" style="color:var(--ink)">MIRROR · 事后镜子</div><p class="small" style="margin-top:6px">股价反应每天自动对照：台股取证交所与柜买中心，韩股取 Naver，美股取纳斯达克。只用来发现被低估或高估的类型。</p></div>
+  </div>
+  <div class="folio">18</div>
+</section>
+
+<!-- ============================================================ 19 影子出刊 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>SHADOW</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">11 / 13 · 2026.10.21</div>
+      <h2 class="k-h">影子出刊</h2>
+      <span class="k-he">Shadow issues</span>
+      <p class="k-p">每到 8、12、20 点，新系统按排名取前三件，每件挑一篇有公开正文、带配图、来源级别高的报道当材料，另附两家媒体的报道当背景，用原来的写稿要求写稿、自动选图、用原模板出图。</p>
+      <p class="k-p">它只写自己的目录：不占期号，不发布。测试里逐字节比对日更的草稿、归档和成品，确认一个字节都没动。</p>
+      <p class="k-pe">The new system ran beside the old one, writing, picking images and rendering full issues without publishing, and was compared issue by issue.</p>
+    </div>
+    <div>
+      <div class="g4 bd" style="column-gap: 18px;">
+        <figure><img src="portfolio/img/shadow-1.jpg" loading="lazy" decoding="async" alt=""><div class="fc">10.21 午报<span>封面</span></div></figure>
+        <figure><img src="portfolio/img/shadow-2.jpg" loading="lazy" decoding="async" alt=""><div class="fc">① 图<span>美光罢工</span></div></figure>
+        <figure><img src="portfolio/img/shadow-4.jpg" loading="lazy" decoding="async" alt=""><div class="fc">② 图<span>英伟达订单</span></div></figure>
+        <figure><img src="portfolio/img/shadow-6.jpg" loading="lazy" decoding="async" alt=""><div class="fc">③ 图<span>韩国出口</span></div></figure>
+      </div>
+      <div class="g3" style="margin-top: 30px; border-top: 1px solid var(--ink); padding-top: 14px;">
+        <div><div class="label" style="color:var(--ink)">IMAGES · 自动选图</div><p class="small" style="margin-top:6px">先按尺寸、比例筛，再让模型逐张打 0–3 分：对不对得上、是不是实拍、有没有广告和大段文字。不到 1 分就不配图。</p></div>
+        <div><div class="label" style="color:var(--ink)">TIERS · 找图顺序</div><p class="small" style="margin-top:6px">主材料 → 同一件事的其他报道 → 公司官网新闻图 → 维基共享与 Openverse 的 CC 授权图，图注写真实作者与授权。不抓 Google 图片。</p></div>
+        <div><div class="label" style="color:var(--ink)">COST · 一期</div><p class="small" style="margin-top:6px">10.21 午报影子刊：8 页，约 5.5 分钟（取材 136 秒，写稿 192 秒），约 $0.05。</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">19</div>
+</section>
+
+<!-- ============================================================ 20 零点击 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>ZERO-CLICK</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">11 / 13 · 2026.10.21 20:00</div>
+      <h2 class="k-h">零点击</h2>
+      <span class="k-he">Zero-click</span>
+      <p class="k-p">10 月 21 日下午，我决定当晚的晚报就切换：不留反悔窗口，影子刊出好就直接转成正式的一期，发往个人网站和 X。Telegram 只报结果；发一句 /auto off 就回到手动挑。</p>
+      <p class="k-p">切换前，在工作台的副本上彩排了一整期，用时 291 秒。彩排抓到一个问题：核对器不认「三五〇億美元」「五％」这类中文数字和全角符号，把一则正确的稿子拿掉了。修好后三则全部通过。</p>
+      <p class="k-pe">A full rehearsal on a copy caught one false alarm: the number checker could not read Chinese numerals, and dropped a correct story.</p>
+    </div>
+    <div>
+      <div class="label" style="color:var(--ink)">WHEN IT DOES NOT PUBLISH · 什么时候不发</div>
+      <div class="ledger" style="margin-top: 10px;">
+        <div class="row" style="grid-template-columns: 60px 1fr;"><span class="d" style="color:var(--ink)">01</span><div class="what">影子刊没有完整出好。</div></div>
+        <div class="row" style="grid-template-columns: 60px 1fr;"><span class="d" style="color:var(--ink)">02</span><div class="what">离时段开始已超过 3 小时：工作台停了很久才起来，半夜不补发晚报。</div></div>
+        <div class="row" style="grid-template-columns: 60px 1fr;"><span class="d" style="color:var(--ink)">03</span><div class="what">这一刊次我已经手动在做或已经出过。</div></div>
+        <div class="row" style="grid-template-columns: 60px 1fr;"><span class="d" style="color:var(--ink)">04</span><div class="what">稿子过不了原有检查。数字对不上材料的那一则拿掉，其余照发。</div></div>
+        <div class="row" style="grid-template-columns: 60px 1fr;"><span class="d" style="color:var(--ink)">05</span><div class="what">整期出错最多重试 2 次，就停下并通知我，不反复花钱。</div></div>
+      </div>
+      <div class="label" style="color:var(--ink); margin-top: 44px;">DISCLAIMER · 免责声明照实写</div>
+      <div class="g2" style="margin-top: 12px;">
+        <div class="rule" style="padding-top: 14px;"><div class="label">BEFORE · 手动期</div><p class="h4" style="margin-top:8px"><span class="strike">文字由 AI 辅助生成并经人工校订</span></p><p class="cap">自动期没有人逐条看过，这句话不再成立。</p></div>
+        <div class="rule" style="padding-top: 14px;"><div class="label">AFTER · 自动期</div><p class="h4" style="margin-top:8px">文字由 AI 生成、程序核对数字与来源，未经人工逐条校订</p><p class="cap">中文文案、声明页和 X 英文声明页同步改。</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">20</div>
+</section>
+
+<!-- ============================================================ 21 成本 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>COST</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">11 / 13 · 2026.10.21</div>
+      <h2 class="k-h">一个月一百块</h2>
+      <span class="k-he">A hundred yuan a month</span>
+      <p class="k-p">10 月 21 日中午，OpenAI 余额用完，午报卡在写稿前。换模型之前，我用第 109 期做了并排比较：DeepSeek 写的三则，数字核对全部通过，标题字数和分段都合规，偶有一句轻微发挥。</p>
+      <p class="k-p">现在写稿和 X 英文串推用 DeepSeek V4 Pro（开思考），其余用 Flash。V2 每天花费上限 $0.50，到了就只采集、不调模型。教训：做大批量验收重跑之前，先说预计花费。</p>
+      <p class="k-pe">After the OpenAI balance ran out mid-day, every model call moved to DeepSeek after a side-by-side test on issue 109, with a daily spending cap.</p>
+    </div>
+    <div style="padding-top: 20px;">
+      <svg viewBox="0 0 1060 300" width="100%">
+<text x="0" y="60" style="font-family:Song,serif;font-size:17px;font-weight:600" fill="#111">10.21 前 · OpenAI</text>
+<text x="0" y="84" style="font-family:Mono,Song,monospace;font-size:13px" fill="#8c8c8c">≈ $2.10 / day</text>
+<rect x="260" y="40" width="660.0" height="34" fill="none" stroke="#111"/>
+<text x="934.0" y="66" style="font-family:Mono,monospace;font-size:30px" fill="#111">¥450<tspan style="font-family:Song,serif;font-size:15px" fill="#8c8c8c"> / 月</tspan></text>
+<text x="0" y="190" style="font-family:Song,serif;font-size:17px;font-weight:600" fill="#111">10.21 起 · DeepSeek</text>
+<text x="0" y="214" style="font-family:Mono,Song,monospace;font-size:13px" fill="#8c8c8c">≈ $0.45 / day</text>
+<rect x="260.0" y="170" width="65.2" height="34" fill="#111"/>
+<text x="260.0" y="230" style="font-family:Song,serif;font-size:13px" fill="#8c8c8c" dx="0"></text>
+<rect x="325.2" y="170" width="65.2" height="34" fill="#6b6b6b"/>
+<text x="325.2" y="250" style="font-family:Song,serif;font-size:13px" fill="#8c8c8c" dx="0"></text>
+<rect x="390.4" y="170" width="16.3" height="34" fill="#b5b5b5"/>
+<text x="390.4" y="270" style="font-family:Song,serif;font-size:13px" fill="#8c8c8c" dx="0"></text>
+<text x="260" y="232" style="font-family:Song,serif;font-size:13px" fill="#8c8c8c">深→浅：写稿与 X 英文串推 $0.20　V2 判断、抽取、归并、打分 $0.20　其余（译标题、看图、图注） $0.05</text>
+<text x="420.7" y="196" style="font-family:Mono,monospace;font-size:30px" fill="#111">¥100<tspan style="font-family:Song,serif;font-size:15px" fill="#8c8c8c"> / 月</tspan></text>
+</svg>
+      <div class="g3" style="margin-top: 50px; border-top: 1px solid var(--ink); padding-top: 14px;">
+        <div><div class="big">$0.06</div><p class="cap">每期写稿加 X 英文串推</p></div>
+        <div><div class="big">$0.50</div><p class="cap">V2 每天花费上限（判断、抽取、归并、打分）</p></div>
+        <div><div class="big">$0.015</div><p class="cap">X 上一条不带链接的帖子</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">21</div>
+</section>
+
+<!-- ============================================================ 22 Atlas -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>ATLAS</span></div>
+  <div class="top">
+    <div>
+      <div class="k-no">12 / 13</div>
+      <h2 class="k-h">与 Atlas 的关系</h2>
+      <span class="k-he">The Atlas and the news</span>
+    </div>
+    <div>
+      <p class="k-p">「东亚制造」的核心是 Digital Age Atlas：一张以证据为门槛的产业图谱，从资源、材料一直到应用，分九层。新闻系统是从同一研究里长出来的输出工具：它不能改写图谱里的事实，但让一张需要人工核实的静态地图，有了每天更新的输入。</p>
+      <p class="k-pe">The Atlas holds verified facts; the news system feeds it daily candidates and never writes to it directly.</p>
+    </div>
+  </div>
+  <div class="below atlas" style="top: 470px;">
+    <div class="box">
+      <div class="label">DIGITAL AGE ATLAS</div>
+      <div class="h4" style="margin-top:8px">背景图谱 · 事实核心</div>
+      <ul>
+        <li>3D 地球、L1–L9 九层技术堆栈、公司关系网，三者共用一份数据</li>
+        <li>公开的公司关系必须「已核实」或「部分核实」，带可查证据</li>
+        <li>候选、存疑、待审的关系一律不显示</li>
+      </ul>
+    </div>
+    <div class="arrows">
+      <div class="arrow r"><span class="label">ATLAS → NEWS</span><div class="line"></div>公司对齐：69 家公司的 ID 与别名</div>
+      <div class="arrow r"><div class="line"></div>九层编号：每则新闻标一个层级</div>
+      <div class="arrow r"><div class="line"></div>卡脖子清单里「已核实」的环节引用 Atlas 证据</div>
+      <div class="arrow l" style="margin-top: 18px;"><span class="label">NEWS → ATLAS</span><div class="line"></div>候选关系与 Atlas 外的公司，只记在事件库，等 Atlas 自己的核实流程</div>
+    </div>
+    <div class="box">
+      <div class="label">SEMICONDUCTOR DAILY</div>
+      <div class="h4" style="margin-top:8px">新闻系统 · 每天的输入</div>
+      <ul>
+        <li>每天两千多篇报道并成一件件事，带公司、地区、层级、关键数字</li>
+        <li>抽出公司之间的关系：供货、投资、竞争、合作、管制</li>
+        <li>早午晚报只是它的一个出口</li>
+      </ul>
+    </div>
+  </div>
+  <div class="folio">22</div>
+</section>
+
+<!-- ============================================================ 23 反思 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>REFLECTION</span></div>
+  <div class="ch narrow">
+    <div class="side">
+      <div class="k-no">13 / 13</div>
+      <h2 class="k-h">判断、检验、修正</h2>
+      <span class="k-he">Judge, test, correct</span>
+      <p class="k-p">这套系统最难的部分不是代码，而是把编辑判断写成可以检验的规则：什么叫相关，什么叫同一件事，什么叫重要，什么时候不发。每一条规则都先是一个直觉，然后被真实数据检验、推翻或修正。</p>
+      <p class="k-p">作为设计实践，它让我关心的不只是一张图好不好看，而是一个判断能不能被看见、被追问、被改正。</p>
+      <p class="k-pe">The hard part was not the code but turning editorial judgment into rules that can be tested, and seen, questioned and corrected.</p>
+    </div>
+    <table>
+      <tr><th style="width:24%">直觉 · INTUITION</th><th style="width:28%">检验 · TEST</th><th>修正 · CORRECTION</th></tr>
+      <tr><td><span class="strike">模型可以直接挑新闻、出海报</span></td><td>成品质量不稳</td><td>先做人在环里的工作台，每一步看得见、改得了</td></tr>
+      <tr><td><span class="strike">关键词足够判断相关</span></td><td>漏斗页：美光罢工只得 1 分被漏</td><td>由模型判断，日韩文一起读</td></tr>
+      <tr><td><span class="strike">看标题就能判断</span></td><td>49 条标准答案，误留约 25%</td><td>两道关，误留降到约 5%</td></tr>
+      <tr><td><span class="strike">重要 = 股价会动</span></td><td>真实收盘价：r = 0.15</td><td>产业分量 + 关注度 + 意外的编辑标准，股价只当镜子</td></tr>
+      <tr><td><span class="strike">计划规模大就重要</span></td><td>没有厂址的 Terafab 排第一</td><td>意向不按「假如实现」打分</td></tr>
+      <tr><td><span class="strike">「经人工校订」</span></td><td>自动期没有人逐条看过</td><td>照实写「未经人工逐条校订」</td></tr>
+      <tr><td><span class="strike">核对器认得所有数字</span></td><td>彩排：不认中文数字，误删一则</td><td>先换成阿拉伯数字再比对</td></tr>
+    </table>
+  </div>
+  <div class="folio">23</div>
+</section>
+
+<!-- ============================================================ 24 下一步 + 版权页 -->
+<section class="page">
+  <div class="run"><span>SEMICONDUCTOR DAILY</span><span>NEXT</span></div>
+  <div class="ch">
+    <div class="side">
+      <div class="k-no">NEXT</div>
+      <h2 class="k-h">下一步</h2>
+      <span class="k-he">What comes next</span>
+      <p class="k-p">早午晚报「一期三则」的形式，其实是为小红书图集做的折中。系统已经能自己判断哪件事最重要，下一步是把一件事讲透：单条新闻分析，发 Instagram 与 X。</p>
+      <ol class="toc" style="margin-top: 30px;">
+        <li><span class="n">01</span><span class="t">单条新闻分析，发 Instagram 与 X</span><span class="p"></span></li>
+        <li><span class="n">02</span><span class="t">故事线：把同一件事的前后进展连起来</span><span class="p"></span></li>
+        <li><span class="n">03</span><span class="t">公司关系网的可视化，作为 Atlas 的候选输入</span><span class="p"></span></li>
+        <li><span class="n">04</span><span class="t">发布后的互动数据回流，用来调整排序</span><span class="p"></span></li>
+      </ol>
+    </div>
+    <div style="padding-top: 6px;">
+      <div class="label" style="color:var(--ink)">COLOPHON · 版权页</div>
+      <div class="g2 rule" style="margin-top: 10px; padding-top: 16px; row-gap: 22px;">
+        <div><div class="label">AUTHOR</div><p class="small">黄熠 Yi Huang · yihuang.art<br>选题方向、编辑标准、视觉、每一次取舍。</p></div>
+        <div><div class="label">CODE</div><p class="small">Python、SQLite、Playwright 无头浏览器出图。代码由 AI 编程助手（Claude Code、Codex）按我的方向编写，由我验收。</p></div>
+        <div><div class="label">MODELS</div><p class="small">DeepSeek V4 Pro / Flash（2026.10.21 起）；此前为 OpenAI。每次模型调用都登记在流程图上。</p></div>
+        <div><div class="label">DATA</div><p class="small">图表数据为 2026.10.21 16:20 的工作台快照，另存于 docs/portfolio/data/；时间与数字出自 WORKLOG.md 与 git log。</p></div>
+        <div><div class="label">TYPE</div><p class="small">思源宋体、Source Serif 4、IBM Plex Mono（均为 SIL OFL）；页眉为 Mom's Typewriter。刊名字体为商业字体，仅用于成品图。</p></div>
+        <div><div class="label">IMAGES</div><p class="small">成品中的新闻配图版权属原媒体与摄影者，每张图在成品上标注来源；二创底图为大都会博物馆公版藏品。</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="folio">24</div>
+</section>
+
+</body>
 </html>
