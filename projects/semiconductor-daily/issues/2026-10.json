@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 117,
+   "date": "2026-10-22",
+   "label": "1022 台湾半导体9月用电首破45亿度",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台湾半导体9月用电首破45亿度"
+   ],
+   "pages": [
+    "issues/117/1.webp",
+    "issues/117/2.webp",
+    "issues/117/3.webp",
+    "issues/117/4.webp",
+    "issues/117/5.webp"
+   ]
+  },
+  {
    "serial": 116,
    "date": "2026-10-22",
    "label": "1022 韩金融监督院称Solidigm上市属重复上市",
