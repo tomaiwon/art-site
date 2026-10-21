@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 114,
+   "date": "2026-10-22",
+   "label": "1022 英伟达携六伙伴扩产载板封装测试",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达携六伙伴扩产载板封装测试"
+   ],
+   "pages": [
+    "issues/114/1.webp",
+    "issues/114/2.webp",
+    "issues/114/3.webp",
+    "issues/114/4.webp",
+    "issues/114/5.webp"
+   ]
+  },
+  {
    "serial": 113,
    "date": "2026-10-21",
    "label": "1021 谷歌开源TorchTPU挑战英伟达",
