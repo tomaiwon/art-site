@@ -1,0 +1,70 @@
+/* 东亚制造工作台 · 共用样式
+   照个人网站 yihuang.art:白底黑字、1px 黑色细线(首页流线同款)、英文大标题用 Space Mono 粗体(只给标题;2026-10-22 用户选它换掉 Mom's Typewriter)、
+   数字和代码用 SF Mono、说明文字灰色小号、极简。朱砂红只表示出错,别处不用颜色。
+   工作台各页(/、/edition、/pipeline、/pipeline/intake、/pipeline/live)都引用这一份;页面自己的 <style> 只写布局。 */
+/* 只有粗体一个字重:任何 font-weight 都用这一份,不让浏览器再加粗或变细 */
+@font-face{font-family:"EAM Title";src:url("fonts/SpaceMono-Bold.woff2") format("woff2");font-weight:100 900;font-display:swap;}
+:root{
+  --paper:#ffffff; --ink:#111111; --ink-2:#333333; --ink-3:#555555;
+  --soft:#8a8a8a; --faint:#c9c9c9; --hair:#e6e6e6; --wash:#f6f6f4;
+  --line:rgba(17,17,17,.42);                                /* 连线:首页流线那种半透明黑 */
+  --cinnabar:#BD4030;                                       /* 只用于出错 */
+  --type:"EAM Title","SF Mono",ui-monospace,monospace;     /* 只用于英文大标题;数字和正文别用 */
+  --num:"SF Mono",ui-monospace,Menlo,monospace;
+  --song:"Songti SC","STSong","Noto Serif SC",serif;
+  --sans:"PingFang SC","Noto Sans SC",sans-serif;
+  --gutter:48px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;background:var(--paper);color:var(--ink);}
+body{font:400 14px/1.6 var(--sans);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+a{color:inherit;}
+::selection{background:var(--ink);color:var(--paper);}
+
+/* ── 页头:左边 EFont 大标题 + 宋体副题 + 灰色小字;右边 EFont 竖排导航 ── */
+.eam-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding:40px var(--gutter) 0;}
+.eam-mark h1{margin:0;font:400 56px/0.95 var(--type);letter-spacing:-.01em;}
+.eam-mark .sub{margin:14px 0 0;font:400 15px/1.7 var(--song);}
+.eam-mark .sub small{display:block;color:var(--soft);font:400 12px/1.7 var(--sans);}
+.eam-nav{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.eam-nav a{font:400 22px/1.2 var(--type);text-decoration:none;letter-spacing:0;color:var(--ink);}
+.eam-nav a:hover,.eam-nav a[aria-current]{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px;}
+
+/* ── 小节标题:EFont 英文 + 宋体中文,下面一条黑线 ── */
+.eam-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 4px;
+  padding-bottom:7px;border-bottom:1px solid var(--ink);font-weight:400;}
+.eam-h .en{font:400 16px/1.3 var(--type);letter-spacing:.04em;}
+.eam-h .zh{font:400 13px/1.3 var(--song);margin-left:10px;}
+.eam-h .tally{font:400 12px/1.3 var(--num);color:var(--soft);white-space:nowrap;}
+
+/* ── 按钮与表单:方角、1px 黑框、悬停反白。:where() 不加权重,页面可以随手覆盖 ── */
+:where(button){font:400 12.5px/1.4 var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--ink);
+  border-radius:0;padding:5px 12px;cursor:pointer;transition:background .12s,color .12s;}
+:where(button.main){background:var(--ink);color:var(--paper);}
+:where(button):hover:not(:disabled){background:var(--ink);color:var(--paper);}
+:where(button.main):hover:not(:disabled){background:var(--ink-2);border-color:var(--ink-2);}
+:where(button):disabled{border-color:var(--faint);color:var(--soft);background:var(--paper);cursor:default;}
+:where(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline:1px solid var(--ink);outline-offset:3px;}
+:where(input[type=text],input[type=number],input[type=url],input[type=search],input:not([type]),select,textarea){
+  font:400 13px/1.5 var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--ink);border-radius:0;}
+:where(input[type=checkbox],input[type=radio]){accent-color:var(--ink);}
+:where(textarea[readonly]){background:var(--wash);border-color:var(--faint);}
+
+/* ── 小标签:黑框 / 灰框 / 出错 ── */
+.eam-chip{display:inline-block;border:1px solid var(--ink);padding:0 5px;font:400 11px/1.5 var(--num);color:var(--ink);}
+.eam-chip.mid{border-color:var(--faint);color:var(--ink-3);}
+.eam-chip.bad{border-color:var(--cinnabar);color:var(--cinnabar);}
+
+/* ── 状态:只有出错用颜色;在跑的用闪烁和流动虚线 ── */
+.eam-bad{color:var(--cinnabar);}
+.eam-soft{color:var(--soft);}
+.eam-num{font-family:var(--num);}
+@keyframes eam-flow{to{stroke-dashoffset:-20;}}
+@keyframes eam-blink{50%{opacity:.15;}}
+
+/* ── 右侧抽屉 ── */
+.eam-drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100vw);background:var(--paper);color:var(--ink);
+  border-left:1px solid var(--ink);z-index:30;transform:translateX(101%);transition:transform .22s ease;}
+
+@media (max-width:700px){:root{--gutter:18px;} .eam-top{padding-top:24px;} .eam-mark h1{font-size:40px;} .eam-nav a{font-size:18px;}}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
