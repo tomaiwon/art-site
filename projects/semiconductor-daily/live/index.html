@@ -551,13 +551,16 @@ function show(r){
   renderStatus(); renderSched(); renderPipe(); renderStage(); renderChannels(); renderIssues(); renderPrinter();
   $('schedTally').textContent = offline ? '工作台离线 · 倒计时停住' : '北京时间 · 每秒走动';
 }
-async function goOffline(){
+async function goOffline(pending){
   const s = await (await fetch(SNAPSHOT + '?t=' + Date.now(), {cache:'no-store'})).json();
+  if (pending && gotLive) return;                      // 快照还没读回来,实时数据先到了:不用快照
   const first = !offline;
   offline = true; snapAt = s.snapshotAt * 1000; running = {};
   show(s.live);
   $('offbar').hidden = false;
-  $('offbar').innerHTML = `工作台离线 · 显示 <b>${stamp(snapAt)}</b> 的快照<span class="eam-soft">工作台那台 Mac 睡着或断网时就这样;每 30 秒试着重连,连上自动回到实时</span>`;
+  $('offbar').innerHTML = pending
+    ? `正在连接工作台… 先显示 <b>${stamp(snapAt)}</b> 的快照<span class="eam-soft">连上就换成实时数据</span>`
+    : `工作台离线 · 显示 <b>${stamp(snapAt)}</b> 的快照<span class="eam-soft">工作台那台 Mac 睡着或断网时就这样;每 30 秒试着重连,连上自动回到实时</span>`;
   if (first){
     const box = $('log');
     box.innerHTML = (s.events || []).map(e => logRow(e, false)).join('') || '<div class="done"><span class="t"></span><span class="nd"></span><span>快照里没有日志。</span></div>';
@@ -571,15 +574,22 @@ function goOnline(){
   $('offbar').hidden = true;
   if (Printer.offline) Printer.offline(false);
 }
+let firstPoll = true, gotLive = false;
 async function pollLive(){
-  let wait = 3000;
+  let wait = 3000, early = null;
+  if (firstPoll && API && SNAPSHOT)                    // 经 Cloudflare 读一次要 2–5 秒:先把快照摆出来,连上再换
+    early = setTimeout(() => { if (!live) goOffline(true).catch(() => {}); }, 2500);
+  firstPoll = false;
   try {
-    const r = await (await fetch(apiUrl('/api/live'), {cache:'no-store', signal: within(API ? 5000 : 20000)})).json();
+    const r = await (await fetch(apiUrl('/api/live'), {cache:'no-store', signal: within(API ? 12000 : 20000)})).json();
+    clearTimeout(early);
     if (!r.ok) throw new Error(r.error || '读取失败');
+    gotLive = true;
     if (offline) goOnline();
     show(r);
     $('foot').classList.remove('err');
   } catch (err) {
+    clearTimeout(early);
     if (SNAPSHOT){
       try { await goOffline(); } catch (e) { $('foot').innerHTML = '<span class="err">工作台离线,快照也没读到。30 秒后重试。</span>'; }
       wait = 30000;
