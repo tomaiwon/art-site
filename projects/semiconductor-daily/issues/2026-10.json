@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 121,
+   "date": "2026-10-22",
+   "label": "1022 英伟达携手矽品扩CPO产能至15倍",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达携手矽品扩CPO产能至15倍"
+   ],
+   "pages": [
+    "issues/121/1.webp",
+    "issues/121/2.webp",
+    "issues/121/3.webp",
+    "issues/121/4.webp",
+    "issues/121/5.webp"
+   ]
+  },
+  {
    "serial": 120,
    "date": "2026-10-22",
    "label": "1022 力积电获利近翻倍 产能利用率97%",
