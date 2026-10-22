@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 124,
+   "date": "2026-10-22",
+   "label": "1022 默克韩国阴城厂投产钼系前驱体",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "默克韩国阴城厂投产钼系前驱体"
+   ],
+   "pages": [
+    "issues/124/1.webp",
+    "issues/124/2.webp",
+    "issues/124/3.webp",
+    "issues/124/4.webp",
+    "issues/124/5.webp"
+   ]
+  },
+  {
    "serial": 123,
    "date": "2026-10-22",
    "label": "1022 谷歌云拟部署96万颗英伟达GPU",
@@ -249,15 +266,7 @@
     "欣兴预计基板尺寸达当前14倍",
     "Modal采用英伟达Vera"
    ],
-   "pages": [
-    "issues/109/1.webp",
-    "issues/109/2.webp",
-    "issues/109/3.webp",
-    "issues/109/4.webp",
-    "issues/109/5.webp",
-    "issues/109/6.webp",
-    "issues/109/7.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 108,
@@ -269,15 +278,7 @@
     "开发者推出免刷写显卡工具",
     "西门子携英伟达加速光刻"
    ],
-   "pages": [
-    "issues/108/1.webp",
-    "issues/108/2.webp",
-    "issues/108/3.webp",
-    "issues/108/4.webp",
-    "issues/108/5.webp",
-    "issues/108/6.webp",
-    "issues/108/7.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 107,
@@ -289,15 +290,7 @@
     "SK海力士展示内存池化架构",
     "台积电向格芯寻求硅中介层"
    ],
-   "pages": [
-    "issues/107/1.webp",
-    "issues/107/2.webp",
-    "issues/107/3.webp",
-    "issues/107/4.webp",
-    "issues/107/5.webp",
-    "issues/107/6.webp",
-    "issues/107/7.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 106,
