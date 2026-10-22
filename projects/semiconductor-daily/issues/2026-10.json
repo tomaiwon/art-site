@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 122,
+   "date": "2026-10-22",
+   "label": "1022 美光放弃4F²聚焦3D DRAM",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美光放弃4F²聚焦3D DRAM"
+   ],
+   "pages": [
+    "issues/122/1.webp",
+    "issues/122/2.webp",
+    "issues/122/3.webp",
+    "issues/122/4.webp",
+    "issues/122/5.webp"
+   ]
+  },
+  {
    "serial": 121,
    "date": "2026-10-22",
    "label": "1022 英伟达携手矽品扩CPO产能至15倍",
