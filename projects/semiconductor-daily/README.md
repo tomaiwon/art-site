@@ -6,8 +6,8 @@
 
 ## 现在的页面（2026-10-21 起）
 
-`index.html` 是作品集《Semiconductor Daily》的网页版：一套东亚半导体新闻系统从手动挑选到零点击出刊的四十天，
-中英双语，13 章。它和 PDF 版同源，源文件与构建脚本在私有仓库 `tomaiwon/eam-pipeline` 的 `docs/portfolio/`
+`index.html` 是作品集《Semiconductor Daily》的网页版：一套东亚半导体新闻系统从手动挑选到零点击出刊的六周，
+中英双语，15 章，28 页。它和 PDF 版同源，源文件与构建脚本在私有仓库 `tomaiwon/eam-pipeline` 的 `docs/portfolio/`
 （`portfolio.html` → `build.py`），这里放的是生成结果，**不要在这里手改**，改源文件后重新生成再拷过来。
 
 - `portfolio/`：网页版用到的图片、字体、样式，以及 PDF `YiHuang_SemiconductorDaily_Portfolio.pdf`（页首「PDF ↓」下载）。
@@ -17,6 +17,7 @@
 
 ## 同目录里别的东西（不属于作品集页面）
 
+- `live/`：实时监测台的静态版与离线快照，工作台每 30 分钟有变化才推一次（`live_snapshot.py`）。**不要动。**
 - `issues/`：工作台每期自动推送的早午晚报数据，`news.html` 的「半导体早午晚报」栏读取它。**不要动。**
 - `assets/`：旧版作品页的图片；`work-digital.html` 的缩略图和旧链接仍在用 `assets/cover-morning.webp`。
 - `style.css`、`gallery.js`、`assets-manifest.json`：旧版作品页（单期示例 + 六步工作流）的样式、看图脚本与清单，
