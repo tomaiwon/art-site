@@ -37,7 +37,7 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   .eam-h .no{font:400 11px/1 var(--num);font-style:normal;color:var(--soft);margin-right:9px;letter-spacing:.04em;position:relative;top:-2px;}
 
   /* ── 01 时间表 ── */
-  .sched{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-left:1px solid var(--hair);}
+  .sched{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));border-left:1px solid var(--hair);}
   .slot{padding:14px 16px 14px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);min-width:0;}
   .slot .nm{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font:400 14px/1.3 var(--song);white-space:nowrap;}
   .slot .nm i{font:400 10px/1 var(--num);letter-spacing:.08em;color:var(--soft);font-style:normal;overflow:hidden;text-overflow:ellipsis;}
@@ -182,7 +182,7 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   #paperView .x{position:absolute;top:16px;right:var(--gutter);}
   @media (max-width:700px){.room{height:440px;} .press-state{left:16px;right:16px;width:auto;top:248px;text-align:center;}
     .press-left{display:none;} #paperView{flex-direction:column;} #paperView img{max-width:86vw;max-height:60vh;}}
-  @media (max-width:1180px){.sched{grid-template-columns:repeat(3,minmax(0,1fr));} .cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr);} .cols .out{grid-column:1/-1;}}
+  @media (max-width:1180px){.sched{grid-template-columns:repeat(4,minmax(0,1fr));} .cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr);} .cols .out{grid-column:1/-1;}}
   @media (max-width:700px){.sched{grid-template-columns:repeat(2,minmax(0,1fr));} .slot .cd{font-size:24px;} .cols{grid-template-columns:minmax(0,1fr);}
     .log div{grid-template-columns:58px 70px minmax(0,1fr);gap:0 8px;} .status .clock{margin-left:0;}}
 </style>
@@ -226,7 +226,7 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
       <ul class="items" id="items"></ul>
     </section>
     <section class="out">
-      <h2 class="eam-h"><span><span class="en"><i class="no">05</i>OUTPUT</span><span class="zh">最近几期</span></span><span class="tally">网站 · IG · X</span></h2>
+      <h2 class="eam-h"><span><span class="en"><i class="no">05</i>OUTPUT</span><span class="zh">最近几期</span></span><span class="tally">网站 · IG · X · 微博</span></h2>
       <ul class="iss" id="issues"></ul>
     </section>
   </div>
@@ -277,7 +277,7 @@ const ms = v => typeof v === 'number' ? v * 1000 : (v ? Date.parse(v) : null);
 const NODE_ZH = {v2collect:'采集', v2deepseek:'DeepSeek', v2triage:'第一道关', v2body:'读正文', v2verify:'第二道关',
   v2extract:'抽取', v2merge:'归并', v2judge:'归并·判断', v2impact:'打分', v2rank:'排名', v2single:'写稿',
   v2images:'选图', render:'出图', v2singleen:'英文版', v2publish:'归档', igpost:'Instagram', v2market:'股价对照',
-  v2store:'入库', v2events:'事件库', v2shadow:'影子刊', edition:'早午晚报'};
+  v2store:'入库', v2events:'事件库', v2shadow:'影子刊', edition:'早午晚报', weibopost:'微博'};
 const QUIET = new Set(['v2store', 'v2events', 'v2rank']);
 
 /* 数据从哪来:工作台自己(同源);或 yihuang.art 上的静态版,先连 live.yihuang.art,连不上就读同目录的快照 */
@@ -302,7 +302,7 @@ function renderSched(){
   if (!live) return;
   const box = $('sched');
   if (box.children.length !== live.schedule.length){
-    box.innerHTML = live.schedule.map(r => `<div class="slot" data-k="${r.key}"><div class="nm"><span>${esc(r.name)}</span><i>${r.tag ? esc(r.tag) : r.every ? 'EVERY ' + (r.every >= 3600 ? r.every / 3600 + 'H' : r.every / 60 + 'M') : (r.hours || []).join('·')}</i></div>`
+    box.innerHTML = live.schedule.map(r => `<div class="slot" data-k="${r.key}"><div class="nm"><span>${esc(r.name)}</span><i>${r.tag ? esc(r.tag) : r.every ? (r.every >= 3600 ? r.every / 3600 + 'H' : r.every / 60 + 'M') : (r.hours || []).join('·')}</i></div>`
       + `<div class="cd">—</div><div class="bar"><i style="width:0"></i></div><div class="when"></div><div class="what"></div></div>`).join('');
   }
   tick();
@@ -345,6 +345,7 @@ function renderStatus(){
     + `<span><span class="k">V2 Spend</span><b class="${s.over ? 'eam-bad' : ''}">$${s.spend.toFixed(2)} / $${s.cap.toFixed(2)}</b><span class="spendbar ${s.over ? 'bad' : ''}"><i style="width:${pct}%"></i></span>${s.over ? ' <span class="eam-bad">到上限:只采集不判断,零点重置</span>' : ''}</span>`
     + `<span><span class="k">Today</span><b>${s.singlesToday}</b> 条单条 <span class="eam-soft">(每天上限 ${s.guard})</span></span>`
     + `<span><span class="k">Line</span>基础分 ≥ <b>${s.baseLine}</b></span>`
+    + (s.weiboBalance != null ? `<span><span class="k">Weibo</span><b>${s.weiboBalance}</b> 积分 <span class="eam-soft">(约 ${Math.floor(s.weiboBalance / (s.weiboPerPost || 40))} 条)</span></span>` : '')
     + `<span><span class="k">Now</span><span class="dot ${busy && !offline ? 'live' : 'idle'}"></span>${esc(offline ? '工作台离线' : (busy || '空闲,等下一次醒来'))}</span>`
     + `<span class="clock" id="statusClock"></span>`;
   tick();
@@ -501,7 +502,7 @@ function renderIssues(){
     return `<span title="${esc(x.note || x.error || '')}" class="${x.note || x.error ? 'bad' : ''}">${label} 等</span>`;
   };
   $('issues').innerHTML = live.issues.length ? live.issues.map(i => `<li><div class="h"><span class="sn">${String(i.serial).padStart(3, '0')}</span><span class="tt">${esc(i.title)}</span><time class="eam-soft eam-num" style="font-size:11px">${hm(i.archivedAt)}</time></div>`
-    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}</div></li>`).join('')
+    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}</div></li>`).join('')
     : '<li class="empty">还没有单条新闻。</li>';
 }
 
@@ -753,7 +754,8 @@ function openPaper(p){
   $('pvImg').src = p.slide; $('pvImg').alt = p.title; $('pvSn').textContent = '第 ' + String(p.serial).padStart(3, '0') + ' 期';
   $('pvTt').textContent = p.title; $('pvHk').textContent = p.hook || '';
   $('pvLinks').innerHTML = (p.ig ? `<a href="${esc(p.ig)}" target="_blank" rel="noopener">Instagram ↗</a>` : '<span class="eam-soft">Instagram —</span>')
-    + (p.x ? `<a href="${esc(p.x)}" target="_blank" rel="noopener">X ↗</a>` : '<span class="eam-soft">X —</span>');
+    + (p.x ? `<a href="${esc(p.x)}" target="_blank" rel="noopener">X ↗</a>` : '<span class="eam-soft">X —</span>')
+    + (p.weibo ? `<a href="${esc(p.weibo)}" target="_blank" rel="noopener">微博 ↗</a>` : '<span class="eam-soft">微博 —</span>');
   $('paperView').classList.add('on'); $('pvClose').focus();
 }
 $('pvClose').onclick = () => $('paperView').classList.remove('on');
