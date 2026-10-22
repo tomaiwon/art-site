@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#12191B" />
+<title>Yi Huang 黄熠</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+<style>
+  /* 手机版首页：单页长滚，作品按年份排成一条时间线；右缘年份刻度可按住拖动跳年。
+     作品数据由 work.html 整理而来，新增作品时两边都要加 */
+  /* 东亚制造色：玄底、月白字、朱砂只用在当前页码和当前年份刻度 */
+  @font-face{
+    font-family:"Space Mono";
+    src:url("projects/semiconductor-daily/live/fonts/SpaceMono-Bold.woff2") format("woff2");
+    font-weight:700;font-display:swap;
+  }
+  :root{
+    --ink:#E9E3D4;      /* 月白 */
+    --paper:#12191B;    /* 玄 */
+    --panel:#1B2325;    /* 墨 */
+    --edge:#030506;
+    --cinnabar:#BD4030; /* 朱砂 */
+    --gold:#B89A5A;     /* 金 */
+    --glow:0 0 6px rgba(233,227,212,.28);
+    --mono:"Space Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  html{background:var(--paper);}
+  body{
+    color:var(--ink);
+    font-family:"Avenir Next Condensed","Arial Narrow",Arial,sans-serif;
+    font-stretch:condensed;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
+  }
+  /* 中文用系统默认黑体（iPhone/Mac 是苹方），只有标题加粗 */
+  .zh{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;font-weight:400;}
+
+  #bg{
+    position:fixed;inset:0;z-index:-1;
+    background:radial-gradient(circle,transparent 90%,var(--edge) 100%),var(--paper);
+    box-shadow:0 0 28px 8px var(--edge) inset;
+  }
+  main{position:relative;z-index:40;width:92%;margin:0 auto;padding:.5rem 0 0;}
+  p,li,footer{text-shadow:var(--glow);}
+  a{
+    color:inherit;
+    text-decoration-thickness:1px;text-underline-offset:.2em;
+  }
+
+  .title{
+    font-family:var(--mono);font-weight:700;
+    font-size:2.6rem;line-height:1;letter-spacing:-.04em;
+    margin:1rem 0 .4rem;text-shadow:var(--glow);
+  }
+  h2{
+    font-family:var(--mono);font-weight:700;
+    font-size:1.75rem;line-height:1;letter-spacing:-.03em;
+    margin:3.2rem 0 1.6rem;text-shadow:var(--glow);
+  }
+  h2 .zh{font-size:1.3rem;font-weight:600;letter-spacing:.04em;margin-left:.3em;}
+  h2.year{font-size:2.6rem;letter-spacing:-.05em;margin:4rem 0 1.6rem;scroll-margin-top:1rem;}
+
+  .section{font-size:1.1rem;line-height:1.38;}
+  .section p{margin:1rem 0;}
+  .entry{margin:0 0 2.4rem;}
+  .entry p{margin:.8rem 0 0;}
+  .entry.text{margin:0 0 1.5rem;}
+  .entry.text p{margin:0;}
+  /* 每条上方一行等宽小字：月份 · 类别 */
+  .tag{
+    display:block;margin:0 0 .45rem;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;
+    text-transform:uppercase;opacity:.5;text-shadow:none;
+  }
+
+  /* 横滑图组：等高胶片条，图按原比例，下一张露边提示可滑。
+     一次只走一张（snap-stop），按下时微微收一下 */
+  .reel{
+    display:flex;gap:6px;height:48vw;max-height:320px;
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    scrollbar-width:none;overscroll-behavior-x:contain;
+  }
+  .reel::-webkit-scrollbar{display:none;}
+  .reel img{
+    flex:0 0 auto;height:100%;width:auto;max-width:100%;object-fit:cover;
+    scroll-snap-align:start;scroll-snap-stop:always;
+    display:block;background:var(--panel);cursor:pointer;
+    transform:translateX(var(--shift,0px));
+    transition:opacity .18s ease;
+  }
+  .reel img:active{transform:translateX(var(--shift,0px)) scale(.975);opacity:.85;}
+
+  /* 下滑交互：年份里和上一年不同的那位数字是一条两格高的数字条，随滚动上翻 */
+  h2.year .d{display:inline-block;}
+  h2.year .roll{height:1em;overflow:hidden;vertical-align:top;}
+  h2.year .roll>span{display:block;will-change:transform;}
+  /* 手机上图组向右出血到屏幕边，露边更大，像原生相册 */
+  @media (max-width:45rem){
+    .reel{margin-right:-4vw;padding-right:4vw;}
+  }
+
+  /* 点进作品页：被点的图复制一份，从原位放大铺满屏幕，其余内容淡出 */
+  .fly{position:fixed;z-index:100;margin:0;max-width:none;object-fit:cover;pointer-events:none;}
+  main,footer,#rail{transition:opacity .3s ease;}
+  body.leaving main,body.leaving footer,body.leaving #rail{opacity:0;}
+  .dots{display:flex;justify-content:center;gap:4px;height:3px;margin-top:3px;}
+  .dots span{width:20px;height:3px;background:var(--ink);opacity:.25;transition:all .3s ease;}
+  .dots span.on{opacity:1;background:var(--cinnabar);}
+
+  /* 年份刻度：平时只是右缘几道细刻度，当前年份是一道朱砂；
+     按住拖动时页面压暗、中间显示大年份，松手回到那一年 */
+  #rail{
+    position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;
+    width:28px;padding:14px 0;touch-action:none;user-select:none;-webkit-user-select:none;
+    opacity:0;transition:opacity .4s ease;
+  }
+  #rail.show{opacity:1;}
+  #rail .t{position:relative;height:32px;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;cursor:pointer;}
+  #rail .t i{display:block;width:8px;height:1px;background:var(--ink);opacity:.4;transition:all .2s ease;}
+  #rail .t.on i{width:14px;height:2px;opacity:1;background:var(--cinnabar);}
+  #rail .t b{
+    position:absolute;right:26px;top:50%;
+    font:700 11px/1 var(--mono);letter-spacing:.02em;white-space:nowrap;
+    padding:3px 5px;background:var(--paper);
+    opacity:0;transform:translate(6px,-50%);transition:opacity .2s ease,transform .2s ease;
+  }
+  #rail.peek .t.on b,#rail.active .t b{opacity:.45;transform:translate(0,-50%);}
+  #rail.peek .t b{opacity:0;}
+  #rail.peek .t.on b,#rail.active .t.on b{opacity:1;}
+  #scrub{
+    position:fixed;inset:0;z-index:55;pointer-events:none;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:rgba(18,25,27,.78);opacity:0;transition:opacity .2s ease;
+  }
+  #scrub.on{opacity:1;}
+  #scrub span{font:700 24vw/1 var(--mono);letter-spacing:-.06em;}
+  #scrub small{margin-top:.8rem;font:700 .72rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;opacity:.55;}
+
+  footer{
+    position:relative;z-index:40;text-align:center;
+    font-size:1.1rem;margin:5rem 0 3rem;line-height:1.6;
+  }
+  footer small{display:block;margin-top:1rem;font-size:.85rem;opacity:.7;}
+
+  @media (min-width:45rem){ main{width:60%;padding-top:4rem;} }
+  @media (min-width:64rem){ main{width:50%;} }
+  @media (min-width:80rem){ main{width:40%;} }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<main>
+  <h1 class="title">Yi Huang</h1>
+
+  <div class="section">
+    <p>is a research-based literary and art worker.</p>
+    <p>Born in 2002 and based between Changsha and London, his practice examines the digital age, art history, and geopolitics through moving image, installation, and text.</p>
+    <p>He is currently building <a href="east-asia/">Confucian Silence</a>, an atlas of East Asian manufacturing, alongside its fully automatic <a href="projects/semiconductor-daily/">Semiconductor Daily</a>.</p>
+    <p>He holds a BA in Digital Media Art from Xi'an Academy of Fine Arts (2020–2024) and an MA in Contemporary Art Practice from the <a href="https://www.rca.ac.uk/">Royal College of Art</a> (2025–2026).</p>
+    <p class="zh">黄熠，二零零二年生。栖居长沙、往来伦敦。为研究型文艺工作者。其作多由数字之世、艺史之脉与地缘之局而生，以影像、装置、文本为媒。</p>
+  </div>
+
+  <h2 class="year" data-year="2026">2026</h2>
+  <div class="section">
+    <div class="entry">
+      <span class="tag">10 · Website</span>
+      <div class="reel"><img loading="lazy" src="images/m/sd-single-110.webp" alt=""><img loading="lazy" src="images/m/sd-single-111.webp" alt=""><img loading="lazy" src="images/m/sd-single-112.webp" alt=""></div>
+      <p><a href="projects/semiconductor-daily/">Semiconductor Daily <span class="zh">半导体早报</span></a>. Six weeks of an East Asian chip news system, from hand-picked to fully automatic.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">09 · Website</span>
+      <div class="reel"><img loading="lazy" src="images/m/east-asia-cover.webp" alt=""></div>
+      <p><a href="east-asia/">Confucian Silence <span class="zh">东亚制造</span></a>. An atlas of the East Asian semiconductor stack, layer by layer.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">08 · Practice</span>
+      <p><a class="zh" href="projects/venice-2026.html">双年展</a>. Film photography, Venice.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">07 · Website</span>
+      <div class="reel"><img loading="lazy" src="images/m/nine-layer-stack-cover.webp" alt=""></div>
+      <p><a href="projects/nine-layer-stack/">The Stack <span class="zh">九层堆栈图谱</span></a>. An interactive map of East Asian manufacturing, its key organisations and industrial sites.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">07 · Practice</span>
+      <p><a class="zh" href="projects/arles-2026.html">摄影术二百年</a>. Film photography, Arles.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">07 · Practice</span>
+      <p><a class="zh" href="projects/marseille-2026.html">晒后假日下</a>. Film photography, Marseille.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">05 · Film</span>
+      <div class="reel"><img loading="lazy" src="images/m/as0.webp" alt=""><img loading="lazy" src="images/m/as1.webp" alt=""><img loading="lazy" src="images/m/as2.webp" alt=""><img loading="lazy" src="images/m/as3.webp" alt=""></div>
+      <p><a href="projects/asfablesgoby.html">As Fables Go By <span class="zh">洋务运动</span></a>. In 1876 the first Westernisation scholars travelled to Britain to study the telegraph; in 2025, self-funded students followed to study contemporary art.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">05 · Practice</span>
+      <p><a class="zh" href="projects/cambridge-2026.html">洋务时刻</a>. Film photography, Cambridge.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">03 · Virtual interactive art</span>
+      <div class="reel"><img loading="lazy" src="images/m/ScreenShot_2026-03-05_180722_622.webp" alt=""><img loading="lazy" src="images/m/ScreenShot_2026-03-05_180732_822.webp" alt=""><img loading="lazy" src="images/m/IMG_8400.webp" alt=""></div>
+      <p><a href="projects/memory-entropy.html">Memory Entropy <span class="zh">记忆熵</span></a>. Digital images lose themselves in transmission, much as memory does. AcrossRCA.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">03 · Talk</span>
+      <div class="reel"><img loading="lazy" src="images/m/20260322010101_186_1635.webp" alt=""><img loading="lazy" src="images/m/20260322010102_187_1635.webp" alt=""><img loading="lazy" src="images/m/20260322010104_188_1635.webp" alt=""></div>
+      <p><a href="projects/lunwenyi.html">On Artistic Worker <span class="zh">论文艺工作者</span></a>. After screening The Experience at Mo Ming Tang, on the glitch between literary workers and artists.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">02 · Interactive art</span>
+      <div class="reel"><img loading="lazy" src="images/m/pass1.webp" alt=""><img loading="lazy" src="images/m/pass2.webp" alt=""><img loading="lazy" src="images/m/passi4.webp" alt=""></div>
+      <p><a href="projects/passingby.html">Passing By</a>. A transient visitor among the mysteries of the cosmos.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">02 · Art history</span>
+      <div class="reel"><img loading="lazy" src="images/m/xi10.webp" alt=""><img loading="lazy" src="images/m/xi3.webp" alt=""><img loading="lazy" src="images/m/xi2.webp" alt=""></div>
+      <p><a href="projects/buxiang.html">The Last Modernism <span class="zh">不想再装</span></a>. Masterpieces seen from a pigeon&#x27;s perspective.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">02 · Practice</span>
+      <p><a class="zh" href="projects/vietnam.html">安南失火</a>. Lingering smoke, London.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">01 · Digital video</span>
+      <div class="reel"><img loading="lazy" src="images/m/ba0.webp" alt=""><img loading="lazy" src="images/m/ba1.webp" alt=""><img loading="lazy" src="images/m/ba2.webp" alt=""></div>
+      <p><a href="projects/barbican.html">Barbican</a>. Material made before the Barbican Centre&#x27;s refurbishment, with David Stothard and David Leung. 3.38 min.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">01 · Practice</span>
+      <p><a class="zh" href="projects/huo.html">火口下的广益人</a>. A side story of As Fables Go By, Pompeii.</p>
+    </div>
+  </div>
+
+  <h2 class="year" data-year="2025">2025</h2>
+  <div class="section">
+    <div class="entry">
+      <span class="tag">12 · Research film</span>
+      <div class="reel"><img loading="lazy" src="images/m/maxwellcen.webp" alt=""><img loading="lazy" src="images/m/pss3.webp" alt=""><img loading="lazy" src="images/m/pss4.webp" alt=""></div>
+      <p><a href="projects/not-bad.html">Not Bad</a>. Early investigation for As Fables Go By, where time misaligns at Loch Ken in southern Scotland. 11.05 min.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">12 · Practice</span>
+      <p><a class="zh" href="projects/nan.html">南丘</a>. Between Christmas and New Year, South Downs.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">11 · Writing</span>
+      <p><a class="zh" href="https://mp.weixin.qq.com/s/LlNA9-oGQRYvCXVsKyjovg">八月十八—赠东莱敏俊序</a>. WeChat.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">11 · Practice</span>
+      <p><a class="zh" href="projects/xun.html">独寻</a>. A journey north from London.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">10 · Digital video</span>
+      <div class="reel"><img loading="lazy" src="images/m/bridge0.webp" alt=""><img loading="lazy" src="images/m/bridge1.webp" alt=""><img loading="lazy" src="images/m/bridge2.webp" alt=""></div>
+      <p><a href="projects/bridge.html">Maidenhead Railway Bridge</a>. On the way to the railway bridge, electromagnetic signals concealed a secret. With Miluo Wang, Tom Bower and Gary Gaga. 3.12 min.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">09 · Film</span>
+      <div class="reel"><img loading="lazy" src="images/m/the0.webp" alt=""><img loading="lazy" src="images/m/the1.webp" alt=""><img loading="lazy" src="images/m/the2.webp" alt=""><img loading="lazy" src="images/m/the3.webp" alt=""></div>
+      <p><a href="projects/theexperience.html">The Experience <span class="zh">关中往事</span></a>. A student director crosses timelines in search of an ending that belongs to the East.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">08 · Digital video</span>
+      <div class="reel"><img loading="lazy" src="images/m/trans0.webp" alt=""><img loading="lazy" src="images/m/trans1.webp" alt=""><img loading="lazy" src="images/m/trans2.webp" alt=""></div>
+      <p><a href="projects/translation.html">Translation</a>. Translating botanical attributes, as digital media shapes how we think. 3.16 min.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">08 · Writing</span>
+      <p><a class="zh" href="https://mp.weixin.qq.com/s/wQLKIj4KiGHx3T2VerkABg">关中再见，关中</a>. WeChat.</p>
+    </div>
+  </div>
+
+  <h2 class="year" data-year="2024">2024</h2>
+  <div class="section">
+    <div class="entry">
+      <span class="tag">12 · Speculative design</span>
+      <div class="reel"><img loading="lazy" src="images/m/no6.webp" alt=""><img loading="lazy" src="images/m/no7.webp" alt=""><img loading="lazy" src="images/m/no11.webp" alt=""></div>
+      <p><a href="projects/remotefantasy.html">Remote Fantasy <span class="zh">情迷海南岛</span></a>. A narrative of digital hegemony, starting from Hainan&#x27;s closed-border policy.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">09 · Website</span>
+      <div class="reel"><img loading="lazy" src="images/m/ash6.webp" alt=""><img loading="lazy" src="images/m/ash7.webp" alt=""><img loading="lazy" src="images/m/ash1.webp" alt=""></div>
+      <p><a href="projects/ashesofsunrise.html">Ashes of Sunrise <span class="zh">光的剩余</span></a>. From pointillism to digital photography, on humans and light.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">07 · Degree project</span>
+      <div class="reel"><img loading="lazy" src="images/m/bu6.webp" alt=""><img loading="lazy" src="images/m/bu7.webp" alt=""><img loading="lazy" src="images/m/bu8.webp" alt=""></div>
+      <p><a href="projects/blowup.html">Blow Up <span class="zh">春光之響</span></a>. Does truth become more obscured or more visible in the information age?</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">07 · Writing</span>
+      <p><a class="zh" href="files/思辨设计表达方式中当代影像艺术的运用及影响——以作品《春光之響》为例.pdf">思辨设计表达方式中当代影像艺术的运用及影响</a>. Undergraduate thesis on Blow Up. PDF.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">2024 · Practice archive</span>
+      <p><span class="zh">海口下</span>, East Asian Anatomy Laboratory <span class="zh">东亚解剖室</span>. Pages in progress.</p>
+    </div>
+  </div>
+
+  <h2 class="year" data-year="2023">2023</h2>
+  <div class="section">
+    <div class="entry text">
+      <span class="tag">11 · Writing</span>
+      <p><a class="zh" href="https://mp.weixin.qq.com/s/b_pZ9IJwiNV1apTHx_JLhQ">考察报告</a>. WeChat.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">10 · Writing</span>
+      <p><a class="zh" href="files/被数字异化的时代.pdf">被数字异化的时代</a>. PDF.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">05 · Installation</span>
+      <div class="reel"><img loading="lazy" src="images/m/flo0.webp" alt=""><img loading="lazy" src="images/m/flo1.webp" alt=""><img loading="lazy" src="images/m/flo2.webp" alt=""></div>
+      <p><a href="projects/flowermachine.html">Flower Machine <span class="zh">意念花</span></a>. A physically interactive installation on human attention and environment.</p>
+    </div>
+    <div class="entry">
+      <span class="tag">02 · Digital video</span>
+      <div class="reel"><img loading="lazy" src="images/m/ass0.webp" alt=""><img loading="lazy" src="images/m/ass1.webp" alt=""><img loading="lazy" src="images/m/ass2.webp" alt=""></div>
+      <p><a href="projects/ashesofsunrisee.html">Ashes of Sunrise <span class="zh">感光札記</span></a>. The eye, the camera, pointillism and facts swirl around the meaning of light. 4.09 min.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">2023 · Practice archive</span>
+      <p><span class="zh">恶童格斗联盟</span>, <span class="zh">小环线</span>, <span class="zh">闪光</span>, <span class="zh">寒窖南路</span>, Vintage Passion <span class="zh">某种狂热</span>, HongKong Fantasy <span class="zh">走过香港</span>, Tomorrow Will Be Better <span class="zh">明天会更好</span>, <span class="zh">中国赌徒</span>, <span class="zh">饺子</span>, What if <span class="zh">如果呢？</span>, <span class="zh">800</span>. Pages in progress.</p>
+    </div>
+  </div>
+
+  <h2 class="year" data-year="2022">2022</h2>
+  <div class="section">
+    <div class="entry text">
+      <span class="tag">01 · Writing</span>
+      <p><a class="zh" href="https://mp.weixin.qq.com/s/EtIzyXlcXQZaWEDjN8B0Wg">辛丑结</a>. WeChat.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">2022 · Practice archive</span>
+      <p>Hug me <span class="zh">拥抱饺子</span>, Order of Dissolution <span class="zh">序与散</span>, <span class="zh">长安志</span>, Black List <span class="zh">黑榜</span>, <span class="zh">夏末</span>, <span class="zh">疫情下的拉萨</span>, Crisis of Faith <span class="zh">信与危</span>, <span class="zh">错位时空</span>, <span class="zh">华山</span>, <span class="zh">戊戌友人</span>, <span class="zh">芙蓉镇</span>, <span class="zh">拴马桩</span>. Pages in progress.</p>
+    </div>
+  </div>
+
+  <h2 class="year" data-year="2021">2021</h2>
+  <div class="section">
+    <div class="entry">
+      <span class="tag">11 · Digital video</span>
+      <div class="reel"><img loading="lazy" src="images/m/ac0.webp" alt=""><img loading="lazy" src="images/m/ac1.webp" alt=""><img loading="lazy" src="images/m/ac2.webp" alt=""></div>
+      <p><a href="projects/acqua.html">Acqua, Civiltà e Tempo <span class="zh">时间、文明和水</span></a>. The Qingmu River leads westward, without answers. 3.36 min.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">05 · Writing</span>
+      <p><a class="zh" href="https://mp.weixin.qq.com/s/YqEZDVt9S5iiTGsKIFyDbA">那座岛</a>. WeChat.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">2021 · Practice archive</span>
+      <p>Smoking Dog <span class="zh">吸烟的狗</span>, Lust Rigorous <span class="zh">肃与色</span>, Products <span class="zh">商品</span>, <span class="zh">吉祥村</span>, <span class="zh">忆陕南写生</span>, <span class="zh">桔园梦</span>, <span class="zh">为了苏州河</span>, Fuck Everything <span class="zh">敲死一切</span>. Pages in progress.</p>
+    </div>
+  </div>
+
+  <h2 class="year" data-year="2020">2020</h2>
+  <div class="section">
+    <div class="entry text">
+      <span class="tag">12 · Writing</span>
+      <p><a class="zh" href="https://mp.weixin.qq.com/s/GGRjiU2ICK6PZKi5Z24sgw">尋找蘇麗珍</a>. WeChat.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">11 · Writing</span>
+      <p><a class="zh" href="projects/qingtongqi.html">论述青铜时代的艺术</a>.</p>
+    </div>
+    <div class="entry text">
+      <span class="tag">2020 · Practice archive</span>
+      <p><span class="zh">三十天计划</span>. Pages in progress.</p>
+    </div>
+  </div>
+
+  <h2>Tests<span class="zh">测试</span></h2>
+  <div class="section">
+    <p><a class="zh" href="projects/plane-of-focus/">焦平面</a>, <a class="zh" href="projects/tempo/">半拍</a>, <a class="zh" href="projects/peach-jelly/">桃子果冻</a>, <a class="zh" href="projects/gallery/">作品图集</a>, <a class="zh" href="projects/specimens/">追踪标本</a>, <a class="zh" href="projects/automatic/">生长半导体</a>, <a class="zh" href="projects/pixel-face/">素码脸</a>, <a class="zh" href="projects/life/">奇怪的生物</a>, <a href="career/news-disc.html">A24光盘交互复刻</a>, <a class="zh" href="projects/letter/">书之痕</a>, <a class="zh" href="projects/fracture/">字细胞的边缘</a>, <a class="zh" href="projects/flowers/">花束</a>, <a class="zh" href="projects/sand/">沙画</a>, <a class="zh" href="projects/digital-human/">数字人</a>, <a class="zh" href="projects/tape/">滚滚胶带</a>, <a class="zh" href="projects/drawer/">抽屉视觉</a>, <a class="zh" href="projects/news-thoughts-mobile/">工作室</a>, <a class="zh" href="projects/type-islands/">字落成洲</a>, <a class="zh" href="projects/type-growth/">字生</a>. Small experiments in image, motion and code.</p>
+  </div>
+
+  <h2>Elsewhere<span class="zh">别处</span></h2>
+  <div class="section">
+    <p>The full <a href="work.html">work index</a>, including <a href="work-practice.html">earlier practice</a>. <a href="news.html">News</a>, updated automatically every day. <a href="support.html">Support</a> the practice through films, artworks and merch.</p>
+  </div>
+</main>
+
+<footer>
+  <a href="files/cv-en.pdf">CV</a> · <a href="https://www.instagram.com/yihuang_art">Instagram</a> · <a href="mailto:yihuangart09@gmail.com">Email</a><br>
+  WeChat: ARTOMAI
+  <small>© 2026 Tomatone Pictures Studio</small>
+</footer>
+
+<nav id="rail" aria-label="Years"></nav>
+<div id="scrub" aria-hidden="true"><span></span><small></small></div>
+
+<script>
+  // 进作品页的过渡：有图就让图从原位放大铺满，没图就整页淡出；
+  // 从作品页按返回（页面从缓存恢复）时，把图缩回原位
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var flying=null;
+  function rectStyle(el,r){
+    el.style.left=r.left+'px'; el.style.top=r.top+'px';
+    el.style.width=r.width+'px'; el.style.height=r.height+'px';
+  }
+  function go(href,img){
+    if(reduce){ location.href=href; return; }
+    document.body.classList.add('leaving');
+    if(!img){ setTimeout(function(){ location.href=href; },280); return; }
+    var c=img.cloneNode(); c.className='fly'; c.removeAttribute('loading');
+    rectStyle(c,img.getBoundingClientRect());
+    document.body.appendChild(c);
+    c.getBoundingClientRect();
+    c.style.transition='left .45s cubic-bezier(.2,.75,0,1),top .45s cubic-bezier(.2,.75,0,1),width .45s cubic-bezier(.2,.75,0,1),height .45s cubic-bezier(.2,.75,0,1)';
+    // 像相册打开照片：按原比例放到满屏宽、竖向居中；竖图则按屏高
+    var ar=img.naturalWidth/img.naturalHeight||1.6, w=innerWidth, h=w/ar;
+    if(h>innerHeight){ h=innerHeight; w=h*ar; }
+    rectStyle(c,{left:(innerWidth-w)/2,top:(innerHeight-h)/2,width:w,height:h});
+    flying={el:c,src:img};
+    setTimeout(function(){ location.href=href; },460);
+  }
+  addEventListener('pageshow',function(e){
+    if(!e.persisted) return;
+    document.body.classList.remove('leaving');
+    if(!flying) return;
+    var f=flying; flying=null;
+    requestAnimationFrame(function(){
+      rectStyle(f.el,f.src.getBoundingClientRect());
+      setTimeout(function(){ f.el.remove(); },480);
+    });
+  });
+  // 站内链接也走淡出；外链（公众号等）、新窗口、带修饰键的点击照常
+  document.querySelector('main').addEventListener('click',function(e){
+    var a=e.target.closest('a');
+    if(!a||a.target||e.metaKey||e.ctrlKey||e.shiftKey||a.origin!==location.origin) return;
+    e.preventDefault();
+    var entry=a.closest('.entry'), img=null;
+    if(entry&&entry.querySelector('.reel')){
+      // 用当前停在图组最左边的那张
+      var reel=entry.querySelector('.reel'), x=reel.getBoundingClientRect().left;
+      [].forEach.call(reel.children,function(im){ if(!img&&im.getBoundingClientRect().right>x+20) img=im; });
+    }
+    go(a.href,img);
+  });
+
+  // 横滑图组：细条页码 + 点图进作品页
+  document.querySelectorAll('.reel').forEach(function(reel){
+    var imgs=[].slice.call(reel.children);
+    var link=reel.parentNode.querySelector('p a');
+    imgs.forEach(function(img){
+      if(link) img.addEventListener('click',function(){ go(link.href,img); });
+    });
+    if(imgs.length<2) return;
+    var dots=document.createElement('div'); dots.className='dots';
+    imgs.forEach(function(_,i){ var s=document.createElement('span'); if(i===0) s.className='on'; dots.appendChild(s); });
+    reel.after(dots);
+    reel.addEventListener('scroll',function(){
+      // 图宽不一，按最接近左缘的那张算；滑到底时亮最后一格
+      var k=0,best=1e9,x=reel.scrollLeft;
+      imgs.forEach(function(img,i){ var d=Math.abs(img.offsetLeft-reel.offsetLeft-x); if(d<best){best=d;k=i;} });
+      if(x+reel.clientWidth>=reel.scrollWidth-2) k=imgs.length-1;
+      [].forEach.call(dots.children,function(d,j){ d.className=j===k?'on':''; });
+    },{passive:true});
+  });
+
+  // 下滑交互，跟着手指的滚动走、往回滑会倒放：
+  // 图组像胶片过片，从左向右拉开，图同时往左归位；
+  // 年份像计数器，变化的那位数字从上一年翻到这一年
+  (function(){
+    if(reduce) return;
+    var reels=[].slice.call(document.querySelectorAll('.reel'));
+    var heads=[].slice.call(document.querySelectorAll('h2.year'));
+    var rolls=heads.map(function(h,i){
+      var y=h.dataset.year, prev=i?heads[i-1].dataset.year:null;
+      h.setAttribute('aria-label',y);
+      h.innerHTML=y.split('').map(function(d,k){
+        if(!prev||prev[k]===d) return '<span class="d" aria-hidden="true">'+d+'</span>';
+        return '<span class="d roll" aria-hidden="true"><span>'+prev[k]+'<br>'+d+'</span></span>';
+      }).join('');
+      return [].slice.call(h.querySelectorAll('.roll>span'));
+    });
+    function clamp(x){ return x<0?0:x>1?1:x; }
+    function ease(x){ return 1-Math.pow(1-x,3); }
+    function update(){
+      var vh=innerHeight;
+      reels.forEach(function(r){
+        var p=ease(clamp((vh*.98-r.getBoundingClientRect().top)/(vh*.32)));
+        r.style.clipPath=p>=1?'':'inset(0 '+((1-p)*100).toFixed(2)+'% 0 0)';
+        r.style.setProperty('--shift',((1-p)*48).toFixed(1)+'px');
+      });
+      heads.forEach(function(h,i){
+        if(!rolls[i].length) return;
+        var p=ease(clamp((vh*.85-h.getBoundingClientRect().top)/(vh*.35)));
+        rolls[i].forEach(function(s){ s.style.transform='translateY('+(-50*p).toFixed(2)+'%)'; });
+      });
+    }
+    var queued=false;
+    addEventListener('scroll',function(){
+      if(queued) return; queued=true;
+      requestAnimationFrame(function(){ queued=false; update(); });
+    },{passive:true});
+    addEventListener('resize',update);
+    update();
+  })();
+
+  // 年份刻度
+  (function(){
+    var heads=[].slice.call(document.querySelectorAll('h2.year'));
+    var rail=document.getElementById('rail');
+    var scrub=document.getElementById('scrub');
+    var big=scrub.querySelector('span'), count=scrub.querySelector('small');
+    var ticks=heads.map(function(h){
+      var t=document.createElement('div'); t.className='t';
+      t.innerHTML='<b>'+h.dataset.year+'</b><i></i>';
+      rail.appendChild(t);
+      return t;
+    });
+    var counts=heads.map(function(h){ return h.nextElementSibling.querySelectorAll('.entry').length; });
+    var cur=-1, dragging=false, peekTimer=0;
+
+    function mark(k){
+      if(k===cur) return;
+      cur=k;
+      ticks.forEach(function(t,i){ t.classList.toggle('on',i===k); });
+    }
+
+    // 平时：按滚动位置点亮当前年份；换年时把年份字露出来一秒
+    function onScroll(){
+      if(dragging) return;
+      var line=innerHeight*.35, k=-1;
+      heads.forEach(function(h,i){ if(h.getBoundingClientRect().top<line) k=i; });
+      rail.classList.toggle('show',k>=0||heads[0].getBoundingClientRect().top<innerHeight);
+      if(k!==cur&&k>=0){
+        mark(k);
+        rail.classList.add('peek');
+        clearTimeout(peekTimer);
+        peekTimer=setTimeout(function(){ rail.classList.remove('peek'); },1100);
+      } else if(k<0) mark(-1);
+    }
+    var ticking=false;
+    addEventListener('scroll',function(){
+      if(ticking) return; ticking=true;
+      requestAnimationFrame(function(){ ticking=false; onScroll(); });
+    },{passive:true});
+    onScroll();
+
+    // 按住拖动：取离手指最近的刻度，页面直接跳到那一年
+    function pick(y){
+      var k=0,best=1e9;
+      ticks.forEach(function(t,i){
+        var r=t.getBoundingClientRect(), d=Math.abs(r.top+r.height/2-y);
+        if(d<best){best=d;k=i;}
+      });
+      if(k===cur&&big.textContent) return;
+      mark(k);
+      big.textContent=heads[k].dataset.year;
+      count.textContent=counts[k]+(counts[k]===1?' work':' works');
+      scrollTo({top:heads[k].getBoundingClientRect().top+scrollY-16,behavior:'instant'});
+    }
+    rail.addEventListener('pointerdown',function(e){
+      dragging=true;
+      try{ rail.setPointerCapture(e.pointerId); }catch(_){}
+      rail.classList.add('show','active'); rail.classList.remove('peek');
+      big.textContent='';
+      scrub.classList.add('on');
+      pick(e.clientY);
+    });
+    rail.addEventListener('pointermove',function(e){ if(dragging) pick(e.clientY); });
+    function end(){
+      if(!dragging) return;
+      dragging=false;
+      rail.classList.remove('active');
+      scrub.classList.remove('on');
+    }
+    rail.addEventListener('pointerup',end);
+    rail.addEventListener('pointercancel',end);
+  })();
+</script>
+</body>
+</html>

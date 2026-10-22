@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<script>
+  // 手机宽度（≤860px，和全站移动端断点一致）直接换到单页手机版首页；放在统计代码前，免得记两次
+  if(window.innerWidth<=860) location.replace('mobile.html'+location.hash);
+</script>
 <title>Yi Huang 黄熠</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
