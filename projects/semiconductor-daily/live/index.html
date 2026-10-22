@@ -102,6 +102,20 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   .items li.new{animation:enter .6s ease-out;}
   @keyframes enter{from{background:var(--wash);}to{background:transparent;}}
   .stage-note{font:400 12px/1.6 var(--sans);color:var(--ink-3);margin-top:10px;}
+  /* 点开一站:全部条目,固定高度可滚动;点一条展开细节 */
+  .items.scroll{height:560px;overflow-y:auto;border-bottom:1px solid var(--hair);scrollbar-width:thin;overscroll-behavior:contain;}
+  .items li.row{cursor:pointer;}
+  .items li.row:hover .tt{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;}
+  .items li.drop:hover .tt{text-decoration:line-through;}
+  .items .dt{display:none;grid-column:1/-1;margin:8px 0 4px;padding:8px 0 2px;border-top:1px dashed var(--hair);
+    grid-template-columns:84px minmax(0,1fr);gap:4px 12px;font:400 11.5px/1.6 var(--sans);}
+  .items li.open .dt{display:grid;}
+  .items li.open .mm{white-space:normal;}
+  .items .dt .k{color:var(--soft);}
+  .items .dt .v{color:var(--ink-2);word-break:break-word;}
+  .items .dt a{color:var(--ink);text-underline-offset:3px;text-decoration-thickness:1px;}
+  .items li.more{display:block;text-align:center;padding:12px 0;border-bottom:0;}
+  .stage-foot{font:400 11px/1.6 var(--num);color:var(--soft);margin-top:6px;}
   .empty{font:400 12px/1.6 var(--sans);color:var(--soft);padding:10px 0;}
 
   .iss{list-style:none;margin:10px 0 0;padding:0;}
@@ -223,7 +237,8 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
     <section>
       <h2 class="eam-h"><span><span class="en"><i class="no">04</i>STAGE</span><span class="zh" id="stageZh"></span></span><span class="tally" id="stageTally"></span></h2>
       <div class="stage-note" id="stageNote"></div>
-      <ul class="items" id="items"></ul>
+      <ul class="items scroll" id="items"></ul>
+      <div class="stage-foot" id="stageFoot"></div>
     </section>
     <section class="out">
       <h2 class="eam-h"><span><span class="en"><i class="no">05</i>OUTPUT</span><span class="zh">最近几期</span></span><span class="tally">网站 · IG · X · 微博</span></h2>
@@ -454,16 +469,64 @@ function frame(now){
 }
 
 /* ── 选中的那一段 ── */
-function renderStage(){
+/* 点开的那一站:近 24 小时的全部条目按站另取(/api/live/stage,分页);离线时用快照里每站前 50 条 */
+const stageCache = {}, stageOpen = {};
+let stageDrawn = '', stageBusy = false;
+async function loadStage(key, append){
+  if (offline){ const snap = (live.stageItems || {})[key]; stageCache[key] = snap ? {...snap, snap: true, at: Date.now()} : null; return; }
+  const c = stageCache[key], offset = append && c ? c.items.length : 0;
+  const r = await (await fetch(apiUrl(`/api/live/stage?key=${key}&offset=${offset}&limit=100`), {cache:'no-store', signal: within(20000)})).json();
+  if (!r.ok) throw new Error(r.error || '读取失败');
+  stageCache[key] = {total: r.total, more: r.more, items: append && c ? c.items.concat(r.items) : r.items, at: Date.now(),
+                     count: (live.stages.find(x => x.key === key) || {}).count};
+}
+function detailHtml(it){
+  return (it.detail || []).map(([k, v, u]) => `<span class="k">${esc(k)}</span><span class="v">${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(v.length > 90 && /^https?:/.test(v) ? v.slice(0, 90) + '…' : v)} ↗</a>` : esc(v)}</span>`).join('');
+}
+function drawStageList(s){
+  const c = stageCache[s.key], box = $('items');
+  const list = c ? c.items : s.items;
+  const sig = s.key + '|' + (c ? c.at : 'live') + '|' + list.length + '|' + offline;
+  if (sig === stageDrawn) return;
+  const keep = stageDrawn.split('|')[0] === s.key ? box.scrollTop : 0;
+  stageDrawn = sig;
+  const open = stageOpen[s.key] || (stageOpen[s.key] = new Set());
+  box.innerHTML = list.length ? list.map((it, i) => {
+    const id = String(it.id ?? i);
+    return `<li class="row ${it.drop ? 'drop' : ''} ${open.has(id) ? 'open' : ''}" data-id="${esc(id)}"><time>${it.t ? hm(it.t) : ''}</time><div class="tt">${esc(it.title)}</div>`
+      + `<div class="mm" title="${esc(it.meta)}">${esc(it.meta || '')}</div><div class="dt">${detailHtml(it)}</div></li>`;
+  }).join('') + (c && c.more ? '<li class="more"><button type="button" id="stageMore">加载更多</button></li>' : '')
+    : '<li class="empty">近 24 小时还没有条目。</li>';
+  box.scrollTop = keep;
+  box.querySelectorAll('li.row').forEach(li => li.onclick = e => {
+    if (e.target.closest('a')) return;
+    li.classList.toggle('open');
+    li.classList.contains('open') ? open.add(li.dataset.id) : open.delete(li.dataset.id);
+  });
+  const more = $('stageMore');
+  if (more) more.onclick = async () => {
+    more.disabled = true; more.textContent = '正在读…';
+    try { await loadStage(s.key, true); } catch (err) { more.textContent = '读取失败,再点一次'; more.disabled = false; return; }
+    drawStageList(s);
+  };
+  $('stageFoot').textContent = !c ? '正在读这一站的全部条目…'
+    : c.snap ? `快照里只带这一站的前 ${c.items.length} 条(共 ${c.total} 条)`
+    : `近 24 小时共 ${c.total} 条,已列出 ${c.items.length} 条 · 点一条看细节`;
+}
+async function renderStage(){
   const s = live.stages.find(x => x.key === selected) || live.stages[0]; if (!s) return;
   const idx = live.stages.indexOf(s) + 1;
-  $('stageZh').textContent = `${String(idx).padStart(2, '0')} ${s.zh} · 最近处理`;
+  $('stageZh').textContent = `${String(idx).padStart(2, '0')} ${s.zh} · 近 24 小时`;
   $('stageTally').textContent = s.of != null ? `${s.count} / ${s.of}` : String(s.count);
   $('stageNote').textContent = s.note || '';
-  $('items').innerHTML = s.items.length ? s.items.map(it => {
-    const key = s.key + '|' + it.title + '|' + it.t, fresh = !seenItems.has(key) && seenItems.size; seenItems.add(key);
-    return `<li class="${it.drop ? 'drop' : ''} ${fresh ? 'new' : ''}"><time>${it.t ? hm(it.t) : ''}</time><div class="tt">${esc(it.title)}</div><div class="mm" title="${esc(it.meta)}">${esc(it.meta || '')}</div></li>`;
-  }).join('') : '<li class="empty">近 24 小时还没有条目。</li>';
+  drawStageList(s);
+  const c = stageCache[s.key];
+  const stale = !c || (offline !== !!c.snap) || (!offline && (c.count !== s.count || Date.now() - c.at > 60000) && c.items.length <= 100);
+  if (!stale || stageBusy) return;
+  stageBusy = true;
+  try { await loadStage(s.key, false); } catch (err) { $('stageFoot').textContent = '这一站的明细没读到,过一会儿自动再试'; }
+  finally { stageBusy = false; }
+  if (selected === s.key || (!selected && s === live.stages[0])) drawStageList(s);
 }
 
 /* ── 怎么抓 ── */
