@@ -542,7 +542,7 @@ function renderChannels(){
     return cell(s.name, st, nums, `${s.name}:源里 ${s.entries ?? '—'} 条,新入库 ${s.new ?? 0},够分 ${s.kept ?? 0}${s.secs != null ? ',' + s.secs + ' 秒' : ''}${s.error ? ',失败 ' + s.error : ''}`);
   }).join('');
   const failed = srcs.filter(s => s.ok === false).length, fresh = srcs.reduce((a, s) => a + (s.new || 0), 0);
-  $('rssHead').textContent = `RSS ${srcs.length - 1} + 证交所 · 新入库/源里条数`;
+  $('rssHead').textContent = `RSS ${srcs.filter(x => !x.twse).length} + 交易所 ${srcs.filter(x => x.twse).length} · 新入库/源里条数`;
   const col = live.schedule.find(r => r.key === 'collect');
   $('rssWhen').innerHTML = `${hm(ms(col && col.last))} · 新 ${fresh} 条${failed ? ` · <span class="eam-bad">${failed} 个失败</span>` : ''}`;
   $('queries').innerHTML = c.queries.map(q => {
