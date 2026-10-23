@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 125,
+   "date": "2026-10-23",
+   "label": "1023 英特尔台积电三星推进CFET晶体管",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英特尔台积电三星推进CFET晶体管"
+   ],
+   "pages": [
+    "issues/125/1.webp",
+    "issues/125/2.webp",
+    "issues/125/3.webp",
+    "issues/125/4.webp",
+    "issues/125/5.webp"
+   ]
+  },
+  {
    "serial": 124,
    "date": "2026-10-22",
    "label": "1022 默克韩国阴城厂投产钼系前驱体",
