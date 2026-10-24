@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 126,
+   "date": "2026-10-24",
+   "label": "1024 英特尔CTO称前沿晶圆产量最多翻倍",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英特尔CTO称前沿晶圆产量最多翻倍"
+   ],
+   "pages": [
+    "issues/126/1.webp",
+    "issues/126/2.webp",
+    "issues/126/3.webp",
+    "issues/126/4.webp",
+    "issues/126/5.webp"
+   ]
+  },
+  {
    "serial": 125,
    "date": "2026-10-23",
    "label": "1023 英特尔台积电三星推进CFET晶体管",
@@ -214,13 +231,7 @@
    "titles": [
     "谷歌开源TorchTPU挑战英伟达"
    ],
-   "pages": [
-    "issues/113/1.webp",
-    "issues/113/2.webp",
-    "issues/113/3.webp",
-    "issues/113/4.webp",
-    "issues/113/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 112,
@@ -231,13 +242,7 @@
    "titles": [
     "韩国10月前20天芯片出口增222.5%"
    ],
-   "pages": [
-    "issues/112/1.webp",
-    "issues/112/2.webp",
-    "issues/112/3.webp",
-    "issues/112/4.webp",
-    "issues/112/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 111,
@@ -248,13 +253,7 @@
    "titles": [
     "字节阿里腾讯向英伟达下单350亿美元"
    ],
-   "pages": [
-    "issues/111/1.webp",
-    "issues/111/2.webp",
-    "issues/111/3.webp",
-    "issues/111/4.webp",
-    "issues/111/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 110,
@@ -265,13 +264,7 @@
    "titles": [
     "美光桃园工会10月22日罢工声援台中"
    ],
-   "pages": [
-    "issues/110/1.webp",
-    "issues/110/2.webp",
-    "issues/110/3.webp",
-    "issues/110/4.webp",
-    "issues/110/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 109,
