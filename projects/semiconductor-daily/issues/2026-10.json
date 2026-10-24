@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 128,
+   "date": "2026-10-24",
+   "label": "1024 三星台积电阿斯麦业绩齐创新高",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星台积电阿斯麦业绩齐创新高"
+   ],
+   "pages": [
+    "issues/128/1.webp",
+    "issues/128/2.webp",
+    "issues/128/3.webp",
+    "issues/128/4.webp",
+    "issues/128/5.webp"
+   ]
+  },
+  {
    "serial": 127,
    "date": "2026-10-24",
    "label": "1024 存储链三家公司占22家半导体近九成利润",
