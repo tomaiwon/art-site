@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 130,
+   "date": "2026-10-26",
+   "label": "1026 磷化铟衬底涨价 云南锗业净利1.02亿",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "磷化铟衬底涨价 云南锗业净利1.02亿"
+   ],
+   "pages": [
+    "issues/130/1.webp",
+    "issues/130/2.webp",
+    "issues/130/3.webp",
+    "issues/130/4.webp",
+    "issues/130/5.webp"
+   ]
+  },
+  {
    "serial": 129,
    "date": "2026-10-25",
    "label": "1025 英伟达CPO交换器量产台积电先进封装",
@@ -78,13 +95,7 @@
    "titles": [
     "英特尔台积电三星推进CFET晶体管"
    ],
-   "pages": [
-    "issues/125/1.webp",
-    "issues/125/2.webp",
-    "issues/125/3.webp",
-    "issues/125/4.webp",
-    "issues/125/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 124,
