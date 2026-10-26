@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 133,
+   "date": "2026-10-26",
+   "label": "1026 英特尔英伟达超微传千亿订金锁载板产能",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英特尔英伟达超微传千亿订金锁载板产能"
+   ],
+   "pages": [
+    "issues/133/1.webp",
+    "issues/133/2.webp",
+    "issues/133/3.webp",
+    "issues/133/4.webp",
+    "issues/133/5.webp"
+   ]
+  },
+  {
    "serial": 132,
    "date": "2026-10-26",
    "label": "1026 佳能拟将光刻设备产量近翻倍",
