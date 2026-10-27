@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 140,
+   "date": "2026-10-28",
+   "label": "1028 高阶ABF载板供需紧 台厂急扩产",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "高阶ABF载板供需紧 台厂急扩产"
+   ],
+   "pages": [
+    "issues/140/1.webp",
+    "issues/140/2.webp",
+    "issues/140/3.webp",
+    "issues/140/4.webp",
+    "issues/140/5.webp"
+   ]
+  },
+  {
    "serial": 139,
    "date": "2026-10-27",
    "label": "1027 阿里腾讯字节向韩企求签10年内存长约",
@@ -180,13 +197,7 @@
    "titles": [
     "英伟达CPO交换器量产台积电先进封装"
    ],
-   "pages": [
-    "issues/129/1.webp",
-    "issues/129/2.webp",
-    "issues/129/3.webp",
-    "issues/129/4.webp",
-    "issues/129/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 128,
