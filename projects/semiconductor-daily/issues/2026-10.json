@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 137,
+   "date": "2026-10-27",
+   "label": "1027 旺宏第三季每股盈余5.52元创新高",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "旺宏第三季每股盈余5.52元创新高"
+   ],
+   "pages": [
+    "issues/137/1.webp",
+    "issues/137/2.webp",
+    "issues/137/3.webp",
+    "issues/137/4.webp",
+    "issues/137/5.webp"
+   ]
+  },
+  {
    "serial": 136,
    "date": "2026-10-27",
    "label": "1027 华强北RTX5090被炒至六万元",
