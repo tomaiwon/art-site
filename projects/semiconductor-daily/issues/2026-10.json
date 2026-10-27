@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 134,
+   "date": "2026-10-27",
+   "label": "1027 韩国三季度GDP环比增长1%远超预期",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "韩国三季度GDP环比增长1%远超预期"
+   ],
+   "pages": [
+    "issues/134/1.webp",
+    "issues/134/2.webp",
+    "issues/134/3.webp",
+    "issues/134/4.webp",
+    "issues/134/5.webp"
+   ]
+  },
+  {
    "serial": 133,
    "date": "2026-10-26",
    "label": "1026 英特尔英伟达超微传千亿订金锁载板产能",
@@ -95,13 +112,7 @@
    "titles": [
     "三星台积电阿斯麦业绩齐创新高"
    ],
-   "pages": [
-    "issues/128/1.webp",
-    "issues/128/2.webp",
-    "issues/128/3.webp",
-    "issues/128/4.webp",
-    "issues/128/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 127,
@@ -112,13 +123,7 @@
    "titles": [
     "存储链三家公司占22家半导体近九成利润"
    ],
-   "pages": [
-    "issues/127/1.webp",
-    "issues/127/2.webp",
-    "issues/127/3.webp",
-    "issues/127/4.webp",
-    "issues/127/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 126,
@@ -129,13 +134,7 @@
    "titles": [
     "英特尔CTO称前沿晶圆产量最多翻倍"
    ],
-   "pages": [
-    "issues/126/1.webp",
-    "issues/126/2.webp",
-    "issues/126/3.webp",
-    "issues/126/4.webp",
-    "issues/126/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 125,
