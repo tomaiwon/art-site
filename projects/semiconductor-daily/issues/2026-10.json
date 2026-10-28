@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 143,
+   "date": "2026-10-28",
+   "label": "1028 联电追加32亿美元扩产先进封装",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "联电追加32亿美元扩产先进封装"
+   ],
+   "pages": [
+    "issues/143/1.webp",
+    "issues/143/2.webp",
+    "issues/143/3.webp",
+    "issues/143/4.webp",
+    "issues/143/5.webp"
+   ]
+  },
+  {
    "serial": 142,
    "date": "2026-10-28",
    "label": "1028 英飞凌建全球首个12英寸GaN量产厂",
