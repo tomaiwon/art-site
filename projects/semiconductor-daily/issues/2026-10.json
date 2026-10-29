@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 153,
+   "date": "2026-10-30",
+   "label": "1030 京元电获英伟达支持赴德州设测试厂",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "京元电获英伟达支持赴德州设测试厂"
+   ],
+   "pages": [
+    "issues/153/1.webp",
+    "issues/153/2.webp",
+    "issues/153/3.webp",
+    "issues/153/4.webp",
+    "issues/153/5.webp"
+   ],
+   "pagesEn": [
+    "issues/153/en/1.webp",
+    "issues/153/en/2.webp",
+    "issues/153/en/3.webp",
+    "issues/153/en/4.webp",
+    "issues/153/en/5.webp"
+   ]
+  },
+  {
    "serial": 152,
    "date": "2026-10-30",
    "label": "1030 客户拟将HBM堆叠从12层降至8层",
