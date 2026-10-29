@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 154,
+   "date": "2026-10-30",
+   "label": "1030 揖斐电投1510亿日元扩产IC载板",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "揖斐电投1510亿日元扩产IC载板"
+   ],
+   "pages": [
+    "issues/154/1.webp",
+    "issues/154/2.webp",
+    "issues/154/3.webp",
+    "issues/154/4.webp",
+    "issues/154/5.webp"
+   ],
+   "pagesEn": [
+    "issues/154/en/1.webp",
+    "issues/154/en/2.webp",
+    "issues/154/en/3.webp",
+    "issues/154/en/4.webp",
+    "issues/154/en/5.webp"
+   ]
+  },
+  {
    "serial": 153,
    "date": "2026-10-30",
    "label": "1030 京元电获英伟达支持赴德州设测试厂",
