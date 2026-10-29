@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 152,
+   "date": "2026-10-30",
+   "label": "1030 客户拟将HBM堆叠从12层降至8层",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "客户拟将HBM堆叠从12层降至8层"
+   ],
+   "pages": [
+    "issues/152/1.webp",
+    "issues/152/2.webp",
+    "issues/152/3.webp",
+    "issues/152/4.webp",
+    "issues/152/5.webp"
+   ]
+  },
+  {
    "serial": 151,
    "date": "2026-10-30",
    "label": "1030 ASML联手蔡司扩产EUV光学系统",
