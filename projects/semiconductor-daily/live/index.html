@@ -292,7 +292,7 @@ const ms = v => typeof v === 'number' ? v * 1000 : (v ? Date.parse(v) : null);
 const NODE_ZH = {v2collect:'采集', v2deepseek:'DeepSeek', v2triage:'第一道关', v2body:'读正文', v2verify:'第二道关',
   v2extract:'抽取', v2merge:'归并', v2judge:'归并·判断', v2impact:'打分', v2rank:'排名', v2single:'写稿',
   v2images:'选图', render:'出图', v2singleen:'英文版', v2publish:'归档', igpost:'Instagram', v2market:'股价对照',
-  v2store:'入库', v2events:'事件库', v2shadow:'影子刊', edition:'早午晚报', weibopost:'微博'};
+  v2store:'入库', v2events:'事件库', v2shadow:'影子刊', edition:'早午晚报', weibopost:'微博', threadspost:'Threads'};
 const QUIET = new Set(['v2store', 'v2events', 'v2rank']);
 
 /* 数据从哪来:工作台自己(同源);或 yihuang.art 上的静态版,先连 live.yihuang.art,连不上就读同目录的快照 */
@@ -565,7 +565,7 @@ function renderIssues(){
     return `<span title="${esc(x.note || x.error || '')}" class="${x.note || x.error ? 'bad' : ''}">${label} 等</span>`;
   };
   $('issues').innerHTML = live.issues.length ? live.issues.map(i => `<li><div class="h"><span class="sn">${String(i.serial).padStart(3, '0')}</span><span class="tt">${esc(i.title)}</span><time class="eam-soft eam-num" style="font-size:11px">${hm(i.archivedAt)}</time></div>`
-    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}</div></li>`).join('')
+    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}${i.threads ? mark('Threads', i.threads) : ''}</div></li>`).join('')
     : '<li class="empty">还没有单条新闻。</li>';
 }
 
@@ -818,7 +818,8 @@ function openPaper(p){
   $('pvTt').textContent = p.title; $('pvHk').textContent = p.hook || '';
   $('pvLinks').innerHTML = (p.ig ? `<a href="${esc(p.ig)}" target="_blank" rel="noopener">Instagram ↗</a>` : '<span class="eam-soft">Instagram —</span>')
     + (p.x ? `<a href="${esc(p.x)}" target="_blank" rel="noopener">X ↗</a>` : '<span class="eam-soft">X —</span>')
-    + (p.weibo ? `<a href="${esc(p.weibo)}" target="_blank" rel="noopener">微博 ↗</a>` : '<span class="eam-soft">微博 —</span>');
+    + (p.weibo ? `<a href="${esc(p.weibo)}" target="_blank" rel="noopener">微博 ↗</a>` : '<span class="eam-soft">微博 —</span>')
+    + (p.threads ? `<a href="${esc(p.threads)}" target="_blank" rel="noopener">Threads ↗</a>` : '<span class="eam-soft">Threads —</span>');
   $('paperView').classList.add('on'); $('pvClose').focus();
 }
 $('pvClose').onclick = () => $('paperView').classList.remove('on');
