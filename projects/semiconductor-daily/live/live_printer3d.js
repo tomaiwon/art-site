@@ -11,7 +11,9 @@ const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const INK = 0x111111, CINNABAR = 0xbd4030;
 const PW = 9.6, PH = 12;                    // 纸:4:5,和封面同比例
 const SLOT = new THREE.Vector3(0, 11.2, 6.4);  // 出纸口(机顶前沿)
-const FAN = { x: -50, z: 16 };                 // 风扇放在左前方,朝右吹
+const FAN = { x: -50, z: 16 };                 // 风扇一开始放在左前方;看的人可以拖着它走(位置只在这一页里,不存)
+const FAN_LEVELS = [0, 8, 14, 22, 30, 40];     // 风速档位 → 扇叶转速;风力按转速比例放大(2 档 = 原来的风)
+const PILE = { x: 0, z: 14 };                  // 风扇总是朝着纸堆这一带吹
 
 function start() {
   const canvas = document.createElement('canvas');
@@ -360,7 +362,7 @@ function start() {
   function spot(seed) {
     let x = (rnd(seed) + rnd(seed + 13) - 1) * 50, z = -2 + rnd(seed + 11) * 32;   // 两个随机数相加:多数落在中间,少数飘远
     if (inPrinter(x, z)) z = 19.5 + rnd(seed + 5) * 9;
-    if (x < FAN.x + 9 && Math.abs(z - FAN.z) < 9) x = FAN.x + 12 + rnd(seed + 17) * 6;   // 别压在风扇底座上
+    if (Math.hypot(x - FAN.x, z - FAN.z) < 9) x = FAN.x + 12 + rnd(seed + 17) * 6;   // 别压在风扇底座上
     return [x, z, (rnd(seed + 7) - 0.5) * 1.6];
   }
 
@@ -403,12 +405,14 @@ function start() {
     blades.add(holder);
   }
   blades.add(part(new THREE.SphereGeometry(0.7, 16, 12), white, null));
-  let wind = 0, windDir = new THREE.Vector3(1, 0, 0), fanOff = false, bladeSpeed = 14;
-  function windAt(x, z) {                        // 某处的风力:离风扇越远越弱,偏离扇头朝向越多越弱
-    const dx = x - FAN.x, dz = z - FAN.z, d = Math.hypot(dx, dz);
+  let wind = 0, windDir = new THREE.Vector3(1, 0, 0), fanOff = false, bladeSpeed = 14, level = 2;
+  try { const saved = +localStorage.getItem('eam-fan-level'); if (saved >= 0 && saved <= 5 && localStorage.getItem('eam-fan-level') !== null) level = saved; } catch (e) {}
+  const scale = () => bladeSpeed / FAN_LEVELS[2];                // 风力倍数:2 档 = 1,5 档约 2.9
+  function windAt(x, z) {                        // 某处的风力:离风扇越远越弱,偏离扇头朝向越多越弱;风越大吹得越远
+    const dx = x - fan.position.x, dz = z - fan.position.z, d = Math.hypot(dx, dz);
     if (d < 1) return 0;
-    const cos = (dx * windDir.x + dz * windDir.z) / d;
-    return cos <= 0.55 ? 0 : wind * Math.pow((cos - 0.55) / 0.45, 1.5) * Math.max(0, 1 - d / 110);
+    const cos = (dx * windDir.x + dz * windDir.z) / d, reach = 110 * (0.6 + 0.4 * scale());
+    return cos <= 0.55 ? 0 : wind * Math.pow((cos - 0.55) / 0.45, 1.5) * Math.max(0, 1 - d / reach);
   }
   function flutter(paper, strength, now) {       // 迎风那一边掀起、颤动(纸是平躺的:局部 x、y 在地面上)
     const { geom, edge } = paper.userData;
@@ -472,7 +476,7 @@ function start() {
     retract() { if (printing) printing.outTarget = 0.25; },
     clear() { if (printing) { scene.remove(printing.paper); printing = null; } },
     mood(state, info) { mood = state; moodInfo = info; drawLcd(); needsFrame = true; },
-    offline(on) { fanOff = on; needsFrame = true; },               // 工作台离线:风扇停、纸落定,不假装在跑
+    offline(on) { fanOff = on; needsFrame = true; syncControls(); },   // 工作台离线:风扇停、纸落定,不假装在跑
     today(n, guard) { today = [n, guard]; front.today && front.today(n, guard); needsFrame = true; },
   };
 
@@ -508,34 +512,115 @@ function start() {
     floorPapers.splice(i, 1);
     floorGroup.remove(paper);
     scene.add(paper);
-    const k = Math.random();
+    const k = Math.random(), boost = Math.max(1, scale());
     fliers.push({
       paper, p: paper.userData.p, t: 1.2,                         // 已经是平躺着的:直接进入翻飞那一段
       pos: paper.position.clone().setY(paper.position.y + 0.3),
-      vel: new THREE.Vector3(windDir.x * (10 + k * 8), 7 + k * 6, windDir.z * (10 + k * 8) + (Math.random() - 0.5) * 6),
+      vel: new THREE.Vector3(windDir.x * (10 + k * 8) * boost, (7 + k * 6) * Math.sqrt(boost), windDir.z * (10 + k * 8) * boost + (Math.random() - 0.5) * 6),
       phase: Math.random() * 6.28, w: 2.4 + Math.random() * 1.4, glide: 6 + Math.random() * 6,
       heading: Math.random() * 6.28, yaw: paper.rotation.y, spin: (Math.random() - 0.5) * 3,
     });
   }
+
+  // —— 风扇的交互:拖着走(手机上点一下风扇、再点地面放下)、换档、收拾纸堆 ——————————————
+  const ground0 = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), hitPoint = new THREE.Vector3();
+  let dragging = false, picked = false, moved = false, grabOffset = new THREE.Vector3();
+  const fanParts = [];
+  fan.traverse(o => { if (o.isMesh) fanParts.push(o); });
+  function overFan() { return ray.intersectObjects(fanParts, false).length > 0; }
+  function groundAtPointer() { return ray.ray.intersectPlane(ground0, hitPoint) ? hitPoint.clone() : null; }
+  function placeFan(x, z) {                        // 留在画面里、别压进打印机
+    x = Math.max(-64, Math.min(64, x)); z = Math.max(-12, Math.min(34, z));
+    if (Math.abs(x) < 28 && z > -20 && z < 22) z = z < 1 ? -20 : 22;
+    fan.position.set(x, 0, z);
+    needsFrame = true;
+  }
+  function setPointer(e) {
+    const r = canvas.getBoundingClientRect();
+    mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(mouse, camera);
+  }
+  canvas.addEventListener('pointerdown', e => {
+    setPointer(e);
+    if (e.pointerType === 'touch') {               // 手机:点风扇「拿起」,再点地面「放下」
+      if (overFan()) { picked = !picked; fanRing.visible = picked; needsFrame = true; e.preventDefault(); }
+      else if (picked) { const g = groundAtPointer(); if (g) placeFan(g.x, g.z); picked = false; fanRing.visible = false; }
+      return;
+    }
+    if (!overFan()) return;
+    const g = groundAtPointer();
+    if (!g) return;
+    dragging = true; moved = false;
+    grabOffset.set(fan.position.x - g.x, 0, fan.position.z - g.z);
+    canvas.setPointerCapture(e.pointerId);
+    canvas.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+  canvas.addEventListener('pointerup', e => {
+    if (!dragging) return;
+    dragging = false;
+    canvas.releasePointerCapture(e.pointerId);
+    canvas.style.cursor = 'grab';
+  });
+  // 拿起时地上的一圈虚线
+  const fanRing = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(
+    Array.from({ length: 48 }, (_, i) => new THREE.Vector3(Math.cos(i / 48 * 6.2832) * 6, 0.15, Math.sin(i / 48 * 6.2832) * 6))),
+    new THREE.LineDashedMaterial({ color: INK, dashSize: 1, gapSize: 0.8 }));
+  fanRing.computeLineDistances();
+  fanRing.visible = false;
+  fan.add(fanRing);
+
+  const ctl = document.createElement('div');
+  ctl.className = 'fanctl';
+  ctl.innerHTML = '<span class="k">FAN</span><span class="lv">' + FAN_LEVELS.map((_, i) =>
+    `<button type="button" data-lv="${i}" aria-label="风速 ${i} 档">${i === 0 ? '关' : i}</button>`).join('') + '</span>'
+    + '<button type="button" class="tidy">收拾纸堆</button><span class="hint">拖动风扇换位置 · 风越大吹得越远</span>';
+  room.appendChild(ctl);
+  function syncControls() {
+    ctl.querySelectorAll('[data-lv]').forEach(b => {
+      b.classList.toggle('on', +b.dataset.lv === level);
+      b.disabled = fanOff;
+    });
+    ctl.classList.toggle('off', fanOff);
+    ctl.querySelector('.hint').textContent = fanOff ? '工作台离线,风扇停了' : (matchMedia('(pointer: coarse)').matches
+      ? '点风扇、再点地面换位置 · 风越大吹得越远' : '拖动风扇换位置 · 风越大吹得越远');
+  }
+  ctl.querySelectorAll('[data-lv]').forEach(b => b.onclick = () => {
+    level = +b.dataset.lv;
+    try { localStorage.setItem('eam-fan-level', String(level)); } catch (e) {}
+    syncControls(); needsFrame = true;
+  });
+  ctl.querySelector('.tidy').onclick = () => {     // 吹乱了:按期号把纸摆回原处,风扇也回到左前方
+    const papers = floorPapers.slice().sort((a, b) => b.userData.p.serial - a.userData.p.serial).map(p => p.userData.p);
+    fliers.splice(0).forEach(f => scene.remove(f.paper));
+    settling.splice(0).forEach(s => scene.remove(s.paper));
+    placeFan(FAN.x, FAN.z);
+    api.floor(papers);
+  };
+  syncControls();
 
   // —— 鼠标:轻微视差、悬停抬起、点开大图 ——————————————————————————————
   const mouse = new THREE.Vector2(), aim = new THREE.Vector2();
   const ray = new THREE.Raycaster();
   let hovered = null;
   canvas.addEventListener('pointermove', e => {
-    const r = canvas.getBoundingClientRect();
-    mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-    ray.setFromCamera(mouse, camera);
+    setPointer(e);
+    if (dragging) {                                  // 拖着风扇走:跟着鼠标落在地面上的点
+      const g = groundAtPointer();
+      if (g) { placeFan(g.x + grabOffset.x, g.z + grabOffset.z); moved = true; }
+      return;
+    }
     const hit = ray.intersectObjects(floorPapers.map(p => p.userData.front), false)[0];
     const paper = hit ? floorPapers.find(p => p.userData.front === hit.object) : null;
-    if (paper !== hovered) {
-      hovered = paper;
-      canvas.style.cursor = paper ? 'zoom-in' : 'default';
-    }
+    if (paper !== hovered) hovered = paper;
+    canvas.style.cursor = overFan() ? 'grab' : paper ? 'zoom-in' : 'default';
     needsFrame = true;
   });
-  canvas.addEventListener('pointerleave', () => { mouse.set(0, 0); hovered = null; needsFrame = true; });
-  canvas.addEventListener('click', () => { if (hovered && window.openPaper) window.openPaper(hovered.userData.p); });
+  canvas.addEventListener('pointerleave', () => { if (!dragging) { mouse.set(0, 0); hovered = null; } needsFrame = true; });
+  canvas.addEventListener('click', () => {
+    if (moved) { moved = false; return; }            // 刚拖完风扇,不算点纸
+    if (hovered && !picked && window.openPaper) window.openPaper(hovered.userData.p);
+  });
 
   // —— 尺寸与可见性 ——————————————————————————————————————————————————————
   function resize() {
@@ -563,7 +648,7 @@ function start() {
     if (fanOff && bladeSpeed < 0.05 && !busy && !needsFrame && aim.distanceTo(mouse) < 0.002) return;   // 离线且风扇已停:不再重画
     needsFrame = false;
 
-    aim.lerp(mouse, REDUCE ? 1 : 0.06);
+    if (!dragging) aim.lerp(mouse, REDUCE ? 1 : 0.06);
     camera.position.set(home.x + aim.x * 10, home.y + aim.y * 5, home.z);
     camera.lookAt(target);
 
@@ -579,12 +664,13 @@ function start() {
     printer.position.y = (mood === 'printing' && !REDUCE) ? Math.sin(now / 30) * 0.03 : 0;
 
     if (!REDUCE) {                                                  // 风:扇叶一直转,扇头左右摆,风力一阵一阵的
-      bladeSpeed += ((fanOff ? 0 : 14) - bladeSpeed) * Math.min(1, dt * 0.8);   // 关掉时扇叶慢慢停
+      bladeSpeed += ((fanOff ? 0 : FAN_LEVELS[level]) - bladeSpeed) * Math.min(1, dt * 0.8);   // 换档、关掉时扇叶慢慢变速
       blades.rotation.x += dt * bladeSpeed;
+      const aimYaw = Math.atan2(PILE.z - fan.position.z, PILE.x - fan.position.x);         // 朝纸堆
       const swing = Math.sin(now / 5200) * 0.42;
-      if (!fanOff) fanHead.rotation.y = -swing;
-      windDir.set(Math.cos(swing), 0, Math.sin(swing));
-      wind = (0.95 + 0.35 * Math.sin(now / 1700) + 0.2 * Math.sin(now / 610)) * (bladeSpeed / 14);
+      if (!fanOff && level > 0) fanHead.rotation.y = -(aimYaw + swing);
+      windDir.set(Math.cos(-fanHead.rotation.y), 0, Math.sin(-fanHead.rotation.y));
+      wind = (0.95 + 0.35 * Math.sin(now / 1700) + 0.2 * Math.sin(now / 610)) * scale();
       floorPapers.forEach(p => {
         if (p === hovered) return;
         const u = p.userData, w = windAt(p.position.x, p.position.z) * (u.covered ? 0 : 1);   // 被压在下面的吹不动
@@ -593,14 +679,21 @@ function start() {
           const sp = (w - 0.2) * 3.2;
           if (!u.sliding) { u.sliding = true; u.layer = ++layerSeq; }   // 开始滑的纸到最上层,从别的纸上面滑过
           u.spin ??= (Math.random() - 0.5) * 0.6;
-          p.position.x = Math.min(58, p.position.x + windDir.x * sp * dt);
-          p.position.z = Math.max(-8, Math.min(30, p.position.z + windDir.z * sp * dt));
+          p.position.x = Math.max(-60, Math.min(60, p.position.x + windDir.x * sp * dt));
+          p.position.z = Math.max(-10, Math.min(28, p.position.z + windDir.z * sp * dt));
           p.rotation.y += u.spin * sp * dt;
-          if (inPrinter(p.position.x, p.position.z)) p.position.z = Math.max(p.position.z, 19.5);
+          if (inPrinter(p.position.x, p.position.z)) {             // 撞到打印机:贴着它往两边滑过去,别全堵在前面
+            p.position.z = Math.max(p.position.z, 19.5);
+            p.position.x += (p.position.x >= 0 ? 1 : -1) * sp * dt * 0.9;
+          }
         } else u.sliding = false;
       });
       gustIn -= dt;
-      if (gustIn <= 0) { gustIn = 4 + Math.random() * 6; if (!printing && !fanOff && fliers.length < 2) gust(); }
+      if (gustIn <= 0) {                                            // 风越大,大风来得越勤、一次掀起的越多
+        const sc = scale();
+        gustIn = (4 + Math.random() * 6) / Math.max(1, sc * sc);
+        if (!printing && !fanOff && sc > 0.3 && fliers.length < Math.max(2, Math.round(sc * 2))) gust();
+      }
     }
     restack();
     if (printing) {
@@ -629,7 +722,7 @@ function start() {
       f.vel.z += (glideZ * settleIn + (1 - settleIn) * 8 + blow * windDir.z - f.vel.z) * dt * 1.6;
       f.pos.addScaledVector(f.vel, dt);
       if (inPrinter(f.pos.x, f.pos.z) && f.pos.y < 14) f.pos.z = Math.max(f.pos.z, 19.5);   // 别落进机器里
-      f.pos.x = Math.min(58, f.pos.x); f.pos.z = Math.max(-8, Math.min(30, f.pos.z));         // 也别飞出画面
+      f.pos.x = Math.max(-60, Math.min(60, f.pos.x)); f.pos.z = Math.max(-10, Math.min(28, f.pos.z));   // 也别飞出画面
       f.yaw += f.spin * dt;
       const flat = 1 - Math.pow(1 - settleIn, 2);
       const pitch = -0.12 + (-Math.PI / 2 + 0.12) * flat + 0.5 * Math.cos(f.t * f.w + f.phase) * flat;

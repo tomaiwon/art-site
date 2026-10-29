@@ -169,6 +169,20 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   .room>.paper{left:0;top:0;}
   .room.three .press,.room.three .mouth,.room.three>.paper{display:none;}
   .room canvas.p3d{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .room canvas.p3d{touch-action:pan-y;}
+  /* 风扇:档位、收拾纸堆(3D 版才有) */
+  .fanctl{position:absolute;left:0;bottom:12px;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    font:400 11px/1.4 var(--num);color:var(--soft);}
+  .fanctl .k{letter-spacing:.14em;}
+  .fanctl .lv{display:inline-flex;border:1px solid var(--ink);}
+  .fanctl .lv button{width:30px;height:26px;padding:0;border:0;border-right:1px solid var(--hair);background:var(--paper);
+    font:400 11.5px/1 var(--num);color:var(--ink);cursor:pointer;}
+  .fanctl .lv button:last-child{border-right:0;}
+  .fanctl .lv button.on{background:var(--ink);color:var(--paper);}
+  .fanctl .lv button:disabled{color:var(--faint);cursor:default;}
+  .fanctl .tidy{height:26px;padding:0 10px;font:400 11.5px/1 var(--sans);}
+  .fanctl.off .lv{border-color:var(--faint);}
+  @media (max-width:700px){.fanctl .hint{display:none;}}
   .room.three{height:520px;}
   .room.three .press-state{top:22px;left:auto;right:0;width:300px;z-index:2;}
   .room.three .press-left{top:22px;right:auto;left:0;width:260px;text-align:left;z-index:2;}
