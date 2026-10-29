@@ -2,6 +2,23 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 151,
+   "date": "2026-10-30",
+   "label": "1030 ASML联手蔡司扩产EUV光学系统",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "ASML联手蔡司扩产EUV光学系统"
+   ],
+   "pages": [
+    "issues/151/1.webp",
+    "issues/151/2.webp",
+    "issues/151/3.webp",
+    "issues/151/4.webp",
+    "issues/151/5.webp"
+   ]
+  },
+  {
    "serial": 150,
    "date": "2026-10-29",
    "label": "1029 旺宏378亿转攻NAND与eMMC",
@@ -197,13 +214,7 @@
    "titles": [
     "阿里腾讯字节向韩企求签10年内存长约"
    ],
-   "pages": [
-    "issues/139/1.webp",
-    "issues/139/2.webp",
-    "issues/139/3.webp",
-    "issues/139/4.webp",
-    "issues/139/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 138,
@@ -214,13 +225,7 @@
    "titles": [
     "智原拿下2奈米云端AI专案订单"
    ],
-   "pages": [
-    "issues/138/1.webp",
-    "issues/138/2.webp",
-    "issues/138/3.webp",
-    "issues/138/4.webp",
-    "issues/138/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 137,
@@ -231,13 +236,7 @@
    "titles": [
     "旺宏第三季每股盈余5.52元创新高"
    ],
-   "pages": [
-    "issues/137/1.webp",
-    "issues/137/2.webp",
-    "issues/137/3.webp",
-    "issues/137/4.webp",
-    "issues/137/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 136,
@@ -248,13 +247,7 @@
    "titles": [
     "华强北RTX5090被炒至六万元"
    ],
-   "pages": [
-    "issues/136/1.webp",
-    "issues/136/2.webp",
-    "issues/136/3.webp",
-    "issues/136/4.webp",
-    "issues/136/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 135,
@@ -265,13 +258,7 @@
    "titles": [
     "DDR4短缺催生二手内存交易"
    ],
-   "pages": [
-    "issues/135/1.webp",
-    "issues/135/2.webp",
-    "issues/135/3.webp",
-    "issues/135/4.webp",
-    "issues/135/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 134,
@@ -282,13 +269,7 @@
    "titles": [
     "韩国三季度GDP环比增长1%远超预期"
    ],
-   "pages": [
-    "issues/134/1.webp",
-    "issues/134/2.webp",
-    "issues/134/3.webp",
-    "issues/134/4.webp",
-    "issues/134/5.webp"
-   ]
+   "pages": []
   },
   {
    "serial": 133,
