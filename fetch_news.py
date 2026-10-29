@@ -547,6 +547,8 @@ _DAILY_SEMI = """
   .daily-strip img{display:block;width:96px;height:120px;object-fit:cover;}
   .daily-strip button:hover img,.daily-strip button:focus-visible img{opacity:.82;}
   .daily-strip button:focus-visible{outline:2px solid #111;outline-offset:2px;}
+  .daily-strip .daily-en{flex:0 0 auto;display:flex;align-items:flex-end;margin-left:8px;padding:0 4px 2px 10px;
+    border-left:1px solid #ddd;font-family:"EFont","ZFont",sans-serif;font-size:11px;letter-spacing:1.5px;color:#888;}
   #daily-viewer{position:fixed;inset:0;z-index:100;background:rgba(255,255,255,.97);display:none;flex-direction:column;
     align-items:center;justify-content:center;user-select:none;}
   #daily-viewer.on{display:flex;}
@@ -590,8 +592,10 @@ _DAILY_SEMI = """
   function beijing(offsetDays){ return new Date(Date.now()+8*3600e3-offsetDays*86400e3).toISOString().slice(0,10); }
   function show(k){
     at=Math.max(0, Math.min(cur.pages.length-1, k));
-    vImg.src=BASE+cur.pages[at]; vImg.alt=cur.label+' 第 '+(at+1)+' 页';
-    vTitle.textContent=cur.label; vCount.textContent=(at+1)+' / '+cur.pages.length;
+    var en=at>=cur.nZh;                     // 中文页后面接着英文版(单条新闻,10-30 起)
+    vImg.src=BASE+cur.pages[at]; vImg.alt=cur.label+(en?' English ':' 第 ')+(en?at-cur.nZh+1:at+1)+(en?'':' 页');
+    vTitle.textContent=cur.label;
+    vCount.textContent=en ? 'EN '+(at-cur.nZh+1)+' / '+(cur.pages.length-cur.nZh) : (at+1)+' / '+cur.nZh;
     vPrev.disabled=at===0; vNext.disabled=at===cur.pages.length-1;
   }
   function open(it, k, btn){ cur=it; opener=btn; show(k); viewer.classList.add('on'); document.body.style.overflow='hidden'; document.getElementById('dv-close').focus(); }
@@ -609,13 +613,16 @@ _DAILY_SEMI = """
     if(touchX===null) return; var dx=e.changedTouches[0].clientX-touchX; touchX=null;
     if(Math.abs(dx)>40) show(at+(dx<0?1:-1));
   });
-  function row(it){
+  function row(src){
+    var it={label:src.label, nZh:src.pages.length, pages:src.pages.concat(src.pagesEn||[])};
     var strip=el('div',{className:'daily-strip'}, it.pages.map(function(p,k){
-      var b=el('button',{type:'button',ariaLabel:it.label+' 第 '+(k+1)+' 页,点开看大图'},
+      var en=k>=it.nZh;
+      var b=el('button',{type:'button',ariaLabel:it.label+(en?' 英文版第 '+(k-it.nZh+1):' 第 '+(k+1))+' 页,点开看大图'},
         [el('img',{src:BASE+p,alt:'',loading:'lazy',width:96,height:120})]);
       b.addEventListener('click', function(){ open(it, k, b); });
       return b;
     }));
+    if(it.pages.length>it.nZh) strip.insertBefore(el('span',{className:'daily-en',textContent:'EN',ariaHidden:'true'}), strip.children[it.nZh]);
     return el('li',{className:'item daily-item'},[el('span',{className:'year',textContent:it.label}), strip]);
   }
   function fetchJson(p){ return fetch(BASE+p,{cache:'no-cache'}).then(function(r){ if(!r.ok) throw r.status; return r.json(); }); }
