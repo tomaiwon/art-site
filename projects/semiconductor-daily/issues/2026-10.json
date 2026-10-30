@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 156,
+   "date": "2026-10-30",
+   "label": "1030 闪迪称NAND长单排至2030年",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "闪迪称NAND长单排至2030年"
+   ],
+   "pages": [
+    "issues/156/1.webp",
+    "issues/156/2.webp",
+    "issues/156/3.webp",
+    "issues/156/4.webp",
+    "issues/156/5.webp"
+   ],
+   "pagesEn": [
+    "issues/156/en/1.webp",
+    "issues/156/en/2.webp",
+    "issues/156/en/3.webp",
+    "issues/156/en/4.webp",
+    "issues/156/en/5.webp"
+   ]
+  },
+  {
    "serial": 155,
    "date": "2026-10-30",
    "label": "1030 英特尔以色列厂爆炸冲击第四季营收",
