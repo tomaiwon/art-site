@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 158,
+   "date": "2026-10-31",
+   "label": "1031 三星SK海力士转产推高PC内存价",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星SK海力士转产推高PC内存价"
+   ],
+   "pages": [
+    "issues/158/1.webp",
+    "issues/158/2.webp",
+    "issues/158/3.webp",
+    "issues/158/4.webp",
+    "issues/158/5.webp"
+   ],
+   "pagesEn": [
+    "issues/158/en/1.webp",
+    "issues/158/en/2.webp",
+    "issues/158/en/3.webp",
+    "issues/158/en/4.webp",
+    "issues/158/en/5.webp"
+   ]
+  },
+  {
    "serial": 157,
    "date": "2026-10-31",
    "label": "1031 128GB DDR5套装破50万日元",
