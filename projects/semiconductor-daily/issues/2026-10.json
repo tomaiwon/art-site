@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 155,
+   "date": "2026-10-30",
+   "label": "1030 英特尔以色列厂爆炸冲击第四季营收",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英特尔以色列厂爆炸冲击第四季营收"
+   ],
+   "pages": [
+    "issues/155/1.webp",
+    "issues/155/2.webp",
+    "issues/155/3.webp",
+    "issues/155/4.webp",
+    "issues/155/5.webp"
+   ],
+   "pagesEn": [
+    "issues/155/en/1.webp",
+    "issues/155/en/2.webp",
+    "issues/155/en/3.webp",
+    "issues/155/en/4.webp",
+    "issues/155/en/5.webp"
+   ]
+  },
+  {
    "serial": 154,
    "date": "2026-10-30",
    "label": "1030 揖斐电投1510亿日元扩产IC载板",
