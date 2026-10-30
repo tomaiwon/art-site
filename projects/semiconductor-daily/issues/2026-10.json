@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 157,
+   "date": "2026-10-31",
+   "label": "1031 128GB DDR5套装破50万日元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "128GB DDR5套装破50万日元"
+   ],
+   "pages": [
+    "issues/157/1.webp",
+    "issues/157/2.webp",
+    "issues/157/3.webp",
+    "issues/157/4.webp",
+    "issues/157/5.webp"
+   ],
+   "pagesEn": [
+    "issues/157/en/1.webp",
+    "issues/157/en/2.webp",
+    "issues/157/en/3.webp",
+    "issues/157/en/4.webp",
+    "issues/157/en/5.webp"
+   ]
+  },
+  {
    "serial": 156,
    "date": "2026-10-30",
    "label": "1030 闪迪称NAND长单排至2030年",
@@ -298,20 +322,8 @@
    "titles": [
     "力成博通4亿美元新加坡合资案获批"
    ],
-   "pages": [
-    "issues/144/1.webp",
-    "issues/144/2.webp",
-    "issues/144/3.webp",
-    "issues/144/4.webp",
-    "issues/144/5.webp"
-   ],
-   "pagesEn": [
-    "issues/144/en/1.webp",
-    "issues/144/en/2.webp",
-    "issues/144/en/3.webp",
-    "issues/144/en/4.webp",
-    "issues/144/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 143,
@@ -322,20 +334,8 @@
    "titles": [
     "联电追加32亿美元扩产先进封装"
    ],
-   "pages": [
-    "issues/143/1.webp",
-    "issues/143/2.webp",
-    "issues/143/3.webp",
-    "issues/143/4.webp",
-    "issues/143/5.webp"
-   ],
-   "pagesEn": [
-    "issues/143/en/1.webp",
-    "issues/143/en/2.webp",
-    "issues/143/en/3.webp",
-    "issues/143/en/4.webp",
-    "issues/143/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 142,
@@ -346,20 +346,8 @@
    "titles": [
     "英飞凌建全球首个12英寸GaN量产厂"
    ],
-   "pages": [
-    "issues/142/1.webp",
-    "issues/142/2.webp",
-    "issues/142/3.webp",
-    "issues/142/4.webp",
-    "issues/142/5.webp"
-   ],
-   "pagesEn": [
-    "issues/142/en/1.webp",
-    "issues/142/en/2.webp",
-    "issues/142/en/3.webp",
-    "issues/142/en/4.webp",
-    "issues/142/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 141,
@@ -370,20 +358,8 @@
    "titles": [
     "欣兴追加509亿设备采购"
    ],
-   "pages": [
-    "issues/141/1.webp",
-    "issues/141/2.webp",
-    "issues/141/3.webp",
-    "issues/141/4.webp",
-    "issues/141/5.webp"
-   ],
-   "pagesEn": [
-    "issues/141/en/1.webp",
-    "issues/141/en/2.webp",
-    "issues/141/en/3.webp",
-    "issues/141/en/4.webp",
-    "issues/141/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 140,
@@ -394,13 +370,8 @@
    "titles": [
     "高阶ABF载板供需紧 台厂急扩产"
    ],
-   "pages": [
-    "issues/140/1.webp",
-    "issues/140/2.webp",
-    "issues/140/3.webp",
-    "issues/140/4.webp",
-    "issues/140/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 139,
