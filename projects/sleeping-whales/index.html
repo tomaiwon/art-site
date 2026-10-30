@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>沉睡的抹香鲸</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{--ink:#e8f4fa;--dim:rgba(232,244,250,.62);--glass:rgba(4,22,38,.42);--line:rgba(200,235,255,.18);--bg:#021424}
+  @media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--ink:#e8f4fa;--dim:rgba(232,244,250,.62);--glass:rgba(4,22,38,.42);--line:rgba(200,235,255,.18);--bg:#021424}}
+  :root[data-theme="dark"]{--bg:#021424}
+  html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;color:var(--ink);
+    font:14px/1.45 -apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Helvetica Neue",sans-serif}
+  canvas{display:block;width:100vw;height:100vh;touch-action:none}
+  [hidden]{display:none!important}
+  #title{position:fixed;left:24px;bottom:24px;pointer-events:none;transition:opacity 1.6s ease}
+  #title h1{margin:0;font-weight:600;font-size:22px;letter-spacing:.12em}
+  #title p{margin:4px 0 0;color:var(--dim);font-size:12px;letter-spacing:.06em}
+  #shot{position:fixed;left:24px;top:20px;color:var(--dim);font-size:11px;letter-spacing:.2em;pointer-events:none}
+  #ui{position:fixed;right:16px;bottom:18px;display:flex;gap:8px}
+  #ui button{appearance:none;border:1px solid var(--line);background:var(--glass);color:var(--ink);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:7px 14px;font:inherit;font-size:12px;cursor:pointer}
+  #ui button[aria-pressed="true"]{background:rgba(160,220,255,.22)}
+  #hint{position:fixed;right:18px;bottom:58px;color:var(--dim);font-size:11px;pointer-events:none;transition:opacity 1.2s}
+  #err{position:fixed;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--dim)}
+  @media (max-width:560px){#title{left:16px;bottom:64px}#title h1{font-size:18px}#ui{right:12px;left:12px;justify-content:flex-end}#hint{display:none}#shot{left:16px}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="shot"></div>
+<div id="title"><h1>沉睡的抹香鲸</h1><p>Physeter macrocephalus · 它们竖直悬停在水中，每次只睡十几分钟</p></div>
+<div id="hint">拖动换成自由视角 · 空格键切回自动镜头</div>
+<div id="ui">
+  <button id="free" aria-pressed="false">自由视角</button>
+  <button id="snd" aria-pressed="false">声音</button>
+</div>
+<div id="err" hidden>这个页面需要 WebGL2。</div>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const canvas = document.getElementById('c');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' }); }
+catch (e) { document.getElementById('err').hidden = false; throw e; }
+if (!renderer.capabilities.isWebGL2) { document.getElementById('err').hidden = false; throw new Error('webgl2'); }
+const DPR = Math.min(devicePixelRatio || 1, 1.5);
+renderer.setPixelRatio(DPR);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+
+const SURF = 30;                 // 水面高度（米）
+const params = new URLSearchParams(location.search);
+const FIX_SHOT = params.has('shot') ? +params.get('shot') : -1;   // 调试：?shot=2&t=1.5
+const FIX_T = params.has('t') ? +params.get('t') : 1.5;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 400);
+
+/* ---------- 共享噪声纹理（可平铺） ---------- */
+function hash2(x, y, s) { let h = (x * 374761393 + y * 668265263 + s * 982451653) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967295; }
+function tileNoise(N, cells, seed) {
+  const out = new Float32Array(N * N);
+  for (let oct = 0, amp = 1, c = cells, tot = 0; oct < 4; oct++, amp *= 0.5, c *= 2) {
+    tot += amp;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const fx = x / N * c, fy = y / N * c, ix = Math.floor(fx), iy = Math.floor(fy);
+      let ux = fx - ix, uy = fy - iy; ux = ux * ux * (3 - 2 * ux); uy = uy * uy * (3 - 2 * uy);
+      const a = hash2(ix % c, iy % c, seed + oct), b = hash2((ix + 1) % c, iy % c, seed + oct);
+      const d = hash2(ix % c, (iy + 1) % c, seed + oct), e = hash2((ix + 1) % c, (iy + 1) % c, seed + oct);
+      out[y * N + x] += amp * (a + (b - a) * ux + (d - a) * uy + (a - b - d + e) * ux * uy);
+    }
+    if (oct === 3) for (let i = 0; i < out.length; i++) out[i] /= tot;
+  }
+  return out;
+}
+const NT = 256;
+const nA = tileNoise(NT, 6, 11), nB = tileNoise(NT, 10, 37);
+const noiseData = new Uint8Array(NT * NT * 4);
+for (let i = 0; i < NT * NT; i++) { noiseData[i * 4] = nA[i] * 255; noiseData[i * 4 + 1] = nB[i] * 255; noiseData[i * 4 + 2] = 0; noiseData[i * 4 + 3] = 255; }
+const noiseTex = new THREE.DataTexture(noiseData, NT, NT);
+noiseTex.wrapS = noiseTex.wrapT = THREE.RepeatWrapping;
+noiseTex.magFilter = THREE.LinearFilter; noiseTex.minFilter = THREE.LinearMipmapLinearFilter;
+noiseTex.generateMipmaps = true; noiseTex.needsUpdate = true;
+
+/* ---------- 光 ---------- */
+scene.add(new THREE.HemisphereLight(0x9ad6ff, 0x020c18, 1.3));
+const sun = new THREE.DirectionalLight(0xd8f2ff, 2.4);
+sun.position.set(12, 60, 6); scene.add(sun);
+const torch = new THREE.SpotLight(0xf4f8ff, 160, 45, 0.34, 0.6, 1.5);
+scene.add(torch, torch.target);
+
+/* ---------- 抹香鲸皮肤：环向皱纹法线贴图 ---------- */
+function wrinkleNormalMap() {
+  const N = 512, h = new Float32Array(N * N), n1 = tileNoise(N, 8, 5), n2 = tileNoise(N, 32, 9);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const i = y * N + x, warp = n1[i] * 9;
+    h[i] = 0.55 * Math.sin((y / N) * Math.PI * 2 * 18 + warp * 1.6) * (0.4 + n1[i]) + 0.45 * n2[i] + 0.18 * Math.sin((y / N) * Math.PI * 2 * 53 + warp * 2.3);
+  }
+  const data = new Uint8Array(N * N * 4);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const i = y * N + x;
+    const dx = h[y * N + (x + 1) % N] - h[y * N + (x + N - 1) % N];
+    const dy = h[((y + 1) % N) * N + x] - h[((y + N - 1) % N) * N + x];
+    const v = new THREE.Vector3(-dx * 1.4, -dy * 1.4, 1).normalize();
+    data[i * 4] = (v.x * 0.5 + 0.5) * 255; data[i * 4 + 1] = (v.y * 0.5 + 0.5) * 255; data[i * 4 + 2] = (v.z * 0.5 + 0.5) * 255; data[i * 4 + 3] = 255;
+  }
+  const t = new THREE.DataTexture(data, N, N);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
+  t.generateMipmaps = true; t.anisotropy = 4; t.needsUpdate = true;
+  return t;
+}
+const skinNormal = wrinkleNormalMap();
+
+/* ---------- 抹香鲸几何：沿 z 轴，吻端在 +z，背在 +y ---------- */
+function spline(keys, t) {             // Catmull-Rom over [t, v] keys
+  let i = 0; while (i < keys.length - 2 && t > keys[i + 1][0]) i++;
+  const p0 = keys[Math.max(0, i - 1)], p1 = keys[i], p2 = keys[i + 1], p3 = keys[Math.min(keys.length - 1, i + 2)];
+  const u = (t - p1[0]) / (p2[0] - p1[0] || 1), u2 = u * u, u3 = u2 * u;
+  const a = p1[1], b = p2[1], ma = (p2[1] - p0[1]) * 0.5, mb = (p3[1] - p1[1]) * 0.5;
+  return Math.max(0, (2 * u3 - 3 * u2 + 1) * a + (u3 - 2 * u2 + u) * ma + (-2 * u3 + 3 * u2) * b + (u3 - u2) * mb);
+}
+const HK = [[0, 0], [0.006, 0.75], [0.025, 1.3], [0.12, 1.5], [0.3, 1.58], [0.42, 1.66], [0.55, 1.5], [0.68, 1.08], [0.8, 0.6], [0.89, 0.36], [0.96, 0.24], [1, 0.1]];
+const WK = [[0, 0], [0.006, 0.7], [0.025, 1.08], [0.12, 1.2], [0.3, 1.26], [0.42, 1.38], [0.55, 1.26], [0.68, 0.84], [0.8, 0.42], [0.89, 0.22], [0.96, 0.16], [1, 0.08]];
+
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+function whaleBody(L, seed) {
+  const NS = 120, NR = 56, R = rng(seed);
+  const scars = [];
+  for (let k = 0; k < 46; k++) {                      // 白色疤痕：多在头部
+    const t0 = Math.pow(R(), 1.8) * 0.55, a0 = R() * Math.PI * 2;
+    scars.push({ t0, a0, dt: (R() - 0.5) * 0.06, da: (R() - 0.5) * 0.9, w: 0.004 + R() * 0.008 });
+  }
+  const pos = [], col = [], uv = [], idx = [];
+  const tmpC = new THREE.Color();
+  for (let i = 0; i <= NS; i++) {
+    const t = i / NS, z = (0.5 - t) * L;
+    const h = spline(HK, t) * L / 16, w = spline(WK, t) * L / 16;
+    const n = THREE.MathUtils.lerp(3.4, 2.1, THREE.MathUtils.smoothstep(t, 0.25, 0.5));
+    const hump = 0.26 * Math.exp(-(((t - 0.63) / 0.028) ** 2)) + [0.7, 0.75, 0.8, 0.85].reduce((s, c) => s + 0.07 * Math.exp(-(((t - c) / 0.012) ** 2)), 0);
+    const keel = 0.12 * Math.exp(-(((t - 0.86) / 0.05) ** 2));
+    for (let j = 0; j <= NR; j++) {
+      const a = j / NR * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a);
+      let x = w * Math.sign(ca) * Math.abs(ca) ** (2 / n);
+      let y = h * Math.sign(sa) * Math.abs(sa) ** (2 / n);
+      if (sa > 0) y += hump * L / 16 * sa ** 6; else y -= keel * L / 16 * sa ** 8;
+      if (t < 0.36 && sa < 0) y *= 0.9;               // 头部下方略平
+      const wob = 1 + 0.007 * Math.sin(t * 70 + a * 2 + Math.sin(a * 5 + t * 23) * 2.5) * Math.min(1, t * 8);
+      pos.push(x * wob, y * wob, z);
+      uv.push(j / NR * 2, t * 4);
+      // 颜色：深灰蓝，头部疤痕，嘴唇白
+      let c = 0.16 + 0.03 * Math.sin(t * 37 + a * 5) * Math.sin(a * 2 + t * 11);
+      let lift = 0;
+      for (const s of scars) {
+        const dt = t - s.t0, da = Math.atan2(Math.sin(a - s.a0), Math.cos(a - s.a0));
+        const len = Math.hypot(s.dt, s.da * 0.08);
+        const px = (dt * s.dt + da * 0.08 * s.da * 0.08) / (len * len);
+        if (px > 0 && px < 1) { const dd = Math.hypot(dt - s.dt * px, da * 0.08 - s.da * 0.08 * px); if (dd < s.w) lift = Math.max(lift, 1 - dd / s.w); }
+      }
+      if (t > 0.03 && t < 0.3 && sa < -0.75) lift = Math.max(lift, 0.35 * THREE.MathUtils.smoothstep(-sa, 0.75, 0.95));
+      c += lift * 0.32;
+      tmpC.setRGB(c * 0.92, c * 1.0, c * 1.08);
+      col.push(tmpC.r, tmpC.g, tmpC.b);
+    }
+  }
+  for (let i = 0; i < NS; i++) for (let j = 0; j < NR; j++) {
+    const a = i * (NR + 1) + j, b = a + NR + 1;
+    idx.push(a, b, a + 1, b, b + 1, a + 1);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setIndex(idx); g.computeVertexNormals();
+  return g;
+}
+
+function flukeGeometry(span, chord) {
+  const s = new THREE.Shape(), hs = span / 2;
+  s.moveTo(0, 0.15);
+  s.quadraticCurveTo(hs * 0.45, 0.05, hs, -chord * 0.62);           // 前缘
+  s.quadraticCurveTo(hs * 0.92, -chord * 0.86, hs * 0.55, -chord * 0.88); // 尖端回勾
+  s.quadraticCurveTo(hs * 0.18, -chord * 0.9, 0, -chord * 0.72);      // 后缘到缺刻
+  s.quadraticCurveTo(-hs * 0.18, -chord * 0.9, -hs * 0.55, -chord * 0.88);
+  s.quadraticCurveTo(-hs * 0.92, -chord * 0.86, -hs, -chord * 0.62);
+  s.quadraticCurveTo(-hs * 0.45, 0.05, 0, 0.15);
+  const g = new THREE.ExtrudeGeometry(s, { depth: 0.06, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 3, curveSegments: 18 });
+  g.translate(0, 0, -0.03);
+  g.rotateX(Math.PI / 2);                  // shape 的 y → -z（向后），厚度沿 y
+  const n = g.attributes.position.count, c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { c[i * 3] = 0.15; c[i * 3 + 1] = 0.165; c[i * 3 + 2] = 0.18; }
+  g.setAttribute('color', new THREE.BufferAttribute(c, 3));
+  return g;
+}
+
+const whaleMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.58, metalness: 0, normalMap: skinNormal, normalScale: new THREE.Vector2(0.22, 0.22) });
+const finMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.6 });
+
+function makeWhale(seed) {
+  const L = 16, g = new THREE.Group();
+  g.add(new THREE.Mesh(whaleBody(L, seed), whaleMat));
+  // 下颌：细长，在头部下方
+  const jaw = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 4.2, 6, 14), finMat);
+  jaw.geometry.rotateX(Math.PI / 2); jaw.scale.set(1.25, 0.8, 1);
+  const jc = new Float32Array(jaw.geometry.attributes.position.count * 3).fill(0.2);
+  jaw.geometry.setAttribute('color', new THREE.BufferAttribute(jc, 3));
+  jaw.position.set(0, -1.12, 5.0); jaw.rotation.x = -0.05; g.add(jaw);
+  // 眼睛
+  for (const sx of [-1, 1]) {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 8), new THREE.MeshStandardMaterial({ color: 0x050607, roughness: 0.2 }));
+    eye.position.set(sx * 1.2, -0.75, 2.6); g.add(eye);
+    // 胸鳍
+    const fin = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 12), finMat);
+    const fc = new Float32Array(fin.geometry.attributes.position.count * 3).fill(0.15);
+    fin.geometry.setAttribute('color', new THREE.BufferAttribute(fc, 3));
+    fin.scale.set(0.42, 0.06, 0.85); fin.position.set(sx * 1.25, -1.05, 2.0);
+    fin.rotation.set(0.25, sx * 0.55, sx * -0.5); g.add(fin);
+  }
+  const flukes = new THREE.Group();
+  flukes.add(new THREE.Mesh(flukeGeometry(4.6, 1.6), finMat));
+  flukes.position.set(0, 0, -L / 2 + 0.25);
+  g.add(flukes);
+  g.userData.flukes = flukes;
+  return g;
+}
+
+const WHALES = [
+  { p: [-14, -1, -6], up: 1, yaw: 0.5, tilt: 0.07, s: 1.0 },
+  { p: [5, 1.5, 2], up: -1, yaw: 2.1, tilt: -0.04, s: 0.95 },
+  { p: [17, -1, -10], up: -1, yaw: -0.9, tilt: 0.06, s: 0.82 },
+  { p: [-4, -5, -32], up: 1, yaw: 1.3, tilt: 0.0, s: 1.05 },
+  { p: [27, -2, -34], up: 1, yaw: 0.2, tilt: 0.1, s: 0.78 },
+  { p: [-34, -3, -24], up: -1, yaw: 0.9, tilt: -0.06, s: 0.9 },
+];
+const whales = WHALES.map((d, i) => {
+  const holder = new THREE.Group(), w = makeWhale(101 + i * 17);
+  w.rotation.x = d.up > 0 ? -Math.PI / 2 : Math.PI / 2;    // 长轴竖直
+  holder.add(w); holder.scale.setScalar(d.s);
+  holder.position.set(...d.p); holder.rotation.set(d.tilt, d.yaw, d.tilt * 0.6);
+  scene.add(holder);
+  return { holder, inner: w, d, ph: i * 1.7 };
+});
+const W1 = whales[0], W2 = whales[1];
+const headWorld = (w, out) => out.set(0, 0, 7.2).applyMatrix4(w.inner.matrixWorld);   // 喷气孔附近
+
+/* ---------- 潜水员 ---------- */
+const suit = new THREE.MeshStandardMaterial({ color: 0x0b1015, roughness: 0.55 });
+const diver = new THREE.Group();
+function cap(r, l, m) { const g = new THREE.CapsuleGeometry(r, l, 4, 10); g.rotateX(Math.PI / 2); return new THREE.Mesh(g, m); }
+const torso = cap(0.2, 0.62, suit); torso.scale.set(1.15, 0.85, 1); diver.add(torso);
+const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 14, 10), suit); head.position.set(0, 0.06, 0.6); diver.add(head);
+const mask = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.08, 0.05), new THREE.MeshStandardMaterial({ color: 0x223040, roughness: 0.1, metalness: 0.6 }));
+mask.position.set(0, 0.04, 0.73); diver.add(mask);
+const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.095, 0.62, 16), new THREE.MeshStandardMaterial({ color: 0x5cff2a, emissive: 0x1e6a08, roughness: 0.35 }));
+tank.rotation.x = Math.PI / 2; tank.position.set(0, 0.24, 0.05); diver.add(tank);
+const legs = [], arms = [];
+for (const sx of [-1, 1]) {
+  const hip = new THREE.Group(); hip.position.set(sx * 0.1, 0, -0.38); diver.add(hip);
+  const thigh = cap(0.085, 0.36, suit); thigh.position.z = -0.24; hip.add(thigh);
+  const knee = new THREE.Group(); knee.position.z = -0.48; hip.add(knee);
+  const shin = cap(0.07, 0.34, suit); shin.position.z = -0.22; knee.add(shin);
+  const fin = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.015, 0.55), suit); fin.position.set(0, -0.03, -0.66); fin.rotation.x = 0.25; knee.add(fin);
+  legs.push({ hip, knee, sx });
+  const sh = new THREE.Group(); sh.position.set(sx * 0.2, 0.02, 0.34); diver.add(sh);
+  const arm = cap(0.06, 0.5, suit); arm.position.z = 0.3; sh.add(arm);
+  arms.push(sh);
+}
+const torchBody = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.03, 0.2, 10), new THREE.MeshStandardMaterial({ color: 0x9aa6ae, metalness: 0.8, roughness: 0.3 }));
+torchBody.rotation.x = Math.PI / 2; torchBody.position.z = 0.64; arms[1].add(torchBody);
+const lens = new THREE.Mesh(new THREE.CircleGeometry(0.034, 12), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+lens.position.z = 0.745; arms[1].add(lens);
+arms[0].rotation.set(0.25, 0.25, 0); arms[1].rotation.set(0.1, -0.1, 0);
+scene.add(diver);
+
+/* ---------- 鱼群 ---------- */
+function fishGeometry() {
+  const v = [0, 0, 0.2, 0, 0.05, 0.03, 0, -0.045, 0.03, 0, 0, -0.12, 0, 0.055, -0.22, 0, -0.055, -0.22];
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
+  g.setIndex([0, 1, 2, 1, 3, 2, 3, 4, 5]);
+  g.setAttribute('normal', new THREE.Float32BufferAttribute([1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0], 3));
+  return g;
+}
+const fishMat = new THREE.MeshStandardMaterial({ color: 0xc8dde8, roughness: 0.32, metalness: 0.35, side: THREE.DoubleSide });
+const NF = 3400, NBIG = 70;
+const school = new THREE.InstancedMesh(fishGeometry(), fishMat, NF); school.frustumCulled = false;
+const bigFish = new THREE.InstancedMesh(fishGeometry(), new THREE.MeshStandardMaterial({ color: 0x8fa6b4, roughness: 0.4, metalness: 0.3, side: THREE.DoubleSide }), NBIG); bigFish.frustumCulled = false;
+school.instanceMatrix.setUsage(THREE.DynamicDrawUsage); bigFish.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+scene.add(school, bigFish);
+const FR = rng(7);
+const fishP = Array.from({ length: NF }, () => {
+  const band = FR();
+  return { R: 11 + Math.pow(FR(), 0.8) * 24, y: 15 + band * 12 + (FR() - 0.5) * 3, th: FR() * Math.PI * 2, sp: 2.6 + FR() * 1.4, wob: FR() * 6.28, s: 1.3 + FR() * 1.0, rr: (FR() - 0.5) * 3 };
+});
+const bigP = Array.from({ length: NBIG }, () => ({ x: (FR() - 0.5) * 120, y: -14 + FR() * 22, z: (FR() - 0.5) * 120, h: FR() * 6.28, sp: 1.2 + FR() * 1.4, s: 1.8 + FR() * 1.6, ph: FR() * 6.28 }));
+const SC = new THREE.Vector3(5, 0, 2);
+
+function writeInst(arr, i, px, py, pz, fx, fy, fz, s) {
+  let l = Math.hypot(fx, fy, fz); fx /= l; fy /= l; fz /= l;
+  let rx = fz, rz = -fx; l = Math.hypot(rx, rz) || 1; rx /= l; rz /= l;      // r = up × f
+  const ux = -rz * fy, uy = rz * fx - rx * fz, uz = rx * fy;                  // u = f × r
+  const o = i * 16;
+  arr[o] = rx * s; arr[o + 1] = 0; arr[o + 2] = rz * s; arr[o + 3] = 0;
+  arr[o + 4] = ux * s; arr[o + 5] = uy * s; arr[o + 6] = uz * s; arr[o + 7] = 0;
+  arr[o + 8] = fx * s; arr[o + 9] = fy * s; arr[o + 10] = fz * s; arr[o + 11] = 0;
+  arr[o + 12] = px; arr[o + 13] = py; arr[o + 14] = pz; arr[o + 15] = 1;
+}
+function updateFish(t) {
+  const a = school.instanceMatrix.array;
+  for (let i = 0; i < NF; i++) {
+    const f = fishP[i], w = f.sp / f.R, th = f.th + t * w;
+    const R = f.R + Math.sin(t * 0.35 + f.wob) * 2.2 + f.rr * Math.sin(th * 3 + f.wob);
+    const y = f.y + Math.sin(t * 0.5 + f.wob + th * 2) * 1.6;
+    const c = Math.cos(th), s = Math.sin(th);
+    const dy = Math.cos(t * 0.5 + f.wob + th * 2) * 0.16;
+    writeInst(a, i, SC.x + c * R, y, SC.z + s * R, -s, dy, c, f.s);
+  }
+  school.instanceMatrix.needsUpdate = true;
+  const b = bigFish.instanceMatrix.array;
+  for (let i = 0; i < NBIG; i++) {
+    const f = bigP[i], h = f.h + Math.sin(t * 0.07 + f.ph) * 0.6, fx = Math.sin(h), fz = Math.cos(h);
+    const x = ((f.x + fx * f.sp * t + 60) % 120 + 120) % 120 - 60, z = ((f.z + fz * f.sp * t + 60) % 120 + 120) % 120 - 60;
+    writeInst(b, i, x, f.y + Math.sin(t * 0.3 + f.ph) * 0.6, z, fx, 0, fz, f.s);
+  }
+  bigFish.instanceMatrix.needsUpdate = true;
+}
+
+/* ---------- 气泡 + 浮游微粒（写深度，雾化交给后期） ---------- */
+const NB = 900, bubbleGeo = new THREE.BufferGeometry();
+const bSeed = new Float32Array(NB * 3);
+for (let i = 0; i < NB; i++) { bSeed[i * 3] = FR(); bSeed[i * 3 + 1] = i % 4; bSeed[i * 3 + 2] = FR(); }
+bubbleGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(NB * 3), 3));
+bubbleGeo.setAttribute('seed', new THREE.BufferAttribute(bSeed, 3));
+const bubbleMat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 }, em: { value: [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()] }, rate: { value: new THREE.Vector4(0.2, 0.08, 0.08, 0.08) }, px: { value: 1 } },
+  vertexShader: `
+    attribute vec3 seed; uniform float time; uniform vec3 em[4]; uniform vec4 rate; uniform float px;
+    varying float vA;
+    void main(){
+      int k = int(seed.y); vec3 e = em[0]; float r = rate.x;
+      if(k==1){e=em[1];r=rate.y;} else if(k==2){e=em[2];r=rate.z;} else if(k==3){e=em[3];r=rate.w;}
+      float life = fract(time*r + seed.x);
+      float rise = life*life*6.0 + life*10.0;
+      float ph = seed.z*40.0;
+      vec3 p = e + vec3(sin(time*2.3+ph)*0.15*life + (seed.z-0.5)*0.6*life, rise, cos(time*1.9+ph)*0.15*life + fract(seed.z*7.0)*0.4*life - 0.2*life);
+      vec4 mv = modelViewMatrix*vec4(p,1.0);
+      gl_Position = projectionMatrix*mv;
+      float size = (0.025 + 0.06*fract(seed.z*13.0)) * (1.0 + life*1.2);
+      gl_PointSize = clamp(size*px/(-mv.z), 0.0, 28.0);
+      vA = smoothstep(0.0,0.04,life)*(1.0-smoothstep(0.85,1.0,life));
+    }`,
+  fragmentShader: `
+    varying float vA;
+    void main(){
+      vec2 q = gl_PointCoord*2.0-1.0; float r = length(q);
+      if(r>1.0 || vA<0.05) discard;
+      float rim = smoothstep(0.55,0.95,r);
+      float hi = smoothstep(0.35,0.0,length(q-vec2(-0.35,0.35)));
+      gl_FragColor = vec4(vec3(0.55,0.8,0.95)*(0.35+rim*1.4+hi*2.0)*vA, 1.0);
+    }`
+});
+const bubbles = new THREE.Points(bubbleGeo, bubbleMat); bubbles.frustumCulled = false; scene.add(bubbles);
+
+const NS = 5000, snowGeo = new THREE.BufferGeometry(), snowP = new Float32Array(NS * 3);
+for (let i = 0; i < NS * 3; i++) snowP[i] = FR();
+snowGeo.setAttribute('position', new THREE.BufferAttribute(snowP, 3));
+const snowMat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 }, cam: { value: new THREE.Vector3() }, px: { value: 1 } },
+  vertexShader: `
+    uniform float time; uniform vec3 cam; uniform float px; varying float vF;
+    void main(){
+      vec3 B = vec3(40.0);
+      vec3 p = position*B + vec3(sin(time*0.05+position.y*30.0)*0.6, -time*0.12, cos(time*0.04+position.x*20.0)*0.6);
+      p = cam + mod(p - cam + B*0.5, B) - B*0.5;
+      vec4 mv = modelViewMatrix*vec4(p,1.0);
+      gl_Position = projectionMatrix*mv;
+      gl_PointSize = clamp(0.028*px/(-mv.z), 0.0, 4.0);
+      vF = 1.0 - smoothstep(12.0, 20.0, length(p-cam));
+    }`,
+  fragmentShader: `varying float vF; void main(){ vec2 q=gl_PointCoord*2.0-1.0; if(dot(q,q)>1.0 || vF<0.02) discard; gl_FragColor=vec4(vec3(0.16,0.28,0.36)*vF,1.0);} `
+});
+const snow = new THREE.Points(snowGeo, snowMat); snow.frustumCulled = false; scene.add(snow);
+
+/* ---------- 后期：水体散射、体积光、手电光柱、焦散 ---------- */
+let W = 2, H = 2;
+const rt = new THREE.WebGLRenderTarget(2, 2, { type: THREE.HalfFloatType, samples: 4 });
+rt.depthTexture = new THREE.DepthTexture(2, 2); rt.depthTexture.type = THREE.UnsignedIntType;
+
+const waterPass = new ShaderPass({
+  uniforms: {
+    tColor: { value: rt.texture }, tDepth: { value: rt.depthTexture }, tNoise: { value: noiseTex },
+    projInv: { value: new THREE.Matrix4() }, camWorld: { value: new THREE.Matrix4() }, camPos: { value: new THREE.Vector3() },
+    near: { value: 0.1 }, far: { value: 400 }, time: { value: 0 }, surfY: { value: SURF },
+    torchPos: { value: new THREE.Vector3() }, torchDir: { value: new THREE.Vector3(0, 0, 1) }, res: { value: new THREE.Vector2(1, 1) },
+  },
+  vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
+  fragmentShader: `
+    #include <packing>
+    uniform sampler2D tColor, tDepth, tNoise;
+    uniform mat4 projInv, camWorld; uniform vec3 camPos; uniform float near, far, time, surfY;
+    uniform vec3 torchPos, torchDir; uniform vec2 res;
+    varying vec2 vUv;
+
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(41.3, 289.1)))*43758.5453); }
+    vec3 water(vec3 d, float py){
+      vec3 deep = vec3(0.0008,0.01,0.05), mid = vec3(0.004,0.075,0.27), hi = vec3(0.08,0.36,0.68);
+      vec3 c = mix(deep, mid, smoothstep(-0.95, 0.15, d.y));
+      c = mix(c, hi, smoothstep(0.15, 0.95, d.y));
+      return c * exp((py - surfY) * 0.011);
+    }
+    // 从水面往下投的光图案：沿太阳方向略倾斜
+    float lightPattern(vec3 p, float sharp){
+      vec2 q = p.xz + vec2(0.22, 0.08) * (surfY - p.y);
+      float a = texture2D(tNoise, q * 0.011 + vec2(time * 0.0035, time * 0.0012)).r;
+      float b = texture2D(tNoise, q * 0.027 - vec2(time * 0.006, -time * 0.004)).g;
+      float v = a * 0.62 + b * 0.38;
+      return smoothstep(sharp, sharp + 0.22, v) * (0.4 + 0.6 * smoothstep(sharp + 0.1, 0.9, v));
+    }
+    float caustic(vec2 q){
+      float a = texture2D(tNoise, q * 0.09 + vec2(time * 0.02, time * 0.013)).g;
+      float b = texture2D(tNoise, q * 0.13 - vec2(time * 0.017, -time * 0.021)).g;
+      float c = 1.0 - abs(a - b) * 5.0;
+      return pow(clamp(c, 0.0, 1.0), 6.0);
+    }
+    void main(){
+      vec3 scol = texture2D(tColor, vUv).rgb;
+      float depth = texture2D(tDepth, vUv).x;
+      vec4 v = projInv * vec4(vUv * 2.0 - 1.0, 1.0, 1.0); v.xyz /= v.w;
+      vec3 dv = normalize(v.xyz);
+      vec3 dir = normalize((camWorld * vec4(dv, 0.0)).xyz);
+      bool bg = depth >= 0.99999;
+      float vz = perspectiveDepthToViewZ(depth, near, far);
+      float dist = bg ? 1e4 : vz / dv.z;
+      vec3 wcol = water(dir, camPos.y);
+      vec3 col;
+
+      if (bg) {
+        col = wcol;
+        if (dir.y > 0.0) {                               // 仰望水面：斯涅尔窗
+          float tS = (surfY - camPos.y) / dir.y;
+          vec3 hit = camPos + dir * tS;
+          float win = smoothstep(0.6, 0.78, dir.y);
+          float rip = texture2D(tNoise, hit.xz * 0.035 + time * 0.008).r;
+          float rip2 = texture2D(tNoise, hit.xz * 0.09 - time * 0.012).g;
+          float glare = pow(max(dot(dir, normalize(vec3(0.22, 1.0, 0.08))), 0.0), 90.0);
+          vec3 sky = vec3(0.55, 0.85, 1.0) * (0.5 + 0.7 * rip * rip2 + 0.25 * caustic(hit.xz * 0.35)) * win
+                   + vec3(1.0, 1.0, 0.95) * glare * 1.4
+                   + vec3(0.04, 0.2, 0.42) * (1.0 - win) * (0.7 + 0.5 * rip);
+          col = mix(sky, wcol, 1.0 - exp(-tS * 0.026));
+        }
+      } else {
+        vec3 wp = camPos + dir * dist;
+        // 焦散：朝上的表面
+        vec3 n = normalize(cross(dFdx(wp), dFdy(wp)));
+        if (dot(n, dir) > 0.0) n = -n;
+        float up = clamp(n.y * 0.8 + 0.2, 0.0, 1.0);
+        float ca = caustic(wp.xz + vec2(0.22, 0.08) * (surfY - wp.y)) * up * exp(-(surfY - wp.y) * 0.035);
+        scol += scol * ca * 5.0 + vec3(0.05, 0.12, 0.15) * ca * 0.4;
+        vec3 ext = exp(-dist * vec3(0.09, 0.028, 0.012));       // 红光最先被吃掉
+        float k = 1.0 - exp(-dist * 0.024);
+        col = mix(scol * ext, water(dir, wp.y * 0.5 + camPos.y * 0.5), k);
+      }
+
+      // 体积光（god rays）
+      float tmax = min(dist, 120.0);
+      float steps = 30.0, dt = tmax / steps;
+      float tt = dt * hash(vUv * res + fract(time * 13.0));
+      float acc = 0.0;
+      for (int i = 0; i < 30; i++) {
+        vec3 p = camPos + dir * tt;
+        if (p.y < surfY) {
+          float depthBelow = surfY - p.y;
+          acc += lightPattern(p, 0.5) * exp(-depthBelow * 0.024) * exp(-tt * 0.016) * dt;
+        }
+        tt += dt;
+      }
+      col += vec3(0.2, 0.5, 0.8) * acc * 0.085;
+
+      // 手电光柱
+      vec3 toT = torchPos - camPos;
+      float tc = dot(toT, dir);
+      float t0 = max(0.0, tc - 16.0), t1 = min(dist, tc + 22.0);
+      float bacc = 0.0;
+      if (t1 > t0) {
+        float bdt = (t1 - t0) / 28.0, bt = t0 + bdt * hash(vUv * res * 1.7 + time);
+        for (int i = 0; i < 28; i++) {
+          vec3 d = camPos + dir * bt - torchPos;
+          float al = dot(d, torchDir);
+          if (al > 0.0) {
+            float perp = length(d - torchDir * al);
+            float cone = al * 0.34 + 0.04;
+            bacc += smoothstep(cone, cone * 0.25, perp) * exp(-al * 0.09) / (1.0 + al * al * 0.02) * bdt;
+          }
+          bt += bdt;
+        }
+      }
+      col += vec3(0.75, 0.9, 1.0) * bacc * 0.22;
+      // 光源本身的眩光
+      if (tc > 0.0 && tc < dist + 0.3) {
+        float dr = length(toT - dir * tc);
+        float facing = max(dot(-dir, torchDir), 0.0);
+        col += vec3(0.9, 0.97, 1.0) * (exp(-dr * dr * 900.0 / (tc * 0.1 + 0.2)) * 6.0 + exp(-dr * 30.0 / (tc * 0.1 + 1.0)) * 0.5) * (0.25 + facing * facing * 1.5);
+      }
+      gl_FragColor = vec4(col, 1.0);
+    }`
+});
+waterPass.textureID = 'none';
+waterPass.uniforms.tColor.value = rt.texture; waterPass.uniforms.tDepth.value = rt.depthTexture;
+
+const gradePass = new ShaderPass({
+  uniforms: { tDiffuse: { value: null }, time: { value: 0 }, fade: { value: 1 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
+  fragmentShader: `
+    uniform sampler2D tDiffuse; uniform float time, fade; varying vec2 vUv;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233)) + time*7.0)*43758.5453); }
+    void main(){
+      vec3 c = texture2D(tDiffuse, vUv).rgb;
+      vec2 q = vUv - 0.5;
+      c *= mix(0.42, 1.0, smoothstep(0.85, 0.2, length(q * vec2(1.15, 1.0))));
+      c += (h(vUv) - 0.5) * 0.012;
+      gl_FragColor = vec4(c * fade, 1.0);
+    }`
+});
+
+const composer = new EffectComposer(renderer);
+const bloom = new UnrealBloomPass(new THREE.Vector2(2, 2), 0.38, 0.65, 0.72);
+composer.addPass(waterPass); composer.addPass(bloom); composer.addPass(gradePass); composer.addPass(new OutputPass());
+
+function resize() {
+  W = innerWidth; H = innerHeight;
+  renderer.setSize(W, H, false);
+  composer.setSize(W, H);
+  rt.setSize(W * DPR, H * DPR); rt.depthTexture.image.width = W * DPR; rt.depthTexture.image.height = H * DPR;
+  camera.aspect = W / H; camera.updateProjectionMatrix();
+  waterPass.uniforms.res.value.set(W * DPR, H * DPR);
+  const px = H * DPR / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
+  bubbleMat.uniforms.px.value = px; snowMat.uniforms.px.value = px;
+}
+addEventListener('resize', resize);
+
+/* ---------- 潜水员动作 ---------- */
+const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
+const tmp = V(), tmp2 = V(), torchWorld = V(), torchDirW = V(), aimP = V(), diverFwd = V();
+function updateDiver(t) {
+  const ang = t * 0.075 + 2.4;
+  const c = W2.holder.position;
+  diver.position.set(c.x + Math.cos(ang) * 6.8, c.y - 4 + Math.sin(t * 0.21) * 0.8, c.z + Math.sin(ang) * 6.8);
+  const tan = V(-Math.sin(ang), 0, Math.cos(ang));
+  const inward = V(c.x - diver.position.x, 0, c.z - diver.position.z).normalize();
+  diverFwd.copy(tan).multiplyScalar(0.75).addScaledVector(inward, 0.55).normalize();
+  diver.lookAt(tmp.copy(diver.position).add(diverFwd));
+  diver.rotateX(0.18 + Math.sin(t * 0.3) * 0.06);
+  diver.rotateZ(-0.35);
+  for (const l of legs) { const k = Math.sin(t * 2.6 + (l.sx > 0 ? 0 : Math.PI)); l.hip.rotation.x = k * 0.28; l.knee.rotation.x = 0.25 + Math.max(0, -k) * 0.45; }
+  arms[1].rotation.x = 0.1 + Math.sin(t * 0.4) * 0.05;
+  diver.updateMatrixWorld(true);
+  lens.getWorldPosition(torchWorld);
+  aimP.set(c.x, c.y - 2.5 + Math.sin(t * 0.17) * 2.5, c.z);
+  torchDirW.copy(aimP).sub(torchWorld).normalize();
+  // 让持手电的手臂真正对准鲸
+  const local = diver.worldToLocal(tmp2.copy(torchWorld).add(torchDirW)).sub(diver.worldToLocal(tmp.copy(torchWorld)));
+  arms[1].rotation.y = Math.atan2(local.x, local.z) * 0.6;
+  torch.position.copy(torchWorld); torch.target.position.copy(torchWorld).addScaledVector(torchDirW, 10);
+}
+
+/* ---------- 镜头 ---------- */
+const look = V(), cpos = V();
+const SHOTS = [
+  { name: '01  仰望', fov: 48, f(u) { cpos.set(-2 + u * 2, -32 + u * 1.5, 46 - u * 3); look.set(2, 6, -6); } },
+  { name: '02  手电', fov: 38, f(u, d) { cpos.copy(d).add(tmp.set(-13 + u * 3, 1.5, 15 - u)); look.copy(d).lerp(W2.holder.position, 0.55).y = d.y + 0.5; } },
+  { name: '03  正下方', fov: 56, up: [0, 0, -1], f(u, d) { cpos.copy(d).add(tmp.set(1.8, -21 + u * 2, 3.2)); look.copy(d).add(tmp.set(0.4, 8, -0.6)); } },
+  { name: '04  跟随', fov: 44, f(u, d) { cpos.copy(d).addScaledVector(diverFwd, -5.5 + u * 0.8).add(tmp.set(0, 2.2, 0)).addScaledVector(tmp2.crossVectors(diverFwd, V(0, 1, 0)).normalize(), -4.5); look.copy(d).lerp(W2.holder.position, 0.4); look.y = d.y; } },
+  { name: '05  鲸首', fov: 62, f(u) { const p = W1.holder.position; cpos.set(p.x + 4.2 - u * 0.6, p.y - 7 + u * 1.0, p.z + 6.5); look.set(p.x - 1.0, p.y + 16, p.z - 1.5); } },
+  { name: '06  深处', fov: 34, f(u) { cpos.set(38 - u * 3, -9 + u * 0.4, 48 - u * 2.5); look.set(0, -2, -4); } },
+];
+const SHOT_LEN = 4.6;
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.enabled = false; controls.maxDistance = 140;
+let free = false;
+const freeBtn = document.getElementById('free'), hint = document.getElementById('hint'), shotEl = document.getElementById('shot');
+function setFree(on) {
+  free = on; controls.enabled = on; freeBtn.setAttribute('aria-pressed', on); freeBtn.textContent = on ? '自动镜头' : '自由视角';
+  camera.up.set(0, 1, 0);
+  if (on) { controls.target.copy(look.y > 20 ? V(0, 0, -4) : look); camera.fov = 48; camera.updateProjectionMatrix(); }
+}
+freeBtn.onclick = () => setFree(!free);
+canvas.addEventListener('pointerdown', () => { if (!free) setFree(true); hint.style.opacity = 0; });
+addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); setFree(!free); } });
+
+/* ---------- 声音：低频水声、抹香鲸咔嗒声、呼吸器 ---------- */
+let ac = null, master = null, sndTimer = 0;
+const sndBtn = document.getElementById('snd');
+function noiseBuf(sec, brown) {
+  const b = ac.createBuffer(1, ac.sampleRate * sec, ac.sampleRate), d = b.getChannelData(0);
+  let last = 0; for (let i = 0; i < d.length; i++) { const w = Math.random() * 2 - 1; if (brown) { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w; }
+  return b;
+}
+function startAudio() {
+  ac = new (window.AudioContext || window.webkitAudioContext)();
+  master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
+  const rum = ac.createBufferSource(); rum.buffer = noiseBuf(6, true); rum.loop = true;
+  const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260;
+  const rg = ac.createGain(); rg.gain.value = 0.7; rum.connect(lp).connect(rg).connect(master); rum.start();
+  const lfo = ac.createOscillator(), lg = ac.createGain(); lfo.frequency.value = 0.07; lg.gain.value = 120; lfo.connect(lg).connect(lp.frequency); lfo.start();
+  ac.white = noiseBuf(2, false);
+}
+function click(at, pan, g) {
+  const s = ac.createBufferSource(); s.buffer = ac.white;
+  const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2400 + Math.random() * 1800; bp.Q.value = 3;
+  const e = ac.createGain(); e.gain.setValueAtTime(0, at); e.gain.linearRampToValueAtTime(g, at + 0.0008); e.gain.exponentialRampToValueAtTime(0.0001, at + 0.012);
+  const p = ac.createStereoPanner(); p.pan.value = pan;
+  s.connect(bp).connect(e).connect(p).connect(master); s.start(at, Math.random()); s.stop(at + 0.03);
+}
+function breath(at) {
+  const s = ac.createBufferSource(); s.buffer = ac.white; s.loop = true;
+  const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 1.2;
+  const e = ac.createGain(); e.gain.setValueAtTime(0, at); e.gain.linearRampToValueAtTime(0.05, at + 0.35); e.gain.linearRampToValueAtTime(0.0, at + 1.3);
+  s.connect(bp).connect(e).connect(master); s.start(at); s.stop(at + 1.4);
+  for (let i = 0; i < 26; i++) {                     // 呼气：一串气泡
+    const t0 = at + 1.9 + i * 0.045 + Math.random() * 0.05, o = ac.createOscillator(), g = ac.createGain();
+    const f = 300 + Math.random() * 500; o.frequency.setValueAtTime(f, t0); o.frequency.exponentialRampToValueAtTime(f * 2.2, t0 + 0.05);
+    g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.035, t0 + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.06);
+    o.connect(g).connect(master); o.start(t0); o.stop(t0 + 0.07);
+  }
+}
+function scheduleSound() {
+  if (!ac || ac.state !== 'running') return;
+  const now = ac.currentTime;
+  if (now + 0.5 > sndTimer) {
+    // 一串咔嗒声
+    const pan = Math.random() * 1.6 - 0.8, n = 6 + (Math.random() * 14 | 0), gap = 0.25 + Math.random() * 0.5, g = 0.08 + Math.random() * 0.12;
+    for (let i = 0; i < n; i++) click(now + 0.5 + i * gap * (0.9 + Math.random() * 0.2), pan, g);
+    if (Math.random() < 0.45) breath(now + 0.8 + Math.random());
+    sndTimer = now + 0.5 + n * gap + 1.5 + Math.random() * 3;
+  }
+}
+sndBtn.onclick = async () => {
+  if (!ac) startAudio();
+  const on = sndBtn.getAttribute('aria-pressed') !== 'true';
+  if (on) await ac.resume();
+  master.gain.cancelScheduledValues(ac.currentTime);
+  master.gain.linearRampToValueAtTime(on ? 0.9 : 0, ac.currentTime + 0.6);
+  sndBtn.setAttribute('aria-pressed', on);
+};
+
+/* ---------- 主循环 ---------- */
+resize();
+const clock = new THREE.Clock();
+let shotIdx = -1, lastT = 0;
+const em = bubbleMat.uniforms.em.value;
+setTimeout(() => { document.getElementById('title').style.opacity = 0; }, 7000);
+setTimeout(() => { hint.style.opacity = 0; }, 10000);
+
+function frame() {
+  const t = FIX_SHOT >= 0 ? FIX_SHOT * SHOT_LEN + FIX_T + 20 : clock.getElapsedTime() + 20;
+  for (const w of whales) {
+    w.holder.position.y = w.d.p[1] + Math.sin(t * 0.18 + w.ph) * 0.3;
+    w.holder.rotation.y = w.d.yaw + Math.sin(t * 0.03 + w.ph) * 0.12;
+    w.inner.userData.flukes.rotation.x = Math.sin(t * 0.35 + w.ph) * 0.05;
+  }
+  scene.updateMatrixWorld();
+  updateDiver(t);
+  updateFish(t);
+  headWorld(W1, em[0]); em[1].copy(head.getWorldPosition(tmp)); headWorld(whales[3], em[2]); headWorld(whales[4], em[3]);
+  const breathe = (t % 5) > 2.6 ? 0.9 : 0.0;
+  bubbleMat.uniforms.rate.value.set(0.11, 0.18 + breathe * 0, 0.08, 0.07);
+
+  if (!free) {
+    const st = t - 20, si = FIX_SHOT >= 0 ? FIX_SHOT : Math.floor(st / SHOT_LEN) % SHOTS.length;
+    const u = FIX_SHOT >= 0 ? FIX_T / SHOT_LEN : (st % SHOT_LEN) / SHOT_LEN;
+    const S = SHOTS[si];
+    S.f(u, diver.position);
+    cpos.x += Math.sin(t * 0.9) * 0.08; cpos.y += Math.sin(t * 0.7 + 1) * 0.06;
+    camera.position.copy(cpos);
+    camera.up.set(...(S.up || [0, 1, 0]));
+    camera.lookAt(look);
+    if (camera.fov !== S.fov) { camera.fov = S.fov; camera.updateProjectionMatrix(); resize(); }
+    if (si !== shotIdx) { shotIdx = si; shotEl.textContent = S.name; }
+    const e = (st % SHOT_LEN);
+    gradePass.uniforms.fade.value = FIX_SHOT >= 0 ? 1 : Math.min(1, e / 0.35, (SHOT_LEN - e) / 0.2 + 0.15);
+  } else {
+    controls.update(); gradePass.uniforms.fade.value = 1; shotEl.textContent = '自由视角';
+  }
+
+  bubbleMat.uniforms.time.value = t; snowMat.uniforms.time.value = t; snowMat.uniforms.cam.value.copy(camera.position);
+  camera.updateMatrixWorld();
+  const U = waterPass.uniforms;
+  U.projInv.value.copy(camera.projectionMatrixInverse); U.camWorld.value.copy(camera.matrixWorld);
+  U.camPos.value.copy(camera.position); U.near.value = camera.near; U.far.value = camera.far; U.time.value = t;
+  U.torchPos.value.copy(torchWorld); U.torchDir.value.copy(torchDirW);
+  gradePass.uniforms.time.value = t;
+
+  renderer.setRenderTarget(rt); renderer.setClearColor(0x000000, 1); renderer.clear(); renderer.render(scene, camera);
+  renderer.setRenderTarget(null);
+  composer.render();
+  scheduleSound();
+  requestAnimationFrame(frame);
+}
+frame();
+window.__ready = true;
+</script>
+</body>
+</html>
