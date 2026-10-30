@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 159,
+   "date": "2026-10-31",
+   "label": "1031 中国出口管制覆盖40项关键技术",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "中国出口管制覆盖40项关键技术"
+   ],
+   "pages": [
+    "issues/159/1.webp",
+    "issues/159/2.webp",
+    "issues/159/3.webp",
+    "issues/159/4.webp",
+    "issues/159/5.webp"
+   ],
+   "pagesEn": [
+    "issues/159/en/1.webp",
+    "issues/159/en/2.webp",
+    "issues/159/en/3.webp",
+    "issues/159/en/4.webp",
+    "issues/159/en/5.webp"
+   ]
+  },
+  {
    "serial": 158,
    "date": "2026-10-31",
    "label": "1031 三星SK海力士转产推高PC内存价",
