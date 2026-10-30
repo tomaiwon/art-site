@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 160,
+   "date": "2026-10-31",
+   "label": "1031 台积电掌控全球92%先进芯片产能",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电掌控全球92%先进芯片产能"
+   ],
+   "pages": [
+    "issues/160/1.webp",
+    "issues/160/2.webp",
+    "issues/160/3.webp",
+    "issues/160/4.webp",
+    "issues/160/5.webp"
+   ],
+   "pagesEn": [
+    "issues/160/en/1.webp",
+    "issues/160/en/2.webp",
+    "issues/160/en/3.webp",
+    "issues/160/en/4.webp",
+    "issues/160/en/5.webp"
+   ]
+  },
+  {
    "serial": 159,
    "date": "2026-10-31",
    "label": "1031 中国出口管制覆盖40项关键技术",
