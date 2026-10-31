@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 162,
+   "date": "2026-10-31",
+   "label": "1031 长鑫科技与头部客户协商长期供货协议",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "长鑫科技与头部客户协商长期供货协议"
+   ],
+   "pages": [
+    "issues/162/1.webp",
+    "issues/162/2.webp",
+    "issues/162/3.webp",
+    "issues/162/4.webp",
+    "issues/162/5.webp"
+   ],
+   "pagesEn": [
+    "issues/162/en/1.webp",
+    "issues/162/en/2.webp",
+    "issues/162/en/3.webp",
+    "issues/162/en/4.webp",
+    "issues/162/en/5.webp"
+   ]
+  },
+  {
    "serial": 161,
    "date": "2026-10-31",
    "label": "1031 联发科ASIC放量Q4营收创高",
