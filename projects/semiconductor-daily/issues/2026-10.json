@@ -2,6 +2,30 @@
  "month": "2026-10",
  "issues": [
   {
+   "serial": 161,
+   "date": "2026-10-31",
+   "label": "1031 联发科ASIC放量Q4营收创高",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "联发科ASIC放量Q4营收创高"
+   ],
+   "pages": [
+    "issues/161/1.webp",
+    "issues/161/2.webp",
+    "issues/161/3.webp",
+    "issues/161/4.webp",
+    "issues/161/5.webp"
+   ],
+   "pagesEn": [
+    "issues/161/en/1.webp",
+    "issues/161/en/2.webp",
+    "issues/161/en/3.webp",
+    "issues/161/en/4.webp",
+    "issues/161/en/5.webp"
+   ]
+  },
+  {
    "serial": 160,
    "date": "2026-10-31",
    "label": "1031 台积电掌控全球92%先进芯片产能",
