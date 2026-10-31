@@ -166,15 +166,18 @@ function start() {
       needle.add(new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.6, 0.06), dark).translateY(1.1));
       needle.add(new THREE.Mesh(new THREE.CircleGeometry(0.28, 24), dark));
       printer.add(needle);
-      const cells = [];
-      for (let k = 0; k < 6; k++) {
+      const cells = [];                                 // 名额格子:近 24 小时上限几条就亮几格(10-31 起 8 条)
+      for (let k = 0; k < 8; k++) {
         const m = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        const cell = part(new THREE.BoxGeometry(1.1, 1.1, 0.12), m, ink, [-3.6 + k * 1.45, 4.0, 11.06]);
+        const cell = part(new THREE.BoxGeometry(0.92, 0.92, 0.12), m, ink, [-4.4 + k * 1.15, 4.0, 11.06]);
         printer.add(cell);
-        cells.push(m);
+        cells.push({ m, cell });
       }
-      printer.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-4.2, 5.3, 11.03), new THREE.Vector3(4.2, 5.3, 11.03)]), soft));
-      out.today = (n, guard) => cells.forEach((m, k) => m.color.setHex(k < Math.min(n, guard) ? INK : 0xffffff));
+      printer.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-4.9, 5.3, 11.03), new THREE.Vector3(4.2, 5.3, 11.03)]), soft));
+      out.today = (n, guard) => cells.forEach(({ m, cell }, k) => {
+        cell.visible = k < guard;
+        m.color.setHex(k < Math.min(n, guard) ? INK : 0xffffff);
+      });
       out.spin = (dt, now, sp, prog) => {
         const shake = sp > 2 ? Math.sin(now / 45) * 0.012 : 0;
         needle.rotation.z = Math.PI * 0.75 - prog * Math.PI * 1.5 + shake;   // 左下 0,右下 100
@@ -206,7 +209,7 @@ function start() {
   for (let k = 0; k < 4; k++) tray.add(part(new THREE.BoxGeometry(PW, 0.06, PH * 0.82), white, soft, [0, 0.2 + k * 0.08, -4]));
   printer.add(tray);
   // 正面左半边的机构(?front= 换):drum 横置滚筒 / slit 观察缝 / gears 齿轮组 / dial 进度表盘
-  let mood = 'idle', moodInfo = null, progress = 0, today = [0, 6];
+  let mood = 'idle', moodInfo = null, progress = 0, today = [0, 8];
   const front = buildFront(FRONT);
   const lcdCanvas = document.createElement('canvas');
   lcdCanvas.width = 320; lcdCanvas.height = 112;

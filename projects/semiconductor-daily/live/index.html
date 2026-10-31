@@ -372,7 +372,7 @@ function renderStatus(){
   $('status').innerHTML =
     `<span><span class="k">Mode</span><span class="dot ${s.mode === 'auto' ? 'live' : 'idle'}"></span><b>${esc(s.mode)}</b> ${esc(modeZh)}</span>`
     + `<span><span class="k">V2 Spend</span><b class="${s.over ? 'eam-bad' : ''}">$${s.spend.toFixed(2)} / $${s.cap.toFixed(2)}</b><span class="spendbar ${s.over ? 'bad' : ''}"><i style="width:${pct}%"></i></span>${s.over ? ' <span class="eam-bad">到上限:只采集不判断,零点重置</span>' : ''}</span>`
-    + `<span><span class="k">Today</span><b>${s.singlesToday}</b> 条单条 <span class="eam-soft">(每天上限 ${s.guard})</span></span>`
+    + `<span><span class="k">24H</span><b>${s.singlesToday}</b> 条单条 <span class="eam-soft">(近 24 小时上限 ${s.guard})</span></span>`
     + `<span><span class="k">Line</span>基础分 ≥ <b>${s.baseLine}</b></span>`
     + (s.weiboBalance != null ? `<span><span class="k">Weibo</span><b>${s.weiboBalance}</b> 积分 <span class="eam-soft">(约 ${Math.floor(s.weiboBalance / (s.weiboPerPost || 40))} 条)</span></span>` : '')
     + `<span><span class="k">Now</span><span class="dot ${busy && !offline ? 'live' : 'idle'}"></span>${esc(offline ? '工作台离线' : (busy || '空闲,等下一次醒来'))}</span>`
@@ -819,12 +819,12 @@ function renderPrinter(){
     const q = pr.queue || {}, top = (q.items || [])[0];
     const when = q.next ? '下一条最早 ' + hm(q.next * 1000) : '';
     const full = live.status.singlesToday >= live.status.guard;
-    if (full) pressText('idle', null, `今天已出满 ${live.status.guard} 条,明天 ${q.hours ? q.hours[0] : 8}:00 起再出` + (q.count ? ` · 排队 ${q.count} 件` : ''));
+    if (full) pressText('idle', null, `近 24 小时已出满 ${live.status.guard} 条 · 下一条最早 ${q.next ? hm(q.next * 1000) : ''}` + (q.count ? ` · 排队 ${q.count} 件` : ''));
     else if (q.count) pressText('idle', top, `排队 ${q.count} 件,先出分最高的 · ${when}`);
     else pressText('idle', null, [q.open === false ? `夜里不出稿,${q.hours[0]}:00 起` : '', intake && intake.next ? '下一次大事检查 ' + hm(intake.next * 1000) : ''].filter(Boolean).join(' · '));
   }
-  $('pressLeft').innerHTML = `<div class="k" style="font:400 10.5px/1 var(--num);letter-spacing:.14em;color:var(--soft)">TODAY</div>`
-    + `<div style="margin-top:8px;font:400 28px/1 var(--num)">${live.status.singlesToday}</div><div class="m" style="margin-top:6px;font:400 11.5px/1.6 var(--sans);color:var(--soft)">今天出了几条 · 底下是最近 ${pr.papers.length} 期</div>`;
+  $('pressLeft').innerHTML = `<div class="k" style="font:400 10.5px/1 var(--num);letter-spacing:.14em;color:var(--soft)">24H</div>`
+    + `<div style="margin-top:8px;font:400 28px/1 var(--num)">${live.status.singlesToday}</div><div class="m" style="margin-top:6px;font:400 11.5px/1.6 var(--sans);color:var(--soft)">近 24 小时出了几条 · 底下是最近 ${pr.papers.length} 期</div>`;
   $('pressTally').textContent = '点一张纸看大图';
 }
 function openPaper(p){
