@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 164,
+   "date": "2026-11-01",
+   "label": "1101 三星投3500亿韩元建日本封装实验室",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星投3500亿韩元建日本封装实验室"
+   ],
+   "pages": [
+    "issues/164/1.webp",
+    "issues/164/2.webp",
+    "issues/164/3.webp",
+    "issues/164/4.webp",
+    "issues/164/5.webp"
+   ],
+   "pagesEn": [
+    "issues/164/en/1.webp",
+    "issues/164/en/2.webp",
+    "issues/164/en/3.webp",
+    "issues/164/en/4.webp",
+    "issues/164/en/5.webp"
+   ]
+  },
+  {
    "serial": 163,
    "date": "2026-11-01",
    "label": "1101 英特尔业绩指引不及预期盘后跌23%",
