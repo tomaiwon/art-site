@@ -1,0 +1,13 @@
+# 原图与打包文件不入库（体积大，且素材授权禁止再分发）
+originals/
+*.zip
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+node_modules/
+
+# 本地覆盖配置（想放本机绝对路径时用）
+config.local.js
