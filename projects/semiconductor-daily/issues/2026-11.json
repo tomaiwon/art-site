@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 166,
+   "date": "2026-11-02",
+   "label": "1102 联电夺中际旭创赛丽硅光子大单",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "联电夺中际旭创赛丽硅光子大单"
+   ],
+   "pages": [
+    "issues/166/1.webp",
+    "issues/166/2.webp",
+    "issues/166/3.webp",
+    "issues/166/4.webp",
+    "issues/166/5.webp"
+   ],
+   "pagesEn": [
+    "issues/166/en/1.webp",
+    "issues/166/en/2.webp",
+    "issues/166/en/3.webp",
+    "issues/166/en/4.webp",
+    "issues/166/en/5.webp"
+   ]
+  },
+  {
    "serial": 165,
    "date": "2026-11-02",
    "label": "1102 三星2030年底前关闭8英寸代工产线",
