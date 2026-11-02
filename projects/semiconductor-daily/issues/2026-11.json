@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 165,
+   "date": "2026-11-02",
+   "label": "1102 三星2030年底前关闭8英寸代工产线",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星2030年底前关闭8英寸代工产线"
+   ],
+   "pages": [
+    "issues/165/1.webp",
+    "issues/165/2.webp",
+    "issues/165/3.webp",
+    "issues/165/4.webp",
+    "issues/165/5.webp"
+   ],
+   "pagesEn": [
+    "issues/165/en/1.webp",
+    "issues/165/en/2.webp",
+    "issues/165/en/3.webp",
+    "issues/165/en/4.webp",
+    "issues/165/en/5.webp"
+   ]
+  },
+  {
    "serial": 164,
    "date": "2026-11-01",
    "label": "1101 三星投3500亿韩元建日本封装实验室",
