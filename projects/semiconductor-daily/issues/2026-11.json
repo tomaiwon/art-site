@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 171,
+   "date": "2026-11-03",
+   "label": "1103 三井金属扩产极薄铜箔至月产620万",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三井金属扩产极薄铜箔至月产620万"
+   ],
+   "pages": [
+    "issues/171/1.webp",
+    "issues/171/2.webp",
+    "issues/171/3.webp",
+    "issues/171/4.webp",
+    "issues/171/5.webp"
+   ],
+   "pagesEn": [
+    "issues/171/en/1.webp",
+    "issues/171/en/2.webp",
+    "issues/171/en/3.webp",
+    "issues/171/en/4.webp",
+    "issues/171/en/5.webp"
+   ]
+  },
+  {
    "serial": 170,
    "date": "2026-11-03",
    "label": "1103 三星泰勒二厂承接AMD HBM基片订单",
