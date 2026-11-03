@@ -14,7 +14,7 @@
 
 菜单从右侧滑入，关闭时向右收起；关闭按钮、Escape 和栏目跳转共用退出动画，保留焦点及阅读位置恢复。系统要求减少动态效果时直接开关。菜单、关闭、语言和方向箭头采用共用 SVG 符号，线条和尺寸统一。
 
-菜单存档链接下方加入 Instagram、微信和邮箱的 SVG 图标，使用原站 `index.html` 已公开的工作室联系方式。Instagram 在新标签页打开 `@yihuang_art`；微信按钮展开／收起原有 `images/qrcode-wechat.jpg` 二维码，关闭目录时重置；邮箱使用 `mailto:yihuangart09@gmail.com`。图标点击区域为 44×44px，支持键盘焦点，微信展开状态通过 `aria-expanded` 标注。
+菜单存档链接下方加入 Instagram、微信和邮箱的 SVG 图标，使用原站 `index.html` 已公开的工作室联系方式。Instagram 在新标签页打开 `@yellwork_`；微信按钮展开／收起原有 `images/qrcode-wechat.jpg` 二维码，关闭目录时重置；邮箱使用 `mailto:yihuangart09@gmail.com`。图标点击区域为 44×44px，支持键盘焦点，微信展开状态通过 `aria-expanded` 标注。
 
 栏目标题左侧保留两款人物原稿：见闻使用牵手人物，沉思录使用吹奏人物。两张原始 PNG 完整存放于 `assets/section-emblems/`，页面以 SVG 视框展示人物区域。它们作为小幅栏目插图，与页头的 Studio Yi Huang 标志分别使用。
 
