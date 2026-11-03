@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 168,
+   "date": "2026-11-03",
+   "label": "1103 联电产能满载婉拒三星上万片急单",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "联电产能满载婉拒三星上万片急单"
+   ],
+   "pages": [
+    "issues/168/1.webp",
+    "issues/168/2.webp",
+    "issues/168/3.webp",
+    "issues/168/4.webp",
+    "issues/168/5.webp"
+   ],
+   "pagesEn": [
+    "issues/168/en/1.webp",
+    "issues/168/en/2.webp",
+    "issues/168/en/3.webp",
+    "issues/168/en/4.webp",
+    "issues/168/en/5.webp"
+   ]
+  },
+  {
    "serial": 167,
    "date": "2026-11-03",
    "label": "1103 苹果确认内存短缺影响Mac与iPad",
