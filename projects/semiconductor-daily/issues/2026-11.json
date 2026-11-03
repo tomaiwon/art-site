@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 173,
+   "date": "2026-11-04",
+   "label": "1104 环球晶发5亿美元可转债美光全额认购",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "环球晶发5亿美元可转债美光全额认购"
+   ],
+   "pages": [
+    "issues/173/1.webp",
+    "issues/173/2.webp",
+    "issues/173/3.webp",
+    "issues/173/4.webp",
+    "issues/173/5.webp"
+   ],
+   "pagesEn": [
+    "issues/173/en/1.webp",
+    "issues/173/en/2.webp",
+    "issues/173/en/3.webp",
+    "issues/173/en/4.webp",
+    "issues/173/en/5.webp"
+   ]
+  },
+  {
    "serial": 172,
    "date": "2026-11-03",
    "label": "1103 苹果称内存涨价前所未有难完全转嫁",
@@ -202,20 +226,8 @@
    "titles": [
     "三星投3500亿韩元建日本封装实验室"
    ],
-   "pages": [
-    "issues/164/1.webp",
-    "issues/164/2.webp",
-    "issues/164/3.webp",
-    "issues/164/4.webp",
-    "issues/164/5.webp"
-   ],
-   "pagesEn": [
-    "issues/164/en/1.webp",
-    "issues/164/en/2.webp",
-    "issues/164/en/3.webp",
-    "issues/164/en/4.webp",
-    "issues/164/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 163,
@@ -226,20 +238,8 @@
    "titles": [
     "英特尔业绩指引不及预期盘后跌23%"
    ],
-   "pages": [
-    "issues/163/1.webp",
-    "issues/163/2.webp",
-    "issues/163/3.webp",
-    "issues/163/4.webp",
-    "issues/163/5.webp"
-   ],
-   "pagesEn": [
-    "issues/163/en/1.webp",
-    "issues/163/en/2.webp",
-    "issues/163/en/3.webp",
-    "issues/163/en/4.webp",
-    "issues/163/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   }
  ]
 }
