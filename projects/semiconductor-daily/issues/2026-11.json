@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 177,
+   "date": "2026-11-04",
+   "label": "1104 晶豪科称DDR2与DDR3价格可维持",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "晶豪科称DDR2与DDR3价格可维持"
+   ],
+   "pages": [
+    "issues/177/1.webp",
+    "issues/177/2.webp",
+    "issues/177/3.webp",
+    "issues/177/4.webp",
+    "issues/177/5.webp"
+   ],
+   "pagesEn": [
+    "issues/177/en/1.webp",
+    "issues/177/en/2.webp",
+    "issues/177/en/3.webp",
+    "issues/177/en/4.webp",
+    "issues/177/en/5.webp"
+   ]
+  },
+  {
    "serial": 176,
    "date": "2026-11-04",
    "label": "1104 南电10月营收创新高年增69.67％",
