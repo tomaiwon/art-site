@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 174,
+   "date": "2026-11-04",
+   "label": "1104 英特尔暴跌45%产能转产服务器CPU",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英特尔暴跌45%产能转产服务器CPU"
+   ],
+   "pages": [
+    "issues/174/1.webp",
+    "issues/174/2.webp",
+    "issues/174/3.webp",
+    "issues/174/4.webp",
+    "issues/174/5.webp"
+   ],
+   "pagesEn": [
+    "issues/174/en/1.webp",
+    "issues/174/en/2.webp",
+    "issues/174/en/3.webp",
+    "issues/174/en/4.webp",
+    "issues/174/en/5.webp"
+   ]
+  },
+  {
    "serial": 173,
    "date": "2026-11-04",
    "label": "1104 环球晶发5亿美元可转债美光全额认购",
