@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 169,
+   "date": "2026-11-03",
+   "label": "1103 三季度手机SoC出货量同比萎缩21%",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三季度手机SoC出货量同比萎缩21%"
+   ],
+   "pages": [
+    "issues/169/1.webp",
+    "issues/169/2.webp",
+    "issues/169/3.webp",
+    "issues/169/4.webp",
+    "issues/169/5.webp"
+   ],
+   "pagesEn": [
+    "issues/169/en/1.webp",
+    "issues/169/en/2.webp",
+    "issues/169/en/3.webp",
+    "issues/169/en/4.webp",
+    "issues/169/en/5.webp"
+   ]
+  },
+  {
    "serial": 168,
    "date": "2026-11-03",
    "label": "1103 联电产能满载婉拒三星上万片急单",
