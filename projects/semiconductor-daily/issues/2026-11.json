@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 176,
+   "date": "2026-11-04",
+   "label": "1104 南电10月营收创新高年增69.67％",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "南电10月营收创新高年增69.67％"
+   ],
+   "pages": [
+    "issues/176/1.webp",
+    "issues/176/2.webp",
+    "issues/176/3.webp",
+    "issues/176/4.webp",
+    "issues/176/5.webp"
+   ],
+   "pagesEn": [
+    "issues/176/en/1.webp",
+    "issues/176/en/2.webp",
+    "issues/176/en/3.webp",
+    "issues/176/en/4.webp",
+    "issues/176/en/5.webp"
+   ]
+  },
+  {
    "serial": 175,
    "date": "2026-11-04",
    "label": "1104 南亚科10月营收464亿元创新高",
