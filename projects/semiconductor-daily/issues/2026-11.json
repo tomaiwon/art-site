@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 172,
+   "date": "2026-11-03",
+   "label": "1103 苹果称内存涨价前所未有难完全转嫁",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "苹果称内存涨价前所未有难完全转嫁"
+   ],
+   "pages": [
+    "issues/172/1.webp",
+    "issues/172/2.webp",
+    "issues/172/3.webp",
+    "issues/172/4.webp",
+    "issues/172/5.webp"
+   ],
+   "pagesEn": [
+    "issues/172/en/1.webp",
+    "issues/172/en/2.webp",
+    "issues/172/en/3.webp",
+    "issues/172/en/4.webp",
+    "issues/172/en/5.webp"
+   ]
+  },
+  {
    "serial": 171,
    "date": "2026-11-03",
    "label": "1103 三井金属扩产极薄铜箔至月产620万",
