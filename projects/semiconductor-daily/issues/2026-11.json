@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 170,
+   "date": "2026-11-03",
+   "label": "1103 三星泰勒二厂承接AMD HBM基片订单",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星泰勒二厂承接AMD HBM基片订单"
+   ],
+   "pages": [
+    "issues/170/1.webp",
+    "issues/170/2.webp",
+    "issues/170/3.webp",
+    "issues/170/4.webp",
+    "issues/170/5.webp"
+   ],
+   "pagesEn": [
+    "issues/170/en/1.webp",
+    "issues/170/en/2.webp",
+    "issues/170/en/3.webp",
+    "issues/170/en/4.webp",
+    "issues/170/en/5.webp"
+   ]
+  },
+  {
    "serial": 169,
    "date": "2026-11-03",
    "label": "1103 三季度手机SoC出货量同比萎缩21%",
