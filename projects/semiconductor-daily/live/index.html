@@ -372,7 +372,7 @@ function renderStatus(){
   $('status').innerHTML =
     `<span><span class="k">Mode</span><span class="dot ${s.mode === 'auto' ? 'live' : 'idle'}"></span><b>${esc(s.mode)}</b> ${esc(modeZh)}</span>`
     + `<span><span class="k">V2 Spend</span><b class="${s.over ? 'eam-bad' : ''}">$${s.spend.toFixed(2)} / $${s.cap.toFixed(2)}</b><span class="spendbar ${s.over ? 'bad' : ''}"><i style="width:${pct}%"></i></span>${s.over ? ' <span class="eam-bad">到上限:只采集不判断,零点重置</span>' : ''}</span>`
-    + `<span><span class="k">24H</span><b>${s.singlesToday}</b> 条单条 <span class="eam-soft">(近 24 小时上限 ${s.guard})</span></span>`
+    + `<span><span class="k">24H</span><b>${s.singlesToday}</b> 条单条 <span class="eam-soft">(近 24 小时 · 不限条数)</span></span>`
     + `<span><span class="k">Line</span>基础分 ≥ <b>${s.baseLine}</b></span>`
     + (s.weiboBalance != null ? `<span><span class="k">Weibo</span><b>${s.weiboBalance}</b> 积分 <span class="eam-soft">(约 ${Math.floor(s.weiboBalance / (s.weiboPerPost || 40))} 条)</span></span>` : '')
     + `<span><span class="k">Now</span><span class="dot ${busy && !offline ? 'live' : 'idle'}"></span>${esc(offline ? '工作台离线' : (busy || '空闲,等下一次醒来'))}</span>`
@@ -777,7 +777,7 @@ window.registerPrinter3D = impl => {
   Printer = impl; room.classList.add('three');
   if (lastPapers.length) impl.floor(lastPapers);
   if (offline && impl.offline) impl.offline(true);
-  if (live && impl.today) impl.today(live.status.singlesToday, live.status.guard);
+  if (live && impl.today) impl.today(live.status.singlesToday, 8);
   printerReadyResolve();
 };
 function pressText(state, info, extra){
@@ -794,7 +794,7 @@ function renderPrinter(){
   if (offline){                                       // 离线:不假装在出纸;纸堆按快照铺
     const ids = pr.papers.map(p => p.serial).join();
     if (Printer._ids !== ids){ Printer.floor(pr.papers); lastPapers = pr.papers; Printer._ids = ids; known = new Set(pr.papers.map(p => p.serial)); }
-    if (Printer.today) Printer.today(live.status.singlesToday, live.status.guard);
+    if (Printer.today) Printer.today(live.status.singlesToday, 8);
     pressText('idle', null, `工作台离线 · 这是 ${stamp(snapAt)} 的快照`);
     $('pressTally').textContent = '点一张纸看大图';
     return;
@@ -802,7 +802,7 @@ function renderPrinter(){
   if (known === null){ Printer.floor(pr.papers); lastPapers = pr.papers; known = new Set(pr.papers.map(p => p.serial)); }
   const fresh = pr.papers.filter(p => !known.has(p.serial)).sort((a, b) => a.serial - b.serial);
   fresh.forEach(p => known.add(p.serial));
-  if (Printer.today) Printer.today(live.status.singlesToday, live.status.guard);
+  if (Printer.today) Printer.today(live.status.singlesToday, 8);      // 表盘下 8 格:近 24 小时出了几条(多于 8 条就全亮)
   const j = pr.job, steps = Object.keys(running);
   const intake = live.schedule.find(r => r.key === 'intake');
   if (fresh.length){ pressText('done', fresh[fresh.length - 1], `第 ${String(fresh[fresh.length - 1].serial).padStart(3, '0')} 期`);
