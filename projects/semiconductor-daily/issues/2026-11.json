@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 185,
+   "date": "2026-11-05",
+   "label": "1105 台积电评估谢尔曼建两座晶圆厂",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电评估谢尔曼建两座晶圆厂"
+   ],
+   "pages": [
+    "issues/185/1.webp",
+    "issues/185/2.webp",
+    "issues/185/3.webp",
+    "issues/185/4.webp",
+    "issues/185/5.webp"
+   ],
+   "pagesEn": [
+    "issues/185/en/1.webp",
+    "issues/185/en/2.webp",
+    "issues/185/en/3.webp",
+    "issues/185/en/4.webp",
+    "issues/185/en/5.webp"
+   ]
+  },
+  {
    "serial": 184,
    "date": "2026-11-04",
    "label": "1104 矽品砸千亿扩产中科二林先进封装",
@@ -442,20 +466,8 @@
    "titles": [
     "联电夺中际旭创赛丽硅光子大单"
    ],
-   "pages": [
-    "issues/166/1.webp",
-    "issues/166/2.webp",
-    "issues/166/3.webp",
-    "issues/166/4.webp",
-    "issues/166/5.webp"
-   ],
-   "pagesEn": [
-    "issues/166/en/1.webp",
-    "issues/166/en/2.webp",
-    "issues/166/en/3.webp",
-    "issues/166/en/4.webp",
-    "issues/166/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 165,
@@ -466,20 +478,8 @@
    "titles": [
     "三星2030年底前关闭8英寸代工产线"
    ],
-   "pages": [
-    "issues/165/1.webp",
-    "issues/165/2.webp",
-    "issues/165/3.webp",
-    "issues/165/4.webp",
-    "issues/165/5.webp"
-   ],
-   "pagesEn": [
-    "issues/165/en/1.webp",
-    "issues/165/en/2.webp",
-    "issues/165/en/3.webp",
-    "issues/165/en/4.webp",
-    "issues/165/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 164,
