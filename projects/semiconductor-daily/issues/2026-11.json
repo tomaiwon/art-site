@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 179,
+   "date": "2026-11-04",
+   "label": "1104 台湾将先进GPU与AI服务器列管",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台湾将先进GPU与AI服务器列管"
+   ],
+   "pages": [
+    "issues/179/1.webp",
+    "issues/179/2.webp",
+    "issues/179/3.webp",
+    "issues/179/4.webp",
+    "issues/179/5.webp"
+   ],
+   "pagesEn": [
+    "issues/179/en/1.webp",
+    "issues/179/en/2.webp",
+    "issues/179/en/3.webp",
+    "issues/179/en/4.webp",
+    "issues/179/en/5.webp"
+   ]
+  },
+  {
    "serial": 178,
    "date": "2026-11-04",
    "label": "1104 华邦电731.63亿扩建高雄12吋厂",
