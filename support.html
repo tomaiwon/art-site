@@ -130,21 +130,13 @@
     .product{grid-template-columns:minmax(160px,40%) minmax(0,1fr);gap:24px;}
     .product-info{min-height:0;}
   }
-  @media(max-width:680px){.desk-page{display:none;}}
-
-  /* ── 移动端卡片 ── */
-  .mob-cats{display:none;}
   @media(max-width:680px){
-    .mob-cats{display:block;}
-    .cat-list{list-style:none;padding:56px 0 0;margin:0;}
-    .cat-item{border-bottom:1px solid #e8e8e8;}
-    .cat-item:last-child{border-bottom:none;}
-    .cat-link{display:block;text-decoration:none;color:#111;}
-    .cat-link img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;}
-    .cat-img-placeholder{width:100%;aspect-ratio:16/9;background:#f0f0f0;display:block;}
-    .cat-info{padding:14px 20px 18px;}
-    .cat-name-zh{font-family:"SupportChinese","EFont",serif;font-size:18px;font-weight:700;display:block;}
-    .cat-name-en{font-family:"EFont","ZFont",sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;color:#888;display:block;margin-top:4px;}
+    .desk-page{padding:84px 20px 56px;}
+    .desk-page section + section{margin-top:56px;}
+    .product{grid-template-columns:1fr;gap:18px;max-width:none;}
+    .product + .product{margin-top:44px;}
+    .product-info{min-height:0;gap:10px;}
+    .product-desc{max-width:none;font-size:13px;}
   }
 </style>
 </head>
@@ -163,7 +155,7 @@
   <a href="contact.html">CONTACT</a>
 </nav>
 
-<!-- 桌面端：四件商品直接陈列，仅光盘保留灰框 -->
+<!-- 商品直接陈列（桌面与手机共用），仅光盘保留灰框 -->
 <main class="desk-page">
   <section>
     <span class="section-label">影像</span>
@@ -222,39 +214,6 @@
     </div>
   </section>
 </main>
-
-<!-- 移动端：分类卡片入口 -->
-<div class="mob-cats">
-  <ul class="cat-list">
-    <li class="cat-item">
-      <a class="cat-link" href="support-film.html">
-        <img src="images/cd1.png" alt="实体影像">
-        <div class="cat-info">
-          <span class="cat-name-zh">实体影像</span>
-          <span class="cat-name-en">Physical Film</span>
-        </div>
-      </a>
-    </li>
-    <li class="cat-item">
-      <a class="cat-link" href="support-artwork.html">
-        <img src="images/artwork1.png" alt="艺术家手作陶瓷">
-        <div class="cat-info">
-          <span class="cat-name-zh">艺术品</span>
-          <span class="cat-name-en">Artwork</span>
-        </div>
-      </a>
-    </li>
-    <li class="cat-item">
-      <a class="cat-link" href="support-merch.html">
-        <img src="images/merch1.png" alt="手作书籍">
-        <div class="cat-info">
-          <span class="cat-name-zh">周边</span>
-          <span class="cat-name-en">Merchandise</span>
-        </div>
-      </a>
-    </li>
-  </ul>
-</div>
 
 </body>
 </html>
