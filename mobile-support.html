@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#12191B" />
+<title>Yi Huang 黄熠 — Support</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
+<style>
+  /* 手机版 Support：沿用 mobile.html 的玄底月白，商品按类别竖排；
+     商品和价格与 support.html 保持一致，那边改了这里也要改 */
+  @font-face{
+    font-family:"Space Mono";
+    src:url("projects/semiconductor-daily/live/fonts/SpaceMono-Bold.woff2") format("woff2");
+    font-weight:700;font-display:swap;
+  }
+  :root{
+    --ink:#E9E3D4;      /* 月白 */
+    --paper:#12191B;    /* 玄 */
+    --panel:#1B2325;    /* 墨 */
+    --edge:#030506;
+    --glow:0 0 6px rgba(233,227,212,.28);
+    --mono:"Space Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  html{background:var(--paper);}
+  body{
+    color:var(--ink);
+    font-family:"Avenir Next Condensed","Arial Narrow",Arial,sans-serif;
+    font-stretch:condensed;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .zh{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;font-weight:400;}
+
+  #bg{
+    position:fixed;inset:0;z-index:-1;
+    background:radial-gradient(circle,transparent 90%,var(--edge) 100%),var(--paper);
+    box-shadow:0 0 28px 8px var(--edge) inset;
+  }
+  main{position:relative;width:92%;margin:0 auto;padding:.5rem 0 0;}
+  p,footer{text-shadow:var(--glow);}
+  a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.2em;}
+
+  .back{
+    display:inline-block;margin:1.1rem 0 0;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
+    text-transform:uppercase;text-decoration:none;opacity:.55;
+  }
+  .title{
+    font-family:var(--mono);font-weight:700;
+    font-size:2.6rem;line-height:1;letter-spacing:-.04em;
+    margin:.7rem 0 .4rem;text-shadow:var(--glow);
+  }
+  .lede{font-size:1.1rem;line-height:1.38;margin:1rem 0 0;}
+  h2{
+    font-family:var(--mono);font-weight:700;
+    font-size:1.75rem;line-height:1;letter-spacing:-.03em;
+    margin:3.2rem 0 1.6rem;text-shadow:var(--glow);
+  }
+  h2 .zh{font-size:1.3rem;font-weight:600;letter-spacing:.04em;margin-left:.3em;}
+
+  .item{margin:0 0 3rem;font-size:1.1rem;line-height:1.38;}
+  .item img{display:block;width:100%;height:auto;background:var(--panel);}
+  .item img.cutout{background:none;}
+  .tag{
+    display:block;margin:1rem 0 .45rem;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;
+    text-transform:uppercase;opacity:.5;text-shadow:none;
+  }
+  .item p{margin:.5rem 0 0;}
+  .name{font-weight:600;}
+  .buy{display:flex;align-items:center;gap:1.1rem;margin-top:1.1rem;}
+  .price{font-family:var(--mono);font-weight:700;font-size:1.1rem;}
+  .buy a{
+    font-family:var(--mono);font-weight:700;font-size:.8rem;letter-spacing:.12em;
+    text-decoration:none;color:var(--paper);background:var(--ink);
+    padding:.55rem 1.4rem;
+  }
+  .buy a:active{opacity:.8;}
+  .soon{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-top:1rem;display:block;}
+
+  footer{text-align:center;font-size:1.1rem;margin:4rem 0 3rem;line-height:1.6;}
+  footer small{display:block;margin-top:1rem;font-size:.85rem;opacity:.7;}
+
+  @media (min-width:45rem){ main{width:60%;padding-top:4rem;} }
+  @media (min-width:64rem){ main{width:50%;} }
+  @media (min-width:80rem){ main{width:40%;} }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<main>
+  <a class="back" href="mobile.html">← Yi Huang</a>
+  <h1 class="title">Support</h1>
+  <p class="lede">Support the practice through films, artworks and merch. <span class="zh">以影像、艺术品与周边支持创作。</span></p>
+
+  <h2>Film<span class="zh">影像</span></h2>
+  <div class="item">
+    <img src="images/m/support-cd1.webp" alt="The Experience 关中往事 光盘封面">
+    <span class="tag">Commemorative Edition DVD</span>
+    <p class="name">The Experience <span class="zh">关中往事</span></p>
+    <p>A student director traverses different timelines in search of a structurally complete ending uniquely belonging to the East. In this quest to discern the boundary between reality and illusion, he finds himself drawn into the historical currents of digital media…</p>
+    <div class="buy"><span class="price">£20</span><a href="https://buy.stripe.com/00wcN53aw6WsaRn7vy6g800" target="_blank" rel="noopener">BUY</a></div>
+  </div>
+  <div class="item">
+    <img src="images/m/support-cd2.webp" alt="As Fables Go By 洋务运动 光盘封面">
+    <span class="tag">Commemorative Edition DVD</span>
+    <p class="name">As Fables Go By <span class="zh">洋务运动</span></p>
+    <p>In 1876, the first cohort of Westernisation scholars travelled to Britain to study telegraph technology; in 2025, self-funded students from the People's Republic journeyed to Britain to study contemporary art practice.</p>
+    <div class="buy"><span class="price">£25</span><a href="https://buy.stripe.com/3cIbJ1bH294A3oV4jm6g801" target="_blank" rel="noopener">BUY</a></div>
+  </div>
+
+  <h2>Artwork<span class="zh">艺术品</span></h2>
+  <div class="item">
+    <img class="cutout" src="images/m/support-artwork.webp" alt="艺术家手作陶瓷">
+    <span class="tag">Ceramics</span>
+    <p class="name">Artist-made Ceramics <span class="zh">艺术家手作陶瓷</span></p>
+    <p>A vessel-shaped work with an uneven rim and a textured, dark-red surface. Further details coming soon.</p>
+    <span class="soon">Coming soon <span class="zh">即将上线</span></span>
+  </div>
+
+  <h2>Merch<span class="zh">周边</span></h2>
+  <div class="item">
+    <img class="cutout" src="images/m/support-merch.webp" alt="《洋务运动》手作书籍">
+    <span class="tag">Handmade books</span>
+    <p class="name">Handmade Books <span class="zh">手作书籍</span></p>
+    <p>A printed design bringing together the Chinese and English titles of As Fables Go By. Further details coming soon.</p>
+    <span class="soon">Coming soon <span class="zh">即将上线</span></span>
+  </div>
+</main>
+
+<footer>
+  <a href="mobile.html">Back to Yi Huang</a>
+  <small>© 2026 Tomatone Pictures Studio</small>
+</footer>
+</body>
+</html>
