@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 180,
+   "date": "2026-11-04",
+   "label": "1104 传日本官方拟售JSR股权予三井化学",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "传日本官方拟售JSR股权予三井化学"
+   ],
+   "pages": [
+    "issues/180/1.webp",
+    "issues/180/2.webp",
+    "issues/180/3.webp",
+    "issues/180/4.webp",
+    "issues/180/5.webp"
+   ],
+   "pagesEn": [
+    "issues/180/en/1.webp",
+    "issues/180/en/2.webp",
+    "issues/180/en/3.webp",
+    "issues/180/en/4.webp",
+    "issues/180/en/5.webp"
+   ]
+  },
+  {
    "serial": 179,
    "date": "2026-11-04",
    "label": "1104 台湾将先进GPU与AI服务器列管",
