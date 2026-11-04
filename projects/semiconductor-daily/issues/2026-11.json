@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 184,
+   "date": "2026-11-04",
+   "label": "1104 矽品砸千亿扩产中科二林先进封装",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "矽品砸千亿扩产中科二林先进封装"
+   ],
+   "pages": [
+    "issues/184/1.webp",
+    "issues/184/2.webp",
+    "issues/184/3.webp",
+    "issues/184/4.webp",
+    "issues/184/5.webp"
+   ],
+   "pagesEn": [
+    "issues/184/en/1.webp",
+    "issues/184/en/2.webp",
+    "issues/184/en/3.webp",
+    "issues/184/en/4.webp",
+    "issues/184/en/5.webp"
+   ]
+  },
+  {
    "serial": 183,
    "date": "2026-11-04",
    "label": "1104 联发科延揽英特尔前高管强化先进封装",
