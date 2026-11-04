@@ -833,7 +833,8 @@ function openPaper(p){
   $('pvLinks').innerHTML = (p.ig ? `<a href="${esc(p.ig)}" target="_blank" rel="noopener">Instagram ↗</a>` : '<span class="eam-soft">Instagram —</span>')
     + (p.x ? `<a href="${esc(p.x)}" target="_blank" rel="noopener">X ↗</a>` : '<span class="eam-soft">X —</span>')
     + (p.weibo ? `<a href="${esc(p.weibo)}" target="_blank" rel="noopener">微博 ↗</a>` : '<span class="eam-soft">微博 —</span>')
-    + (p.threads ? `<a href="${esc(p.threads)}" target="_blank" rel="noopener">Threads ↗</a>` : '<span class="eam-soft">Threads —</span>');
+    + (p.threads ? `<a href="${esc(p.threads)}" target="_blank" rel="noopener">Threads ↗</a>` : '<span class="eam-soft">Threads —</span>')
+    + (p.xhs ? `<a href="${esc(p.xhs)}" target="_blank" rel="noopener">小红书 ↗</a>` : '');
   $('paperView').classList.add('on'); $('pvClose').focus();
 }
 $('pvClose').onclick = () => $('paperView').classList.remove('on');
