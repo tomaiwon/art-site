@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 182,
+   "date": "2026-11-04",
+   "label": "1104 三星在器兴建2纳米4纳米代工厂",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星在器兴建2纳米4纳米代工厂"
+   ],
+   "pages": [
+    "issues/182/1.webp",
+    "issues/182/2.webp",
+    "issues/182/3.webp",
+    "issues/182/4.webp",
+    "issues/182/5.webp"
+   ],
+   "pagesEn": [
+    "issues/182/en/1.webp",
+    "issues/182/en/2.webp",
+    "issues/182/en/3.webp",
+    "issues/182/en/4.webp",
+    "issues/182/en/5.webp"
+   ]
+  },
+  {
    "serial": 181,
    "date": "2026-11-04",
    "label": "1104 松下湖口厂火警CCL供应吃紧",
