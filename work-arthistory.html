@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+  // 手机只看单页 mobile.html，旧的 work / support 页在手机上不再显示
+  if(window.innerWidth<=860) location.replace('mobile.html');
+</script>
 <title>Yi Huang — Art History Series</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPBFT1Q5SF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BPBFT1Q5SF');</script>
