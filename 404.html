@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Yi Huang 黄熠</title>
+<script>
+  // GitHub Pages 找不到页面时显示这一页（地址栏仍是原网址），所以这里的链接都用 / 开头的绝对路径。
+  // 2026-11-06 删掉的旧分类页按内容送到新位置，其余网址一律回首页；
+  // 手机（≤860px，与全站跳转一致）去深色单页 mobile.html / mobile-support.html。
+  (function(){
+    var name = location.pathname.replace(/^\/+|\/+$/g, '').replace(/\.html$/i, '').toLowerCase();
+    var desk = {
+      'work-digital': '/work.html#digital',
+      'films': '/work.html#digital',
+      'work-arthistory': '/work.html#arthistory',
+      'writing': '/work.html#articles',
+      'work-practice': '/work.html#practice',
+      'work-test': '/work.html#tests',
+      'support-film': '/support.html',
+      'support-artwork': '/support.html',
+      'support-merch': '/support.html'
+    };
+    var to = window.innerWidth <= 860
+      ? (/^support-/.test(name) ? '/mobile-support.html' : '/mobile.html')
+      : (desk[name] || '/');
+    document.documentElement.className = 'going';
+    location.replace(to);
+  })();
+</script>
+<style>
+  /* 只有关掉 JavaScript 才看得到；电脑白底，手机沿用 mobile.html 的玄底月白 */
+  html{background:#fff;color:#111;}
+  body{margin:0;font-family:"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+  .going main{visibility:hidden;}
+  main{max-width:34rem;margin:20vh auto 0;padding:0 24px;font-size:17px;line-height:1.5;}
+  .code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-weight:700;font-size:44px;letter-spacing:-.04em;margin:0 0 .5em;}
+  .zh{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;}
+  a{color:inherit;text-underline-offset:.2em;}
+  .m{display:none;}
+  @media (max-width:860px){
+    html{background:#12191B;color:#E9E3D4;}
+    .d{display:none;}
+    .m{display:inline;}
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="code">404</p>
+  <p>This page has moved or no longer exists. <span class="zh">此页已移除或不存在。</span></p>
+  <p><a class="d" href="/">Back to Yi Huang</a><a class="m" href="/mobile.html">Back to Yi Huang</a></p>
+</main>
+</body>
+</html>
