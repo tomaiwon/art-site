@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 186,
+   "date": "2026-11-05",
+   "label": "1105 游族网络42.25亿采购GPU",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "游族网络42.25亿采购GPU"
+   ],
+   "pages": [
+    "issues/186/1.webp",
+    "issues/186/2.webp",
+    "issues/186/3.webp",
+    "issues/186/4.webp",
+    "issues/186/5.webp"
+   ],
+   "pagesEn": [
+    "issues/186/en/1.webp",
+    "issues/186/en/2.webp",
+    "issues/186/en/3.webp",
+    "issues/186/en/4.webp",
+    "issues/186/en/5.webp"
+   ]
+  },
+  {
    "serial": 185,
    "date": "2026-11-05",
    "label": "1105 台积电评估谢尔曼建两座晶圆厂",
