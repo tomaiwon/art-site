@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 192,
+   "date": "2026-11-06",
+   "label": "1106 美国多州拟限数据中心，韩存储股齐跌",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国多州拟限数据中心，韩存储股齐跌"
+   ],
+   "pages": [
+    "issues/192/1.webp",
+    "issues/192/2.webp",
+    "issues/192/3.webp",
+    "issues/192/4.webp",
+    "issues/192/5.webp"
+   ],
+   "pagesEn": [
+    "issues/192/en/1.webp",
+    "issues/192/en/2.webp",
+    "issues/192/en/3.webp",
+    "issues/192/en/4.webp",
+    "issues/192/en/5.webp"
+   ]
+  },
+  {
    "serial": 191,
    "date": "2026-11-06",
    "label": "1106 月之暗面洽租欧洲英伟达GPU算力",
