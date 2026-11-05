@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 188,
+   "date": "2026-11-05",
+   "label": "1105 长存控股330亿元科创板IPO暂缓",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "长存控股330亿元科创板IPO暂缓"
+   ],
+   "pages": [
+    "issues/188/1.webp",
+    "issues/188/2.webp",
+    "issues/188/3.webp",
+    "issues/188/4.webp",
+    "issues/188/5.webp"
+   ],
+   "pagesEn": [
+    "issues/188/en/1.webp",
+    "issues/188/en/2.webp",
+    "issues/188/en/3.webp",
+    "issues/188/en/4.webp",
+    "issues/188/en/5.webp"
+   ]
+  },
+  {
    "serial": 187,
    "date": "2026-11-05",
    "label": "1105 欧盟启动芯片设计平台投5.25亿",
