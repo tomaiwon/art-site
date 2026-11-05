@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 190,
+   "date": "2026-11-05",
+   "label": "1105 台湾美光新奖酬总体薪酬成长2.7倍",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台湾美光新奖酬总体薪酬成长2.7倍"
+   ],
+   "pages": [
+    "issues/190/1.webp",
+    "issues/190/2.webp",
+    "issues/190/3.webp",
+    "issues/190/4.webp",
+    "issues/190/5.webp"
+   ],
+   "pagesEn": [
+    "issues/190/en/1.webp",
+    "issues/190/en/2.webp",
+    "issues/190/en/3.webp",
+    "issues/190/en/4.webp",
+    "issues/190/en/5.webp"
+   ]
+  },
+  {
    "serial": 189,
    "date": "2026-11-05",
    "label": "1105 美光暂停桃园45亿美元DRAM建厂",
