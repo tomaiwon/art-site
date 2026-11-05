@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 187,
+   "date": "2026-11-05",
+   "label": "1105 欧盟启动芯片设计平台投5.25亿",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "欧盟启动芯片设计平台投5.25亿"
+   ],
+   "pages": [
+    "issues/187/1.webp",
+    "issues/187/2.webp",
+    "issues/187/3.webp",
+    "issues/187/4.webp",
+    "issues/187/5.webp"
+   ],
+   "pagesEn": [
+    "issues/187/en/1.webp",
+    "issues/187/en/2.webp",
+    "issues/187/en/3.webp",
+    "issues/187/en/4.webp",
+    "issues/187/en/5.webp"
+   ]
+  },
+  {
    "serial": 186,
    "date": "2026-11-05",
    "label": "1105 游族网络42.25亿采购GPU",
