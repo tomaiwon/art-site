@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 191,
+   "date": "2026-11-06",
+   "label": "1106 月之暗面洽租欧洲英伟达GPU算力",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "月之暗面洽租欧洲英伟达GPU算力"
+   ],
+   "pages": [
+    "issues/191/1.webp",
+    "issues/191/2.webp",
+    "issues/191/3.webp",
+    "issues/191/4.webp",
+    "issues/191/5.webp"
+   ],
+   "pagesEn": [
+    "issues/191/en/1.webp",
+    "issues/191/en/2.webp",
+    "issues/191/en/3.webp",
+    "issues/191/en/4.webp",
+    "issues/191/en/5.webp"
+   ]
+  },
+  {
    "serial": 190,
    "date": "2026-11-05",
    "label": "1105 台湾美光新奖酬总体薪酬成长2.7倍",
@@ -442,20 +466,8 @@
    "titles": [
     "苹果称内存涨价前所未有难完全转嫁"
    ],
-   "pages": [
-    "issues/172/1.webp",
-    "issues/172/2.webp",
-    "issues/172/3.webp",
-    "issues/172/4.webp",
-    "issues/172/5.webp"
-   ],
-   "pagesEn": [
-    "issues/172/en/1.webp",
-    "issues/172/en/2.webp",
-    "issues/172/en/3.webp",
-    "issues/172/en/4.webp",
-    "issues/172/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 171,
@@ -466,20 +478,8 @@
    "titles": [
     "三井金属扩产极薄铜箔至月产620万"
    ],
-   "pages": [
-    "issues/171/1.webp",
-    "issues/171/2.webp",
-    "issues/171/3.webp",
-    "issues/171/4.webp",
-    "issues/171/5.webp"
-   ],
-   "pagesEn": [
-    "issues/171/en/1.webp",
-    "issues/171/en/2.webp",
-    "issues/171/en/3.webp",
-    "issues/171/en/4.webp",
-    "issues/171/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 170,
@@ -490,20 +490,8 @@
    "titles": [
     "三星泰勒二厂承接AMD HBM基片订单"
    ],
-   "pages": [
-    "issues/170/1.webp",
-    "issues/170/2.webp",
-    "issues/170/3.webp",
-    "issues/170/4.webp",
-    "issues/170/5.webp"
-   ],
-   "pagesEn": [
-    "issues/170/en/1.webp",
-    "issues/170/en/2.webp",
-    "issues/170/en/3.webp",
-    "issues/170/en/4.webp",
-    "issues/170/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 169,
@@ -514,20 +502,8 @@
    "titles": [
     "三季度手机SoC出货量同比萎缩21%"
    ],
-   "pages": [
-    "issues/169/1.webp",
-    "issues/169/2.webp",
-    "issues/169/3.webp",
-    "issues/169/4.webp",
-    "issues/169/5.webp"
-   ],
-   "pagesEn": [
-    "issues/169/en/1.webp",
-    "issues/169/en/2.webp",
-    "issues/169/en/3.webp",
-    "issues/169/en/4.webp",
-    "issues/169/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 168,
@@ -538,20 +514,8 @@
    "titles": [
     "联电产能满载婉拒三星上万片急单"
    ],
-   "pages": [
-    "issues/168/1.webp",
-    "issues/168/2.webp",
-    "issues/168/3.webp",
-    "issues/168/4.webp",
-    "issues/168/5.webp"
-   ],
-   "pagesEn": [
-    "issues/168/en/1.webp",
-    "issues/168/en/2.webp",
-    "issues/168/en/3.webp",
-    "issues/168/en/4.webp",
-    "issues/168/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 167,
@@ -562,20 +526,8 @@
    "titles": [
     "苹果确认内存短缺影响Mac与iPad"
    ],
-   "pages": [
-    "issues/167/1.webp",
-    "issues/167/2.webp",
-    "issues/167/3.webp",
-    "issues/167/4.webp",
-    "issues/167/5.webp"
-   ],
-   "pagesEn": [
-    "issues/167/en/1.webp",
-    "issues/167/en/2.webp",
-    "issues/167/en/3.webp",
-    "issues/167/en/4.webp",
-    "issues/167/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 166,
