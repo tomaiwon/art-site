@@ -2,7 +2,7 @@
 
 入口：WORK → 测试 → 工作室。
 
-移动分类页为 `/work-test.html`；桌面访问分类页时回到 `/work.html#tests`，沿用网站现有的双端入口方式。样页路径为 `/projects/news-thoughts-mobile/`，菜单和页脚可返回测试分类。
+桌面入口为 `/work.html#tests`；手机上的返回链接回到单页 `/mobile.html`。样页路径为 `/projects/news-thoughts-mobile/`，菜单和页脚可返回测试分类。
 
 纯静态 HTML/CSS/JavaScript，无构建或服务端依赖。沿用移动试刊 002 的整页排版、吸顶导航、全屏目录、背景滚动锁定和阅读位置恢复。该样页为设计测试，没有自动采集或发布功能。
 

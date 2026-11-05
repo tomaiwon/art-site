@@ -2,7 +2,7 @@
 
 2026-10 · 数字媒介本体系列 · 作者：黄熠
 
-作品页入口为 `/projects/semiconductor-daily/`。桌面 `work.html` 与手机 `work-digital.html` 的数字媒介本体系列均有入口。
+作品页入口为 `/projects/semiconductor-daily/`。桌面 `work.html` 的数字媒介本体系列与手机单页 `mobile.html` 均有入口。
 
 ## 现在的页面（2026-10-21 起）
 
@@ -19,7 +19,7 @@
 
 - `live/`：实时监测台的静态版与离线快照，工作台每 30 分钟有变化才推一次（`live_snapshot.py`）。**不要动。**
 - `issues/`：工作台每期自动推送的早午晚报数据，`news.html` 的「半导体早午晚报」栏读取它。**不要动。**
-- `assets/`：旧版作品页的图片；`work-digital.html` 的缩略图和旧链接仍在用 `assets/cover-morning.webp`。
+- `assets/`：旧版作品页的图片；旧链接可能仍在用 `assets/cover-morning.webp`，先保留。
 - `style.css`、`gallery.js`、`assets-manifest.json`：旧版作品页（单期示例 + 六步工作流）的样式、看图脚本与清单，
   现已不被 `index.html` 引用，留作旧版存档；旧版 `index.html` 可从 git 历史取回。
 - 图内刊名「半導體早報」用百家造字杜怀健行隶，属商业字体，正式发布前需取得商用授权。

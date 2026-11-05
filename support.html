@@ -51,22 +51,6 @@
   .top-nav a{color:#111;text-decoration:none;line-height:1;}
   .top-nav a:hover{text-decoration:underline;text-underline-offset:5px;}
 
-  /* ── 移动端导航 ── */
-  .mob-nav{
-    position:fixed;top:0;left:0;right:0;z-index:100;
-    display:flex;justify-content:space-between;align-items:center;
-    padding:0 22px;height:56px;
-    background:#fff;border-bottom:1px solid #e8e8e8;
-  }
-  .mob-nav a{
-    font-family:"EFont","ZFont",sans-serif;font-size:15px;font-weight:700;
-    letter-spacing:1.5px;text-transform:uppercase;color:#aaa;text-decoration:none;
-  }
-  .mob-nav a.active{color:#111;}
-  .mob-nav a:hover{color:#111;}
-  @media(min-width:681px){.mob-nav{display:none;}}
-  @media(max-width:680px){.top-nav{display:none;}}
-
   /* ── 桌面端内容 ── */
   .desk-page{
     min-height:100vh;
@@ -134,31 +118,9 @@
     .product{grid-template-columns:minmax(160px,40%) minmax(0,1fr);gap:24px;}
     .product-info{min-height:0;}
   }
-  @media(max-width:680px){.desk-page{display:none;}}
-
-  /* ── 移动端卡片 ── */
-  .mob-cats{display:none;}
-  @media(max-width:680px){
-    .mob-cats{display:block;}
-    .cat-list{list-style:none;padding:56px 0 0;margin:0;}
-    .cat-item{border-bottom:1px solid #e8e8e8;}
-    .cat-item:last-child{border-bottom:none;}
-    .cat-link{display:block;text-decoration:none;color:#111;}
-    .cat-link img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;}
-    .cat-img-placeholder{width:100%;aspect-ratio:16/9;background:#f0f0f0;display:block;}
-    .cat-info{padding:14px 20px 18px;}
-    .cat-name-zh{font-family:"SupportChinese","EFont",serif;font-size:18px;font-weight:700;display:block;}
-    .cat-name-en{font-family:"EFont","ZFont",sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;color:#888;display:block;margin-top:4px;}
-  }
 </style>
 </head>
 <body>
-
-<nav class="mob-nav">
-  <a href="index.html">about</a>
-  <a href="work.html">work</a>
-  <a href="support.html" class="active">support</a>
-</nav>
 
 <nav class="top-nav" aria-label="Primary">
   <a href="index.html">ABOUT</a>
@@ -226,39 +188,6 @@
     </div>
   </section>
 </main>
-
-<!-- 移动端：分类卡片入口 -->
-<div class="mob-cats">
-  <ul class="cat-list">
-    <li class="cat-item">
-      <a class="cat-link" href="support-film.html">
-        <img src="images/cd1.png" alt="实体影像">
-        <div class="cat-info">
-          <span class="cat-name-zh">实体影像</span>
-          <span class="cat-name-en">Physical Film</span>
-        </div>
-      </a>
-    </li>
-    <li class="cat-item">
-      <a class="cat-link" href="support-artwork.html">
-        <img src="images/artwork1.png" alt="艺术家手作陶瓷">
-        <div class="cat-info">
-          <span class="cat-name-zh">艺术品</span>
-          <span class="cat-name-en">Artwork</span>
-        </div>
-      </a>
-    </li>
-    <li class="cat-item">
-      <a class="cat-link" href="support-merch.html">
-        <img src="images/merch1.png" alt="手作书籍">
-        <div class="cat-info">
-          <span class="cat-name-zh">周边</span>
-          <span class="cat-name-en">Merchandise</span>
-        </div>
-      </a>
-    </li>
-  </ul>
-</div>
 
 </body>
 </html>
