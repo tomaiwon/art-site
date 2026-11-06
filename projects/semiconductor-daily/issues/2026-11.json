@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 194,
+   "date": "2026-11-07",
+   "label": "1107 Eulitha交付多台DUV光刻设备",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "Eulitha交付多台DUV光刻设备"
+   ],
+   "pages": [
+    "issues/194/1.webp",
+    "issues/194/2.webp",
+    "issues/194/3.webp",
+    "issues/194/4.webp",
+    "issues/194/5.webp"
+   ],
+   "pagesEn": [
+    "issues/194/en/1.webp",
+    "issues/194/en/2.webp",
+    "issues/194/en/3.webp",
+    "issues/194/en/4.webp",
+    "issues/194/en/5.webp"
+   ]
+  },
+  {
    "serial": 193,
    "date": "2026-11-06",
    "label": "1106 昇腾适配Kimi K3.1 Pro模型",
@@ -226,20 +250,8 @@
    "titles": [
     "矽品砸千亿扩产中科二林先进封装"
    ],
-   "pages": [
-    "issues/184/1.webp",
-    "issues/184/2.webp",
-    "issues/184/3.webp",
-    "issues/184/4.webp",
-    "issues/184/5.webp"
-   ],
-   "pagesEn": [
-    "issues/184/en/1.webp",
-    "issues/184/en/2.webp",
-    "issues/184/en/3.webp",
-    "issues/184/en/4.webp",
-    "issues/184/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 183,
@@ -250,20 +262,8 @@
    "titles": [
     "联发科延揽英特尔前高管强化先进封装"
    ],
-   "pages": [
-    "issues/183/1.webp",
-    "issues/183/2.webp",
-    "issues/183/3.webp",
-    "issues/183/4.webp",
-    "issues/183/5.webp"
-   ],
-   "pagesEn": [
-    "issues/183/en/1.webp",
-    "issues/183/en/2.webp",
-    "issues/183/en/3.webp",
-    "issues/183/en/4.webp",
-    "issues/183/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 182,
@@ -274,20 +274,8 @@
    "titles": [
     "三星在器兴建2纳米4纳米代工厂"
    ],
-   "pages": [
-    "issues/182/1.webp",
-    "issues/182/2.webp",
-    "issues/182/3.webp",
-    "issues/182/4.webp",
-    "issues/182/5.webp"
-   ],
-   "pagesEn": [
-    "issues/182/en/1.webp",
-    "issues/182/en/2.webp",
-    "issues/182/en/3.webp",
-    "issues/182/en/4.webp",
-    "issues/182/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 181,
@@ -298,20 +286,8 @@
    "titles": [
     "松下湖口厂火警CCL供应吃紧"
    ],
-   "pages": [
-    "issues/181/1.webp",
-    "issues/181/2.webp",
-    "issues/181/3.webp",
-    "issues/181/4.webp",
-    "issues/181/5.webp"
-   ],
-   "pagesEn": [
-    "issues/181/en/1.webp",
-    "issues/181/en/2.webp",
-    "issues/181/en/3.webp",
-    "issues/181/en/4.webp",
-    "issues/181/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 180,
@@ -322,20 +298,8 @@
    "titles": [
     "传日本官方拟售JSR股权予三井化学"
    ],
-   "pages": [
-    "issues/180/1.webp",
-    "issues/180/2.webp",
-    "issues/180/3.webp",
-    "issues/180/4.webp",
-    "issues/180/5.webp"
-   ],
-   "pagesEn": [
-    "issues/180/en/1.webp",
-    "issues/180/en/2.webp",
-    "issues/180/en/3.webp",
-    "issues/180/en/4.webp",
-    "issues/180/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 179,
@@ -346,20 +310,8 @@
    "titles": [
     "台湾将先进GPU与AI服务器列管"
    ],
-   "pages": [
-    "issues/179/1.webp",
-    "issues/179/2.webp",
-    "issues/179/3.webp",
-    "issues/179/4.webp",
-    "issues/179/5.webp"
-   ],
-   "pagesEn": [
-    "issues/179/en/1.webp",
-    "issues/179/en/2.webp",
-    "issues/179/en/3.webp",
-    "issues/179/en/4.webp",
-    "issues/179/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 178,
@@ -370,20 +322,8 @@
    "titles": [
     "华邦电731.63亿扩建高雄12吋厂"
    ],
-   "pages": [
-    "issues/178/1.webp",
-    "issues/178/2.webp",
-    "issues/178/3.webp",
-    "issues/178/4.webp",
-    "issues/178/5.webp"
-   ],
-   "pagesEn": [
-    "issues/178/en/1.webp",
-    "issues/178/en/2.webp",
-    "issues/178/en/3.webp",
-    "issues/178/en/4.webp",
-    "issues/178/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 177,
@@ -394,20 +334,8 @@
    "titles": [
     "晶豪科称DDR2与DDR3价格可维持"
    ],
-   "pages": [
-    "issues/177/1.webp",
-    "issues/177/2.webp",
-    "issues/177/3.webp",
-    "issues/177/4.webp",
-    "issues/177/5.webp"
-   ],
-   "pagesEn": [
-    "issues/177/en/1.webp",
-    "issues/177/en/2.webp",
-    "issues/177/en/3.webp",
-    "issues/177/en/4.webp",
-    "issues/177/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 176,
@@ -418,20 +346,8 @@
    "titles": [
     "南电10月营收创新高年增69.67％"
    ],
-   "pages": [
-    "issues/176/1.webp",
-    "issues/176/2.webp",
-    "issues/176/3.webp",
-    "issues/176/4.webp",
-    "issues/176/5.webp"
-   ],
-   "pagesEn": [
-    "issues/176/en/1.webp",
-    "issues/176/en/2.webp",
-    "issues/176/en/3.webp",
-    "issues/176/en/4.webp",
-    "issues/176/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 175,
@@ -442,20 +358,8 @@
    "titles": [
     "南亚科10月营收464亿元创新高"
    ],
-   "pages": [
-    "issues/175/1.webp",
-    "issues/175/2.webp",
-    "issues/175/3.webp",
-    "issues/175/4.webp",
-    "issues/175/5.webp"
-   ],
-   "pagesEn": [
-    "issues/175/en/1.webp",
-    "issues/175/en/2.webp",
-    "issues/175/en/3.webp",
-    "issues/175/en/4.webp",
-    "issues/175/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 174,
@@ -466,20 +370,8 @@
    "titles": [
     "英特尔暴跌45%产能转产服务器CPU"
    ],
-   "pages": [
-    "issues/174/1.webp",
-    "issues/174/2.webp",
-    "issues/174/3.webp",
-    "issues/174/4.webp",
-    "issues/174/5.webp"
-   ],
-   "pagesEn": [
-    "issues/174/en/1.webp",
-    "issues/174/en/2.webp",
-    "issues/174/en/3.webp",
-    "issues/174/en/4.webp",
-    "issues/174/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 173,
@@ -490,20 +382,8 @@
    "titles": [
     "环球晶发5亿美元可转债美光全额认购"
    ],
-   "pages": [
-    "issues/173/1.webp",
-    "issues/173/2.webp",
-    "issues/173/3.webp",
-    "issues/173/4.webp",
-    "issues/173/5.webp"
-   ],
-   "pagesEn": [
-    "issues/173/en/1.webp",
-    "issues/173/en/2.webp",
-    "issues/173/en/3.webp",
-    "issues/173/en/4.webp",
-    "issues/173/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 172,
