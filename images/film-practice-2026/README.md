@@ -36,4 +36,4 @@ same web spec as above:
 - 094–130 金200, frames 1–37
 
 Frames follow scan order within each roll; the true shooting order is not known
-from the scans. 22 sideways frames are presented upright. No retouching.
+from the scans. 27 sideways frames are presented upright. No retouching.
