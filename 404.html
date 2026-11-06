@@ -6,10 +6,15 @@
 <title>Yi Huang 黄熠</title>
 <script>
   // GitHub Pages 找不到页面时显示这一页（地址栏仍是原网址），所以这里的链接都用 / 开头的绝对路径。
+  // 改过名的文件先按新名字送过去（电脑手机都一样）；
   // 2026-11-06 删掉的旧分类页按内容送到新位置，其余网址一律回首页；
   // 手机（≤860px，与全站跳转一致）去深色单页 mobile.html / mobile-support.html。
   (function(){
     var name = location.pathname.replace(/^\/+|\/+$/g, '').replace(/\.html$/i, '').toLowerCase();
+    var moved = {
+      'files/upon-the-sea-of-jiaozhi.pdf': '/files/The-Monocrystalline-Desert.pdf',
+      'files/somewhere-in-the-gulf-of-tonkin.pdf': '/files/The-Monocrystalline-Desert.pdf'
+    };
     var desk = {
       'work-digital': '/work.html#digital',
       'films': '/work.html#digital',
@@ -21,9 +26,9 @@
       'support-artwork': '/support.html',
       'support-merch': '/support.html'
     };
-    var to = window.innerWidth <= 860
+    var to = moved[name] || (window.innerWidth <= 860
       ? (/^support-/.test(name) ? '/mobile-support.html' : '/mobile.html')
-      : (desk[name] || '/');
+      : (desk[name] || '/'));
     document.documentElement.className = 'going';
     location.replace(to);
   })();
