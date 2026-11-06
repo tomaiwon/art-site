@@ -412,7 +412,7 @@
     font-display:block;
     unicode-range:U+5355,U+6676,U+6C99,U+6F20,U+4EA4;
   }
-  /* 「Film Journal 胶片手记」的 片手（胶、记 已在别的补丁里） */
+  /* 片（「出片机」用；最早为「胶片手记」补的 片手） */
   @font-face{
     font-family:"ZFont";
     src:url("fonts/Z-film-journal-patch.woff2?v=20261106") format("woff2");
@@ -669,6 +669,9 @@
 
   @font-face{font-family:"FilmTitle";src:url("fonts/Z-film-practice.woff2") format("woff2");font-weight:400;font-display:swap;}
   @font-face{font-family:"FilmTitle";src:url("fonts/Z-film-practice.woff2") format("woff2");font-weight:700;font-display:swap;}
+  /* 「丙午年那座岛」的 丙午那座岛（年 已在 FilmTitle 里） */
+  @font-face{font-family:"FilmTitle";src:url("fonts/Z-film-practice-patch.woff2?v=20261107") format("woff2");font-weight:400;font-display:swap;unicode-range:U+4E19,U+5348,U+90A3,U+5EA7,U+5C9B;}
+  @font-face{font-family:"FilmTitle";src:url("fonts/Z-film-practice-patch.woff2?v=20261107") format("woff2");font-weight:700;font-display:swap;unicode-range:U+4E19,U+5348,U+90A3,U+5EA7,U+5C9B;}
   .film-practice-title{font-family:"FilmTitle","ZFont",serif;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2");font-weight:400;font-display:block;unicode-range:U+4E0E,U+6C89,U+601D,U+5F55,U+79FB,U+52A8,U+7248;}
   @font-face{font-family:"ZFont";src:url("fonts/Z-news.woff2") format("woff2");font-weight:700;font-display:block;unicode-range:U+4E0E,U+6C89,U+601D,U+5F55,U+79FB,U+52A8,U+7248;}
@@ -826,20 +829,20 @@
 
       <ul class="list">
         <li class="item">
-          <span class="year">2026.11</span>
-          <span class="name"><a href="projects/film-journal/">Film Journal 胶片手记</a></span>
+          <span class="year">2026.10</span>
+          <span class="name"><a class="film-practice-title" href="projects/film-journal/#/ch/island">丙午年那座岛</a></span>
         </li>
         <li class="item">
           <span class="year">2026.08</span>
-          <span class="name"><a class="film-practice-title" href="projects/venice-2026.html">双年展</a></span>
+          <span class="name"><a class="film-practice-title" href="projects/film-journal/#/ch/venice">双年展</a></span>
         </li>
         <li class="item">
           <span class="year">2026.07</span>
-          <span class="name"><a class="film-practice-title" href="projects/arles-2026.html">摄影术二百年</a></span>
+          <span class="name"><a class="film-practice-title" href="projects/film-journal/#/ch/arles">摄影术二百年</a></span>
         </li>
         <li class="item">
           <span class="year">2026.07</span>
-          <span class="name"><a class="film-practice-title" href="projects/marseille-2026.html">晒后假日下</a></span>
+          <span class="name"><a class="film-practice-title" href="projects/film-journal/#/ch/marseille">晒后假日下</a></span>
         </li>
         <li class="item">
           <span class="year">2026.07</span>
@@ -847,7 +850,7 @@
         </li>
         <li class="item">
           <span class="year">2026.05</span>
-          <span class="name"><a class="film-practice-title" href="projects/cambridge-2026.html">洋务时刻</a></span>
+          <span class="name"><a class="film-practice-title" href="projects/film-journal/#/ch/cambridge">洋务时刻</a></span>
         </li>
         <li class="item">
           <span class="year">2026.03</span>
