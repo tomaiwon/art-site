@@ -22,3 +22,18 @@ Original scans are not included in the website repository.
 typeface. Only the new archive entries use it; existing type remains unchanged.
 Gallery pages follow the existing photography layout: a single BACK link,
 a 760px image column, and the same heading and navigation typography.
+
+## island-2026 — 丙午年那座岛 (Film Journal only, 2026.10)
+
+Used only by the Film Journal (`projects/film-journal/`), not by a gallery page.
+130 frames from four rolls, scanned on a Flextight as two-strip 16-bit Adobe RGB
+TIFFs, then cut into single frames, converted to sRGB and exported with the
+same web spec as above:
+
+- 001–037 全能400, frames 1–37
+- 038–057 快拍200, frames 1–18, 23, 24 (frames 19–22 and 25–37 were shot in London and are not part of this set)
+- 058–093 快拍200 (second roll, underexposed), frames 1–36
+- 094–130 金200, frames 1–37
+
+Frames follow scan order within each roll; the true shooting order is not known
+from the scans. 22 sideways frames are presented upright. No retouching.

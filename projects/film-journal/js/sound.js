@@ -14,6 +14,7 @@ export const PRESETS = {
   sea:    { root: 62, scale: [0, 2, 4, 6, 7, 9, 11],   bpm: 104, voice: 'pluck', label: 'Sea · 海' },
   dust:   { root: 57, scale: [0, 3, 5, 7, 10],         bpm: 86,  voice: 'reed',  label: 'Dust · 尘土' },
   glass:  { root: 63, scale: [0, 2, 4, 6, 7, 9, 11],   bpm: 58,  voice: 'bell',  label: 'Glass · 玻璃' },
+  rain:   { root: 61, scale: [0, 2, 5, 7, 10],         bpm: 76,  voice: 'drop',  label: 'Rain · 雨' },
 };
 
 const CHORDS = {
@@ -22,6 +23,7 @@ const CHORDS = {
   sea:    [[0, 4, 7, 14], [2, 6, 9, 16], [7, 11, 14, 18], [4, 7, 11, 16]],
   dust:   [[0, 7, 12, 15], [-2, 5, 10, 14], [-4, 3, 8, 12], [-5, 2, 7, 10]],
   glass:  [[0, 7, 11, 16], [6, 11, 14, 18], [4, 9, 11, 16], [2, 9, 14, 18]],
+  rain:   [[0, 7, 14, 17], [-2, 5, 10, 14], [5, 10, 14, 19], [-5, 2, 7, 12]],
 };
 
 class SoundEngine {
@@ -77,6 +79,7 @@ class SoundEngine {
     this.bgm.gain.setTargetAtTime(0, t, 0.15);
     this.bgm.gain.setTargetAtTime(0.55, t + 0.6, 0.6);
     this._waves(name === 'sea');
+    this._rain(name === 'rain');
     this._crackle(name === 'dust');
     this.step = 0;
     this._emit();
@@ -120,6 +123,7 @@ class SoundEngine {
     this.nextTime = ctx.currentTime + 0.1;
     this.timer = setInterval(() => this._tick(), 40);
     this._waves(this.scene === 'sea');
+    this._rain(this.scene === 'rain');
     this._crackle(this.scene === 'dust');
   }
 
@@ -159,6 +163,25 @@ class SoundEngine {
       const w = this.waveSrc; this.waveSrc = null;
       w.g.gain.setTargetAtTime(0, ctx.currentTime, 0.3);
       setTimeout(() => { w.src.stop(); w.lfo.stop(); }, 1500);
+    }
+  }
+
+  // 雨：高通噪声铺一层很轻的沙沙声
+  _rain(on) {
+    const ctx = this.ctx;
+    if (on && !this.rainSrc) {
+      const src = ctx.createBufferSource(); src.buffer = this.noiseBuf; src.loop = true;
+      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1600;
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 6500;
+      const g = ctx.createGain(); g.gain.value = 0;
+      src.connect(hp).connect(lp).connect(g).connect(this.bgm);
+      g.gain.setTargetAtTime(0.022, ctx.currentTime, 1.2);
+      src.start();
+      this.rainSrc = { src, g };
+    } else if (!on && this.rainSrc) {
+      const r = this.rainSrc; this.rainSrc = null;
+      r.g.gain.setTargetAtTime(0, ctx.currentTime, 0.3);
+      setTimeout(() => r.src.stop(), 1500);
     }
   }
 
@@ -230,6 +253,18 @@ class SoundEngine {
       env.linearRampToValueAtTime(vel * 0.24, time + 0.003);
       env.exponentialRampToValueAtTime(0.0001, time + 2.6 * dur);
       stop(car, time + 2.7 * dur); stop(mod, time + 2.7 * dur);
+    } else if (type === 'drop') {
+      // 雨滴：正弦从高处一下子落到音高上，很短
+      const o = ctx.createOscillator(); o.type = 'sine';
+      o.frequency.setValueAtTime(freq * 1.9, time);
+      o.frequency.exponentialRampToValueAtTime(freq, time + 0.045);
+      const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = freq * 3.01;
+      const g2 = ctx.createGain(); g2.gain.value = 0.08;
+      o.connect(out); o2.connect(g2).connect(out);
+      env.setValueAtTime(0, time);
+      env.linearRampToValueAtTime(vel * 0.3, time + 0.003);
+      env.exponentialRampToValueAtTime(0.0001, time + 0.42 * dur);
+      stop(o, time + 0.5 * dur); stop(o2, time + 0.5 * dur);
     } else if (type === 'drone') {
       const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = freq;
       const o2 = ctx.createOscillator(); o2.type = 'triangle'; o2.frequency.value = freq * 1.5; o2.detune.value = 4;
@@ -312,6 +347,11 @@ class SoundEngine {
         const iv = pick(chord);
         this._voice('bell', t, mtof(p.root + iv + (Math.random() < 0.3 ? 12 : 0)), 0.32, 1.2, bgm);
       }
+    } else if (sc === 'rain') {
+      // 慢慢换的和弦 + 不对拍的雨滴，偶尔一滴落在更高处
+      if (bar === 0) chord.forEach((iv) => this._voice('pad', t, mtof(p.root + iv - 12), 0.55, sd * 15, bgm));
+      if (Math.random() < 0.32) this._voice('drop', t + Math.random() * sd, this._deg((Math.random() * 10) | 0, 1), rand(0.14, 0.3), 1, bgm);
+      if (bar % 4 === 2 && Math.random() < 0.4) this._voice('drop', t, this._deg(pick([0, 1, 3]), 2), 0.12, 1.2, bgm);
     }
   }
 
