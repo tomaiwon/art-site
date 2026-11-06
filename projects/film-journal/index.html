@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Film Journal 胶片手记 — 黄熠 Yi Huang</title>
+<meta name="description" content="黄熠 2026 年的四卷胶片：剑桥、马赛、阿尔勒、威尼斯。一个可以听的照片集。">
+<link rel="canonical" href="https://yihuang.art/projects/film-journal/">
+<meta name="theme-color" content="#F4F0E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="#/" aria-label="回到首页"><span class="logo-name"></span><span class="logo-tag"></span></a>
+  <nav class="nav" aria-label="主导航">
+    <a class="nav-item nav-back pn-d" href="../../work.html#practice">BACK</a>
+    <a class="nav-item nav-back pn-m" href="../../mobile.html">BACK</a>
+    <a class="nav-item" href="#/" data-nav="album">ALBUM</a>
+    <button class="nav-item" type="button" data-nav="chapters" aria-expanded="false" aria-controls="index-menu">CHAPTERS</button>
+    <button class="nav-item sound-btn" type="button" aria-pressed="false">
+      <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="sound-label">Sound</span>
+    </button>
+    <span class="nav-item year"></span>
+  </nav>
+  <div class="index-menu" id="index-menu" hidden></div>
+</header>
+
+<main>
+  <!-- 首页：拼贴 + 粒子大字 -->
+  <section id="home" class="view" aria-label="首页">
+    <div class="mosaic">
+      <div class="hero">
+        <canvas class="hero-canvas" aria-hidden="true"></canvas>
+        <h1 class="sr-only">Film Journal</h1>
+        <div class="hero-text">
+          <p class="hero-line"></p>
+          <p class="hero-sub"></p>
+          <p class="hero-hint"><span>SCROLL TO TRAVEL</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 章节页 -->
+  <section id="chapter" class="view" aria-label="章节" hidden>
+    <div class="ch-head">
+      <a class="ch-back" href="#/">BACK</a>
+      <div class="ch-title">
+        <p class="ch-num"></p>
+        <h2><span class="en"></span> <span class="zh"></span></h2>
+        <p class="ch-intro"></p>
+      </div>
+      <p class="ch-count"></p>
+    </div>
+    <div class="strip" tabindex="0" aria-label="照片，横向滚动">
+      <div class="strip-track"></div>
+    </div>
+    <div class="ch-progress" aria-hidden="true"><i></i></div>
+    <div class="ch-bar">
+      <a class="ch-prev" href="#/"></a>
+      <div class="style-switch" role="radiogroup" aria-label="呈现方式"></div>
+      <a class="ch-next" href="#/"></a>
+    </div>
+    <footer class="ch-foot"><span class="f1"></span><span class="f2"></span><span class="f3"></span></footer>
+  </section>
+</main>
+
+<!-- 大图 -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="照片" hidden>
+  <div class="lb-stage">
+    <div class="lb-photo">
+      <img class="lb-img" alt="">
+      <canvas class="lb-fx" aria-hidden="true"></canvas>
+      <canvas class="lb-dots" aria-hidden="true"></canvas>
+    </div>
+  </div>
+  <aside class="lb-side">
+    <div class="lb-top">
+      <p class="lb-ch"></p>
+      <button class="lb-close" type="button">CLOSE <span aria-hidden="true">×</span></button>
+    </div>
+    <p class="lb-count"><b></b><span></span></p>
+    <p class="lb-cap"></p>
+    <p class="lb-style"><span class="en"></span><span class="zh"></span></p>
+    <div class="lb-block">
+      <div class="lb-label"><span>UNDER LOUPE</span><span class="lb-xy"></span></div>
+      <div class="lb-under"><span class="hex">把鼠标移到照片上</span><span class="zoom"></span></div>
+    </div>
+    <div class="lb-block">
+      <div class="lb-label"><span>PALETTE · 5</span><span>SHARE</span></div>
+      <ul class="lb-palette"></ul>
+    </div>
+    <div class="lb-nav">
+      <button class="lb-prev" type="button">← PREV</button>
+      <button class="lb-next" type="button">NEXT →</button>
+    </div>
+    <dl class="lb-keys">
+      <div><dt>← →</dt><dd>上一张 / 下一张</dd></div>
+      <div><dt>滚轮</dt><dd>放大镜倍数</dd></div>
+      <div><dt>1–4</dt><dd>切换风格</dd></div>
+      <div><dt>Esc</dt><dd>关闭</dd></div>
+    </dl>
+  </aside>
+  <canvas class="loupe" width="200" height="200" aria-hidden="true"></canvas>
+</div>
+
+<!-- 转场色幕 -->
+<div id="wipe" aria-hidden="true"><p class="wipe-num"></p><p class="wipe-text"></p></div>
+
+<p class="sound-hint" aria-live="polite"><i></i>点一下任意处，打开声音</p>
+
+<noscript><p style="padding:40px">这个网站需要 JavaScript。</p></noscript>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
