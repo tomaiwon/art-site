@@ -199,7 +199,7 @@ const rig = $('#rig'), paper = $('#paper'), strip = $('#strip'), copyEl = $('#co
 /* ───────── 纸上的作品：数字媒介本体系列（yihuang.art/work.html），新的在前 ───────── */
 // h = 截图在 1280 宽下的高度；画面在上面 <style> 里的 .w-* 类
 const CARDS = [
-  { h: 900, cls: 'w-mono', title: '单晶沙漠 The Monocrystalline Desert · 2026.11' },
+  { h: 900, cls: 'w-mono', title: '粉色沙漠 The Pink Desert · 2026.11' },
   { h: 900, cls: 'w-semi', title: '半导体早报 Semiconductor Daily · 2026.10' },
   { h: 900, cls: 'w-conf', title: '东亚制造 Confucian Silence · 2026.09' },
   { h: 900, cls: 'w-fable', title: '洋务运动 As Fables Go By · 2026.05' },
@@ -211,7 +211,7 @@ const CARDS = [
 /* ───────── 左下角轮换：作品名（4 组 × 4 件，链到 yihuang.art 上各自的页面） ───────── */
 const work = (t, u) => `<a href="${u.startsWith('http') ? u : 'https://yihuang.art/' + u}">${t}</a>`;
 const LOGOS = [
-  [work('单晶沙漠', 'https://tomaiwon.github.io/jiaozhi/'), work('半导体早报', 'projects/semiconductor-daily/'), work('东亚制造', 'east-asia/'), work('洋务运动', 'projects/asfablesgoby.html')],
+  [work('粉色沙漠', 'https://tomaiwon.github.io/jiaozhi/'), work('半导体早报', 'projects/semiconductor-daily/'), work('东亚制造', 'east-asia/'), work('洋务运动', 'projects/asfablesgoby.html')],
   [work('关中往事', 'projects/theexperience.html'), work('春光之響', 'projects/blowup.html'), work('意念花', 'projects/flowermachine.html'), work('记忆熵', 'projects/memory-entropy.html')],
   [work('胶片手记', 'projects/film-journal/'), work('九层堆栈图谱', 'projects/nine-layer-stack/'), work('情迷海南岛', 'projects/remotefantasy.html'), work('光的剩余', 'projects/ashesofsunrise.html')],
   [work('论文艺工作者', 'projects/lunwenyi.html'), work('不想再装', 'projects/buxiang.html'), work('时间、文明和水', 'projects/acqua.html'), work('为何植物', 'projects/translation.html')],
