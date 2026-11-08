@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 195,
+   "date": "2026-11-09",
+   "label": "1109 Duksan前三季营收超2025全年",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "Duksan前三季营收超2025全年"
+   ],
+   "pages": [
+    "issues/195/1.webp",
+    "issues/195/2.webp",
+    "issues/195/3.webp",
+    "issues/195/4.webp",
+    "issues/195/5.webp"
+   ],
+   "pagesEn": [
+    "issues/195/en/1.webp",
+    "issues/195/en/2.webp",
+    "issues/195/en/3.webp",
+    "issues/195/en/4.webp",
+    "issues/195/en/5.webp"
+   ]
+  },
+  {
    "serial": 194,
    "date": "2026-11-07",
    "label": "1107 Eulitha交付多台DUV光刻设备",
@@ -34,20 +58,8 @@
    "titles": [
     "昇腾适配Kimi K3.1 Pro模型"
    ],
-   "pages": [
-    "issues/193/1.webp",
-    "issues/193/2.webp",
-    "issues/193/3.webp",
-    "issues/193/4.webp",
-    "issues/193/5.webp"
-   ],
-   "pagesEn": [
-    "issues/193/en/1.webp",
-    "issues/193/en/2.webp",
-    "issues/193/en/3.webp",
-    "issues/193/en/4.webp",
-    "issues/193/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 192,
@@ -58,20 +70,8 @@
    "titles": [
     "美国多州拟限数据中心，韩存储股齐跌"
    ],
-   "pages": [
-    "issues/192/1.webp",
-    "issues/192/2.webp",
-    "issues/192/3.webp",
-    "issues/192/4.webp",
-    "issues/192/5.webp"
-   ],
-   "pagesEn": [
-    "issues/192/en/1.webp",
-    "issues/192/en/2.webp",
-    "issues/192/en/3.webp",
-    "issues/192/en/4.webp",
-    "issues/192/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 191,
@@ -82,20 +82,8 @@
    "titles": [
     "月之暗面洽租欧洲英伟达GPU算力"
    ],
-   "pages": [
-    "issues/191/1.webp",
-    "issues/191/2.webp",
-    "issues/191/3.webp",
-    "issues/191/4.webp",
-    "issues/191/5.webp"
-   ],
-   "pagesEn": [
-    "issues/191/en/1.webp",
-    "issues/191/en/2.webp",
-    "issues/191/en/3.webp",
-    "issues/191/en/4.webp",
-    "issues/191/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 190,
@@ -106,20 +94,8 @@
    "titles": [
     "台湾美光新奖酬总体薪酬成长2.7倍"
    ],
-   "pages": [
-    "issues/190/1.webp",
-    "issues/190/2.webp",
-    "issues/190/3.webp",
-    "issues/190/4.webp",
-    "issues/190/5.webp"
-   ],
-   "pagesEn": [
-    "issues/190/en/1.webp",
-    "issues/190/en/2.webp",
-    "issues/190/en/3.webp",
-    "issues/190/en/4.webp",
-    "issues/190/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 189,
@@ -130,20 +106,8 @@
    "titles": [
     "美光暂停桃园45亿美元DRAM建厂"
    ],
-   "pages": [
-    "issues/189/1.webp",
-    "issues/189/2.webp",
-    "issues/189/3.webp",
-    "issues/189/4.webp",
-    "issues/189/5.webp"
-   ],
-   "pagesEn": [
-    "issues/189/en/1.webp",
-    "issues/189/en/2.webp",
-    "issues/189/en/3.webp",
-    "issues/189/en/4.webp",
-    "issues/189/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 188,
@@ -154,20 +118,8 @@
    "titles": [
     "长存控股330亿元科创板IPO暂缓"
    ],
-   "pages": [
-    "issues/188/1.webp",
-    "issues/188/2.webp",
-    "issues/188/3.webp",
-    "issues/188/4.webp",
-    "issues/188/5.webp"
-   ],
-   "pagesEn": [
-    "issues/188/en/1.webp",
-    "issues/188/en/2.webp",
-    "issues/188/en/3.webp",
-    "issues/188/en/4.webp",
-    "issues/188/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 187,
@@ -178,20 +130,8 @@
    "titles": [
     "欧盟启动芯片设计平台投5.25亿"
    ],
-   "pages": [
-    "issues/187/1.webp",
-    "issues/187/2.webp",
-    "issues/187/3.webp",
-    "issues/187/4.webp",
-    "issues/187/5.webp"
-   ],
-   "pagesEn": [
-    "issues/187/en/1.webp",
-    "issues/187/en/2.webp",
-    "issues/187/en/3.webp",
-    "issues/187/en/4.webp",
-    "issues/187/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 186,
@@ -202,20 +142,8 @@
    "titles": [
     "游族网络42.25亿采购GPU"
    ],
-   "pages": [
-    "issues/186/1.webp",
-    "issues/186/2.webp",
-    "issues/186/3.webp",
-    "issues/186/4.webp",
-    "issues/186/5.webp"
-   ],
-   "pagesEn": [
-    "issues/186/en/1.webp",
-    "issues/186/en/2.webp",
-    "issues/186/en/3.webp",
-    "issues/186/en/4.webp",
-    "issues/186/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 185,
@@ -226,20 +154,8 @@
    "titles": [
     "台积电评估谢尔曼建两座晶圆厂"
    ],
-   "pages": [
-    "issues/185/1.webp",
-    "issues/185/2.webp",
-    "issues/185/3.webp",
-    "issues/185/4.webp",
-    "issues/185/5.webp"
-   ],
-   "pagesEn": [
-    "issues/185/en/1.webp",
-    "issues/185/en/2.webp",
-    "issues/185/en/3.webp",
-    "issues/185/en/4.webp",
-    "issues/185/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 184,
