@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 203,
+   "date": "2026-11-09",
+   "label": "1109 谷歌推两款TPU挑战英伟达",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "谷歌推两款TPU挑战英伟达"
+   ],
+   "pages": [
+    "issues/203/1.webp",
+    "issues/203/2.webp",
+    "issues/203/3.webp",
+    "issues/203/4.webp",
+    "issues/203/5.webp"
+   ],
+   "pagesEn": [
+    "issues/203/en/1.webp",
+    "issues/203/en/2.webp",
+    "issues/203/en/3.webp",
+    "issues/203/en/4.webp",
+    "issues/203/en/5.webp"
+   ]
+  },
+  {
    "serial": 202,
    "date": "2026-11-09",
    "label": "1109 Diamond Foundry造出全球首片200mm金刚石单晶",
