@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 201,
+   "date": "2026-11-09",
+   "label": "1109 Terafab目标月产百万片晶圆",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "Terafab目标月产百万片晶圆"
+   ],
+   "pages": [
+    "issues/201/1.webp",
+    "issues/201/2.webp",
+    "issues/201/3.webp",
+    "issues/201/4.webp",
+    "issues/201/5.webp"
+   ],
+   "pagesEn": [
+    "issues/201/en/1.webp",
+    "issues/201/en/2.webp",
+    "issues/201/en/3.webp",
+    "issues/201/en/4.webp",
+    "issues/201/en/5.webp"
+   ]
+  },
+  {
    "serial": 200,
    "date": "2026-11-09",
    "label": "1109 英伟达首尔AI Day公布多项合作",
