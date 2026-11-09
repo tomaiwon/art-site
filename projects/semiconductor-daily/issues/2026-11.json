@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 200,
+   "date": "2026-11-09",
+   "label": "1109 英伟达首尔AI Day公布多项合作",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达首尔AI Day公布多项合作"
+   ],
+   "pages": [
+    "issues/200/1.webp",
+    "issues/200/2.webp",
+    "issues/200/3.webp",
+    "issues/200/4.webp",
+    "issues/200/5.webp"
+   ],
+   "pagesEn": [
+    "issues/200/en/1.webp",
+    "issues/200/en/2.webp",
+    "issues/200/en/3.webp",
+    "issues/200/en/4.webp",
+    "issues/200/en/5.webp"
+   ]
+  },
+  {
    "serial": 199,
    "date": "2026-11-09",
    "label": "1109 纽时指黄仁勋身边高管为中国国安部间谍",
