@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 196,
+   "date": "2026-11-09",
+   "label": "1109 三星泰勒厂最早12月试运行",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星泰勒厂最早12月试运行"
+   ],
+   "pages": [
+    "issues/196/1.webp",
+    "issues/196/2.webp",
+    "issues/196/3.webp",
+    "issues/196/4.webp",
+    "issues/196/5.webp"
+   ],
+   "pagesEn": [
+    "issues/196/en/1.webp",
+    "issues/196/en/2.webp",
+    "issues/196/en/3.webp",
+    "issues/196/en/4.webp",
+    "issues/196/en/5.webp"
+   ]
+  },
+  {
    "serial": 195,
    "date": "2026-11-09",
    "label": "1109 Duksan前三季营收超2025全年",
