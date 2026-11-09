@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 202,
+   "date": "2026-11-09",
+   "label": "1109 Diamond Foundry造出全球首片200mm金刚石单晶",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "Diamond Foundry造出全球首片200mm金刚石单晶"
+   ],
+   "pages": [
+    "issues/202/1.webp",
+    "issues/202/2.webp",
+    "issues/202/3.webp",
+    "issues/202/4.webp",
+    "issues/202/5.webp"
+   ],
+   "pagesEn": [
+    "issues/202/en/1.webp",
+    "issues/202/en/2.webp",
+    "issues/202/en/3.webp",
+    "issues/202/en/4.webp",
+    "issues/202/en/5.webp"
+   ]
+  },
+  {
    "serial": 201,
    "date": "2026-11-09",
    "label": "1109 Terafab目标月产百万片晶圆",
