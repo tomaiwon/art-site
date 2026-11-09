@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 198,
+   "date": "2026-11-09",
+   "label": "1109 美商务部批准约两打中企H200",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美商务部批准约两打中企H200"
+   ],
+   "pages": [
+    "issues/198/1.webp",
+    "issues/198/2.webp",
+    "issues/198/3.webp",
+    "issues/198/4.webp",
+    "issues/198/5.webp"
+   ],
+   "pagesEn": [
+    "issues/198/en/1.webp",
+    "issues/198/en/2.webp",
+    "issues/198/en/3.webp",
+    "issues/198/en/4.webp",
+    "issues/198/en/5.webp"
+   ]
+  },
+  {
    "serial": 197,
    "date": "2026-11-09",
    "label": "1109 美国拟将云远程访问纳入出口管制",
