@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 199,
+   "date": "2026-11-09",
+   "label": "1109 纽时指黄仁勋身边高管为中国国安部间谍",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "纽时指黄仁勋身边高管为中国国安部间谍"
+   ],
+   "pages": [
+    "issues/199/1.webp",
+    "issues/199/2.webp",
+    "issues/199/3.webp",
+    "issues/199/4.webp",
+    "issues/199/5.webp"
+   ],
+   "pagesEn": [
+    "issues/199/en/1.webp",
+    "issues/199/en/2.webp",
+    "issues/199/en/3.webp",
+    "issues/199/en/4.webp",
+    "issues/199/en/5.webp"
+   ]
+  },
+  {
    "serial": 198,
    "date": "2026-11-09",
    "label": "1109 美商务部批准约两打中企H200",
