@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 197,
+   "date": "2026-11-09",
+   "label": "1109 美国拟将云远程访问纳入出口管制",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国拟将云远程访问纳入出口管制"
+   ],
+   "pages": [
+    "issues/197/1.webp",
+    "issues/197/2.webp",
+    "issues/197/3.webp",
+    "issues/197/4.webp",
+    "issues/197/5.webp"
+   ],
+   "pagesEn": [
+    "issues/197/en/1.webp",
+    "issues/197/en/2.webp",
+    "issues/197/en/3.webp",
+    "issues/197/en/4.webp",
+    "issues/197/en/5.webp"
+   ]
+  },
+  {
    "serial": 196,
    "date": "2026-11-09",
    "label": "1109 三星泰勒厂最早12月试运行",
