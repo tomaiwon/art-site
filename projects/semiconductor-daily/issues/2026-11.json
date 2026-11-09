@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 204,
+   "date": "2026-11-10",
+   "label": "1110 英伟达内部调查黄仁勋间谍指控",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达内部调查黄仁勋间谍指控"
+   ],
+   "pages": [
+    "issues/204/1.webp",
+    "issues/204/2.webp",
+    "issues/204/3.webp",
+    "issues/204/4.webp",
+    "issues/204/5.webp"
+   ],
+   "pagesEn": [
+    "issues/204/en/1.webp",
+    "issues/204/en/2.webp",
+    "issues/204/en/3.webp",
+    "issues/204/en/4.webp",
+    "issues/204/en/5.webp"
+   ]
+  },
+  {
    "serial": 203,
    "date": "2026-11-09",
    "label": "1109 谷歌推两款TPU挑战英伟达",
@@ -226,20 +250,8 @@
    "titles": [
     "Eulitha交付多台DUV光刻设备"
    ],
-   "pages": [
-    "issues/194/1.webp",
-    "issues/194/2.webp",
-    "issues/194/3.webp",
-    "issues/194/4.webp",
-    "issues/194/5.webp"
-   ],
-   "pagesEn": [
-    "issues/194/en/1.webp",
-    "issues/194/en/2.webp",
-    "issues/194/en/3.webp",
-    "issues/194/en/4.webp",
-    "issues/194/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 193,
