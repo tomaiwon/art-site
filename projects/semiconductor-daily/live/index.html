@@ -51,12 +51,6 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   .slot.run .cd{animation:eam-blink 1.6s ease-in-out infinite;}
   .slot .when{font:400 11px/1.6 var(--num);color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .slot .what{font:400 11.5px/1.55 var(--sans);color:var(--ink-3);margin-top:4px;}
-  .slot .plats{margin-top:8px;border-top:1px solid var(--hair);}
-  .slot .plats:empty{display:none;}
-  .slot .plats div{display:flex;justify-content:space-between;gap:8px;padding:5px 0 0;font:400 11px/1.4 var(--num);color:var(--ink-3);}
-  .slot .plats b{font:400 12px/1.4 var(--song);color:var(--ink);white-space:nowrap;}
-  .slot .plats span{text-align:right;}
-  .slot .plats .off{color:var(--soft);}
 
   /* ── 02 管线 ── */
   .pipe-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
@@ -132,7 +126,6 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   .iss .ch{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:3px;padding-left:34px;font:400 11px/1.5 var(--num);color:var(--soft);}
   .iss .ch a{color:var(--ink);text-underline-offset:3px;text-decoration-thickness:1px;}
   .iss .ch .bad{color:var(--cinnabar);}
-  /* 出好片的期:竖屏短视频直接在这里播(网页版,点了才加载) */
 
   /* ── 06 日志 ── */
   .log{margin-top:10px;height:224px;overflow-y:auto;font:400 12px/1.75 var(--num);color:var(--ink-2);
@@ -230,7 +223,7 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
     <h1>LIVE</h1>
     <div class="sub">实时监测台<small>全自动新闻系统此刻在做什么、下一步几点做、抓到的报道怎么一步步变成一条新闻。全部是工作台的真实数据,每 3 秒刷新;日志每 1.5 秒。</small></div>
   </div>
-  <nav class="eam-nav"><a href="./" aria-current="page">LIVE</a><a href="https://live.yihuang.art/pipeline">PIPELINE</a><a href="https://live.yihuang.art/pipeline/intake">INTAKE</a><a href="https://live.yihuang.art/pipeline/negation">NEGATION</a><a href="https://live.yihuang.art/studio">STUDIO</a></nav>
+  <nav class="eam-nav"><a href="./" aria-current="page">LIVE</a><a href="https://live.yihuang.art/pipeline/video">VIDEO</a><a href="https://live.yihuang.art/pipeline">PIPELINE</a><a href="https://live.yihuang.art/pipeline/intake">INTAKE</a><a href="https://live.yihuang.art/pipeline/negation">NEGATION</a><a href="https://live.yihuang.art/studio">STUDIO</a></nav>
 </header>
 
 <main class="wrap">
@@ -262,7 +255,7 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
       <div class="stage-foot" id="stageFoot"></div>
     </section>
     <section class="out">
-      <h2 class="eam-h"><span><span class="en"><i class="no">05</i>OUTPUT</span><span class="zh">最近几期</span></span><span class="tally">网站 · IG · X · 微博 · 短视频</span></h2>
+      <h2 class="eam-h"><span><span class="en"><i class="no">05</i>OUTPUT</span><span class="zh">最近几期</span></span><span class="tally">网站 · IG · X · 微博</span></h2>
       <ul class="iss" id="issues"></ul>
     </section>
   </div>
@@ -313,7 +306,7 @@ const ms = v => typeof v === 'number' ? v * 1000 : (v ? Date.parse(v) : null);
 const NODE_ZH = {v2collect:'采集', v2deepseek:'DeepSeek', v2triage:'第一道关', v2body:'读正文', v2verify:'第二道关',
   v2extract:'抽取', v2merge:'归并', v2judge:'归并·判断', v2impact:'打分', v2rank:'排名', v2single:'写稿',
   v2images:'选图', render:'出图', v2singleen:'英文版', v2publish:'归档', igpost:'Instagram', v2market:'股价对照',
-  v2store:'入库', v2events:'事件库', v2shadow:'影子刊', edition:'早午晚报', weibopost:'微博', threadspost:'Threads', xhspost:'小红书', videoscore:'选题分', videobuild:'出短视频', videopost:'发短视频'};
+  v2store:'入库', v2events:'事件库', v2shadow:'影子刊', edition:'早午晚报', weibopost:'微博', threadspost:'Threads', xhspost:'小红书'};
 const QUIET = new Set(['v2store', 'v2events', 'v2rank']);
 
 /* 数据从哪来:工作台自己(同源);或 yihuang.art 上的静态版,先连 live.yihuang.art,连不上就读同目录的快照 */
@@ -339,7 +332,7 @@ function renderSched(){
   const box = $('sched');
   if (box.children.length !== live.schedule.length){
     box.innerHTML = live.schedule.map(r => `<div class="slot" data-k="${r.key}"><div class="nm"><span>${esc(r.name)}</span><i>${r.tag ? esc(r.tag) : r.every ? (r.every >= 3600 ? r.every / 3600 + 'H' : r.every / 60 + 'M') : (r.hours || []).join('·')}</i></div>`
-      + `<div class="cd">—</div><div class="bar"><i style="width:0"></i></div><div class="when"></div><div class="what"></div><div class="plats"></div></div>`).join('');
+      + `<div class="cd">—</div><div class="bar"><i style="width:0"></i></div><div class="when"></div><div class="what"></div></div>`).join('');
   }
   tick();
 }
@@ -366,20 +359,8 @@ function tick(){
     const extra = r.key === 'deepseek' && r.billable != null ? ` · 今天计费 ${r.billable}/${r.cap}` : '';
     el.querySelector('.when').textContent = (offline ? '快照时 · ' : '') + `上次 ${hm(start)} · 下次 ${next ? hm(next) : '—'}${extra}`;
     el.querySelector('.what').textContent = r.what || '';
-    const plats = (r.platforms || []).map(p => `<div${p.on ? '' : ' class="off"'}><b>${esc(p.name)}</b><span>${esc(platLine(p, now))}</span></div>`).join('');
-    const box = el.querySelector('.plats'); if (box.innerHTML !== plats) box.innerHTML = plats;
   });
   $('statusClock') && ($('statusClock').textContent = offline ? '快照 ' + stamp(snapAt) : 'BJT ' + hms(now));
-}
-// 短视频那一格:每个平台一行(11-10 用户:TikTok、抖音、小红书、视频号分开写)
-function platLine(p, now){
-  if (!p.on) return '关';
-  const day = t => new Date(t).toLocaleDateString('zh-CN', TZ);
-  const at = t => day(t) === day(now) ? hm(t) : stamp(t);
-  const bits = [p.last ? `${at(ms(p.last))} 发了 ${String(p.serial).padStart(3, '0')} ✓` : '还没发过'];
-  if (p.waiting) bits.push(`排着 ${p.waiting} 条` + (p.next && ms(p.next) > now ? ` · ${hm(ms(p.next))} 起可发` : ''));
-  if (p.gaveup) bits.push(`${p.gaveup} 条没发出去 ✗`);
-  return bits.join(' · ');
 }
 const stamp = t => t ? new Date(t).toLocaleString('zh-CN', {...TZ, month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}).replace(/\//g, '-') : '—';
 
@@ -411,8 +392,7 @@ function layoutPipe(){
   pipe.querySelectorAll('.st').forEach((el, i) => el.style.left = stX[i] + 'px');
   // 三段分组:采集 / 分类 / 出刊,底下一条细括线标出范围
   pipe.querySelectorAll('.tag').forEach(el => el.remove());
-  const last = live.stages.some(s => s.key === 'video') ? 'video' : 'publish';   // 短视频(11-10)接在发布后面,也算出刊
-  const groups = [['report', 'report', 'INTAKE 采集'], ['triage', 'line', 'CLASSIFY 分类'], ['single', last, 'PUBLISH 出刊']];
+  const groups = [['report', 'report', 'INTAKE 采集'], ['triage', 'line', 'CLASSIFY 分类'], ['single', 'publish', 'PUBLISH 出刊']];
   let marks = '';
   groups.forEach(([a, b, label]) => {
     const i = live.stages.findIndex(s => s.key === a), j = live.stages.findIndex(s => s.key === b); if (i < 0 || j < 0) return;
@@ -600,7 +580,7 @@ function renderIssues(){
     return `<span title="${esc(x.note || x.error || '')}" class="${x.note || x.error ? 'bad' : ''}">${label} 等</span>`;
   };
   const html = live.issues.length ? live.issues.map(i => `<li><div class="h"><span class="sn">${String(i.serial).padStart(3, '0')}</span><span class="tt">${esc(i.title)}</span><time class="eam-soft eam-num" style="font-size:11px">${hm(i.archivedAt)}</time></div>`
-    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}${i.threads ? mark('Threads', i.threads) : ''}${i.xhs && i.xhs.state !== 'none' ? mark('小红书', i.xhs) : ''}${i.video && i.video.state !== 'none' ? (i.video.status === 'skipped' ? '<span>短视频 —</span>' : mark('TikTok', i.video.tiktok || i.video) + mark('视频·抖音', i.video.douyin || i.video) + mark('视频·小红书', i.video.xhs || i.video) + mark('视频号', i.video.channels || i.video)) : ''}</div>`
+    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}${i.threads ? mark('Threads', i.threads) : ''}${i.xhs && i.xhs.state !== 'none' ? mark('小红书', i.xhs) : ''}</div>`
     + `</li>`).join('')
     : '<li class="empty">还没有单条新闻。</li>';
   if (html === issuesHtml) return;            // 每 3 秒刷新一次:内容没变就不重画
@@ -610,7 +590,7 @@ function renderIssues(){
 /* ── 日志 ── */
 let seq = 0, logLines = 0;
 function logRow(e, fresh){
-  if (e.level === 'start') return '';
+  if (e.level === 'start' || /^video/.test(e.node)) return '';     // 短视频三站在自己的监测台(/pipeline/video)看
   let msg = e.msg;
   if (e.level === 'done' && (QUIET.has(e.node) || /用时 0\.\d 秒/.test(e.msg))){
     if (e.node !== 'v2deepseek') return '';
@@ -639,7 +619,7 @@ async function pollEvents(){
       });
       seq = r.seq; running = r.running || {};
       markRunning();
-      const names = Object.keys(running).map(n => NODE_ZH[n] || n);
+      const names = Object.keys(running).filter(n => !/^video/.test(n)).map(n => NODE_ZH[n] || n);
       $('logTally').textContent = (names.length ? '正在跑:' + names.join('、') + ' · ' : '') + 'seq ' + seq;
     }
   } catch (err) { $('logTally').innerHTML = '<span class="err">日志读取失败</span>'; }
