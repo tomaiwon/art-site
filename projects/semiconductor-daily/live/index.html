@@ -133,7 +133,6 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   .iss .ch a{color:var(--ink);text-underline-offset:3px;text-decoration-thickness:1px;}
   .iss .ch .bad{color:var(--cinnabar);}
   /* 出好片的期:竖屏短视频直接在这里播(网页版,点了才加载) */
-  .iss .vid{display:block;width:132px;aspect-ratio:9/16;margin:8px 0 2px 34px;background:var(--ink);border:1px solid var(--hair);object-fit:cover;}
 
   /* ── 06 日志 ── */
   .log{margin-top:10px;height:224px;overflow-y:auto;font:400 12px/1.75 var(--num);color:var(--ink-2);
@@ -602,10 +601,9 @@ function renderIssues(){
   };
   const html = live.issues.length ? live.issues.map(i => `<li><div class="h"><span class="sn">${String(i.serial).padStart(3, '0')}</span><span class="tt">${esc(i.title)}</span><time class="eam-soft eam-num" style="font-size:11px">${hm(i.archivedAt)}</time></div>`
     + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}${i.threads ? mark('Threads', i.threads) : ''}${i.xhs && i.xhs.state !== 'none' ? mark('小红书', i.xhs) : ''}${i.video && i.video.state !== 'none' ? (i.video.status === 'skipped' ? '<span>短视频 —</span>' : mark('TikTok', i.video.tiktok || i.video) + mark('视频·抖音', i.video.douyin || i.video) + mark('视频·小红书', i.video.xhs || i.video) + mark('视频号', i.video.channels || i.video)) : ''}</div>`
-    + (i.video && i.video.src ? `<video class="vid" src="${esc(i.video.src)}" poster="${esc(i.video.poster || '')}" preload="none" controls playsinline aria-label="第 ${i.serial} 期短视频" onerror="this.remove()"></video>` : '')
     + `</li>`).join('')
     : '<li class="empty">还没有单条新闻。</li>';
-  if (html === issuesHtml) return;            // 每 3 秒刷新一次:内容没变就不重画,正在播的视频不会被打断
+  if (html === issuesHtml) return;            // 每 3 秒刷新一次:内容没变就不重画
   issuesHtml = html; $('issues').innerHTML = html;
 }
 
