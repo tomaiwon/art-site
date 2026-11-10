@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 210,
+   "date": "2026-11-10",
+   "label": "1110 台积电16纳米赢苹果 三星4纳米挫败",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电16纳米赢苹果 三星4纳米挫败"
+   ],
+   "pages": [
+    "issues/210/1.webp",
+    "issues/210/2.webp",
+    "issues/210/3.webp",
+    "issues/210/4.webp",
+    "issues/210/5.webp"
+   ],
+   "pagesEn": [
+    "issues/210/en/1.webp",
+    "issues/210/en/2.webp",
+    "issues/210/en/3.webp",
+    "issues/210/en/4.webp",
+    "issues/210/en/5.webp"
+   ]
+  },
+  {
    "serial": 209,
    "date": "2026-11-10",
    "label": "1110 中科上修全年营业额至1.3兆元",
