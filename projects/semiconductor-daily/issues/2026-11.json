@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 205,
+   "date": "2026-11-10",
+   "label": "1110 英飞凌造出300mm碳化硅功率器件",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英飞凌造出300mm碳化硅功率器件"
+   ],
+   "pages": [
+    "issues/205/1.webp",
+    "issues/205/2.webp",
+    "issues/205/3.webp",
+    "issues/205/4.webp",
+    "issues/205/5.webp"
+   ],
+   "pagesEn": [
+    "issues/205/en/1.webp",
+    "issues/205/en/2.webp",
+    "issues/205/en/3.webp",
+    "issues/205/en/4.webp",
+    "issues/205/en/5.webp"
+   ]
+  },
+  {
    "serial": 204,
    "date": "2026-11-10",
    "label": "1110 英伟达内部调查黄仁勋间谍指控",
