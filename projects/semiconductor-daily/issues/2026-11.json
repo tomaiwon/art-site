@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 213,
+   "date": "2026-11-11",
+   "label": "1111 中微首台等离子晶圆切割设备交付",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "中微首台等离子晶圆切割设备交付"
+   ],
+   "pages": [
+    "issues/213/1.webp",
+    "issues/213/2.webp",
+    "issues/213/3.webp",
+    "issues/213/4.webp",
+    "issues/213/5.webp"
+   ],
+   "pagesEn": [
+    "issues/213/en/1.webp",
+    "issues/213/en/2.webp",
+    "issues/213/en/3.webp",
+    "issues/213/en/4.webp",
+    "issues/213/en/5.webp"
+   ]
+  },
+  {
    "serial": 212,
    "date": "2026-11-11",
    "label": "1111 超微Venice量产采用台积电2纳米",
