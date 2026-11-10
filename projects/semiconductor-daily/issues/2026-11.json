@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 207,
+   "date": "2026-11-10",
+   "label": "1110 台积电10月营收5868亿创新高",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电10月营收5868亿创新高"
+   ],
+   "pages": [
+    "issues/207/1.webp",
+    "issues/207/2.webp",
+    "issues/207/3.webp",
+    "issues/207/4.webp",
+    "issues/207/5.webp"
+   ],
+   "pagesEn": [
+    "issues/207/en/1.webp",
+    "issues/207/en/2.webp",
+    "issues/207/en/3.webp",
+    "issues/207/en/4.webp",
+    "issues/207/en/5.webp"
+   ]
+  },
+  {
    "serial": 206,
    "date": "2026-11-10",
    "label": "1110 美议员呼吁暂停对华出口先进AI芯片",
