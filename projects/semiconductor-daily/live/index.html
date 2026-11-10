@@ -51,6 +51,12 @@ DATA: /api/live(每 3 秒,只读)+ /api/pipeline/events?since=(每 1.5 秒,runlo
   .slot.run .cd{animation:eam-blink 1.6s ease-in-out infinite;}
   .slot .when{font:400 11px/1.6 var(--num);color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .slot .what{font:400 11.5px/1.55 var(--sans);color:var(--ink-3);margin-top:4px;}
+  .slot .plats{margin-top:8px;border-top:1px solid var(--hair);}
+  .slot .plats:empty{display:none;}
+  .slot .plats div{display:flex;justify-content:space-between;gap:8px;padding:5px 0 0;font:400 11px/1.4 var(--num);color:var(--ink-3);}
+  .slot .plats b{font:400 12px/1.4 var(--song);color:var(--ink);white-space:nowrap;}
+  .slot .plats span{text-align:right;}
+  .slot .plats .off{color:var(--soft);}
 
   /* ── 02 管线 ── */
   .pipe-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
@@ -334,7 +340,7 @@ function renderSched(){
   const box = $('sched');
   if (box.children.length !== live.schedule.length){
     box.innerHTML = live.schedule.map(r => `<div class="slot" data-k="${r.key}"><div class="nm"><span>${esc(r.name)}</span><i>${r.tag ? esc(r.tag) : r.every ? (r.every >= 3600 ? r.every / 3600 + 'H' : r.every / 60 + 'M') : (r.hours || []).join('·')}</i></div>`
-      + `<div class="cd">—</div><div class="bar"><i style="width:0"></i></div><div class="when"></div><div class="what"></div></div>`).join('');
+      + `<div class="cd">—</div><div class="bar"><i style="width:0"></i></div><div class="when"></div><div class="what"></div><div class="plats"></div></div>`).join('');
   }
   tick();
 }
@@ -361,8 +367,20 @@ function tick(){
     const extra = r.key === 'deepseek' && r.billable != null ? ` · 今天计费 ${r.billable}/${r.cap}` : '';
     el.querySelector('.when').textContent = (offline ? '快照时 · ' : '') + `上次 ${hm(start)} · 下次 ${next ? hm(next) : '—'}${extra}`;
     el.querySelector('.what').textContent = r.what || '';
+    const plats = (r.platforms || []).map(p => `<div${p.on ? '' : ' class="off"'}><b>${esc(p.name)}</b><span>${esc(platLine(p, now))}</span></div>`).join('');
+    const box = el.querySelector('.plats'); if (box.innerHTML !== plats) box.innerHTML = plats;
   });
   $('statusClock') && ($('statusClock').textContent = offline ? '快照 ' + stamp(snapAt) : 'BJT ' + hms(now));
+}
+// 短视频那一格:每个平台一行(11-10 用户:TikTok、抖音、小红书、视频号分开写)
+function platLine(p, now){
+  if (!p.on) return '关';
+  const day = t => new Date(t).toLocaleDateString('zh-CN', TZ);
+  const at = t => day(t) === day(now) ? hm(t) : stamp(t);
+  const bits = [p.last ? `${at(ms(p.last))} 发了 ${String(p.serial).padStart(3, '0')} ✓` : '还没发过'];
+  if (p.waiting) bits.push(`排着 ${p.waiting} 条` + (p.next && ms(p.next) > now ? ` · ${hm(ms(p.next))} 起可发` : ''));
+  if (p.gaveup) bits.push(`${p.gaveup} 条没发出去 ✗`);
+  return bits.join(' · ');
 }
 const stamp = t => t ? new Date(t).toLocaleString('zh-CN', {...TZ, month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}).replace(/\//g, '-') : '—';
 
@@ -583,7 +601,7 @@ function renderIssues(){
     return `<span title="${esc(x.note || x.error || '')}" class="${x.note || x.error ? 'bad' : ''}">${label} 等</span>`;
   };
   const html = live.issues.length ? live.issues.map(i => `<li><div class="h"><span class="sn">${String(i.serial).padStart(3, '0')}</span><span class="tt">${esc(i.title)}</span><time class="eam-soft eam-num" style="font-size:11px">${hm(i.archivedAt)}</time></div>`
-    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}${i.threads ? mark('Threads', i.threads) : ''}${i.xhs && i.xhs.state !== 'none' ? mark('小红书', i.xhs) : ''}${i.video && i.video.state !== 'none' ? (i.video.status === 'skipped' ? '<span>短视频 —</span>' : mark('视频·小红书', i.video.xhs || i.video) + mark('视频·抖音', i.video.douyin || i.video) + mark('TikTok', i.video.tiktok || i.video)) : ''}</div>`
+    + `<div class="ch">${mark('网站', i.site.state === 'posted' ? {state:'posted', url:'https://yihuang.art/news'} : i.site)}${mark('IG', i.ig)}${mark('X', i.x)}${mark('微博', i.weibo)}${i.threads ? mark('Threads', i.threads) : ''}${i.xhs && i.xhs.state !== 'none' ? mark('小红书', i.xhs) : ''}${i.video && i.video.state !== 'none' ? (i.video.status === 'skipped' ? '<span>短视频 —</span>' : mark('TikTok', i.video.tiktok || i.video) + mark('视频·抖音', i.video.douyin || i.video) + mark('视频·小红书', i.video.xhs || i.video) + mark('视频号', i.video.channels || i.video)) : ''}</div>`
     + (i.video && i.video.src ? `<video class="vid" src="${esc(i.video.src)}" poster="${esc(i.video.poster || '')}" preload="none" controls playsinline aria-label="第 ${i.serial} 期短视频" onerror="this.remove()"></video>` : '')
     + `</li>`).join('')
     : '<li class="empty">还没有单条新闻。</li>';
