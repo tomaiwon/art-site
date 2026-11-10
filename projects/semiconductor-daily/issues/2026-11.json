@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 209,
+   "date": "2026-11-10",
+   "label": "1110 中科上修全年营业额至1.3兆元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "中科上修全年营业额至1.3兆元"
+   ],
+   "pages": [
+    "issues/209/1.webp",
+    "issues/209/2.webp",
+    "issues/209/3.webp",
+    "issues/209/4.webp",
+    "issues/209/5.webp"
+   ],
+   "pagesEn": [
+    "issues/209/en/1.webp",
+    "issues/209/en/2.webp",
+    "issues/209/en/3.webp",
+    "issues/209/en/4.webp",
+    "issues/209/en/5.webp"
+   ]
+  },
+  {
    "serial": 208,
    "date": "2026-11-10",
    "label": "1110 分析师质疑黄仁勋能否续任执行长",
