@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 206,
+   "date": "2026-11-10",
+   "label": "1110 美议员呼吁暂停对华出口先进AI芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美议员呼吁暂停对华出口先进AI芯片"
+   ],
+   "pages": [
+    "issues/206/1.webp",
+    "issues/206/2.webp",
+    "issues/206/3.webp",
+    "issues/206/4.webp",
+    "issues/206/5.webp"
+   ],
+   "pagesEn": [
+    "issues/206/en/1.webp",
+    "issues/206/en/2.webp",
+    "issues/206/en/3.webp",
+    "issues/206/en/4.webp",
+    "issues/206/en/5.webp"
+   ]
+  },
+  {
    "serial": 205,
    "date": "2026-11-10",
    "label": "1110 英飞凌造出300mm碳化硅功率器件",
