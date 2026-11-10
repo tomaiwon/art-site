@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 208,
+   "date": "2026-11-10",
+   "label": "1110 分析师质疑黄仁勋能否续任执行长",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "分析师质疑黄仁勋能否续任执行长"
+   ],
+   "pages": [
+    "issues/208/1.webp",
+    "issues/208/2.webp",
+    "issues/208/3.webp",
+    "issues/208/4.webp",
+    "issues/208/5.webp"
+   ],
+   "pagesEn": [
+    "issues/208/en/1.webp",
+    "issues/208/en/2.webp",
+    "issues/208/en/3.webp",
+    "issues/208/en/4.webp",
+    "issues/208/en/5.webp"
+   ]
+  },
+  {
    "serial": 207,
    "date": "2026-11-10",
    "label": "1110 台积电10月营收5868亿创新高",
