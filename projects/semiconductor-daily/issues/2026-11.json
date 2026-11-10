@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 212,
+   "date": "2026-11-11",
+   "label": "1111 超微Venice量产采用台积电2纳米",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "超微Venice量产采用台积电2纳米"
+   ],
+   "pages": [
+    "issues/212/1.webp",
+    "issues/212/2.webp",
+    "issues/212/3.webp",
+    "issues/212/4.webp",
+    "issues/212/5.webp"
+   ],
+   "pagesEn": [
+    "issues/212/en/1.webp",
+    "issues/212/en/2.webp",
+    "issues/212/en/3.webp",
+    "issues/212/en/4.webp",
+    "issues/212/en/5.webp"
+   ]
+  },
+  {
    "serial": 211,
    "date": "2026-11-10",
    "label": "1110 华为发布首款逻辑折叠芯片麒麟9050",
