@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 211,
+   "date": "2026-11-10",
+   "label": "1110 华为发布首款逻辑折叠芯片麒麟9050",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "华为发布首款逻辑折叠芯片麒麟9050"
+   ],
+   "pages": [
+    "issues/211/1.webp",
+    "issues/211/2.webp",
+    "issues/211/3.webp",
+    "issues/211/4.webp",
+    "issues/211/5.webp"
+   ],
+   "pagesEn": [
+    "issues/211/en/1.webp",
+    "issues/211/en/2.webp",
+    "issues/211/en/3.webp",
+    "issues/211/en/4.webp",
+    "issues/211/en/5.webp"
+   ]
+  },
+  {
    "serial": 210,
    "date": "2026-11-10",
    "label": "1110 台积电16纳米赢苹果 三星4纳米挫败",
