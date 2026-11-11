@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 215,
+   "date": "2026-11-11",
+   "label": "1111 豪雅EUV掩膜产能不足三星寻本土替代",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "豪雅EUV掩膜产能不足三星寻本土替代"
+   ],
+   "pages": [
+    "issues/215/1.webp",
+    "issues/215/2.webp",
+    "issues/215/3.webp",
+    "issues/215/4.webp",
+    "issues/215/5.webp"
+   ],
+   "pagesEn": [
+    "issues/215/en/1.webp",
+    "issues/215/en/2.webp",
+    "issues/215/en/3.webp",
+    "issues/215/en/4.webp",
+    "issues/215/en/5.webp"
+   ]
+  },
+  {
    "serial": 214,
    "date": "2026-11-11",
    "label": "1111 中国AI算力扩张撞上需求缺口",
