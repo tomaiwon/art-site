@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 216,
+   "date": "2026-11-11",
+   "label": "1111 台积电熊本二厂将导入3纳米并携手索尼",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电熊本二厂将导入3纳米并携手索尼"
+   ],
+   "pages": [
+    "issues/216/1.webp",
+    "issues/216/2.webp",
+    "issues/216/3.webp",
+    "issues/216/4.webp",
+    "issues/216/5.webp"
+   ],
+   "pagesEn": [
+    "issues/216/en/1.webp",
+    "issues/216/en/2.webp",
+    "issues/216/en/3.webp",
+    "issues/216/en/4.webp",
+    "issues/216/en/5.webp"
+   ]
+  },
+  {
    "serial": 215,
    "date": "2026-11-11",
    "label": "1111 豪雅EUV掩膜产能不足三星寻本土替代",
