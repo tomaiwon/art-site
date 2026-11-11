@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 217,
+   "date": "2026-11-11",
+   "label": "1111 大银微系统CPO检测平台排到明年中",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "大银微系统CPO检测平台排到明年中"
+   ],
+   "pages": [
+    "issues/217/1.webp",
+    "issues/217/2.webp",
+    "issues/217/3.webp",
+    "issues/217/4.webp",
+    "issues/217/5.webp"
+   ],
+   "pagesEn": [
+    "issues/217/en/1.webp",
+    "issues/217/en/2.webp",
+    "issues/217/en/3.webp",
+    "issues/217/en/4.webp",
+    "issues/217/en/5.webp"
+   ]
+  },
+  {
    "serial": 216,
    "date": "2026-11-11",
    "label": "1111 台积电熊本二厂将导入3纳米并携手索尼",
