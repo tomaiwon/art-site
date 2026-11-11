@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 214,
+   "date": "2026-11-11",
+   "label": "1111 中国AI算力扩张撞上需求缺口",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "中国AI算力扩张撞上需求缺口"
+   ],
+   "pages": [
+    "issues/214/1.webp",
+    "issues/214/2.webp",
+    "issues/214/3.webp",
+    "issues/214/4.webp",
+    "issues/214/5.webp"
+   ],
+   "pagesEn": [
+    "issues/214/en/1.webp",
+    "issues/214/en/2.webp",
+    "issues/214/en/3.webp",
+    "issues/214/en/4.webp",
+    "issues/214/en/5.webp"
+   ]
+  },
+  {
    "serial": 213,
    "date": "2026-11-11",
    "label": "1111 中微首台等离子晶圆切割设备交付",
