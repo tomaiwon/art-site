@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 218,
+   "date": "2026-11-11",
+   "label": "1111 国科会预告清单增至46项纳AI载板",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "国科会预告清单增至46项纳AI载板"
+   ],
+   "pages": [
+    "issues/218/1.webp",
+    "issues/218/2.webp",
+    "issues/218/3.webp",
+    "issues/218/4.webp",
+    "issues/218/5.webp"
+   ],
+   "pagesEn": [
+    "issues/218/en/1.webp",
+    "issues/218/en/2.webp",
+    "issues/218/en/3.webp",
+    "issues/218/en/4.webp",
+    "issues/218/en/5.webp"
+   ]
+  },
+  {
    "serial": 217,
    "date": "2026-11-11",
    "label": "1111 大银微系统CPO检测平台排到明年中",
