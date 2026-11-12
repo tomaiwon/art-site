@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 224,
+   "date": "2026-11-12",
+   "label": "1112 长鑫DDR5完成32Gb迭代",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "长鑫DDR5完成32Gb迭代"
+   ],
+   "pages": [
+    "issues/224/1.webp",
+    "issues/224/2.webp",
+    "issues/224/3.webp",
+    "issues/224/4.webp",
+    "issues/224/5.webp"
+   ],
+   "pagesEn": [
+    "issues/224/en/1.webp",
+    "issues/224/en/2.webp",
+    "issues/224/en/3.webp",
+    "issues/224/en/4.webp",
+    "issues/224/en/5.webp"
+   ]
+  },
+  {
    "serial": 223,
    "date": "2026-11-12",
    "label": "1112 中国AI企业借海外算力续用英伟达芯片",
