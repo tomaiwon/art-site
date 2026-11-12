@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 226,
+   "date": "2026-11-13",
+   "label": "1113 英伟达董事会拟罢免黄仁勋",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达董事会拟罢免黄仁勋"
+   ],
+   "pages": [
+    "issues/226/1.webp",
+    "issues/226/2.webp",
+    "issues/226/3.webp",
+    "issues/226/4.webp",
+    "issues/226/5.webp"
+   ],
+   "pagesEn": [
+    "issues/226/en/1.webp",
+    "issues/226/en/2.webp",
+    "issues/226/en/3.webp",
+    "issues/226/en/4.webp",
+    "issues/226/en/5.webp"
+   ]
+  },
+  {
    "serial": 225,
    "date": "2026-11-12",
    "label": "1112 黄仁勋辞任英伟达CEO即刻生效",
@@ -346,20 +370,8 @@
    "titles": [
     "华为发布首款逻辑折叠芯片麒麟9050"
    ],
-   "pages": [
-    "issues/211/1.webp",
-    "issues/211/2.webp",
-    "issues/211/3.webp",
-    "issues/211/4.webp",
-    "issues/211/5.webp"
-   ],
-   "pagesEn": [
-    "issues/211/en/1.webp",
-    "issues/211/en/2.webp",
-    "issues/211/en/3.webp",
-    "issues/211/en/4.webp",
-    "issues/211/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 210,
@@ -370,20 +382,8 @@
    "titles": [
     "台积电16纳米赢苹果 三星4纳米挫败"
    ],
-   "pages": [
-    "issues/210/1.webp",
-    "issues/210/2.webp",
-    "issues/210/3.webp",
-    "issues/210/4.webp",
-    "issues/210/5.webp"
-   ],
-   "pagesEn": [
-    "issues/210/en/1.webp",
-    "issues/210/en/2.webp",
-    "issues/210/en/3.webp",
-    "issues/210/en/4.webp",
-    "issues/210/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 209,
@@ -394,20 +394,8 @@
    "titles": [
     "中科上修全年营业额至1.3兆元"
    ],
-   "pages": [
-    "issues/209/1.webp",
-    "issues/209/2.webp",
-    "issues/209/3.webp",
-    "issues/209/4.webp",
-    "issues/209/5.webp"
-   ],
-   "pagesEn": [
-    "issues/209/en/1.webp",
-    "issues/209/en/2.webp",
-    "issues/209/en/3.webp",
-    "issues/209/en/4.webp",
-    "issues/209/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 208,
@@ -418,20 +406,8 @@
    "titles": [
     "分析师质疑黄仁勋能否续任执行长"
    ],
-   "pages": [
-    "issues/208/1.webp",
-    "issues/208/2.webp",
-    "issues/208/3.webp",
-    "issues/208/4.webp",
-    "issues/208/5.webp"
-   ],
-   "pagesEn": [
-    "issues/208/en/1.webp",
-    "issues/208/en/2.webp",
-    "issues/208/en/3.webp",
-    "issues/208/en/4.webp",
-    "issues/208/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 207,
@@ -442,20 +418,8 @@
    "titles": [
     "台积电10月营收5868亿创新高"
    ],
-   "pages": [
-    "issues/207/1.webp",
-    "issues/207/2.webp",
-    "issues/207/3.webp",
-    "issues/207/4.webp",
-    "issues/207/5.webp"
-   ],
-   "pagesEn": [
-    "issues/207/en/1.webp",
-    "issues/207/en/2.webp",
-    "issues/207/en/3.webp",
-    "issues/207/en/4.webp",
-    "issues/207/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 206,
@@ -466,20 +430,8 @@
    "titles": [
     "美议员呼吁暂停对华出口先进AI芯片"
    ],
-   "pages": [
-    "issues/206/1.webp",
-    "issues/206/2.webp",
-    "issues/206/3.webp",
-    "issues/206/4.webp",
-    "issues/206/5.webp"
-   ],
-   "pagesEn": [
-    "issues/206/en/1.webp",
-    "issues/206/en/2.webp",
-    "issues/206/en/3.webp",
-    "issues/206/en/4.webp",
-    "issues/206/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 205,
@@ -490,20 +442,8 @@
    "titles": [
     "英飞凌造出300mm碳化硅功率器件"
    ],
-   "pages": [
-    "issues/205/1.webp",
-    "issues/205/2.webp",
-    "issues/205/3.webp",
-    "issues/205/4.webp",
-    "issues/205/5.webp"
-   ],
-   "pagesEn": [
-    "issues/205/en/1.webp",
-    "issues/205/en/2.webp",
-    "issues/205/en/3.webp",
-    "issues/205/en/4.webp",
-    "issues/205/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 204,
@@ -514,20 +454,8 @@
    "titles": [
     "英伟达内部调查黄仁勋间谍指控"
    ],
-   "pages": [
-    "issues/204/1.webp",
-    "issues/204/2.webp",
-    "issues/204/3.webp",
-    "issues/204/4.webp",
-    "issues/204/5.webp"
-   ],
-   "pagesEn": [
-    "issues/204/en/1.webp",
-    "issues/204/en/2.webp",
-    "issues/204/en/3.webp",
-    "issues/204/en/4.webp",
-    "issues/204/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 203,
