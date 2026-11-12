@@ -2,30 +2,6 @@
  "month": "2026-11",
  "issues": [
   {
-   "serial": 226,
-   "date": "2026-11-13",
-   "label": "1113 英伟达披露1645亿承诺股价跌8%",
-   "edition": null,
-   "kind": "single",
-   "titles": [
-    "英伟达披露1645亿承诺股价跌8%"
-   ],
-   "pages": [
-    "issues/226/1.webp",
-    "issues/226/2.webp",
-    "issues/226/3.webp",
-    "issues/226/4.webp",
-    "issues/226/5.webp"
-   ],
-   "pagesEn": [
-    "issues/226/en/1.webp",
-    "issues/226/en/2.webp",
-    "issues/226/en/3.webp",
-    "issues/226/en/4.webp",
-    "issues/226/en/5.webp"
-   ]
-  },
-  {
    "serial": 225,
    "date": "2026-11-12",
    "label": "1112 黄仁勋辞任英伟达CEO即刻生效",
