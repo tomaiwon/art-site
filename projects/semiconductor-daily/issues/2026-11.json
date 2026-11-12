@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 221,
+   "date": "2026-11-12",
+   "label": "1112 三星电子温阳动工建HBM封装线",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星电子温阳动工建HBM封装线"
+   ],
+   "pages": [
+    "issues/221/1.webp",
+    "issues/221/2.webp",
+    "issues/221/3.webp",
+    "issues/221/4.webp",
+    "issues/221/5.webp"
+   ],
+   "pagesEn": [
+    "issues/221/en/1.webp",
+    "issues/221/en/2.webp",
+    "issues/221/en/3.webp",
+    "issues/221/en/4.webp",
+    "issues/221/en/5.webp"
+   ]
+  },
+  {
    "serial": 220,
    "date": "2026-11-12",
    "label": "1112 南亚斥115.3亿元建玻纤布五厂",
