@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 220,
+   "date": "2026-11-12",
+   "label": "1112 南亚斥115.3亿元建玻纤布五厂",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "南亚斥115.3亿元建玻纤布五厂"
+   ],
+   "pages": [
+    "issues/220/1.webp",
+    "issues/220/2.webp",
+    "issues/220/3.webp",
+    "issues/220/4.webp",
+    "issues/220/5.webp"
+   ],
+   "pagesEn": [
+    "issues/220/en/1.webp",
+    "issues/220/en/2.webp",
+    "issues/220/en/3.webp",
+    "issues/220/en/4.webp",
+    "issues/220/en/5.webp"
+   ]
+  },
+  {
    "serial": 219,
    "date": "2026-11-12",
    "label": "1112 CoreWeave旧GPU租金涨五成",
