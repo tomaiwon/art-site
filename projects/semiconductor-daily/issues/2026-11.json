@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 225,
+   "date": "2026-11-12",
+   "label": "1112 黄仁勋辞任英伟达CEO即刻生效",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "黄仁勋辞任英伟达CEO即刻生效"
+   ],
+   "pages": [
+    "issues/225/1.webp",
+    "issues/225/2.webp",
+    "issues/225/3.webp",
+    "issues/225/4.webp",
+    "issues/225/5.webp"
+   ],
+   "pagesEn": [
+    "issues/225/en/1.webp",
+    "issues/225/en/2.webp",
+    "issues/225/en/3.webp",
+    "issues/225/en/4.webp",
+    "issues/225/en/5.webp"
+   ]
+  },
+  {
    "serial": 224,
    "date": "2026-11-12",
    "label": "1112 长鑫DDR5完成32Gb迭代",
