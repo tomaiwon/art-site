@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 219,
+   "date": "2026-11-12",
+   "label": "1112 CoreWeave旧GPU租金涨五成",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "CoreWeave旧GPU租金涨五成"
+   ],
+   "pages": [
+    "issues/219/1.webp",
+    "issues/219/2.webp",
+    "issues/219/3.webp",
+    "issues/219/4.webp",
+    "issues/219/5.webp"
+   ],
+   "pagesEn": [
+    "issues/219/en/1.webp",
+    "issues/219/en/2.webp",
+    "issues/219/en/3.webp",
+    "issues/219/en/4.webp",
+    "issues/219/en/5.webp"
+   ]
+  },
+  {
    "serial": 218,
    "date": "2026-11-11",
    "label": "1111 国科会预告清单增至46项纳AI载板",
@@ -370,20 +394,8 @@
    "titles": [
     "谷歌推两款TPU挑战英伟达"
    ],
-   "pages": [
-    "issues/203/1.webp",
-    "issues/203/2.webp",
-    "issues/203/3.webp",
-    "issues/203/4.webp",
-    "issues/203/5.webp"
-   ],
-   "pagesEn": [
-    "issues/203/en/1.webp",
-    "issues/203/en/2.webp",
-    "issues/203/en/3.webp",
-    "issues/203/en/4.webp",
-    "issues/203/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 202,
@@ -394,20 +406,8 @@
    "titles": [
     "Diamond Foundry造出全球首片200mm金刚石单晶"
    ],
-   "pages": [
-    "issues/202/1.webp",
-    "issues/202/2.webp",
-    "issues/202/3.webp",
-    "issues/202/4.webp",
-    "issues/202/5.webp"
-   ],
-   "pagesEn": [
-    "issues/202/en/1.webp",
-    "issues/202/en/2.webp",
-    "issues/202/en/3.webp",
-    "issues/202/en/4.webp",
-    "issues/202/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 201,
@@ -418,20 +418,8 @@
    "titles": [
     "Terafab目标月产百万片晶圆"
    ],
-   "pages": [
-    "issues/201/1.webp",
-    "issues/201/2.webp",
-    "issues/201/3.webp",
-    "issues/201/4.webp",
-    "issues/201/5.webp"
-   ],
-   "pagesEn": [
-    "issues/201/en/1.webp",
-    "issues/201/en/2.webp",
-    "issues/201/en/3.webp",
-    "issues/201/en/4.webp",
-    "issues/201/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 200,
@@ -442,20 +430,8 @@
    "titles": [
     "英伟达首尔AI Day公布多项合作"
    ],
-   "pages": [
-    "issues/200/1.webp",
-    "issues/200/2.webp",
-    "issues/200/3.webp",
-    "issues/200/4.webp",
-    "issues/200/5.webp"
-   ],
-   "pagesEn": [
-    "issues/200/en/1.webp",
-    "issues/200/en/2.webp",
-    "issues/200/en/3.webp",
-    "issues/200/en/4.webp",
-    "issues/200/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 199,
@@ -466,20 +442,8 @@
    "titles": [
     "纽时指黄仁勋身边高管为中国国安部间谍"
    ],
-   "pages": [
-    "issues/199/1.webp",
-    "issues/199/2.webp",
-    "issues/199/3.webp",
-    "issues/199/4.webp",
-    "issues/199/5.webp"
-   ],
-   "pagesEn": [
-    "issues/199/en/1.webp",
-    "issues/199/en/2.webp",
-    "issues/199/en/3.webp",
-    "issues/199/en/4.webp",
-    "issues/199/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 198,
@@ -490,20 +454,8 @@
    "titles": [
     "美商务部批准约两打中企H200"
    ],
-   "pages": [
-    "issues/198/1.webp",
-    "issues/198/2.webp",
-    "issues/198/3.webp",
-    "issues/198/4.webp",
-    "issues/198/5.webp"
-   ],
-   "pagesEn": [
-    "issues/198/en/1.webp",
-    "issues/198/en/2.webp",
-    "issues/198/en/3.webp",
-    "issues/198/en/4.webp",
-    "issues/198/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 197,
@@ -514,20 +466,8 @@
    "titles": [
     "美国拟将云远程访问纳入出口管制"
    ],
-   "pages": [
-    "issues/197/1.webp",
-    "issues/197/2.webp",
-    "issues/197/3.webp",
-    "issues/197/4.webp",
-    "issues/197/5.webp"
-   ],
-   "pagesEn": [
-    "issues/197/en/1.webp",
-    "issues/197/en/2.webp",
-    "issues/197/en/3.webp",
-    "issues/197/en/4.webp",
-    "issues/197/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 196,
@@ -538,20 +478,8 @@
    "titles": [
     "三星泰勒厂最早12月试运行"
    ],
-   "pages": [
-    "issues/196/1.webp",
-    "issues/196/2.webp",
-    "issues/196/3.webp",
-    "issues/196/4.webp",
-    "issues/196/5.webp"
-   ],
-   "pagesEn": [
-    "issues/196/en/1.webp",
-    "issues/196/en/2.webp",
-    "issues/196/en/3.webp",
-    "issues/196/en/4.webp",
-    "issues/196/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 195,
@@ -562,20 +490,8 @@
    "titles": [
     "Duksan前三季营收超2025全年"
    ],
-   "pages": [
-    "issues/195/1.webp",
-    "issues/195/2.webp",
-    "issues/195/3.webp",
-    "issues/195/4.webp",
-    "issues/195/5.webp"
-   ],
-   "pagesEn": [
-    "issues/195/en/1.webp",
-    "issues/195/en/2.webp",
-    "issues/195/en/3.webp",
-    "issues/195/en/4.webp",
-    "issues/195/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 194,
