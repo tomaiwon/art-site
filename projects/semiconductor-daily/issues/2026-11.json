@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 222,
+   "date": "2026-11-12",
+   "label": "1112 低端手机改用回收内存芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "低端手机改用回收内存芯片"
+   ],
+   "pages": [
+    "issues/222/1.webp",
+    "issues/222/2.webp",
+    "issues/222/3.webp",
+    "issues/222/4.webp",
+    "issues/222/5.webp"
+   ],
+   "pagesEn": [
+    "issues/222/en/1.webp",
+    "issues/222/en/2.webp",
+    "issues/222/en/3.webp",
+    "issues/222/en/4.webp",
+    "issues/222/en/5.webp"
+   ]
+  },
+  {
    "serial": 221,
    "date": "2026-11-12",
    "label": "1112 三星电子温阳动工建HBM封装线",
