@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 223,
+   "date": "2026-11-12",
+   "label": "1112 中国AI企业借海外算力续用英伟达芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "中国AI企业借海外算力续用英伟达芯片"
+   ],
+   "pages": [
+    "issues/223/1.webp",
+    "issues/223/2.webp",
+    "issues/223/3.webp",
+    "issues/223/4.webp",
+    "issues/223/5.webp"
+   ],
+   "pagesEn": [
+    "issues/223/en/1.webp",
+    "issues/223/en/2.webp",
+    "issues/223/en/3.webp",
+    "issues/223/en/4.webp",
+    "issues/223/en/5.webp"
+   ]
+  },
+  {
    "serial": 222,
    "date": "2026-11-12",
    "label": "1112 低端手机改用回收内存芯片",
