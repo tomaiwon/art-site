@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 229,
+   "date": "2026-11-13",
+   "label": "1113 美国民主党调查英伟达H200对华出口",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国民主党调查英伟达H200对华出口"
+   ],
+   "pages": [
+    "issues/229/1.webp",
+    "issues/229/2.webp",
+    "issues/229/3.webp",
+    "issues/229/4.webp",
+    "issues/229/5.webp"
+   ],
+   "pagesEn": [
+    "issues/229/en/1.webp",
+    "issues/229/en/2.webp",
+    "issues/229/en/3.webp",
+    "issues/229/en/4.webp",
+    "issues/229/en/5.webp"
+   ]
+  },
+  {
    "serial": 228,
    "date": "2026-11-13",
    "label": "1113 特朗普三度批准打击辉达芯片输陆",
