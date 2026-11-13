@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 230,
+   "date": "2026-11-13",
+   "label": "1113 中芯国际公布三季度营收31.9亿美元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "中芯国际公布三季度营收31.9亿美元"
+   ],
+   "pages": [
+    "issues/230/1.webp",
+    "issues/230/2.webp",
+    "issues/230/3.webp",
+    "issues/230/4.webp",
+    "issues/230/5.webp"
+   ],
+   "pagesEn": [
+    "issues/230/en/1.webp",
+    "issues/230/en/2.webp",
+    "issues/230/en/3.webp",
+    "issues/230/en/4.webp",
+    "issues/230/en/5.webp"
+   ]
+  },
+  {
    "serial": 229,
    "date": "2026-11-13",
    "label": "1113 美国民主党调查英伟达H200对华出口",
