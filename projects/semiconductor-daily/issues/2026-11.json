@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 239,
+   "date": "2026-11-14",
+   "label": "1114 台积电美国厂获利539亿年增逾十倍",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电美国厂获利539亿年增逾十倍"
+   ],
+   "pages": [
+    "issues/239/1.webp",
+    "issues/239/2.webp",
+    "issues/239/3.webp",
+    "issues/239/4.webp",
+    "issues/239/5.webp"
+   ],
+   "pagesEn": [
+    "issues/239/en/1.webp",
+    "issues/239/en/2.webp",
+    "issues/239/en/3.webp",
+    "issues/239/en/4.webp",
+    "issues/239/en/5.webp"
+   ]
+  },
+  {
    "serial": 238,
    "date": "2026-11-14",
    "label": "1114 应用材料全年净利100.88亿美元",
