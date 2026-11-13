@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 236,
+   "date": "2026-11-13",
+   "label": "1113 日月光路竹厂一期启用二期动土扩产",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "日月光路竹厂一期启用二期动土扩产"
+   ],
+   "pages": [
+    "issues/236/1.webp",
+    "issues/236/2.webp",
+    "issues/236/3.webp",
+    "issues/236/4.webp",
+    "issues/236/5.webp"
+   ],
+   "pagesEn": [
+    "issues/236/en/1.webp",
+    "issues/236/en/2.webp",
+    "issues/236/en/3.webp",
+    "issues/236/en/4.webp",
+    "issues/236/en/5.webp"
+   ]
+  },
+  {
    "serial": 235,
    "date": "2026-11-13",
    "label": "1113 精材与台积电签订七年先进封装外包协议",
