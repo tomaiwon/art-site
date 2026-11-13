@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 238,
+   "date": "2026-11-14",
+   "label": "1114 应用材料全年净利100.88亿美元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "应用材料全年净利100.88亿美元"
+   ],
+   "pages": [
+    "issues/238/1.webp",
+    "issues/238/2.webp",
+    "issues/238/3.webp",
+    "issues/238/4.webp",
+    "issues/238/5.webp"
+   ],
+   "pagesEn": [
+    "issues/238/en/1.webp",
+    "issues/238/en/2.webp",
+    "issues/238/en/3.webp",
+    "issues/238/en/4.webp",
+    "issues/238/en/5.webp"
+   ]
+  },
+  {
    "serial": 237,
    "date": "2026-11-13",
    "label": "1113 中国或收紧稀土出口反制美国芯片管制",
@@ -442,20 +466,8 @@
    "titles": [
     "国科会预告清单增至46项纳AI载板"
    ],
-   "pages": [
-    "issues/218/1.webp",
-    "issues/218/2.webp",
-    "issues/218/3.webp",
-    "issues/218/4.webp",
-    "issues/218/5.webp"
-   ],
-   "pagesEn": [
-    "issues/218/en/1.webp",
-    "issues/218/en/2.webp",
-    "issues/218/en/3.webp",
-    "issues/218/en/4.webp",
-    "issues/218/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 217,
@@ -466,20 +478,8 @@
    "titles": [
     "大银微系统CPO检测平台排到明年中"
    ],
-   "pages": [
-    "issues/217/1.webp",
-    "issues/217/2.webp",
-    "issues/217/3.webp",
-    "issues/217/4.webp",
-    "issues/217/5.webp"
-   ],
-   "pagesEn": [
-    "issues/217/en/1.webp",
-    "issues/217/en/2.webp",
-    "issues/217/en/3.webp",
-    "issues/217/en/4.webp",
-    "issues/217/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 216,
@@ -490,20 +490,8 @@
    "titles": [
     "台积电熊本二厂将导入3纳米并携手索尼"
    ],
-   "pages": [
-    "issues/216/1.webp",
-    "issues/216/2.webp",
-    "issues/216/3.webp",
-    "issues/216/4.webp",
-    "issues/216/5.webp"
-   ],
-   "pagesEn": [
-    "issues/216/en/1.webp",
-    "issues/216/en/2.webp",
-    "issues/216/en/3.webp",
-    "issues/216/en/4.webp",
-    "issues/216/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 215,
@@ -514,20 +502,8 @@
    "titles": [
     "豪雅EUV掩膜产能不足三星寻本土替代"
    ],
-   "pages": [
-    "issues/215/1.webp",
-    "issues/215/2.webp",
-    "issues/215/3.webp",
-    "issues/215/4.webp",
-    "issues/215/5.webp"
-   ],
-   "pagesEn": [
-    "issues/215/en/1.webp",
-    "issues/215/en/2.webp",
-    "issues/215/en/3.webp",
-    "issues/215/en/4.webp",
-    "issues/215/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 214,
@@ -538,20 +514,8 @@
    "titles": [
     "中国AI算力扩张撞上需求缺口"
    ],
-   "pages": [
-    "issues/214/1.webp",
-    "issues/214/2.webp",
-    "issues/214/3.webp",
-    "issues/214/4.webp",
-    "issues/214/5.webp"
-   ],
-   "pagesEn": [
-    "issues/214/en/1.webp",
-    "issues/214/en/2.webp",
-    "issues/214/en/3.webp",
-    "issues/214/en/4.webp",
-    "issues/214/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 213,
@@ -562,20 +526,8 @@
    "titles": [
     "中微首台等离子晶圆切割设备交付"
    ],
-   "pages": [
-    "issues/213/1.webp",
-    "issues/213/2.webp",
-    "issues/213/3.webp",
-    "issues/213/4.webp",
-    "issues/213/5.webp"
-   ],
-   "pagesEn": [
-    "issues/213/en/1.webp",
-    "issues/213/en/2.webp",
-    "issues/213/en/3.webp",
-    "issues/213/en/4.webp",
-    "issues/213/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 212,
@@ -586,20 +538,8 @@
    "titles": [
     "超微Venice量产采用台积电2纳米"
    ],
-   "pages": [
-    "issues/212/1.webp",
-    "issues/212/2.webp",
-    "issues/212/3.webp",
-    "issues/212/4.webp",
-    "issues/212/5.webp"
-   ],
-   "pagesEn": [
-    "issues/212/en/1.webp",
-    "issues/212/en/2.webp",
-    "issues/212/en/3.webp",
-    "issues/212/en/4.webp",
-    "issues/212/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 211,
