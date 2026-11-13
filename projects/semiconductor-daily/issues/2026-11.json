@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 233,
+   "date": "2026-11-13",
+   "label": "1113 中国超230亿AI项目依赖英伟达芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "中国超230亿AI项目依赖英伟达芯片"
+   ],
+   "pages": [
+    "issues/233/1.webp",
+    "issues/233/2.webp",
+    "issues/233/3.webp",
+    "issues/233/4.webp",
+    "issues/233/5.webp"
+   ],
+   "pagesEn": [
+    "issues/233/en/1.webp",
+    "issues/233/en/2.webp",
+    "issues/233/en/3.webp",
+    "issues/233/en/4.webp",
+    "issues/233/en/5.webp"
+   ]
+  },
+  {
    "serial": 232,
    "date": "2026-11-13",
    "label": "1113 Cerebras签约微软云服务增272%",
