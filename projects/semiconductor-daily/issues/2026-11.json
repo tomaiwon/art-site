@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 234,
+   "date": "2026-11-13",
+   "label": "1113 台积电明年资本开支或达900亿美元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电明年资本开支或达900亿美元"
+   ],
+   "pages": [
+    "issues/234/1.webp",
+    "issues/234/2.webp",
+    "issues/234/3.webp",
+    "issues/234/4.webp",
+    "issues/234/5.webp"
+   ],
+   "pagesEn": [
+    "issues/234/en/1.webp",
+    "issues/234/en/2.webp",
+    "issues/234/en/3.webp",
+    "issues/234/en/4.webp",
+    "issues/234/en/5.webp"
+   ]
+  },
+  {
    "serial": 233,
    "date": "2026-11-13",
    "label": "1113 中国超230亿AI项目依赖英伟达芯片",
