@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 228,
+   "date": "2026-11-13",
+   "label": "1113 特朗普三度批准打击辉达芯片输陆",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "特朗普三度批准打击辉达芯片输陆"
+   ],
+   "pages": [
+    "issues/228/1.webp",
+    "issues/228/2.webp",
+    "issues/228/3.webp",
+    "issues/228/4.webp",
+    "issues/228/5.webp"
+   ],
+   "pagesEn": [
+    "issues/228/en/1.webp",
+    "issues/228/en/2.webp",
+    "issues/228/en/3.webp",
+    "issues/228/en/4.webp",
+    "issues/228/en/5.webp"
+   ]
+  },
+  {
    "serial": 227,
    "date": "2026-11-13",
    "label": "1113 三星提前至2029年底退出8英寸代工",
