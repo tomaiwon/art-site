@@ -128,6 +128,19 @@
     font-weight:700; font-style:normal; font-display:block;
     unicode-range:U+4E1C,U+4E9A,U+5236,U+9020;
   }
+  /* 海报倒推：Z-poster-patch 是从 Z-news 截的「倒推」两个字（海、报 Z-work 里已有） */
+  @font-face{
+    font-family:"ZFont";
+    src:url("fonts/Z-poster-patch.woff2?v=1") format("woff2");
+    font-weight:400; font-style:normal; font-display:block;
+    unicode-range:U+5012,U+63A8;
+  }
+  @font-face{
+    font-family:"ZFont";
+    src:url("fonts/Z-poster-patch.woff2?v=1") format("woff2");
+    font-weight:700; font-style:normal; font-display:block;
+    unicode-range:U+5012,U+63A8;
+  }
   @font-face{
     font-family:"ZFont";
     src:url("fonts/Z-gallery-patch.woff2?v=1") format("woff2");
@@ -1042,6 +1055,10 @@
         <span class="name group-title-en" style="display:block">Tests</span>
       </h2>
       <ul class="list">
+        <li class="item">
+          <span class="year">2026.11</span>
+          <span class="name"><a href="projects/poster-reverse/">海报倒推</a></span>
+        </li>
         <li class="item">
           <span class="year">2026.11</span>
           <span class="name"><a href="https://live.yihuang.art/pipeline/negation">否定之否定</a></span>
