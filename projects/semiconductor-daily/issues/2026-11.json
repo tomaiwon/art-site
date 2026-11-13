@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 231,
+   "date": "2026-11-13",
+   "label": "1113 Claude用3天适配AMD GPU",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "Claude用3天适配AMD GPU"
+   ],
+   "pages": [
+    "issues/231/1.webp",
+    "issues/231/2.webp",
+    "issues/231/3.webp",
+    "issues/231/4.webp",
+    "issues/231/5.webp"
+   ],
+   "pagesEn": [
+    "issues/231/en/1.webp",
+    "issues/231/en/2.webp",
+    "issues/231/en/3.webp",
+    "issues/231/en/4.webp",
+    "issues/231/en/5.webp"
+   ]
+  },
+  {
    "serial": 230,
    "date": "2026-11-13",
    "label": "1113 中芯国际公布三季度营收31.9亿美元",
