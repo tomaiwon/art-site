@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 240,
+   "date": "2026-11-14",
+   "label": "1114 黄乐返京 英伟达董事会调查继续",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "黄乐返京 英伟达董事会调查继续"
+   ],
+   "pages": [
+    "issues/240/1.webp",
+    "issues/240/2.webp",
+    "issues/240/3.webp",
+    "issues/240/4.webp",
+    "issues/240/5.webp"
+   ],
+   "pagesEn": [
+    "issues/240/en/1.webp",
+    "issues/240/en/2.webp",
+    "issues/240/en/3.webp",
+    "issues/240/en/4.webp",
+    "issues/240/en/5.webp"
+   ]
+  },
+  {
    "serial": 239,
    "date": "2026-11-14",
    "label": "1114 台积电美国厂获利539亿年增逾十倍",
