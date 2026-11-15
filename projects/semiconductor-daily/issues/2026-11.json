@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 243,
+   "date": "2026-11-15",
+   "label": "1115 美银报告称DRAM强NAND转弱",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美银报告称DRAM强NAND转弱"
+   ],
+   "pages": [
+    "issues/243/1.webp",
+    "issues/243/2.webp",
+    "issues/243/3.webp",
+    "issues/243/4.webp",
+    "issues/243/5.webp"
+   ],
+   "pagesEn": [
+    "issues/243/en/1.webp",
+    "issues/243/en/2.webp",
+    "issues/243/en/3.webp",
+    "issues/243/en/4.webp",
+    "issues/243/en/5.webp"
+   ]
+  },
+  {
    "serial": 242,
    "date": "2026-11-15",
    "label": "1115 SK海力士扩HBM4产能月增2万片",
