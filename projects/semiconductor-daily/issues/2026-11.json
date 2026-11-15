@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 246,
+   "date": "2026-11-16",
+   "label": "1116 三星奥斯汀厂19亿美元扩产星链芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星奥斯汀厂19亿美元扩产星链芯片"
+   ],
+   "pages": [
+    "issues/246/1.webp",
+    "issues/246/2.webp",
+    "issues/246/3.webp",
+    "issues/246/4.webp",
+    "issues/246/5.webp"
+   ],
+   "pagesEn": [
+    "issues/246/en/1.webp",
+    "issues/246/en/2.webp",
+    "issues/246/en/3.webp",
+    "issues/246/en/4.webp",
+    "issues/246/en/5.webp"
+   ]
+  },
+  {
    "serial": 245,
    "date": "2026-11-16",
    "label": "1116 台积电388亿新台币购友达两厂",
