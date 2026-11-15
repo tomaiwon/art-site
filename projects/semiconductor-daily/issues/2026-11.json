@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 244,
+   "date": "2026-11-16",
+   "label": "1116 黄仁勳辞任英伟达执行长 美财长促外部找",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "黄仁勳辞任英伟达执行长 美财长促外部找"
+   ],
+   "pages": [
+    "issues/244/1.webp",
+    "issues/244/2.webp",
+    "issues/244/3.webp",
+    "issues/244/4.webp",
+    "issues/244/5.webp"
+   ],
+   "pagesEn": [
+    "issues/244/en/1.webp",
+    "issues/244/en/2.webp",
+    "issues/244/en/3.webp",
+    "issues/244/en/4.webp",
+    "issues/244/en/5.webp"
+   ]
+  },
+  {
    "serial": 243,
    "date": "2026-11-15",
    "label": "1115 美银报告称DRAM强NAND转弱",
@@ -154,20 +178,8 @@
    "titles": [
     "中国或收紧稀土出口反制美国芯片管制"
    ],
-   "pages": [
-    "issues/237/1.webp",
-    "issues/237/2.webp",
-    "issues/237/3.webp",
-    "issues/237/4.webp",
-    "issues/237/5.webp"
-   ],
-   "pagesEn": [
-    "issues/237/en/1.webp",
-    "issues/237/en/2.webp",
-    "issues/237/en/3.webp",
-    "issues/237/en/4.webp",
-    "issues/237/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 236,
@@ -178,20 +190,8 @@
    "titles": [
     "日月光路竹厂一期启用二期动土扩产"
    ],
-   "pages": [
-    "issues/236/1.webp",
-    "issues/236/2.webp",
-    "issues/236/3.webp",
-    "issues/236/4.webp",
-    "issues/236/5.webp"
-   ],
-   "pagesEn": [
-    "issues/236/en/1.webp",
-    "issues/236/en/2.webp",
-    "issues/236/en/3.webp",
-    "issues/236/en/4.webp",
-    "issues/236/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 235,
@@ -202,20 +202,8 @@
    "titles": [
     "精材与台积电签订七年先进封装外包协议"
    ],
-   "pages": [
-    "issues/235/1.webp",
-    "issues/235/2.webp",
-    "issues/235/3.webp",
-    "issues/235/4.webp",
-    "issues/235/5.webp"
-   ],
-   "pagesEn": [
-    "issues/235/en/1.webp",
-    "issues/235/en/2.webp",
-    "issues/235/en/3.webp",
-    "issues/235/en/4.webp",
-    "issues/235/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 234,
@@ -226,20 +214,8 @@
    "titles": [
     "台积电明年资本开支或达900亿美元"
    ],
-   "pages": [
-    "issues/234/1.webp",
-    "issues/234/2.webp",
-    "issues/234/3.webp",
-    "issues/234/4.webp",
-    "issues/234/5.webp"
-   ],
-   "pagesEn": [
-    "issues/234/en/1.webp",
-    "issues/234/en/2.webp",
-    "issues/234/en/3.webp",
-    "issues/234/en/4.webp",
-    "issues/234/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 233,
@@ -250,20 +226,8 @@
    "titles": [
     "中国超230亿AI项目依赖英伟达芯片"
    ],
-   "pages": [
-    "issues/233/1.webp",
-    "issues/233/2.webp",
-    "issues/233/3.webp",
-    "issues/233/4.webp",
-    "issues/233/5.webp"
-   ],
-   "pagesEn": [
-    "issues/233/en/1.webp",
-    "issues/233/en/2.webp",
-    "issues/233/en/3.webp",
-    "issues/233/en/4.webp",
-    "issues/233/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 232,
@@ -274,20 +238,8 @@
    "titles": [
     "Cerebras签约微软云服务增272%"
    ],
-   "pages": [
-    "issues/232/1.webp",
-    "issues/232/2.webp",
-    "issues/232/3.webp",
-    "issues/232/4.webp",
-    "issues/232/5.webp"
-   ],
-   "pagesEn": [
-    "issues/232/en/1.webp",
-    "issues/232/en/2.webp",
-    "issues/232/en/3.webp",
-    "issues/232/en/4.webp",
-    "issues/232/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 231,
@@ -298,20 +250,8 @@
    "titles": [
     "Claude用3天适配AMD GPU"
    ],
-   "pages": [
-    "issues/231/1.webp",
-    "issues/231/2.webp",
-    "issues/231/3.webp",
-    "issues/231/4.webp",
-    "issues/231/5.webp"
-   ],
-   "pagesEn": [
-    "issues/231/en/1.webp",
-    "issues/231/en/2.webp",
-    "issues/231/en/3.webp",
-    "issues/231/en/4.webp",
-    "issues/231/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 230,
@@ -322,20 +262,8 @@
    "titles": [
     "中芯国际公布三季度营收31.9亿美元"
    ],
-   "pages": [
-    "issues/230/1.webp",
-    "issues/230/2.webp",
-    "issues/230/3.webp",
-    "issues/230/4.webp",
-    "issues/230/5.webp"
-   ],
-   "pagesEn": [
-    "issues/230/en/1.webp",
-    "issues/230/en/2.webp",
-    "issues/230/en/3.webp",
-    "issues/230/en/4.webp",
-    "issues/230/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 229,
@@ -346,20 +274,8 @@
    "titles": [
     "美国民主党调查英伟达H200对华出口"
    ],
-   "pages": [
-    "issues/229/1.webp",
-    "issues/229/2.webp",
-    "issues/229/3.webp",
-    "issues/229/4.webp",
-    "issues/229/5.webp"
-   ],
-   "pagesEn": [
-    "issues/229/en/1.webp",
-    "issues/229/en/2.webp",
-    "issues/229/en/3.webp",
-    "issues/229/en/4.webp",
-    "issues/229/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 228,
@@ -370,20 +286,8 @@
    "titles": [
     "特朗普三度批准打击辉达芯片输陆"
    ],
-   "pages": [
-    "issues/228/1.webp",
-    "issues/228/2.webp",
-    "issues/228/3.webp",
-    "issues/228/4.webp",
-    "issues/228/5.webp"
-   ],
-   "pagesEn": [
-    "issues/228/en/1.webp",
-    "issues/228/en/2.webp",
-    "issues/228/en/3.webp",
-    "issues/228/en/4.webp",
-    "issues/228/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 227,
@@ -394,20 +298,8 @@
    "titles": [
     "三星提前至2029年底退出8英寸代工"
    ],
-   "pages": [
-    "issues/227/1.webp",
-    "issues/227/2.webp",
-    "issues/227/3.webp",
-    "issues/227/4.webp",
-    "issues/227/5.webp"
-   ],
-   "pagesEn": [
-    "issues/227/en/1.webp",
-    "issues/227/en/2.webp",
-    "issues/227/en/3.webp",
-    "issues/227/en/4.webp",
-    "issues/227/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 225,
