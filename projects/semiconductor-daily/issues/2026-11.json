@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 245,
+   "date": "2026-11-16",
+   "label": "1116 台积电388亿新台币购友达两厂",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电388亿新台币购友达两厂"
+   ],
+   "pages": [
+    "issues/245/1.webp",
+    "issues/245/2.webp",
+    "issues/245/3.webp",
+    "issues/245/4.webp",
+    "issues/245/5.webp"
+   ],
+   "pagesEn": [
+    "issues/245/en/1.webp",
+    "issues/245/en/2.webp",
+    "issues/245/en/3.webp",
+    "issues/245/en/4.webp",
+    "issues/245/en/5.webp"
+   ]
+  },
+  {
    "serial": 244,
    "date": "2026-11-16",
    "label": "1116 黄仁勳辞任英伟达执行长 美财长促外部找",
