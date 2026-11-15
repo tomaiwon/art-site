@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 242,
+   "date": "2026-11-15",
+   "label": "1115 SK海力士扩HBM4产能月增2万片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "SK海力士扩HBM4产能月增2万片"
+   ],
+   "pages": [
+    "issues/242/1.webp",
+    "issues/242/2.webp",
+    "issues/242/3.webp",
+    "issues/242/4.webp",
+    "issues/242/5.webp"
+   ],
+   "pagesEn": [
+    "issues/242/en/1.webp",
+    "issues/242/en/2.webp",
+    "issues/242/en/3.webp",
+    "issues/242/en/4.webp",
+    "issues/242/en/5.webp"
+   ]
+  },
+  {
    "serial": 241,
    "date": "2026-11-15",
    "label": "1115 辉达以预付款锁定ABF载板产能",
