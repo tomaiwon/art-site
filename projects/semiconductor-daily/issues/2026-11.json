@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 247,
+   "date": "2026-11-16",
+   "label": "1116 台湾检方起诉英伟达经理走私AI芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台湾检方起诉英伟达经理走私AI芯片"
+   ],
+   "pages": [
+    "issues/247/1.webp",
+    "issues/247/2.webp",
+    "issues/247/3.webp",
+    "issues/247/4.webp",
+    "issues/247/5.webp"
+   ],
+   "pagesEn": [
+    "issues/247/en/1.webp",
+    "issues/247/en/2.webp",
+    "issues/247/en/3.webp",
+    "issues/247/en/4.webp",
+    "issues/247/en/5.webp"
+   ]
+  },
+  {
    "serial": 246,
    "date": "2026-11-16",
    "label": "1116 三星奥斯汀厂19亿美元扩产星链芯片",
