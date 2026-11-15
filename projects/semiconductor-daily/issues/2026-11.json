@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 241,
+   "date": "2026-11-15",
+   "label": "1115 辉达以预付款锁定ABF载板产能",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "辉达以预付款锁定ABF载板产能"
+   ],
+   "pages": [
+    "issues/241/1.webp",
+    "issues/241/2.webp",
+    "issues/241/3.webp",
+    "issues/241/4.webp",
+    "issues/241/5.webp"
+   ],
+   "pagesEn": [
+    "issues/241/en/1.webp",
+    "issues/241/en/2.webp",
+    "issues/241/en/3.webp",
+    "issues/241/en/4.webp",
+    "issues/241/en/5.webp"
+   ]
+  },
+  {
    "serial": 240,
    "date": "2026-11-14",
    "label": "1114 黄乐返京 英伟达董事会调查继续",
@@ -346,20 +370,8 @@
    "titles": [
     "黄仁勋辞任英伟达CEO即刻生效"
    ],
-   "pages": [
-    "issues/225/1.webp",
-    "issues/225/2.webp",
-    "issues/225/3.webp",
-    "issues/225/4.webp",
-    "issues/225/5.webp"
-   ],
-   "pagesEn": [
-    "issues/225/en/1.webp",
-    "issues/225/en/2.webp",
-    "issues/225/en/3.webp",
-    "issues/225/en/4.webp",
-    "issues/225/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 224,
@@ -370,20 +382,8 @@
    "titles": [
     "长鑫DDR5完成32Gb迭代"
    ],
-   "pages": [
-    "issues/224/1.webp",
-    "issues/224/2.webp",
-    "issues/224/3.webp",
-    "issues/224/4.webp",
-    "issues/224/5.webp"
-   ],
-   "pagesEn": [
-    "issues/224/en/1.webp",
-    "issues/224/en/2.webp",
-    "issues/224/en/3.webp",
-    "issues/224/en/4.webp",
-    "issues/224/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 223,
@@ -394,20 +394,8 @@
    "titles": [
     "中国AI企业借海外算力续用英伟达芯片"
    ],
-   "pages": [
-    "issues/223/1.webp",
-    "issues/223/2.webp",
-    "issues/223/3.webp",
-    "issues/223/4.webp",
-    "issues/223/5.webp"
-   ],
-   "pagesEn": [
-    "issues/223/en/1.webp",
-    "issues/223/en/2.webp",
-    "issues/223/en/3.webp",
-    "issues/223/en/4.webp",
-    "issues/223/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 222,
@@ -418,20 +406,8 @@
    "titles": [
     "低端手机改用回收内存芯片"
    ],
-   "pages": [
-    "issues/222/1.webp",
-    "issues/222/2.webp",
-    "issues/222/3.webp",
-    "issues/222/4.webp",
-    "issues/222/5.webp"
-   ],
-   "pagesEn": [
-    "issues/222/en/1.webp",
-    "issues/222/en/2.webp",
-    "issues/222/en/3.webp",
-    "issues/222/en/4.webp",
-    "issues/222/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 221,
@@ -442,20 +418,8 @@
    "titles": [
     "三星电子温阳动工建HBM封装线"
    ],
-   "pages": [
-    "issues/221/1.webp",
-    "issues/221/2.webp",
-    "issues/221/3.webp",
-    "issues/221/4.webp",
-    "issues/221/5.webp"
-   ],
-   "pagesEn": [
-    "issues/221/en/1.webp",
-    "issues/221/en/2.webp",
-    "issues/221/en/3.webp",
-    "issues/221/en/4.webp",
-    "issues/221/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 220,
@@ -466,20 +430,8 @@
    "titles": [
     "南亚斥115.3亿元建玻纤布五厂"
    ],
-   "pages": [
-    "issues/220/1.webp",
-    "issues/220/2.webp",
-    "issues/220/3.webp",
-    "issues/220/4.webp",
-    "issues/220/5.webp"
-   ],
-   "pagesEn": [
-    "issues/220/en/1.webp",
-    "issues/220/en/2.webp",
-    "issues/220/en/3.webp",
-    "issues/220/en/4.webp",
-    "issues/220/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 219,
@@ -490,20 +442,8 @@
    "titles": [
     "CoreWeave旧GPU租金涨五成"
    ],
-   "pages": [
-    "issues/219/1.webp",
-    "issues/219/2.webp",
-    "issues/219/3.webp",
-    "issues/219/4.webp",
-    "issues/219/5.webp"
-   ],
-   "pagesEn": [
-    "issues/219/en/1.webp",
-    "issues/219/en/2.webp",
-    "issues/219/en/3.webp",
-    "issues/219/en/4.webp",
-    "issues/219/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 218,
