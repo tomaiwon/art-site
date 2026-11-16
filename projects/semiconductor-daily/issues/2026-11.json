@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 253,
+   "date": "2026-11-16",
+   "label": "1116 美国法院驳回三家DRAM巨头撤诉动议",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国法院驳回三家DRAM巨头撤诉动议"
+   ],
+   "pages": [
+    "issues/253/1.webp",
+    "issues/253/2.webp",
+    "issues/253/3.webp",
+    "issues/253/4.webp",
+    "issues/253/5.webp"
+   ],
+   "pagesEn": [
+    "issues/253/en/1.webp",
+    "issues/253/en/2.webp",
+    "issues/253/en/3.webp",
+    "issues/253/en/4.webp",
+    "issues/253/en/5.webp"
+   ]
+  },
+  {
    "serial": 252,
    "date": "2026-11-16",
    "label": "1116 美光暂停台湾桃园DRAM新厂建设",
