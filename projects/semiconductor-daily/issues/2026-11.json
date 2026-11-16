@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 259,
+   "date": "2026-11-17",
+   "label": "1117 美国收紧AI芯片远程访问出口管制",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国收紧AI芯片远程访问出口管制"
+   ],
+   "pages": [
+    "issues/259/1.webp",
+    "issues/259/2.webp",
+    "issues/259/3.webp",
+    "issues/259/4.webp",
+    "issues/259/5.webp"
+   ],
+   "pagesEn": [
+    "issues/259/en/1.webp",
+    "issues/259/en/2.webp",
+    "issues/259/en/3.webp",
+    "issues/259/en/4.webp",
+    "issues/259/en/5.webp"
+   ]
+  },
+  {
    "serial": 258,
    "date": "2026-11-16",
    "label": "1116 台积电五百亿美元增资带动对外投资",
@@ -442,20 +466,8 @@
    "titles": [
     "黄乐返京 英伟达董事会调查继续"
    ],
-   "pages": [
-    "issues/240/1.webp",
-    "issues/240/2.webp",
-    "issues/240/3.webp",
-    "issues/240/4.webp",
-    "issues/240/5.webp"
-   ],
-   "pagesEn": [
-    "issues/240/en/1.webp",
-    "issues/240/en/2.webp",
-    "issues/240/en/3.webp",
-    "issues/240/en/4.webp",
-    "issues/240/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 239,
@@ -466,20 +478,8 @@
    "titles": [
     "台积电美国厂获利539亿年增逾十倍"
    ],
-   "pages": [
-    "issues/239/1.webp",
-    "issues/239/2.webp",
-    "issues/239/3.webp",
-    "issues/239/4.webp",
-    "issues/239/5.webp"
-   ],
-   "pagesEn": [
-    "issues/239/en/1.webp",
-    "issues/239/en/2.webp",
-    "issues/239/en/3.webp",
-    "issues/239/en/4.webp",
-    "issues/239/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 238,
@@ -490,20 +490,8 @@
    "titles": [
     "应用材料全年净利100.88亿美元"
    ],
-   "pages": [
-    "issues/238/1.webp",
-    "issues/238/2.webp",
-    "issues/238/3.webp",
-    "issues/238/4.webp",
-    "issues/238/5.webp"
-   ],
-   "pagesEn": [
-    "issues/238/en/1.webp",
-    "issues/238/en/2.webp",
-    "issues/238/en/3.webp",
-    "issues/238/en/4.webp",
-    "issues/238/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 237,
