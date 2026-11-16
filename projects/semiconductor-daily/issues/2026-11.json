@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 250,
+   "date": "2026-11-16",
+   "label": "1116 华大九天整合亚科鸿禹思尔芯成立新禹思",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "华大九天整合亚科鸿禹思尔芯成立新禹思"
+   ],
+   "pages": [
+    "issues/250/1.webp",
+    "issues/250/2.webp",
+    "issues/250/3.webp",
+    "issues/250/4.webp",
+    "issues/250/5.webp"
+   ],
+   "pagesEn": [
+    "issues/250/en/1.webp",
+    "issues/250/en/2.webp",
+    "issues/250/en/3.webp",
+    "issues/250/en/4.webp",
+    "issues/250/en/5.webp"
+   ]
+  },
+  {
    "serial": 249,
    "date": "2026-11-16",
    "label": "1116 英伟达Vera Rubin放量延至明年",
