@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 254,
+   "date": "2026-11-16",
+   "label": "1116 SK海力士龙仁Y1厂2月投产",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "SK海力士龙仁Y1厂2月投产"
+   ],
+   "pages": [
+    "issues/254/1.webp",
+    "issues/254/2.webp",
+    "issues/254/3.webp",
+    "issues/254/4.webp",
+    "issues/254/5.webp"
+   ],
+   "pagesEn": [
+    "issues/254/en/1.webp",
+    "issues/254/en/2.webp",
+    "issues/254/en/3.webp",
+    "issues/254/en/4.webp",
+    "issues/254/en/5.webp"
+   ]
+  },
+  {
    "serial": 253,
    "date": "2026-11-16",
    "label": "1116 美国法院驳回三家DRAM巨头撤诉动议",
