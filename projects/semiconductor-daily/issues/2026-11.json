@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 251,
+   "date": "2026-11-16",
+   "label": "1116 DRAM营收因AI需求近两千亿美元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "DRAM营收因AI需求近两千亿美元"
+   ],
+   "pages": [
+    "issues/251/1.webp",
+    "issues/251/2.webp",
+    "issues/251/3.webp",
+    "issues/251/4.webp",
+    "issues/251/5.webp"
+   ],
+   "pagesEn": [
+    "issues/251/en/1.webp",
+    "issues/251/en/2.webp",
+    "issues/251/en/3.webp",
+    "issues/251/en/4.webp",
+    "issues/251/en/5.webp"
+   ]
+  },
+  {
    "serial": 250,
    "date": "2026-11-16",
    "label": "1116 华大九天整合亚科鸿禹思尔芯成立新禹思",
