@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 261,
+   "date": "2026-11-17",
+   "label": "1117 谷歌TPU出货能见度延至2029年",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "谷歌TPU出货能见度延至2029年"
+   ],
+   "pages": [
+    "issues/261/1.webp",
+    "issues/261/2.webp",
+    "issues/261/3.webp",
+    "issues/261/4.webp",
+    "issues/261/5.webp"
+   ],
+   "pagesEn": [
+    "issues/261/en/1.webp",
+    "issues/261/en/2.webp",
+    "issues/261/en/3.webp",
+    "issues/261/en/4.webp",
+    "issues/261/en/5.webp"
+   ]
+  },
+  {
    "serial": 260,
    "date": "2026-11-17",
    "label": "1117 美光台中工地安全事故致1死遭勒令停工",
