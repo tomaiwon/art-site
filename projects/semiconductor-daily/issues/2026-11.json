@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 255,
+   "date": "2026-11-16",
+   "label": "1116 台积电拟设5亿美元创投基金",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电拟设5亿美元创投基金"
+   ],
+   "pages": [
+    "issues/255/1.webp",
+    "issues/255/2.webp",
+    "issues/255/3.webp",
+    "issues/255/4.webp",
+    "issues/255/5.webp"
+   ],
+   "pagesEn": [
+    "issues/255/en/1.webp",
+    "issues/255/en/2.webp",
+    "issues/255/en/3.webp",
+    "issues/255/en/4.webp",
+    "issues/255/en/5.webp"
+   ]
+  },
+  {
    "serial": 254,
    "date": "2026-11-16",
    "label": "1116 SK海力士龙仁Y1厂2月投产",
