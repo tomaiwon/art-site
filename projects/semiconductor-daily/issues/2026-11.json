@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 249,
+   "date": "2026-11-16",
+   "label": "1116 英伟达Vera Rubin放量延至明年",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达Vera Rubin放量延至明年"
+   ],
+   "pages": [
+    "issues/249/1.webp",
+    "issues/249/2.webp",
+    "issues/249/3.webp",
+    "issues/249/4.webp",
+    "issues/249/5.webp"
+   ],
+   "pagesEn": [
+    "issues/249/en/1.webp",
+    "issues/249/en/2.webp",
+    "issues/249/en/3.webp",
+    "issues/249/en/4.webp",
+    "issues/249/en/5.webp"
+   ]
+  },
+  {
    "serial": 248,
    "date": "2026-11-16",
    "label": "1116 SK海力士建测试厂缩短供应商验证",
