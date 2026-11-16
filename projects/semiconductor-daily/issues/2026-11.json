@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 262,
+   "date": "2026-11-17",
+   "label": "1117 美拟公布AI国家队逾24家英伟达入列",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美拟公布AI国家队逾24家英伟达入列"
+   ],
+   "pages": [
+    "issues/262/1.webp",
+    "issues/262/2.webp",
+    "issues/262/3.webp",
+    "issues/262/4.webp",
+    "issues/262/5.webp"
+   ],
+   "pagesEn": [
+    "issues/262/en/1.webp",
+    "issues/262/en/2.webp",
+    "issues/262/en/3.webp",
+    "issues/262/en/4.webp",
+    "issues/262/en/5.webp"
+   ]
+  },
+  {
    "serial": 261,
    "date": "2026-11-17",
    "label": "1117 谷歌TPU出货能见度延至2029年",
