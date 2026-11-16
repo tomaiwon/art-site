@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 258,
+   "date": "2026-11-16",
+   "label": "1116 台积电五百亿美元增资带动对外投资",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电五百亿美元增资带动对外投资"
+   ],
+   "pages": [
+    "issues/258/1.webp",
+    "issues/258/2.webp",
+    "issues/258/3.webp",
+    "issues/258/4.webp",
+    "issues/258/5.webp"
+   ],
+   "pagesEn": [
+    "issues/258/en/1.webp",
+    "issues/258/en/2.webp",
+    "issues/258/en/3.webp",
+    "issues/258/en/4.webp",
+    "issues/258/en/5.webp"
+   ]
+  },
+  {
    "serial": 257,
    "date": "2026-11-16",
    "label": "1116 美国与韩日等8国签署AI供应链宣言",
