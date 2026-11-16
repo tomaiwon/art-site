@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 257,
+   "date": "2026-11-16",
+   "label": "1116 美国与韩日等8国签署AI供应链宣言",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国与韩日等8国签署AI供应链宣言"
+   ],
+   "pages": [
+    "issues/257/1.webp",
+    "issues/257/2.webp",
+    "issues/257/3.webp",
+    "issues/257/4.webp",
+    "issues/257/5.webp"
+   ],
+   "pagesEn": [
+    "issues/257/en/1.webp",
+    "issues/257/en/2.webp",
+    "issues/257/en/3.webp",
+    "issues/257/en/4.webp",
+    "issues/257/en/5.webp"
+   ]
+  },
+  {
    "serial": 256,
    "date": "2026-11-16",
    "label": "1116 东南亚手机出货降36%均价涨53%",
