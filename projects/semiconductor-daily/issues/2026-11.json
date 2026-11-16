@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 260,
+   "date": "2026-11-17",
+   "label": "1117 美光台中工地安全事故致1死遭勒令停工",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美光台中工地安全事故致1死遭勒令停工"
+   ],
+   "pages": [
+    "issues/260/1.webp",
+    "issues/260/2.webp",
+    "issues/260/3.webp",
+    "issues/260/4.webp",
+    "issues/260/5.webp"
+   ],
+   "pagesEn": [
+    "issues/260/en/1.webp",
+    "issues/260/en/2.webp",
+    "issues/260/en/3.webp",
+    "issues/260/en/4.webp",
+    "issues/260/en/5.webp"
+   ]
+  },
+  {
    "serial": 259,
    "date": "2026-11-17",
    "label": "1117 美国收紧AI芯片远程访问出口管制",
