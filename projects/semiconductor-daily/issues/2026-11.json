@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 252,
+   "date": "2026-11-16",
+   "label": "1116 美光暂停台湾桃园DRAM新厂建设",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美光暂停台湾桃园DRAM新厂建设"
+   ],
+   "pages": [
+    "issues/252/1.webp",
+    "issues/252/2.webp",
+    "issues/252/3.webp",
+    "issues/252/4.webp",
+    "issues/252/5.webp"
+   ],
+   "pagesEn": [
+    "issues/252/en/1.webp",
+    "issues/252/en/2.webp",
+    "issues/252/en/3.webp",
+    "issues/252/en/4.webp",
+    "issues/252/en/5.webp"
+   ]
+  },
+  {
    "serial": 251,
    "date": "2026-11-16",
    "label": "1116 DRAM营收因AI需求近两千亿美元",
