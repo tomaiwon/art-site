@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 266,
+   "date": "2026-11-17",
+   "label": "1117 台积电等晶圆厂2027年涨价逾10%",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电等晶圆厂2027年涨价逾10%"
+   ],
+   "pages": [
+    "issues/266/1.webp",
+    "issues/266/2.webp",
+    "issues/266/3.webp",
+    "issues/266/4.webp",
+    "issues/266/5.webp"
+   ],
+   "pagesEn": [
+    "issues/266/en/1.webp",
+    "issues/266/en/2.webp",
+    "issues/266/en/3.webp",
+    "issues/266/en/4.webp",
+    "issues/266/en/5.webp"
+   ]
+  },
+  {
    "serial": 265,
    "date": "2026-11-17",
    "label": "1117 三星为Meta定制HBM采用2nm基础裸片",
