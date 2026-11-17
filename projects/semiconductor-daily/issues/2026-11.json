@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 265,
+   "date": "2026-11-17",
+   "label": "1117 三星为Meta定制HBM采用2nm基础裸片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星为Meta定制HBM采用2nm基础裸片"
+   ],
+   "pages": [
+    "issues/265/1.webp",
+    "issues/265/2.webp",
+    "issues/265/3.webp",
+    "issues/265/4.webp",
+    "issues/265/5.webp"
+   ],
+   "pagesEn": [
+    "issues/265/en/1.webp",
+    "issues/265/en/2.webp",
+    "issues/265/en/3.webp",
+    "issues/265/en/4.webp",
+    "issues/265/en/5.webp"
+   ]
+  },
+  {
    "serial": 264,
    "date": "2026-11-17",
    "label": "1117 英伟达GPU短缺持续至2028财年",
