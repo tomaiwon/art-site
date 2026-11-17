@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 264,
+   "date": "2026-11-17",
+   "label": "1117 英伟达GPU短缺持续至2028财年",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达GPU短缺持续至2028财年"
+   ],
+   "pages": [
+    "issues/264/1.webp",
+    "issues/264/2.webp",
+    "issues/264/3.webp",
+    "issues/264/4.webp",
+    "issues/264/5.webp"
+   ],
+   "pagesEn": [
+    "issues/264/en/1.webp",
+    "issues/264/en/2.webp",
+    "issues/264/en/3.webp",
+    "issues/264/en/4.webp",
+    "issues/264/en/5.webp"
+   ]
+  },
+  {
    "serial": 263,
    "date": "2026-11-17",
    "label": "1117 台积电3nm需求超指引上限",
