@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 263,
+   "date": "2026-11-17",
+   "label": "1117 台积电3nm需求超指引上限",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电3nm需求超指引上限"
+   ],
+   "pages": [
+    "issues/263/1.webp",
+    "issues/263/2.webp",
+    "issues/263/3.webp",
+    "issues/263/4.webp",
+    "issues/263/5.webp"
+   ],
+   "pagesEn": [
+    "issues/263/en/1.webp",
+    "issues/263/en/2.webp",
+    "issues/263/en/3.webp",
+    "issues/263/en/4.webp",
+    "issues/263/en/5.webp"
+   ]
+  },
+  {
    "serial": 262,
    "date": "2026-11-17",
    "label": "1117 美拟公布AI国家队逾24家英伟达入列",
