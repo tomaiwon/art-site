@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 267,
+   "date": "2026-11-17",
+   "label": "1117 半导体研究机构下修AI加速器资本开支",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "半导体研究机构下修AI加速器资本开支"
+   ],
+   "pages": [
+    "issues/267/1.webp",
+    "issues/267/2.webp",
+    "issues/267/3.webp",
+    "issues/267/4.webp",
+    "issues/267/5.webp"
+   ],
+   "pagesEn": [
+    "issues/267/en/1.webp",
+    "issues/267/en/2.webp",
+    "issues/267/en/3.webp",
+    "issues/267/en/4.webp",
+    "issues/267/en/5.webp"
+   ]
+  },
+  {
    "serial": 266,
    "date": "2026-11-17",
    "label": "1117 台积电等晶圆厂2027年涨价逾10%",
