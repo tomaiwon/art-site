@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 268,
+   "date": "2026-11-17",
+   "label": "1117 英伟达要求非中客户占比至少51%",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达要求非中客户占比至少51%"
+   ],
+   "pages": [
+    "issues/268/1.webp",
+    "issues/268/2.webp",
+    "issues/268/3.webp",
+    "issues/268/4.webp",
+    "issues/268/5.webp"
+   ],
+   "pagesEn": [
+    "issues/268/en/1.webp",
+    "issues/268/en/2.webp",
+    "issues/268/en/3.webp",
+    "issues/268/en/4.webp",
+    "issues/268/en/5.webp"
+   ]
+  },
+  {
    "serial": 267,
    "date": "2026-11-17",
    "label": "1117 半导体研究机构下修AI加速器资本开支",
