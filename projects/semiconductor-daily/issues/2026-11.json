@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 269,
+   "date": "2026-11-18",
+   "label": "1118 英伟达停售中国H200芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达停售中国H200芯片"
+   ],
+   "pages": [
+    "issues/269/1.webp",
+    "issues/269/2.webp",
+    "issues/269/3.webp",
+    "issues/269/4.webp",
+    "issues/269/5.webp"
+   ],
+   "pagesEn": [
+    "issues/269/en/1.webp",
+    "issues/269/en/2.webp",
+    "issues/269/en/3.webp",
+    "issues/269/en/4.webp",
+    "issues/269/en/5.webp"
+   ]
+  },
+  {
    "serial": 268,
    "date": "2026-11-17",
    "label": "1117 英伟达要求非中客户占比至少51%",
@@ -610,20 +634,8 @@
    "titles": [
     "美银报告称DRAM强NAND转弱"
    ],
-   "pages": [
-    "issues/243/1.webp",
-    "issues/243/2.webp",
-    "issues/243/3.webp",
-    "issues/243/4.webp",
-    "issues/243/5.webp"
-   ],
-   "pagesEn": [
-    "issues/243/en/1.webp",
-    "issues/243/en/2.webp",
-    "issues/243/en/3.webp",
-    "issues/243/en/4.webp",
-    "issues/243/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 242,
@@ -634,20 +646,8 @@
    "titles": [
     "SK海力士扩HBM4产能月增2万片"
    ],
-   "pages": [
-    "issues/242/1.webp",
-    "issues/242/2.webp",
-    "issues/242/3.webp",
-    "issues/242/4.webp",
-    "issues/242/5.webp"
-   ],
-   "pagesEn": [
-    "issues/242/en/1.webp",
-    "issues/242/en/2.webp",
-    "issues/242/en/3.webp",
-    "issues/242/en/4.webp",
-    "issues/242/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 241,
@@ -658,20 +658,8 @@
    "titles": [
     "辉达以预付款锁定ABF载板产能"
    ],
-   "pages": [
-    "issues/241/1.webp",
-    "issues/241/2.webp",
-    "issues/241/3.webp",
-    "issues/241/4.webp",
-    "issues/241/5.webp"
-   ],
-   "pagesEn": [
-    "issues/241/en/1.webp",
-    "issues/241/en/2.webp",
-    "issues/241/en/3.webp",
-    "issues/241/en/4.webp",
-    "issues/241/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 240,
