@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 271,
+   "date": "2026-11-18",
+   "label": "1118 三星苹果敲定DRAM长期供货协议",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星苹果敲定DRAM长期供货协议"
+   ],
+   "pages": [
+    "issues/271/1.webp",
+    "issues/271/2.webp",
+    "issues/271/3.webp",
+    "issues/271/4.webp",
+    "issues/271/5.webp"
+   ],
+   "pagesEn": [
+    "issues/271/en/1.webp",
+    "issues/271/en/2.webp",
+    "issues/271/en/3.webp",
+    "issues/271/en/4.webp",
+    "issues/271/en/5.webp"
+   ]
+  },
+  {
    "serial": 270,
    "date": "2026-11-18",
    "label": "1118 英伟达投资超10亿美元扩景硕载板产能",
