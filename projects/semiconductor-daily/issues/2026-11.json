@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 270,
+   "date": "2026-11-18",
+   "label": "1118 英伟达投资超10亿美元扩景硕载板产能",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达投资超10亿美元扩景硕载板产能"
+   ],
+   "pages": [
+    "issues/270/1.webp",
+    "issues/270/2.webp",
+    "issues/270/3.webp",
+    "issues/270/4.webp",
+    "issues/270/5.webp"
+   ],
+   "pagesEn": [
+    "issues/270/en/1.webp",
+    "issues/270/en/2.webp",
+    "issues/270/en/3.webp",
+    "issues/270/en/4.webp",
+    "issues/270/en/5.webp"
+   ]
+  },
+  {
    "serial": 269,
    "date": "2026-11-18",
    "label": "1118 英伟达停售中国H200芯片",
