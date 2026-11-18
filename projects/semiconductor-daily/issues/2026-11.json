@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 272,
+   "date": "2026-11-19",
+   "label": "1119 微软Maia 200投入量产",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "微软Maia 200投入量产"
+   ],
+   "pages": [
+    "issues/272/1.webp",
+    "issues/272/2.webp",
+    "issues/272/3.webp",
+    "issues/272/4.webp",
+    "issues/272/5.webp"
+   ],
+   "pagesEn": [
+    "issues/272/en/1.webp",
+    "issues/272/en/2.webp",
+    "issues/272/en/3.webp",
+    "issues/272/en/4.webp",
+    "issues/272/en/5.webp"
+   ]
+  },
+  {
    "serial": 271,
    "date": "2026-11-18",
    "label": "1118 三星苹果敲定DRAM长期供货协议",
@@ -322,20 +346,8 @@
    "titles": [
     "台积电五百亿美元增资带动对外投资"
    ],
-   "pages": [
-    "issues/258/1.webp",
-    "issues/258/2.webp",
-    "issues/258/3.webp",
-    "issues/258/4.webp",
-    "issues/258/5.webp"
-   ],
-   "pagesEn": [
-    "issues/258/en/1.webp",
-    "issues/258/en/2.webp",
-    "issues/258/en/3.webp",
-    "issues/258/en/4.webp",
-    "issues/258/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 257,
@@ -346,20 +358,8 @@
    "titles": [
     "美国与韩日等8国签署AI供应链宣言"
    ],
-   "pages": [
-    "issues/257/1.webp",
-    "issues/257/2.webp",
-    "issues/257/3.webp",
-    "issues/257/4.webp",
-    "issues/257/5.webp"
-   ],
-   "pagesEn": [
-    "issues/257/en/1.webp",
-    "issues/257/en/2.webp",
-    "issues/257/en/3.webp",
-    "issues/257/en/4.webp",
-    "issues/257/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 256,
@@ -370,20 +370,8 @@
    "titles": [
     "东南亚手机出货降36%均价涨53%"
    ],
-   "pages": [
-    "issues/256/1.webp",
-    "issues/256/2.webp",
-    "issues/256/3.webp",
-    "issues/256/4.webp",
-    "issues/256/5.webp"
-   ],
-   "pagesEn": [
-    "issues/256/en/1.webp",
-    "issues/256/en/2.webp",
-    "issues/256/en/3.webp",
-    "issues/256/en/4.webp",
-    "issues/256/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 255,
@@ -394,20 +382,8 @@
    "titles": [
     "台积电拟设5亿美元创投基金"
    ],
-   "pages": [
-    "issues/255/1.webp",
-    "issues/255/2.webp",
-    "issues/255/3.webp",
-    "issues/255/4.webp",
-    "issues/255/5.webp"
-   ],
-   "pagesEn": [
-    "issues/255/en/1.webp",
-    "issues/255/en/2.webp",
-    "issues/255/en/3.webp",
-    "issues/255/en/4.webp",
-    "issues/255/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 254,
@@ -418,20 +394,8 @@
    "titles": [
     "SK海力士龙仁Y1厂2月投产"
    ],
-   "pages": [
-    "issues/254/1.webp",
-    "issues/254/2.webp",
-    "issues/254/3.webp",
-    "issues/254/4.webp",
-    "issues/254/5.webp"
-   ],
-   "pagesEn": [
-    "issues/254/en/1.webp",
-    "issues/254/en/2.webp",
-    "issues/254/en/3.webp",
-    "issues/254/en/4.webp",
-    "issues/254/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 253,
@@ -442,20 +406,8 @@
    "titles": [
     "美国法院驳回三家DRAM巨头撤诉动议"
    ],
-   "pages": [
-    "issues/253/1.webp",
-    "issues/253/2.webp",
-    "issues/253/3.webp",
-    "issues/253/4.webp",
-    "issues/253/5.webp"
-   ],
-   "pagesEn": [
-    "issues/253/en/1.webp",
-    "issues/253/en/2.webp",
-    "issues/253/en/3.webp",
-    "issues/253/en/4.webp",
-    "issues/253/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 252,
@@ -466,20 +418,8 @@
    "titles": [
     "美光暂停台湾桃园DRAM新厂建设"
    ],
-   "pages": [
-    "issues/252/1.webp",
-    "issues/252/2.webp",
-    "issues/252/3.webp",
-    "issues/252/4.webp",
-    "issues/252/5.webp"
-   ],
-   "pagesEn": [
-    "issues/252/en/1.webp",
-    "issues/252/en/2.webp",
-    "issues/252/en/3.webp",
-    "issues/252/en/4.webp",
-    "issues/252/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 251,
@@ -490,20 +430,8 @@
    "titles": [
     "DRAM营收因AI需求近两千亿美元"
    ],
-   "pages": [
-    "issues/251/1.webp",
-    "issues/251/2.webp",
-    "issues/251/3.webp",
-    "issues/251/4.webp",
-    "issues/251/5.webp"
-   ],
-   "pagesEn": [
-    "issues/251/en/1.webp",
-    "issues/251/en/2.webp",
-    "issues/251/en/3.webp",
-    "issues/251/en/4.webp",
-    "issues/251/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 250,
@@ -514,20 +442,8 @@
    "titles": [
     "华大九天整合亚科鸿禹思尔芯成立新禹思"
    ],
-   "pages": [
-    "issues/250/1.webp",
-    "issues/250/2.webp",
-    "issues/250/3.webp",
-    "issues/250/4.webp",
-    "issues/250/5.webp"
-   ],
-   "pagesEn": [
-    "issues/250/en/1.webp",
-    "issues/250/en/2.webp",
-    "issues/250/en/3.webp",
-    "issues/250/en/4.webp",
-    "issues/250/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 249,
@@ -538,20 +454,8 @@
    "titles": [
     "英伟达Vera Rubin放量延至明年"
    ],
-   "pages": [
-    "issues/249/1.webp",
-    "issues/249/2.webp",
-    "issues/249/3.webp",
-    "issues/249/4.webp",
-    "issues/249/5.webp"
-   ],
-   "pagesEn": [
-    "issues/249/en/1.webp",
-    "issues/249/en/2.webp",
-    "issues/249/en/3.webp",
-    "issues/249/en/4.webp",
-    "issues/249/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 248,
@@ -562,20 +466,8 @@
    "titles": [
     "SK海力士建测试厂缩短供应商验证"
    ],
-   "pages": [
-    "issues/248/1.webp",
-    "issues/248/2.webp",
-    "issues/248/3.webp",
-    "issues/248/4.webp",
-    "issues/248/5.webp"
-   ],
-   "pagesEn": [
-    "issues/248/en/1.webp",
-    "issues/248/en/2.webp",
-    "issues/248/en/3.webp",
-    "issues/248/en/4.webp",
-    "issues/248/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 247,
@@ -586,20 +478,8 @@
    "titles": [
     "台湾检方起诉英伟达经理走私AI芯片"
    ],
-   "pages": [
-    "issues/247/1.webp",
-    "issues/247/2.webp",
-    "issues/247/3.webp",
-    "issues/247/4.webp",
-    "issues/247/5.webp"
-   ],
-   "pagesEn": [
-    "issues/247/en/1.webp",
-    "issues/247/en/2.webp",
-    "issues/247/en/3.webp",
-    "issues/247/en/4.webp",
-    "issues/247/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 246,
@@ -610,20 +490,8 @@
    "titles": [
     "三星奥斯汀厂19亿美元扩产星链芯片"
    ],
-   "pages": [
-    "issues/246/1.webp",
-    "issues/246/2.webp",
-    "issues/246/3.webp",
-    "issues/246/4.webp",
-    "issues/246/5.webp"
-   ],
-   "pagesEn": [
-    "issues/246/en/1.webp",
-    "issues/246/en/2.webp",
-    "issues/246/en/3.webp",
-    "issues/246/en/4.webp",
-    "issues/246/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 245,
@@ -634,20 +502,8 @@
    "titles": [
     "台积电388亿新台币购友达两厂"
    ],
-   "pages": [
-    "issues/245/1.webp",
-    "issues/245/2.webp",
-    "issues/245/3.webp",
-    "issues/245/4.webp",
-    "issues/245/5.webp"
-   ],
-   "pagesEn": [
-    "issues/245/en/1.webp",
-    "issues/245/en/2.webp",
-    "issues/245/en/3.webp",
-    "issues/245/en/4.webp",
-    "issues/245/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 244,
@@ -658,20 +514,8 @@
    "titles": [
     "黄仁勳辞任英伟达执行长 美财长促外部找"
    ],
-   "pages": [
-    "issues/244/1.webp",
-    "issues/244/2.webp",
-    "issues/244/3.webp",
-    "issues/244/4.webp",
-    "issues/244/5.webp"
-   ],
-   "pagesEn": [
-    "issues/244/en/1.webp",
-    "issues/244/en/2.webp",
-    "issues/244/en/3.webp",
-    "issues/244/en/4.webp",
-    "issues/244/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 243,
