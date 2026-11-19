@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 273,
+   "date": "2026-11-19",
+   "label": "1119 英伟达GPU租赁价全面上涨最高翻倍",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达GPU租赁价全面上涨最高翻倍"
+   ],
+   "pages": [
+    "issues/273/1.webp",
+    "issues/273/2.webp",
+    "issues/273/3.webp",
+    "issues/273/4.webp",
+    "issues/273/5.webp"
+   ],
+   "pagesEn": [
+    "issues/273/en/1.webp",
+    "issues/273/en/2.webp",
+    "issues/273/en/3.webp",
+    "issues/273/en/4.webp",
+    "issues/273/en/5.webp"
+   ]
+  },
+  {
    "serial": 272,
    "date": "2026-11-19",
    "label": "1119 微软Maia 200投入量产",
