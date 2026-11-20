@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 275,
+   "date": "2026-11-20",
+   "label": "1120 美国商务部批准87.9万颗AI芯片出口中国",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国商务部批准87.9万颗AI芯片出口中国"
+   ],
+   "pages": [
+    "issues/275/1.webp",
+    "issues/275/2.webp",
+    "issues/275/3.webp",
+    "issues/275/4.webp",
+    "issues/275/5.webp"
+   ],
+   "pagesEn": [
+    "issues/275/en/1.webp",
+    "issues/275/en/2.webp",
+    "issues/275/en/3.webp",
+    "issues/275/en/4.webp",
+    "issues/275/en/5.webp"
+   ]
+  },
+  {
    "serial": 274,
    "date": "2026-11-19",
    "label": "1119 英特尔18A制程签下首家外部客户",
@@ -154,20 +178,8 @@
    "titles": [
     "英伟达要求非中客户占比至少51%"
    ],
-   "pages": [
-    "issues/268/1.webp",
-    "issues/268/2.webp",
-    "issues/268/3.webp",
-    "issues/268/4.webp",
-    "issues/268/5.webp"
-   ],
-   "pagesEn": [
-    "issues/268/en/1.webp",
-    "issues/268/en/2.webp",
-    "issues/268/en/3.webp",
-    "issues/268/en/4.webp",
-    "issues/268/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 267,
@@ -178,20 +190,8 @@
    "titles": [
     "半导体研究机构下修AI加速器资本开支"
    ],
-   "pages": [
-    "issues/267/1.webp",
-    "issues/267/2.webp",
-    "issues/267/3.webp",
-    "issues/267/4.webp",
-    "issues/267/5.webp"
-   ],
-   "pagesEn": [
-    "issues/267/en/1.webp",
-    "issues/267/en/2.webp",
-    "issues/267/en/3.webp",
-    "issues/267/en/4.webp",
-    "issues/267/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 266,
@@ -202,20 +202,8 @@
    "titles": [
     "台积电等晶圆厂2027年涨价逾10%"
    ],
-   "pages": [
-    "issues/266/1.webp",
-    "issues/266/2.webp",
-    "issues/266/3.webp",
-    "issues/266/4.webp",
-    "issues/266/5.webp"
-   ],
-   "pagesEn": [
-    "issues/266/en/1.webp",
-    "issues/266/en/2.webp",
-    "issues/266/en/3.webp",
-    "issues/266/en/4.webp",
-    "issues/266/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 265,
@@ -226,20 +214,8 @@
    "titles": [
     "三星为Meta定制HBM采用2nm基础裸片"
    ],
-   "pages": [
-    "issues/265/1.webp",
-    "issues/265/2.webp",
-    "issues/265/3.webp",
-    "issues/265/4.webp",
-    "issues/265/5.webp"
-   ],
-   "pagesEn": [
-    "issues/265/en/1.webp",
-    "issues/265/en/2.webp",
-    "issues/265/en/3.webp",
-    "issues/265/en/4.webp",
-    "issues/265/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 264,
@@ -250,20 +226,8 @@
    "titles": [
     "英伟达GPU短缺持续至2028财年"
    ],
-   "pages": [
-    "issues/264/1.webp",
-    "issues/264/2.webp",
-    "issues/264/3.webp",
-    "issues/264/4.webp",
-    "issues/264/5.webp"
-   ],
-   "pagesEn": [
-    "issues/264/en/1.webp",
-    "issues/264/en/2.webp",
-    "issues/264/en/3.webp",
-    "issues/264/en/4.webp",
-    "issues/264/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 263,
@@ -274,20 +238,8 @@
    "titles": [
     "台积电3nm需求超指引上限"
    ],
-   "pages": [
-    "issues/263/1.webp",
-    "issues/263/2.webp",
-    "issues/263/3.webp",
-    "issues/263/4.webp",
-    "issues/263/5.webp"
-   ],
-   "pagesEn": [
-    "issues/263/en/1.webp",
-    "issues/263/en/2.webp",
-    "issues/263/en/3.webp",
-    "issues/263/en/4.webp",
-    "issues/263/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 262,
@@ -298,20 +250,8 @@
    "titles": [
     "美拟公布AI国家队逾24家英伟达入列"
    ],
-   "pages": [
-    "issues/262/1.webp",
-    "issues/262/2.webp",
-    "issues/262/3.webp",
-    "issues/262/4.webp",
-    "issues/262/5.webp"
-   ],
-   "pagesEn": [
-    "issues/262/en/1.webp",
-    "issues/262/en/2.webp",
-    "issues/262/en/3.webp",
-    "issues/262/en/4.webp",
-    "issues/262/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 261,
@@ -322,20 +262,8 @@
    "titles": [
     "谷歌TPU出货能见度延至2029年"
    ],
-   "pages": [
-    "issues/261/1.webp",
-    "issues/261/2.webp",
-    "issues/261/3.webp",
-    "issues/261/4.webp",
-    "issues/261/5.webp"
-   ],
-   "pagesEn": [
-    "issues/261/en/1.webp",
-    "issues/261/en/2.webp",
-    "issues/261/en/3.webp",
-    "issues/261/en/4.webp",
-    "issues/261/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 260,
@@ -346,20 +274,8 @@
    "titles": [
     "美光台中工地安全事故致1死遭勒令停工"
    ],
-   "pages": [
-    "issues/260/1.webp",
-    "issues/260/2.webp",
-    "issues/260/3.webp",
-    "issues/260/4.webp",
-    "issues/260/5.webp"
-   ],
-   "pagesEn": [
-    "issues/260/en/1.webp",
-    "issues/260/en/2.webp",
-    "issues/260/en/3.webp",
-    "issues/260/en/4.webp",
-    "issues/260/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 259,
@@ -370,20 +286,8 @@
    "titles": [
     "美国收紧AI芯片远程访问出口管制"
    ],
-   "pages": [
-    "issues/259/1.webp",
-    "issues/259/2.webp",
-    "issues/259/3.webp",
-    "issues/259/4.webp",
-    "issues/259/5.webp"
-   ],
-   "pagesEn": [
-    "issues/259/en/1.webp",
-    "issues/259/en/2.webp",
-    "issues/259/en/3.webp",
-    "issues/259/en/4.webp",
-    "issues/259/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 258,
