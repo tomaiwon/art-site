@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 277,
+   "date": "2026-11-20",
+   "label": "1120 微软自研芯片采用英特尔先进封装",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "微软自研芯片采用英特尔先进封装"
+   ],
+   "pages": [
+    "issues/277/1.webp",
+    "issues/277/2.webp",
+    "issues/277/3.webp",
+    "issues/277/4.webp",
+    "issues/277/5.webp"
+   ],
+   "pagesEn": [
+    "issues/277/en/1.webp",
+    "issues/277/en/2.webp",
+    "issues/277/en/3.webp",
+    "issues/277/en/4.webp",
+    "issues/277/en/5.webp"
+   ]
+  },
+  {
    "serial": 276,
    "date": "2026-11-20",
    "label": "1120 SK海力士转股成铠侠最大股东",
