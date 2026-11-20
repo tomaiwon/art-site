@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 278,
+   "date": "2026-11-21",
+   "label": "1121 六所美制裁中国高校购入受限英伟达芯片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "六所美制裁中国高校购入受限英伟达芯片"
+   ],
+   "pages": [
+    "issues/278/1.webp",
+    "issues/278/2.webp",
+    "issues/278/3.webp",
+    "issues/278/4.webp",
+    "issues/278/5.webp"
+   ],
+   "pagesEn": [
+    "issues/278/en/1.webp",
+    "issues/278/en/2.webp",
+    "issues/278/en/3.webp",
+    "issues/278/en/4.webp",
+    "issues/278/en/5.webp"
+   ]
+  },
+  {
    "serial": 277,
    "date": "2026-11-20",
    "label": "1120 微软自研芯片采用英特尔先进封装",
@@ -154,20 +178,8 @@
    "titles": [
     "三星苹果敲定DRAM长期供货协议"
    ],
-   "pages": [
-    "issues/271/1.webp",
-    "issues/271/2.webp",
-    "issues/271/3.webp",
-    "issues/271/4.webp",
-    "issues/271/5.webp"
-   ],
-   "pagesEn": [
-    "issues/271/en/1.webp",
-    "issues/271/en/2.webp",
-    "issues/271/en/3.webp",
-    "issues/271/en/4.webp",
-    "issues/271/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 270,
@@ -178,20 +190,8 @@
    "titles": [
     "英伟达投资超10亿美元扩景硕载板产能"
    ],
-   "pages": [
-    "issues/270/1.webp",
-    "issues/270/2.webp",
-    "issues/270/3.webp",
-    "issues/270/4.webp",
-    "issues/270/5.webp"
-   ],
-   "pagesEn": [
-    "issues/270/en/1.webp",
-    "issues/270/en/2.webp",
-    "issues/270/en/3.webp",
-    "issues/270/en/4.webp",
-    "issues/270/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 269,
@@ -202,20 +202,8 @@
    "titles": [
     "英伟达停售中国H200芯片"
    ],
-   "pages": [
-    "issues/269/1.webp",
-    "issues/269/2.webp",
-    "issues/269/3.webp",
-    "issues/269/4.webp",
-    "issues/269/5.webp"
-   ],
-   "pagesEn": [
-    "issues/269/en/1.webp",
-    "issues/269/en/2.webp",
-    "issues/269/en/3.webp",
-    "issues/269/en/4.webp",
-    "issues/269/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 268,
