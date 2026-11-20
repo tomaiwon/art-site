@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 276,
+   "date": "2026-11-20",
+   "label": "1120 SK海力士转股成铠侠最大股东",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "SK海力士转股成铠侠最大股东"
+   ],
+   "pages": [
+    "issues/276/1.webp",
+    "issues/276/2.webp",
+    "issues/276/3.webp",
+    "issues/276/4.webp",
+    "issues/276/5.webp"
+   ],
+   "pagesEn": [
+    "issues/276/en/1.webp",
+    "issues/276/en/2.webp",
+    "issues/276/en/3.webp",
+    "issues/276/en/4.webp",
+    "issues/276/en/5.webp"
+   ]
+  },
+  {
    "serial": 275,
    "date": "2026-11-20",
    "label": "1120 美国商务部批准87.9万颗AI芯片出口中国",
