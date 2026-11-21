@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 279,
+   "date": "2026-11-21",
+   "label": "1121 台积电78.5亿元买友达台中厂区",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电78.5亿元买友达台中厂区"
+   ],
+   "pages": [
+    "issues/279/1.webp",
+    "issues/279/2.webp",
+    "issues/279/3.webp",
+    "issues/279/4.webp",
+    "issues/279/5.webp"
+   ],
+   "pagesEn": [
+    "issues/279/en/1.webp",
+    "issues/279/en/2.webp",
+    "issues/279/en/3.webp",
+    "issues/279/en/4.webp",
+    "issues/279/en/5.webp"
+   ]
+  },
+  {
    "serial": 278,
    "date": "2026-11-21",
    "label": "1121 六所美制裁中国高校购入受限英伟达芯片",
