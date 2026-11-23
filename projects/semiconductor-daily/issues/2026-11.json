@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 280,
+   "date": "2026-11-23",
+   "label": "1123 三星存储产能被合约预订至2029年",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星存储产能被合约预订至2029年"
+   ],
+   "pages": [
+    "issues/280/1.webp",
+    "issues/280/2.webp",
+    "issues/280/3.webp",
+    "issues/280/4.webp",
+    "issues/280/5.webp"
+   ],
+   "pagesEn": [
+    "issues/280/en/1.webp",
+    "issues/280/en/2.webp",
+    "issues/280/en/3.webp",
+    "issues/280/en/4.webp",
+    "issues/280/en/5.webp"
+   ]
+  },
+  {
    "serial": 279,
    "date": "2026-11-21",
    "label": "1121 台积电78.5亿元买友达台中厂区",
@@ -58,20 +82,8 @@
    "titles": [
     "微软自研芯片采用英特尔先进封装"
    ],
-   "pages": [
-    "issues/277/1.webp",
-    "issues/277/2.webp",
-    "issues/277/3.webp",
-    "issues/277/4.webp",
-    "issues/277/5.webp"
-   ],
-   "pagesEn": [
-    "issues/277/en/1.webp",
-    "issues/277/en/2.webp",
-    "issues/277/en/3.webp",
-    "issues/277/en/4.webp",
-    "issues/277/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 276,
@@ -82,20 +94,8 @@
    "titles": [
     "SK海力士转股成铠侠最大股东"
    ],
-   "pages": [
-    "issues/276/1.webp",
-    "issues/276/2.webp",
-    "issues/276/3.webp",
-    "issues/276/4.webp",
-    "issues/276/5.webp"
-   ],
-   "pagesEn": [
-    "issues/276/en/1.webp",
-    "issues/276/en/2.webp",
-    "issues/276/en/3.webp",
-    "issues/276/en/4.webp",
-    "issues/276/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 275,
@@ -106,20 +106,8 @@
    "titles": [
     "美国商务部批准87.9万颗AI芯片出口中国"
    ],
-   "pages": [
-    "issues/275/1.webp",
-    "issues/275/2.webp",
-    "issues/275/3.webp",
-    "issues/275/4.webp",
-    "issues/275/5.webp"
-   ],
-   "pagesEn": [
-    "issues/275/en/1.webp",
-    "issues/275/en/2.webp",
-    "issues/275/en/3.webp",
-    "issues/275/en/4.webp",
-    "issues/275/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 274,
@@ -130,20 +118,8 @@
    "titles": [
     "英特尔18A制程签下首家外部客户"
    ],
-   "pages": [
-    "issues/274/1.webp",
-    "issues/274/2.webp",
-    "issues/274/3.webp",
-    "issues/274/4.webp",
-    "issues/274/5.webp"
-   ],
-   "pagesEn": [
-    "issues/274/en/1.webp",
-    "issues/274/en/2.webp",
-    "issues/274/en/3.webp",
-    "issues/274/en/4.webp",
-    "issues/274/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 273,
@@ -154,20 +130,8 @@
    "titles": [
     "英伟达GPU租赁价全面上涨最高翻倍"
    ],
-   "pages": [
-    "issues/273/1.webp",
-    "issues/273/2.webp",
-    "issues/273/3.webp",
-    "issues/273/4.webp",
-    "issues/273/5.webp"
-   ],
-   "pagesEn": [
-    "issues/273/en/1.webp",
-    "issues/273/en/2.webp",
-    "issues/273/en/3.webp",
-    "issues/273/en/4.webp",
-    "issues/273/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 272,
@@ -178,20 +142,8 @@
    "titles": [
     "微软Maia 200投入量产"
    ],
-   "pages": [
-    "issues/272/1.webp",
-    "issues/272/2.webp",
-    "issues/272/3.webp",
-    "issues/272/4.webp",
-    "issues/272/5.webp"
-   ],
-   "pagesEn": [
-    "issues/272/en/1.webp",
-    "issues/272/en/2.webp",
-    "issues/272/en/3.webp",
-    "issues/272/en/4.webp",
-    "issues/272/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 271,
