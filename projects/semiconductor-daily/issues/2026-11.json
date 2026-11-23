@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 284,
+   "date": "2026-11-24",
+   "label": "1124 英伟达恢复黄仁勋CEO职务",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达恢复黄仁勋CEO职务"
+   ],
+   "pages": [
+    "issues/284/1.webp",
+    "issues/284/2.webp",
+    "issues/284/3.webp",
+    "issues/284/4.webp",
+    "issues/284/5.webp"
+   ],
+   "pagesEn": [
+    "issues/284/en/1.webp",
+    "issues/284/en/2.webp",
+    "issues/284/en/3.webp",
+    "issues/284/en/4.webp",
+    "issues/284/en/5.webp"
+   ]
+  },
+  {
    "serial": 283,
    "date": "2026-11-24",
    "label": "1124 三星西安二厂V9产能将扩至月产5万片",
