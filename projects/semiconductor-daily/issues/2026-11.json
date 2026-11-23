@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 282,
+   "date": "2026-11-23",
+   "label": "1123 英伟达董事会恢复黄仁勋CEO职务",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "英伟达董事会恢复黄仁勋CEO职务"
+   ],
+   "pages": [
+    "issues/282/1.webp",
+    "issues/282/2.webp",
+    "issues/282/3.webp",
+    "issues/282/4.webp",
+    "issues/282/5.webp"
+   ],
+   "pagesEn": [
+    "issues/282/en/1.webp",
+    "issues/282/en/2.webp",
+    "issues/282/en/3.webp",
+    "issues/282/en/4.webp",
+    "issues/282/en/5.webp"
+   ]
+  },
+  {
    "serial": 281,
    "date": "2026-11-23",
    "label": "1123 美证管会查辉达会计，司法部审收购案",
