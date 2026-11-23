@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 281,
+   "date": "2026-11-23",
+   "label": "1123 美证管会查辉达会计，司法部审收购案",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美证管会查辉达会计，司法部审收购案"
+   ],
+   "pages": [
+    "issues/281/1.webp",
+    "issues/281/2.webp",
+    "issues/281/3.webp",
+    "issues/281/4.webp",
+    "issues/281/5.webp"
+   ],
+   "pagesEn": [
+    "issues/281/en/1.webp",
+    "issues/281/en/2.webp",
+    "issues/281/en/3.webp",
+    "issues/281/en/4.webp",
+    "issues/281/en/5.webp"
+   ]
+  },
+  {
    "serial": 280,
    "date": "2026-11-23",
    "label": "1123 三星存储产能被合约预订至2029年",
