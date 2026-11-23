@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 283,
+   "date": "2026-11-24",
+   "label": "1124 三星西安二厂V9产能将扩至月产5万片",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "三星西安二厂V9产能将扩至月产5万片"
+   ],
+   "pages": [
+    "issues/283/1.webp",
+    "issues/283/2.webp",
+    "issues/283/3.webp",
+    "issues/283/4.webp",
+    "issues/283/5.webp"
+   ],
+   "pagesEn": [
+    "issues/283/en/1.webp",
+    "issues/283/en/2.webp",
+    "issues/283/en/3.webp",
+    "issues/283/en/4.webp",
+    "issues/283/en/5.webp"
+   ]
+  },
+  {
    "serial": 282,
    "date": "2026-11-23",
    "label": "1123 英伟达董事会恢复黄仁勋CEO职务",
@@ -82,20 +106,8 @@
    "titles": [
     "台积电78.5亿元买友达台中厂区"
    ],
-   "pages": [
-    "issues/279/1.webp",
-    "issues/279/2.webp",
-    "issues/279/3.webp",
-    "issues/279/4.webp",
-    "issues/279/5.webp"
-   ],
-   "pagesEn": [
-    "issues/279/en/1.webp",
-    "issues/279/en/2.webp",
-    "issues/279/en/3.webp",
-    "issues/279/en/4.webp",
-    "issues/279/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 278,
@@ -106,20 +118,8 @@
    "titles": [
     "六所美制裁中国高校购入受限英伟达芯片"
    ],
-   "pages": [
-    "issues/278/1.webp",
-    "issues/278/2.webp",
-    "issues/278/3.webp",
-    "issues/278/4.webp",
-    "issues/278/5.webp"
-   ],
-   "pagesEn": [
-    "issues/278/en/1.webp",
-    "issues/278/en/2.webp",
-    "issues/278/en/3.webp",
-    "issues/278/en/4.webp",
-    "issues/278/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 277,
