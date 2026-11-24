@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 289,
+   "date": "2026-11-24",
+   "label": "1124 七家韩企基板扩产2.8万亿韩元",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "七家韩企基板扩产2.8万亿韩元"
+   ],
+   "pages": [
+    "issues/289/1.webp",
+    "issues/289/2.webp",
+    "issues/289/3.webp",
+    "issues/289/4.webp",
+    "issues/289/5.webp"
+   ],
+   "pagesEn": [
+    "issues/289/en/1.webp",
+    "issues/289/en/2.webp",
+    "issues/289/en/3.webp",
+    "issues/289/en/4.webp",
+    "issues/289/en/5.webp"
+   ]
+  },
+  {
    "serial": 288,
    "date": "2026-11-24",
    "label": "1124 台积电申请得州建2nm晶圆厂",
