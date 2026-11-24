@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 285,
+   "date": "2026-11-24",
+   "label": "1124 美国商务部将Megaspeed列入实体清单",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美国商务部将Megaspeed列入实体清单"
+   ],
+   "pages": [
+    "issues/285/1.webp",
+    "issues/285/2.webp",
+    "issues/285/3.webp",
+    "issues/285/4.webp",
+    "issues/285/5.webp"
+   ],
+   "pagesEn": [
+    "issues/285/en/1.webp",
+    "issues/285/en/2.webp",
+    "issues/285/en/3.webp",
+    "issues/285/en/4.webp",
+    "issues/285/en/5.webp"
+   ]
+  },
+  {
    "serial": 284,
    "date": "2026-11-24",
    "label": "1124 英伟达恢复黄仁勋CEO职务",
