@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 286,
+   "date": "2026-11-24",
+   "label": "1124 艾为电子拟收购钰泰半导体100%股份",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "艾为电子拟收购钰泰半导体100%股份"
+   ],
+   "pages": [
+    "issues/286/1.webp",
+    "issues/286/2.webp",
+    "issues/286/3.webp",
+    "issues/286/4.webp",
+    "issues/286/5.webp"
+   ],
+   "pagesEn": [
+    "issues/286/en/1.webp",
+    "issues/286/en/2.webp",
+    "issues/286/en/3.webp",
+    "issues/286/en/4.webp",
+    "issues/286/en/5.webp"
+   ]
+  },
+  {
    "serial": 285,
    "date": "2026-11-24",
    "label": "1124 美国商务部将Megaspeed列入实体清单",
