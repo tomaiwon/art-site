@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 287,
+   "date": "2026-11-24",
+   "label": "1124 亚马逊75亿美元收购Decart技术",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "亚马逊75亿美元收购Decart技术"
+   ],
+   "pages": [
+    "issues/287/1.webp",
+    "issues/287/2.webp",
+    "issues/287/3.webp",
+    "issues/287/4.webp",
+    "issues/287/5.webp"
+   ],
+   "pagesEn": [
+    "issues/287/en/1.webp",
+    "issues/287/en/2.webp",
+    "issues/287/en/3.webp",
+    "issues/287/en/4.webp",
+    "issues/287/en/5.webp"
+   ]
+  },
+  {
    "serial": 286,
    "date": "2026-11-24",
    "label": "1124 艾为电子拟收购钰泰半导体100%股份",
