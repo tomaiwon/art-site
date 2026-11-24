@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 288,
+   "date": "2026-11-24",
+   "label": "1124 台积电申请得州建2nm晶圆厂",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电申请得州建2nm晶圆厂"
+   ],
+   "pages": [
+    "issues/288/1.webp",
+    "issues/288/2.webp",
+    "issues/288/3.webp",
+    "issues/288/4.webp",
+    "issues/288/5.webp"
+   ],
+   "pagesEn": [
+    "issues/288/en/1.webp",
+    "issues/288/en/2.webp",
+    "issues/288/en/3.webp",
+    "issues/288/en/4.webp",
+    "issues/288/en/5.webp"
+   ]
+  },
+  {
    "serial": 287,
    "date": "2026-11-24",
    "label": "1124 亚马逊75亿美元收购Decart技术",
