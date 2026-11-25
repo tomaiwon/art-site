@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 291,
+   "date": "2026-11-25",
+   "label": "1125 台积电亚利桑那厂12月4日办扩建典礼",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "台积电亚利桑那厂12月4日办扩建典礼"
+   ],
+   "pages": [
+    "issues/291/1.webp",
+    "issues/291/2.webp",
+    "issues/291/3.webp",
+    "issues/291/4.webp",
+    "issues/291/5.webp"
+   ],
+   "pagesEn": [
+    "issues/291/en/1.webp",
+    "issues/291/en/2.webp",
+    "issues/291/en/3.webp",
+    "issues/291/en/4.webp",
+    "issues/291/en/5.webp"
+   ]
+  },
+  {
    "serial": 290,
    "date": "2026-11-25",
    "label": "1125 戴尔AI服务器积压订单创纪录",
