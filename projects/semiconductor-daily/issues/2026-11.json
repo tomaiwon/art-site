@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 293,
+   "date": "2026-11-26",
+   "label": "1126 标普将英伟达列入信用观察负面名单",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "标普将英伟达列入信用观察负面名单"
+   ],
+   "pages": [
+    "issues/293/1.webp",
+    "issues/293/2.webp",
+    "issues/293/3.webp",
+    "issues/293/4.webp",
+    "issues/293/5.webp"
+   ],
+   "pagesEn": [
+    "issues/293/en/1.webp",
+    "issues/293/en/2.webp",
+    "issues/293/en/3.webp",
+    "issues/293/en/4.webp",
+    "issues/293/en/5.webp"
+   ]
+  },
+  {
    "serial": 292,
    "date": "2026-11-25",
    "label": "1125 商务部暂停对美两用物项出口管制条款",
@@ -250,20 +274,8 @@
    "titles": [
     "英伟达董事会恢复黄仁勋CEO职务"
    ],
-   "pages": [
-    "issues/282/1.webp",
-    "issues/282/2.webp",
-    "issues/282/3.webp",
-    "issues/282/4.webp",
-    "issues/282/5.webp"
-   ],
-   "pagesEn": [
-    "issues/282/en/1.webp",
-    "issues/282/en/2.webp",
-    "issues/282/en/3.webp",
-    "issues/282/en/4.webp",
-    "issues/282/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 281,
@@ -274,20 +286,8 @@
    "titles": [
     "美证管会查辉达会计，司法部审收购案"
    ],
-   "pages": [
-    "issues/281/1.webp",
-    "issues/281/2.webp",
-    "issues/281/3.webp",
-    "issues/281/4.webp",
-    "issues/281/5.webp"
-   ],
-   "pagesEn": [
-    "issues/281/en/1.webp",
-    "issues/281/en/2.webp",
-    "issues/281/en/3.webp",
-    "issues/281/en/4.webp",
-    "issues/281/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 280,
@@ -298,20 +298,8 @@
    "titles": [
     "三星存储产能被合约预订至2029年"
    ],
-   "pages": [
-    "issues/280/1.webp",
-    "issues/280/2.webp",
-    "issues/280/3.webp",
-    "issues/280/4.webp",
-    "issues/280/5.webp"
-   ],
-   "pagesEn": [
-    "issues/280/en/1.webp",
-    "issues/280/en/2.webp",
-    "issues/280/en/3.webp",
-    "issues/280/en/4.webp",
-    "issues/280/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 279,
