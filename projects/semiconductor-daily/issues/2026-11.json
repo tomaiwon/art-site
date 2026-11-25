@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 290,
+   "date": "2026-11-25",
+   "label": "1125 戴尔AI服务器积压订单创纪录",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "戴尔AI服务器积压订单创纪录"
+   ],
+   "pages": [
+    "issues/290/1.webp",
+    "issues/290/2.webp",
+    "issues/290/3.webp",
+    "issues/290/4.webp",
+    "issues/290/5.webp"
+   ],
+   "pagesEn": [
+    "issues/290/en/1.webp",
+    "issues/290/en/2.webp",
+    "issues/290/en/3.webp",
+    "issues/290/en/4.webp",
+    "issues/290/en/5.webp"
+   ]
+  },
+  {
    "serial": 289,
    "date": "2026-11-24",
    "label": "1124 七家韩企基板扩产2.8万亿韩元",
