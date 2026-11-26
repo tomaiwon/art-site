@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 294,
+   "date": "2026-11-26",
+   "label": "1126 美对韩提议15%关税施压芯片扩产",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "美对韩提议15%关税施压芯片扩产"
+   ],
+   "pages": [
+    "issues/294/1.webp",
+    "issues/294/2.webp",
+    "issues/294/3.webp",
+    "issues/294/4.webp",
+    "issues/294/5.webp"
+   ],
+   "pagesEn": [
+    "issues/294/en/1.webp",
+    "issues/294/en/2.webp",
+    "issues/294/en/3.webp",
+    "issues/294/en/4.webp",
+    "issues/294/en/5.webp"
+   ]
+  },
+  {
    "serial": 293,
    "date": "2026-11-26",
    "label": "1126 标普将英伟达列入信用观察负面名单",
