@@ -151,12 +151,27 @@
   @media (min-width:64rem){ main{width:50%;} }
   @media (min-width:80rem){ main{width:40%;} }
 </style>
+<link rel="stylesheet" href="projects/yi-digital-twin/home-vase.css">
+<script defer src="projects/yi-digital-twin/home-vase.js"></script>
 </head>
 <body>
 <div id="bg"></div>
 
 <main>
-  <h1 class="title">Yi Huang</h1>
+  <div class="home-vase-header">
+    <h1 class="title">Yi Huang</h1>
+    <figure class="home-vase home-vase--mobile" data-home-vase data-turn-src="projects/yi-digital-twin/vase-turn.webp">
+      <div class="home-vase__drift">
+        <img class="home-vase__still" src="projects/yi-digital-twin/vase.webp" width="160" height="240" alt="仿哥釉开片瓶">
+      </div>
+      <button class="home-vase__toggle" type="button" aria-label="暂停瓷瓶动效 / Pause vase animation" aria-pressed="false" hidden>
+        <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path class="home-vase__pause" d="M5 3v10m6-10v10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path class="home-vase__play" d="M5 3l7 5-7 5z" fill="currentColor"/>
+        </svg>
+      </button>
+    </figure>
+  </div>
 
   <div class="section">
     <p>is a research-based literary and art worker.</p>

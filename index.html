@@ -282,6 +282,8 @@
     .footer{ margin-top:14px; }
   }
 </style>
+<link rel="stylesheet" href="projects/yi-digital-twin/home-vase.css">
+<script defer src="projects/yi-digital-twin/home-vase.js"></script>
 </head>
 
 <body>
@@ -318,6 +320,17 @@
 
 <div class="screen">
   <div class="wrap">
+    <figure class="home-vase home-vase--desktop" data-home-vase data-turn-src="projects/yi-digital-twin/vase-turn.webp">
+      <div class="home-vase__drift">
+        <img class="home-vase__still" src="projects/yi-digital-twin/vase.webp" width="160" height="240" alt="仿哥釉开片瓶">
+      </div>
+      <button class="home-vase__toggle" type="button" aria-label="暂停瓷瓶动效 / Pause vase animation" aria-pressed="false" hidden>
+        <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path class="home-vase__pause" d="M5 3v10m6-10v10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path class="home-vase__play" d="M5 3l7 5-7 5z" fill="currentColor"/>
+        </svg>
+      </button>
+    </figure>
 <div class="section-title desk-only">ABOUT</div>
     <div class="about-zh">
       黄熠，二零零二年生。<span class="mob-br"></span>
