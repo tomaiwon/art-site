@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 296,
+   "date": "2026-11-27",
+   "label": "1127 数千枚英伟达B300涌入转售市场",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "数千枚英伟达B300涌入转售市场"
+   ],
+   "pages": [
+    "issues/296/1.webp",
+    "issues/296/2.webp",
+    "issues/296/3.webp",
+    "issues/296/4.webp",
+    "issues/296/5.webp"
+   ],
+   "pagesEn": [
+    "issues/296/en/1.webp",
+    "issues/296/en/2.webp",
+    "issues/296/en/3.webp",
+    "issues/296/en/4.webp",
+    "issues/296/en/5.webp"
+   ]
+  },
+  {
    "serial": 295,
    "date": "2026-11-27",
    "label": "1127 芯片短缺客户向三星SK海力士预付货款",
