@@ -2,6 +2,30 @@
  "month": "2026-11",
  "issues": [
   {
+   "serial": 295,
+   "date": "2026-11-27",
+   "label": "1127 芯片短缺客户向三星SK海力士预付货款",
+   "edition": null,
+   "kind": "single",
+   "titles": [
+    "芯片短缺客户向三星SK海力士预付货款"
+   ],
+   "pages": [
+    "issues/295/1.webp",
+    "issues/295/2.webp",
+    "issues/295/3.webp",
+    "issues/295/4.webp",
+    "issues/295/5.webp"
+   ],
+   "pagesEn": [
+    "issues/295/en/1.webp",
+    "issues/295/en/2.webp",
+    "issues/295/en/3.webp",
+    "issues/295/en/4.webp",
+    "issues/295/en/5.webp"
+   ]
+  },
+  {
    "serial": 294,
    "date": "2026-11-26",
    "label": "1126 美对韩提议15%关税施压芯片扩产",
@@ -130,20 +154,8 @@
    "titles": [
     "七家韩企基板扩产2.8万亿韩元"
    ],
-   "pages": [
-    "issues/289/1.webp",
-    "issues/289/2.webp",
-    "issues/289/3.webp",
-    "issues/289/4.webp",
-    "issues/289/5.webp"
-   ],
-   "pagesEn": [
-    "issues/289/en/1.webp",
-    "issues/289/en/2.webp",
-    "issues/289/en/3.webp",
-    "issues/289/en/4.webp",
-    "issues/289/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 288,
@@ -154,20 +166,8 @@
    "titles": [
     "台积电申请得州建2nm晶圆厂"
    ],
-   "pages": [
-    "issues/288/1.webp",
-    "issues/288/2.webp",
-    "issues/288/3.webp",
-    "issues/288/4.webp",
-    "issues/288/5.webp"
-   ],
-   "pagesEn": [
-    "issues/288/en/1.webp",
-    "issues/288/en/2.webp",
-    "issues/288/en/3.webp",
-    "issues/288/en/4.webp",
-    "issues/288/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 287,
@@ -178,20 +178,8 @@
    "titles": [
     "亚马逊75亿美元收购Decart技术"
    ],
-   "pages": [
-    "issues/287/1.webp",
-    "issues/287/2.webp",
-    "issues/287/3.webp",
-    "issues/287/4.webp",
-    "issues/287/5.webp"
-   ],
-   "pagesEn": [
-    "issues/287/en/1.webp",
-    "issues/287/en/2.webp",
-    "issues/287/en/3.webp",
-    "issues/287/en/4.webp",
-    "issues/287/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 286,
@@ -202,20 +190,8 @@
    "titles": [
     "艾为电子拟收购钰泰半导体100%股份"
    ],
-   "pages": [
-    "issues/286/1.webp",
-    "issues/286/2.webp",
-    "issues/286/3.webp",
-    "issues/286/4.webp",
-    "issues/286/5.webp"
-   ],
-   "pagesEn": [
-    "issues/286/en/1.webp",
-    "issues/286/en/2.webp",
-    "issues/286/en/3.webp",
-    "issues/286/en/4.webp",
-    "issues/286/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 285,
@@ -226,20 +202,8 @@
    "titles": [
     "美国商务部将Megaspeed列入实体清单"
    ],
-   "pages": [
-    "issues/285/1.webp",
-    "issues/285/2.webp",
-    "issues/285/3.webp",
-    "issues/285/4.webp",
-    "issues/285/5.webp"
-   ],
-   "pagesEn": [
-    "issues/285/en/1.webp",
-    "issues/285/en/2.webp",
-    "issues/285/en/3.webp",
-    "issues/285/en/4.webp",
-    "issues/285/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 284,
@@ -250,20 +214,8 @@
    "titles": [
     "英伟达恢复黄仁勋CEO职务"
    ],
-   "pages": [
-    "issues/284/1.webp",
-    "issues/284/2.webp",
-    "issues/284/3.webp",
-    "issues/284/4.webp",
-    "issues/284/5.webp"
-   ],
-   "pagesEn": [
-    "issues/284/en/1.webp",
-    "issues/284/en/2.webp",
-    "issues/284/en/3.webp",
-    "issues/284/en/4.webp",
-    "issues/284/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 283,
@@ -274,20 +226,8 @@
    "titles": [
     "三星西安二厂V9产能将扩至月产5万片"
    ],
-   "pages": [
-    "issues/283/1.webp",
-    "issues/283/2.webp",
-    "issues/283/3.webp",
-    "issues/283/4.webp",
-    "issues/283/5.webp"
-   ],
-   "pagesEn": [
-    "issues/283/en/1.webp",
-    "issues/283/en/2.webp",
-    "issues/283/en/3.webp",
-    "issues/283/en/4.webp",
-    "issues/283/en/5.webp"
-   ]
+   "pages": [],
+   "pagesEn": []
   },
   {
    "serial": 282,
